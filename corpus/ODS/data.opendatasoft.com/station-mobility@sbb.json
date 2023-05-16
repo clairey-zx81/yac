@@ -1,0 +1,506 @@
+{
+    "title": "station-mobility@sbb",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/station-mobility@sbb"
+        }
+    ],
+    "definitions": {
+        "station-mobility@sbb": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/station-mobility@sbb_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "station-mobility@sbb_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "didok": {
+                            "type": "integer",
+                            "title": "Didok-Nummer",
+                            "description": "Code der Haltestelle gemäss der Didok (Dienststellen-Dokumentations-) Liste. Stop code according to the Didok (Services Documentation) list."
+                        },
+                        "stationsbezeichnung": {
+                            "type": "string",
+                            "title": "Haltestellen Name",
+                            "description": "Offizieller Name der Haltestelle"
+                        },
+                        "parkrail_anzahl": {
+                            "type": "number",
+                            "title": "parkrail_anzahl",
+                            "description": "Anzahl Park&Rail Parkplätze"
+                        },
+                        "parkrail_preis_tag": {
+                            "type": "number",
+                            "title": "parkrail_preis_tag",
+                            "description": "Preis des Parkplatz pro Tag"
+                        },
+                        "parkrail_preis_monat": {
+                            "type": "number",
+                            "title": "parkrail_preis_monat",
+                            "description": "Preis des Parkplatz pro Monat"
+                        },
+                        "parkrail_preis_jahr": {
+                            "type": "number",
+                            "title": "parkrail_preis_jahr",
+                            "description": "Preis des Parkplatz pro Jahr"
+                        },
+                        "parkrail_pflichtig_zeit1": {
+                            "type": "string",
+                            "title": "parkrail_pflichtig_zeit2",
+                            "description": "Öffnungszeiten Mo-Fr"
+                        },
+                        "parkrail_pflichtig_zeit2": {
+                            "type": "string",
+                            "title": "parkrail_pflichtig_zeit3",
+                            "description": "Öffnungszeiten Sa"
+                        },
+                        "parkrail_pflichtig_zeit3": {
+                            "type": "string",
+                            "title": "parkrail_pflichtig_zeit2",
+                            "description": "Öffnungszeiten So"
+                        },
+                        "parkrail_bemerkung": {
+                            "type": "string",
+                            "title": "parkrail_bemerkung",
+                            "description": "Bemerkungen zu Park&Rail"
+                        },
+                        "railtaxitext": {
+                            "type": "string",
+                            "title": "Rail Taxi Text",
+                            "description": ""
+                        },
+                        "railtaxiinfo": {
+                            "type": "string",
+                            "title": "Rail Taxi",
+                            "description": ""
+                        },
+                        "mietvelo_bezeichnung": {
+                            "type": "string",
+                            "title": "Bike rental services designation",
+                            "description": ""
+                        },
+                        "mietvelo_anzahl": {
+                            "type": "number",
+                            "title": "mietvelo_anzahl",
+                            "description": "Anzahl Mietvelos"
+                        },
+                        "mietvelo_bemerkung": {
+                            "type": "string",
+                            "title": "rental bike Comments",
+                            "description": "Bemerkungen"
+                        },
+                        "veloparking_status_d": {
+                            "type": "string",
+                            "title": "Veloparking Status D",
+                            "description": ""
+                        },
+                        "veloparking_bemerkung_d": {
+                            "type": "string",
+                            "title": "",
+                            "description": ""
+                        },
+                        "veloparking_abschliessbar": {
+                            "type": "integer",
+                            "title": "Veloparking abschliessbar",
+                            "description": "Ist der Veloparking abschliessbar"
+                        },
+                        "veloparking_abschliessbar_text": {
+                            "type": "string",
+                            "title": "Veloparking abschliessbar Text",
+                            "description": "Bemerkungen zum Veloparking / Bemerkungen zu den Abschliessmöglichkeiten?"
+                        },
+                        "carsharing_standort_bezeichnung": {
+                            "type": "string",
+                            "title": "carsharing standort_bezeichnung",
+                            "description": "Standortbezeichnung von Mobility"
+                        },
+                        "parkrail_app": {
+                            "type": "integer",
+                            "title": "parkrail_App",
+                            "description": "Verkaufskanal App"
+                        },
+                        "parkrail_webshop": {
+                            "type": "integer",
+                            "title": "parkrail_Webshop",
+                            "description": "Verkaufskanal Webshop"
+                        },
+                        "parkrail_lokal": {
+                            "type": "integer",
+                            "title": "parkrail_Lokal",
+                            "description": "Verkaufskanal Kasse vor Ort"
+                        },
+                        "parkrail_automat": {
+                            "type": "integer",
+                            "title": "parkrail_Automat",
+                            "description": ""
+                        },
+                        "geopos": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geoposition",
+                            "description": "Geoposition des Datensatz"
+                        },
+                        "tu_nummer": {
+                            "type": "integer",
+                            "title": "Transportunternehmung (Nummer)",
+                            "description": ""
+                        },
+                        "bpuic": {
+                            "type": "integer",
+                            "title": "BPUIC",
+                            "description": "Identifikation der Haltestelle gemäss der Spetzifikation der UIC"
+                        },
+                        "station_lod": {
+                            "type": "string",
+                            "title": "lod",
+                            "description": "Linked Open Data Repräsentation der Haltestelle"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

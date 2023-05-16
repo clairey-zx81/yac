@@ -1,0 +1,314 @@
+{
+  "$schema": "http://json-schema.org/draft-04/hyper-schema",
+  "definitions": {
+    "actor_email": {
+      "description": "the email of the actor triggering the test run",
+      "format": "email",
+      "type": [
+        "string"
+      ]
+    },
+    "app_setup": {
+      "description": "the app setup for the test run",
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "clear_cache": {
+      "description": "whether the test was run with an empty cache",
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "commit_branch": {
+      "description": "the branch of the repository that the test run concerns",
+      "type": [
+        "string"
+      ]
+    },
+    "commit_message": {
+      "description": "the message for the commit under test",
+      "type": [
+        "string"
+      ]
+    },
+    "commit_sha": {
+      "description": "the SHA hash of the commit under test",
+      "type": [
+        "string"
+      ]
+    },
+    "created_at": {
+      "description": "when test run was created",
+      "format": "date-time",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "debug": {
+      "description": "whether the test run was started for interactive debugging",
+      "type": [
+        "boolean"
+      ]
+    },
+    "id": {
+      "description": "unique identifier of a test run",
+      "format": "uuid",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "identity": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/test-run/definitions/id"
+        }
+      ]
+    },
+    "message": {
+      "description": "human friendly message indicating reason for an error",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "number": {
+      "description": "the auto incrementing test run number",
+      "type": [
+        "integer"
+      ]
+    },
+    "source_blob_url": {
+      "description": "The download location for the source code to be tested",
+      "type": [
+        "string"
+      ]
+    },
+    "status": {
+      "description": "current state of the test run",
+      "enum": [
+        "pending",
+        "cancelled",
+        "creating",
+        "building",
+        "running",
+        "succeeded",
+        "failed",
+        "errored",
+        "debugging"
+      ],
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "updated_at": {
+      "description": "when test-run was updated",
+      "format": "date-time",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "warning_message": {
+      "description": "human friently warning emitted during the test run",
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "description": "An execution or trial of one or more tests",
+  "links": [
+    {
+      "description": "Create a new test-run.",
+      "href": "/test-runs",
+      "method": "POST",
+      "rel": "create",
+      "schema": {
+        "properties": {
+          "commit_branch": {
+            "$ref": "#/definitions/test-run/definitions/commit_branch"
+          },
+          "commit_message": {
+            "$ref": "#/definitions/test-run/definitions/commit_message"
+          },
+          "commit_sha": {
+            "$ref": "#/definitions/test-run/definitions/commit_sha"
+          },
+          "debug": {
+            "$ref": "#/definitions/test-run/definitions/debug"
+          },
+          "organization": {
+            "$ref": "#/definitions/team/definitions/identity"
+          },
+          "pipeline": {
+            "$ref": "#/definitions/pipeline/definitions/identity"
+          },
+          "source_blob_url": {
+            "$ref": "#/definitions/test-run/definitions/source_blob_url"
+          }
+        },
+        "required": [
+          "commit_branch",
+          "commit_message",
+          "commit_sha",
+          "pipeline",
+          "source_blob_url"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "title": "Create"
+    },
+    {
+      "description": "Info for existing test-run.",
+      "href": "/test-runs/{(%23%2Fdefinitions%2Ftest-run%2Fdefinitions%2Fid)}",
+      "method": "GET",
+      "rel": "self",
+      "title": "Info"
+    },
+    {
+      "description": "List existing test-runs for a pipeline.",
+      "href": "/pipelines/{(%23%2Fdefinitions%2Fpipeline%2Fdefinitions%2Fid)}/test-runs",
+      "method": "GET",
+      "rel": "instances",
+      "targetSchema": {
+        "items": {
+          "$ref": "#/definitions/test-run"
+        }
+      },
+      "title": "List",
+      "type": [
+        "array"
+      ]
+    },
+    {
+      "description": "Info for existing test-run by Pipeline",
+      "href": "/pipelines/{(%23%2Fdefinitions%2Fpipeline%2Fdefinitions%2Fid)}/test-runs/{(%23%2Fdefinitions%2Ftest-run%2Fdefinitions%2Fnumber)}",
+      "method": "GET",
+      "rel": "self",
+      "title": "Info By Pipeline"
+    },
+    {
+      "description": "Update a test-run's status.",
+      "href": "/test-runs/{(%23%2Fdefinitions%2Ftest-run%2Fdefinitions%2Fnumber)}",
+      "method": "PATCH",
+      "rel": "self",
+      "schema": {
+        "properties": {
+          "message": {
+            "$ref": "#/definitions/test-run/definitions/message"
+          },
+          "status": {
+            "$ref": "#/definitions/test-run/definitions/status"
+          }
+        },
+        "required": [
+          "status",
+          "message"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "title": "Update"
+    }
+  ],
+  "properties": {
+    "actor_email": {
+      "$ref": "#/definitions/test-run/definitions/actor_email"
+    },
+    "app_setup": {
+      "$ref": "#/definitions/test-run/definitions/app_setup"
+    },
+    "clear_cache": {
+      "$ref": "#/definitions/test-run/definitions/clear_cache"
+    },
+    "commit_branch": {
+      "$ref": "#/definitions/test-run/definitions/commit_branch"
+    },
+    "commit_message": {
+      "$ref": "#/definitions/test-run/definitions/commit_message"
+    },
+    "commit_sha": {
+      "$ref": "#/definitions/test-run/definitions/commit_sha"
+    },
+    "created_at": {
+      "$ref": "#/definitions/test-run/definitions/created_at"
+    },
+    "debug": {
+      "$ref": "#/definitions/test-run/definitions/debug"
+    },
+    "dyno": {
+      "description": "the type of dynos used for this test-run",
+      "properties": {
+        "size": {
+          "$ref": "#/definitions/dyno/definitions/size"
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "id": {
+      "$ref": "#/definitions/test-run/definitions/id"
+    },
+    "message": {
+      "$ref": "#/definitions/test-run/definitions/message"
+    },
+    "number": {
+      "$ref": "#/definitions/test-run/definitions/number"
+    },
+    "organization": {
+      "description": "the team that owns this test-run",
+      "properties": {
+        "name": {
+          "$ref": "#/definitions/team/definitions/name"
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "pipeline": {
+      "description": "the pipeline which owns this test-run",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/pipeline/definitions/identity"
+        }
+      },
+      "type": [
+        "object"
+      ]
+    },
+    "source_blob_url": {
+      "$ref": "#/definitions/test-run/definitions/source_blob_url"
+    },
+    "status": {
+      "$ref": "#/definitions/test-run/definitions/status"
+    },
+    "updated_at": {
+      "$ref": "#/definitions/test-run/definitions/updated_at"
+    },
+    "user": {
+      "$ref": "#/definitions/account"
+    },
+    "warning_message": {
+      "$ref": "#/definitions/test-run/definitions/warning_message"
+    }
+  },
+  "stability": "prototype",
+  "strictProperties": true,
+  "title": "Test Run",
+  "type": [
+    "object"
+  ]
+}

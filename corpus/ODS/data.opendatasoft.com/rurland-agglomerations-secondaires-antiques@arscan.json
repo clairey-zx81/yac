@@ -1,0 +1,441 @@
+{
+    "title": "rurland-agglomerations-secondaires-antiques@arscan",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/rurland-agglomerations-secondaires-antiques@arscan"
+        }
+    ],
+    "definitions": {
+        "rurland-agglomerations-secondaires-antiques@arscan": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/rurland-agglomerations-secondaires-antiques@arscan_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "rurland-agglomerations-secondaires-antiques@arscan_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": "Point géographique"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": "Forme géométrique"
+                        },
+                        "na": {
+                            "type": "integer",
+                            "title": "Identifiant",
+                            "description": " Identifiant de l’agglomération. Chaque numéro est unique."
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "Commune",
+                            "description": "Commune actuelle sur laquelle est localisé le site"
+                        },
+                        "departemen": {
+                            "type": "string",
+                            "title": "Département",
+                            "description": "Nom du département"
+                        },
+                        "x_93": {
+                            "type": "number",
+                            "title": "X_93",
+                            "description": "Coordonnée X en Lambert 93"
+                        },
+                        "y_93": {
+                            "type": "number",
+                            "title": "Y_93",
+                            "description": "Coordonnée Y en Lambert 93"
+                        },
+                        "nom_antiqu": {
+                            "type": "string",
+                            "title": "Nom antique",
+                            "description": "Appellation antique de l’agglomération lorsque celle-ci est connue (ou appellation envisagée)"
+                        },
+                        "cite_antiq": {
+                            "type": "string",
+                            "title": "Cité antique",
+                            "description": "Cité à laquelle était probablement rattachée l’agglomération secondaire"
+                        },
+                        "lieu_dit": {
+                            "type": "string",
+                            "title": "Lieu-dit",
+                            "description": "Précision sur la localisation du point site. Nom usuel, lieu-dit ou description géographique succincte (ex : bourg, rue XXX, etc.)"
+                        },
+                        "auteur": {
+                            "type": "string",
+                            "title": "Auteur",
+                            "description": "Auteur de la donnée (EL=Étienne Lallau ; PN=Pierre Nouvel)"
+                        },
+                        "debut_occu": {
+                            "type": "string",
+                            "title": "Début d'occupation",
+                            "description": "Époque estimée ou connue de la création de l’agglomération secondaire"
+                        },
+                        "fin_occup": {
+                            "type": "string",
+                            "title": "Fin d'occupation",
+                            "description": "Époque estimée ou connue de la disparition de l’agglomération secondaire"
+                        },
+                        "remarques": {
+                            "type": "string",
+                            "title": "Remarques",
+                            "description": "Précisions diverses"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

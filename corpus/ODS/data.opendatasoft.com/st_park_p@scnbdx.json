@@ -1,0 +1,673 @@
+{
+    "title": "st_park_p@scnbdx",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/st_park_p@scnbdx"
+        }
+    ],
+    "definitions": {
+        "st_park_p@scnbdx": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/st_park_p@scnbdx_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "st_park_p@scnbdx_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "insee": {
+                            "type": "string",
+                            "title": "insee",
+                            "description": "INSEE Commune : \nListe des valeurs possibles : \n33003 : Ambarès-et-Lagrave\n33004 : Ambès\n33013 : Artigues-Près-Bordeaux\n33032 : Bassens\n33039 : Bègles\n33056 : Blanquefort\n33063 : Bordeaux\n33065 : Bouliac\n33069 : Le Bouscat\n33075 : Bruges\n33096 : Carbon-Blanc\n33119 : Cenon\n33162 : Eysines\n33167 : Floirac\n33192 : Gradignan\n33200 : Le Haillan\n33249 : Lormont\n33273 : Martignas-sur-Jalle\n33281 : Mérignac\n33312 : Parempuyre\n33318 : Pessac\n33376 : Saint-Aubin-de-Médoc\n33434 : Saint-Louis-de-Montferrand\n33449 : Saint-Médard-en-Jalles\n33487 : Saint-Vincent-de-Paul\n33519 : Le Taillan-Médoc\n33522 : Talence\n33550 : Villenave-d'Ornon\n"
+                        },
+                        "ident": {
+                            "type": "string",
+                            "title": "ident",
+                            "description": "Identifiant"
+                        },
+                        "siret": {
+                            "type": "string",
+                            "title": "siret",
+                            "description": "Numéro SIRET de l'exploitant"
+                        },
+                        "infor": {
+                            "type": "string",
+                            "title": "infor",
+                            "description": "Remarques"
+                        },
+                        "adresse": {
+                            "type": "string",
+                            "title": "adresse",
+                            "description": "Adresse du parking"
+                        },
+                        "exploit": {
+                            "type": "string",
+                            "title": "exploit",
+                            "description": "Exploitant : \nListe des valeurs possibles : \nURBIS_PARK : Urbis park\nQ_PARK : Q-park\nINTERPARKING : Interparking\nINDIGO_PARK : Indigo park\nKEOLIS : Keolis\nEFFIA_STATIONNEMENT : Effia Stationnement\nMEGARAMA : Megarama\nGERAUD : Geraud\nPARCUB_BORDEAUX_METROPOLE : Parcub Bordeaux Metropole\n"
+                        },
+                        "th_heur": {
+                            "type": "number",
+                            "title": "th_heur",
+                            "description": "Exemple tarif horaire < 1h"
+                        },
+                        "th_nuit": {
+                            "type": "number",
+                            "title": "th_nuit",
+                            "description": "Exemple forfait max nuit unique"
+                        },
+                        "ta_moivel": {
+                            "type": "number",
+                            "title": "ta_moivel",
+                            "description": "Exemple abonnement au mois vélo"
+                        },
+                        "th_quar": {
+                            "type": "number",
+                            "title": "th_quar",
+                            "description": "Exemple tarif horaire < 1/4h"
+                        },
+                        "th_10": {
+                            "type": "number",
+                            "title": "th_10",
+                            "description": "Exemple tarif horaire < 10h"
+                        },
+                        "np_pmr": {
+                            "type": "integer",
+                            "title": "np_pmr",
+                            "description": "Dont places PMR"
+                        },
+                        "ta_type": {
+                            "type": "string",
+                            "title": "ta_type",
+                            "description": "Type de tarif : \nListe des valeurs possibles : \nGRATUIT : Parking gratuit\nPAYANT_RESERVE_ABONNES : Parking payant réservé aux abonnés\nPAYANT_TARIF_HORAIRE : Tarif payant horaire\nPAYANT_TARIF_PARC_RELAIS : Tarif payant Parc-Relais\nPAYANT_TARIF_VOIRIE : Tarif payant voirie\nPAYANT_AUTRE_TYPE_DE_TARIF : Payant autre type de tarif\n"
+                        },
+                        "ta_nres7j": {
+                            "type": "number",
+                            "title": "ta_nres7j",
+                            "description": "Exemple abonnement 7/7 mois Non résident"
+                        },
+                        "ta_titul": {
+                            "type": "number",
+                            "title": "ta_titul",
+                            "description": "Tarif pour titulaire abonnement TBM"
+                        },
+                        "libres": {
+                            "type": "integer",
+                            "title": "libres",
+                            "description": "Nombre de places libres (temps réel)"
+                        },
+                        "np_veltot": {
+                            "type": "integer",
+                            "title": "np_veltot",
+                            "description": "Total places vélo"
+                        },
+                        "np_2rele": {
+                            "type": "integer",
+                            "title": "np_2rele",
+                            "description": "Dont 2 roues à moteur électrique"
+                        },
+                        "np_hgsup": {
+                            "type": "integer",
+                            "title": "np_hgsup",
+                            "description": "Places Hors gabarit > 3.5T"
+                        },
+                        "np_stlav": {
+                            "type": "integer",
+                            "title": "np_stlav",
+                            "description": "Et dont places pour station de lavage"
+                        },
+                        "np_covoit": {
+                            "type": "integer",
+                            "title": "np_covoit",
+                            "description": "Dont Covoiturage"
+                        },
+                        "prepaye": {
+                            "type": "number",
+                            "title": "prepaye",
+                            "description": "Accès prépayé uniquement (temps réel)"
+                        },
+                        "nb_niv": {
+                            "type": "integer",
+                            "title": "nb_niv",
+                            "description": "Nombre de niveaux"
+                        },
+                        "th_4": {
+                            "type": "number",
+                            "title": "th_4",
+                            "description": "Exemple tarif horaire < 4h"
+                        },
+                        "ta_ntitul": {
+                            "type": "number",
+                            "title": "ta_ntitul",
+                            "description": "Tarif pour possesseur ticket TBM"
+                        },
+                        "th_3": {
+                            "type": "number",
+                            "title": "th_3",
+                            "description": "Exemple tarif horaire < 3h"
+                        },
+                        "th_2": {
+                            "type": "number",
+                            "title": "th_2",
+                            "description": "Exemple tarif horaire < 2h"
+                        },
+                        "th_24": {
+                            "type": "number",
+                            "title": "th_24",
+                            "description": "Exemple tarif horaire < 24h"
+                        },
+                        "gabari_max": {
+                            "type": "number",
+                            "title": "gabari_max",
+                            "description": "Hauteur maximum des places hors gabarit en m"
+                        },
+                        "mdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "mdate",
+                            "description": "Date de modification"
+                        },
+                        "url": {
+                            "type": "string",
+                            "title": "url",
+                            "description": "Lien externe pour plus de détails"
+                        },
+                        "np_vle": {
+                            "type": "integer",
+                            "title": "np_vle",
+                            "description": "Dont places VL électrique"
+                        },
+                        "np_fourr": {
+                            "type": "integer",
+                            "title": "np_fourr",
+                            "description": "Nombre de places utilisées en fourrière"
+                        },
+                        "th_demi": {
+                            "type": "number",
+                            "title": "th_demi",
+                            "description": "Exemple tarif horaire < 1/2h"
+                        },
+                        "secteur": {
+                            "type": "string",
+                            "title": "secteur",
+                            "description": "Secteur : \nListe des valeurs possibles : \nCENTRE : Centre\nPERIPHERIE : Périphérie\nHYPER_CENTRE : Hyper centre\n"
+                        },
+                        "np_global": {
+                            "type": "integer",
+                            "title": "np_global",
+                            "description": "Potentiel global : Parking + Parc Relais + Fourrière"
+                        },
+                        "np_velec": {
+                            "type": "integer",
+                            "title": "np_velec",
+                            "description": "Dont Places vélo électrique"
+                        },
+                        "gid": {
+                            "type": "string",
+                            "title": "gid",
+                            "description": "Clé primaire"
+                        },
+                        "gabari_std": {
+                            "type": "number",
+                            "title": "gabari_std",
+                            "description": "Hauteur maximum tous niveaux en m"
+                        },
+                        "titul": {
+                            "type": "string",
+                            "title": "titul",
+                            "description": "Titulaire du contrat : \nListe des valeurs possibles : \nAGORA_CINEMA : Agora cinéma\nQ_PARK : Q-park\nINDIGO_CENTRAL_PARCS : Indigo Central parcs\nINDIGO_SNC_DES_GRANDS_HOMMES : Indigo SNC des Grands hommes\nINTERPARKING : Interparking\nINDIGO_PARK : Indigo park\nINDIGO_INFRA_FRANCE : Indigo INFRA France\n"
+                        },
+                        "propr": {
+                            "type": "string",
+                            "title": "propr",
+                            "description": "Propriétaire : \nListe des valeurs possibles : \nAGORA_CINEMA : Agora cinéma\nCHU_GROUPE_HOSPITALIER_PELLEGRIN : CHU Groupe hospitalier Pellegrin\nQ_PARK : Q-PARK\nSNCF_GARES_ET_CONNEXIONS_BAIL_45_ANS : SNCF Gares et connexions (bail 45 ans)\nVILLE_DE_BORDEAUX : Ville de Bordeaux\nINTERPARKING : Interparking\nAEROPORT_DE_BORDEAUX : Aéroport de Bordeaux\nQUAI_DES_MARQUES : Quai des marques\nBORDEAUX_METROPOLE : Bordeaux Métropole\n"
+                        },
+                        "np_mobalt": {
+                            "type": "integer",
+                            "title": "np_mobalt",
+                            "description": "Dont places Autopartage ou Autocool ou Citiz"
+                        },
+                        "ta_handi": {
+                            "type": "string",
+                            "title": "ta_handi",
+                            "description": "Tarif pour titulaire de la carte stationnement handicapé : \nListe des valeurs possibles : \nGRATUIT : Gratuit\nNORMAL_PAYANT : Normal payant\nAUTRE : Autre\n"
+                        },
+                        "np_hginf": {
+                            "type": "integer",
+                            "title": "np_hginf",
+                            "description": "Places Hors gabarit < 3.5T"
+                        },
+                        "connecte": {
+                            "type": "integer",
+                            "title": "connecte",
+                            "description": "Temps réel connecté"
+                        },
+                        "np_pr": {
+                            "type": "integer",
+                            "title": "np_pr",
+                            "description": "Dont max de places utilisées en parc-relais"
+                        },
+                        "etat": {
+                            "type": "string",
+                            "title": "etat",
+                            "description": "État du parking : \nListe des valeurs possibles : \nLIBRE : Places libres disponibles (temps réel)\nCOMPLET : Parking complet (temps réel)\nABONNES : Accès réservé aux abonnés (temps réel)\nFERME : Parking fermé\nOUVERT : Parking en service\n"
+                        },
+                        "nom": {
+                            "type": "string",
+                            "title": "nom",
+                            "description": "Nom du parking"
+                        },
+                        "total": {
+                            "type": "integer",
+                            "title": "total",
+                            "description": "Nombre de places totales (temps réel)"
+                        },
+                        "typgest": {
+                            "type": "string",
+                            "title": "typgest",
+                            "description": "Type de gestion : \nListe des valeurs possibles : \nDELEGATION_DE_SERVICE_PUBLIC_POUR_BORDEAUX_METROPOLE : Délégation de service public pour Bordeaux Metropole\nDELEGATION_DE_SERVICE_PUBLIC_POUR_LA_VILLE_DE_BORDEAUX : Délégation de service public pour la Ville de Bordeaux\nGESTION_PRIVEE : Gestion privée\nAUTORISATION_OCCUPATION_TEMPORAIRE : Autorisation doccupation temporaire\nREGIE_AUTONOME : Régie autonome\nCONCESSION_DE_SERVICE : Concession de service\nDELEGATION_DE_SERVICE_PUBLIC_POUR_LE_CHU : Délégation de Service Public pour le CHU\n"
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "type",
+                            "description": "Type de construction"
+                        },
+                        "an_serv": {
+                            "type": "string",
+                            "title": "an_serv",
+                            "description": "Année de mise en service"
+                        },
+                        "ta_resmoi": {
+                            "type": "number",
+                            "title": "ta_resmoi",
+                            "description": "Exemple abonnement au mois résident"
+                        },
+                        "np_2rmot": {
+                            "type": "integer",
+                            "title": "np_2rmot",
+                            "description": "Places 2 roues à moteur"
+                        },
+                        "cdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "cdate",
+                            "description": "Date de création"
+                        },
+                        "np_total": {
+                            "type": "integer",
+                            "title": "np_total",
+                            "description": "Total de places en Parking ou Parc Relais"
+                        },
+                        "tv_1h": {
+                            "type": "number",
+                            "title": "tv_1h",
+                            "description": "Note : tarif voirie du secteur autour du park < 1h"
+                        },
+                        "ta_moimot": {
+                            "type": "number",
+                            "title": "ta_moimot",
+                            "description": "Exemple abonnement au mois moto"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

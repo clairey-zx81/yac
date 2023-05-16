@@ -1,0 +1,204 @@
+{
+  "$schema": "http://json-schema.org/draft-04/hyper-schema",
+  "definitions": {
+    "created_at": {
+      "description": "when invitation was created",
+      "example": "2012-01-01T12:00:00Z",
+      "format": "date-time",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "identity": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/invitation/definitions/token"
+        }
+      ]
+    },
+    "method": {
+      "default": "sms",
+      "description": "Transport used to send verification code",
+      "enum": [
+        "call",
+        "sms"
+      ],
+      "example": "sms",
+      "type": [
+        "string"
+      ]
+    },
+    "phone_number": {
+      "description": "Phone number to send verification code",
+      "example": "+1 123-123-1234",
+      "type": [
+        "string"
+      ]
+    },
+    "receive_newsletter": {
+      "description": "whether this user should receive a newsletter or not",
+      "example": false,
+      "readOnly": true,
+      "type": [
+        "boolean"
+      ]
+    },
+    "token": {
+      "description": "Unique identifier of an invitation",
+      "example": "01234567-89ab-cdef-0123-456789abcdef",
+      "format": "uuid",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "verification_code": {
+      "description": "Value used to verify invitation",
+      "example": "123456",
+      "type": [
+        "string"
+      ]
+    },
+    "verification_required": {
+      "description": "if the invitation requires verification",
+      "example": false,
+      "readOnly": true,
+      "type": [
+        "boolean"
+      ]
+    }
+  },
+  "description": "An invitation represents an invite sent to a user to use the Heroku platform.",
+  "links": [
+    {
+      "description": "Info for invitation.",
+      "href": "/invitations/{(%23%2Fdefinitions%2Finvitation%2Fdefinitions%2Fidentity)}",
+      "method": "GET",
+      "rel": "self",
+      "title": "Info"
+    },
+    {
+      "description": "Invite a user.",
+      "href": "/invitations",
+      "method": "POST",
+      "rel": "self",
+      "schema": {
+        "properties": {
+          "email": {
+            "$ref": "#/definitions/account/definitions/email"
+          },
+          "name": {
+            "$ref": "#/definitions/account/definitions/name"
+          }
+        },
+        "required": [
+          "email",
+          "name"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "title": "Create"
+    },
+    {
+      "description": "Send a verification code for an invitation via SMS/phone call.",
+      "href": "/invitations/{(%23%2Fdefinitions%2Finvitation%2Fdefinitions%2Fidentity)}/actions/send-verification",
+      "method": "POST",
+      "rel": "empty",
+      "schema": {
+        "properties": {
+          "method": {
+            "$ref": "#/definitions/invitation/definitions/method"
+          },
+          "phone_number": {
+            "$ref": "#/definitions/invitation/definitions/phone_number"
+          }
+        },
+        "required": [
+          "phone_number"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "title": "Send Verification Code"
+    },
+    {
+      "description": "Verify an invitation using a verification code.",
+      "href": "/invitations/{(%23%2Fdefinitions%2Finvitation%2Fdefinitions%2Fidentity)}/actions/verify",
+      "method": "POST",
+      "rel": "self",
+      "schema": {
+        "properties": {
+          "verification_code": {
+            "$ref": "#/definitions/invitation/definitions/verification_code"
+          }
+        },
+        "required": [
+          "verification_code"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "title": "Verify"
+    },
+    {
+      "description": "Finalize Invitation and Create Account.",
+      "href": "/invitations/{(%23%2Fdefinitions%2Finvitation%2Fdefinitions%2Fidentity)}",
+      "method": "PATCH",
+      "rel": "update",
+      "schema": {
+        "properties": {
+          "password": {
+            "$ref": "#/definitions/account/definitions/password"
+          },
+          "password_confirmation": {
+            "$ref": "#/definitions/account/definitions/password"
+          },
+          "receive_newsletter": {
+            "$ref": "#/definitions/invitation/definitions/receive_newsletter"
+          }
+        },
+        "required": [
+          "password",
+          "password_confirmation"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "title": "Finalize"
+    }
+  ],
+  "properties": {
+    "created_at": {
+      "$ref": "#/definitions/invitation/definitions/created_at"
+    },
+    "user": {
+      "properties": {
+        "email": {
+          "$ref": "#/definitions/account/definitions/email"
+        },
+        "id": {
+          "$ref": "#/definitions/account/definitions/id"
+        }
+      },
+      "strictProperties": true,
+      "type": [
+        "object"
+      ]
+    },
+    "verification_required": {
+      "$ref": "#/definitions/invitation/definitions/verification_required"
+    }
+  },
+  "stability": "production",
+  "strictProperties": true,
+  "title": "Heroku Platform API - Invitation",
+  "type": [
+    "object"
+  ]
+}

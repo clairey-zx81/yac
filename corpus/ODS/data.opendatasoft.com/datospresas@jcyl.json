@@ -1,0 +1,481 @@
+{
+    "title": "datospresas@jcyl",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/datospresas@jcyl"
+        }
+    ],
+    "definitions": {
+        "datospresas@jcyl": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/datospresas@jcyl_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "datospresas@jcyl_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "nombre_de_la_presa_balsa": {
+                            "type": "string",
+                            "title": "Nombre de la presa/balsa",
+                            "description": ""
+                        },
+                        "otro_nombre": {
+                            "type": "string",
+                            "title": "Otro nombre",
+                            "description": ""
+                        },
+                        "titular_de_la_presa_balsa": {
+                            "type": "string",
+                            "title": "Titular de la presa/balsa",
+                            "description": ""
+                        },
+                        "promotor": {
+                            "type": "string",
+                            "title": "Promotor",
+                            "description": ""
+                        },
+                        "titular_de_la_concesion": {
+                            "type": "string",
+                            "title": "Titular de la concesion",
+                            "description": ""
+                        },
+                        "cuenca_hidrografica": {
+                            "type": "string",
+                            "title": "Cuenca hidrografica",
+                            "description": ""
+                        },
+                        "rio": {
+                            "type": "string",
+                            "title": "Rio",
+                            "description": ""
+                        },
+                        "provincia": {
+                            "type": "string",
+                            "title": "Provincia",
+                            "description": ""
+                        },
+                        "municipio": {
+                            "type": "string",
+                            "title": "Municipio",
+                            "description": ""
+                        },
+                        "municipios_afectados_por_la_transformacion": {
+                            "type": "string",
+                            "title": "Municipios afectados por la transformacion",
+                            "description": ""
+                        },
+                        "coordenadas_utm_x": {
+                            "type": "number",
+                            "title": "Coordenadas UTM X",
+                            "description": ""
+                        },
+                        "coordenadas_utm_y": {
+                            "type": "number",
+                            "title": "Coordenadas UTM Y",
+                            "description": ""
+                        },
+                        "superficie_embalse_nivel_normal": {
+                            "type": "string",
+                            "title": "Superficie embalse nivel normal",
+                            "description": ""
+                        },
+                        "capacidad_util": {
+                            "type": "string",
+                            "title": "Capacidad util",
+                            "description": ""
+                        },
+                        "tipo_de_presa_balsa": {
+                            "type": "string",
+                            "title": "Tipo de presa / balsa",
+                            "description": ""
+                        },
+                        "altura_desde_la_cota_de_cimentacion": {
+                            "type": "string",
+                            "title": "Altura desde la cota de cimentacion",
+                            "description": ""
+                        },
+                        "longitud_de_coronacion": {
+                            "type": "string",
+                            "title": "Longitud de coronacion",
+                            "description": ""
+                        },
+                        "foto_del_elemento_1": {
+                            "type": "string",
+                            "title": "Foto del elemento 1",
+                            "description": ""
+                        },
+                        "foto_del_elemento_2": {
+                            "type": "string",
+                            "title": "Foto del elemento 2",
+                            "description": ""
+                        },
+                        "documento_asociado_1": {
+                            "type": "string",
+                            "title": "Documento asociado 1",
+                            "description": ""
+                        },
+                        "documento_asociado_2": {
+                            "type": "string",
+                            "title": "Documento asociado 2",
+                            "description": ""
+                        },
+                        "column_22": {
+                            "type": "string",
+                            "title": "Column 22",
+                            "description": ""
+                        },
+                        "geolocalizacion": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geolocalización",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,497 @@
+{
+    "title": "aire_covoiturage@haute-garonne",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/aire_covoiturage@haute-garonne"
+        }
+    ],
+    "definitions": {
+        "aire_covoiturage@haute-garonne": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/aire_covoiturage@haute-garonne_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "aire_covoiturage@haute-garonne_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id_lieux": {
+                            "type": "string",
+                            "title": "id_lieu",
+                            "description": "Identifiant du lieu de covoiturage, délivré par le point d'accès national selon la règle INSEE-C-XXX où INSEE est le code INSEE de la commune et XXX est le numéro d’ordre d'arrivée dans la base sur 3 chiffres, commençant par 001."
+                        },
+                        "id_local": {
+                            "type": "integer",
+                            "title": "id_local",
+                            "description": "Identifiant du lieu de covoiturage fixé par le producteur de la donnée pour son propre usage."
+                        },
+                        "nom_lieu": {
+                            "type": "string",
+                            "title": "nom_lieu",
+                            "description": "Nom du lieu de covoiturage."
+                        },
+                        "ad_lieu": {
+                            "type": "string",
+                            "title": "ad_lieu",
+                            "description": "L'adresse du lieu compréhensible par le grand public pour assurer la coordination entre le passager et le conducteur."
+                        },
+                        "com_lieu": {
+                            "type": "string",
+                            "title": "com_lieu",
+                            "description": "La commune / le lieu-dit du covoiturage."
+                        },
+                        "insee": {
+                            "type": "string",
+                            "title": "insee",
+                            "description": "Le code INSEE de la commune d'implantation."
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "type",
+                            "description": "Le type de lieu de covoiturage (aire, parking...)."
+                        },
+                        "date_maj": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "date_maj",
+                            "description": "Date de dernière mise à jour des données. Notation ISO 8601, format AAAA-MM-DD."
+                        },
+                        "ouvert": {
+                            "type": "string",
+                            "title": "ouvert",
+                            "description": "Le lieu est-il actuellement accessible ? (actif : true ou inactif : false)."
+                        },
+                        "source": {
+                            "type": "string",
+                            "title": "source",
+                            "description": "Numéro SIREN du Conseil départemental de la Haute-Garonne. (source = SIREN de l'entité ayant fourni la donnée)"
+                        },
+                        "xlong": {
+                            "type": "number",
+                            "title": "Xlong",
+                            "description": ""
+                        },
+                        "ylat": {
+                            "type": "number",
+                            "title": "Ylat",
+                            "description": ""
+                        },
+                        "nbre_pl": {
+                            "type": "integer",
+                            "title": "nbre_pl",
+                            "description": "Le nombre de places disponibles réservées au stationnement."
+                        },
+                        "nbre_pmr": {
+                            "type": "integer",
+                            "title": "nbre_pmr",
+                            "description": "Nombre de places de parking réservées aux personnes à mobilité réduite (PMR)"
+                        },
+                        "duree": {
+                            "type": "string",
+                            "title": "duree",
+                            "description": "S'il existe une restriction sur la durée de stationnement autorisée, la durée maximale de stationnement autorisée exprimée en minutes."
+                        },
+                        "horaires": {
+                            "type": "string",
+                            "title": "horaires",
+                            "description": "Ce champ permet de renseigner, si l'information est connue, les jours et horaires d'ouverture de l'équipement."
+                        },
+                        "proprio": {
+                            "type": "string",
+                            "title": "proprio",
+                            "description": "Le nom de l'aménageur, c'est-à-dire de l'entité publique ou privée propriétaire des infrastructures."
+                        },
+                        "lumiere": {
+                            "type": "string",
+                            "title": "lumiere",
+                            "description": "Un éclairage nocturne est-il présent ? (Oui : True, non : False)."
+                        },
+                        "comm": {
+                            "type": "string",
+                            "title": "comm",
+                            "description": "Commentaires éventuels sur les commodités mises à disposition du grand public."
+                        },
+                        "route": {
+                            "type": "string",
+                            "title": "route",
+                            "description": "Nom de la route départementale"
+                        },
+                        "code_postal": {
+                            "type": "string",
+                            "title": "code_postal",
+                            "description": "Code postal de la commune où est située l'aire de covoiturage"
+                        },
+                        "transport_public": {
+                            "type": "string",
+                            "title": "transport_public",
+                            "description": "Connexion avec transport en commun interurbain"
+                        },
+                        "velo": {
+                            "type": "string",
+                            "title": "velo",
+                            "description": "Parking deux roues à disposition sur l'aire de covoiturage. (Oui : True - Non : False)."
+                        },
+                        "prix": {
+                            "type": "string",
+                            "title": "prix",
+                            "description": ""
+                        },
+                        "mise_en_service": {
+                            "type": "string",
+                            "title": "mise_en_service",
+                            "description": "Date de mise en service de l'aire de covoiturage"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

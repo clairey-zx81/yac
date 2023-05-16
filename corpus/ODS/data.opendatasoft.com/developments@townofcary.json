@@ -1,0 +1,505 @@
+{
+    "title": "developments@townofcary",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/developments@townofcary"
+        }
+    ],
+    "definitions": {
+        "developments@townofcary": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/developments@townofcary_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "developments@townofcary_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "gisprod1_gis_adopp_sitesub_project_number_current": {
+                            "type": "string",
+                            "title": "Project Number",
+                            "description": ""
+                        },
+                        "gisprod1_gis_adopp_sitesub_project_name_current": {
+                            "type": "string",
+                            "title": "Project Name",
+                            "description": ""
+                        },
+                        "gisprod1_gis_adopp_sitesub_submittal_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Submittal Date",
+                            "description": ""
+                        },
+                        "gisprod1_gis_adopp_sitesub_approval_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Approval Date",
+                            "description": ""
+                        },
+                        "gisprod1_gis_adopp_sitesub_comments": {
+                            "type": "string",
+                            "title": "Comments",
+                            "description": ""
+                        },
+                        "gisprod1_gis_adopp_sitesub_review_type": {
+                            "type": "string",
+                            "title": "Review Type",
+                            "description": ""
+                        },
+                        "gisprod1_gis_adopp_sitesub_status": {
+                            "type": "string",
+                            "title": "Status",
+                            "description": ""
+                        },
+                        "gisprod1_gis_adopp_sitesub_units": {
+                            "type": "integer",
+                            "title": "Units",
+                            "description": "The number of residential units in the development."
+                        },
+                        "gisprod1_gis_adopp_sitesub_lots": {
+                            "type": "integer",
+                            "title": "Lots",
+                            "description": "The number of lots in the development."
+                        },
+                        "gisprod1_gis_adopp_sitesub_average_lot_size": {
+                            "type": "integer",
+                            "title": "Average Lot Size",
+                            "description": ""
+                        },
+                        "gisprod1_gis_adopp_sitesub_bldgsqft": {
+                            "type": "integer",
+                            "title": "Building Square Footage",
+                            "description": "Building square footage of non-residential developments."
+                        },
+                        "gisprod1_gis_adopp_sitesub_acreage": {
+                            "type": "number",
+                            "title": "Acreage",
+                            "description": ""
+                        },
+                        "gisprod1_gis_adopp_sitesub_proposed_use": {
+                            "type": "string",
+                            "title": "Proposed Use",
+                            "description": ""
+                        },
+                        "gisprod1_gis_adopp_sitesub_usecategory": {
+                            "type": "string",
+                            "title": "Use Category",
+                            "description": ""
+                        },
+                        "gisprod1_gis_adopp_sitesub_usetype": {
+                            "type": "string",
+                            "title": "Use Type",
+                            "description": ""
+                        },
+                        "gisprod1_gis_siteandsubdivisionplans_councildistrict": {
+                            "type": "string",
+                            "title": "Council District",
+                            "description": ""
+                        },
+                        "gisprod1_gis_siteandsubdivisionplans_subdiv1": {
+                            "type": "string",
+                            "title": "Subdiv1",
+                            "description": ""
+                        },
+                        "gisprod1_gis_siteandsubdivisionplans_subdiv2": {
+                            "type": "string",
+                            "title": "Subdiv2",
+                            "description": ""
+                        },
+                        "gisprod1_gis_siteandsubdivisionplans_groupindex": {
+                            "type": "string",
+                            "title": "GROUPINDEX",
+                            "description": ""
+                        },
+                        "gisprod1_gis_siteandsubdivisionplans_weblink": {
+                            "type": "string",
+                            "title": "Weblink",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        },
+                        "gisprod1_gis_siteandsubdivisionplans_created_user": {
+                            "type": "string",
+                            "title": "created_user",
+                            "description": ""
+                        },
+                        "gisprod1_gis_siteandsubdivisionplans_created_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "created_date",
+                            "description": ""
+                        },
+                        "gisprod1_gis_siteandsubdivisionplans_last_edited_user": {
+                            "type": "string",
+                            "title": "last_edited_user",
+                            "description": ""
+                        },
+                        "gisprod1_gis_siteandsubdivisionplans_last_edited_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "last_edited_date",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,578 @@
+{
+    "title": "covid-19-germany-landkreise",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/covid-19-germany-landkreise"
+        }
+    ],
+    "definitions": {
+        "covid-19-germany-landkreise": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/covid-19-germany-landkreise_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "covid-19-germany-landkreise_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "last_update": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Last updated",
+                            "description": ""
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "Name",
+                            "description": "Geografischer Name"
+                        },
+                        "ade": {
+                            "type": "integer",
+                            "title": "Administrative level",
+                            "description": "Administrative Ebene (4 = Kreis)"
+                        },
+                        "gf": {
+                            "type": "integer",
+                            "title": "Land factor",
+                            "description": "Geofaktor (4 = mit Struktur Land)"
+                        },
+                        "bsg": {
+                            "type": "integer",
+                            "title": "Specific domains",
+                            "description": "Besondere Gebiete (1 = Deutschland/Germany)"
+                        },
+                        "rs": {
+                            "type": "string",
+                            "title": "Regional code",
+                            "description": "Regionalschlüssel (XXYZZ, XX = Land, Y = Regierungsbezirks, ZZ = Kreis)"
+                        },
+                        "sdv_rs": {
+                            "type": "string",
+                            "title": "Regional code of the local authority",
+                            "description": "Sitz der Verwaltung"
+                        },
+                        "bez": {
+                            "type": "string",
+                            "title": "Type of division",
+                            "description": "Bezeichnung der Verwaltungseinheit"
+                        },
+                        "ibz": {
+                            "type": "integer",
+                            "title": "Type of division code",
+                            "description": "Identifikator für BEZ"
+                        },
+                        "nbd": {
+                            "type": "string",
+                            "title": "Name construction indication",
+                            "description": "Namensbildung"
+                        },
+                        "sn_l": {
+                            "type": "string",
+                            "title": "Land code",
+                            "description": ""
+                        },
+                        "sn_r": {
+                            "type": "string",
+                            "title": "Regierungsbezirk code",
+                            "description": ""
+                        },
+                        "sn_k": {
+                            "type": "string",
+                            "title": "Kreis code",
+                            "description": ""
+                        },
+                        "fk_s3": {
+                            "type": "string",
+                            "title": "FK_S3",
+                            "description": "Funktion der 3. Schlüsselstelle (R=Regierungsbezirk, K=Kreis)"
+                        },
+                        "nuts": {
+                            "type": "string",
+                            "title": "NUTS code",
+                            "description": ""
+                        },
+                        "rs_0": {
+                            "type": "string",
+                            "title": "RS_0",
+                            "description": ""
+                        },
+                        "ags_0": {
+                            "type": "string",
+                            "title": "AGS_0",
+                            "description": ""
+                        },
+                        "wsk": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "WSK",
+                            "description": ""
+                        },
+                        "ewz": {
+                            "type": "integer",
+                            "title": "Population",
+                            "description": "Einwohnerzahl"
+                        },
+                        "kfl": {
+                            "type": "number",
+                            "title": "Cadastral area",
+                            "description": "Kataster Fläche"
+                        },
+                        "debkg_id": {
+                            "type": "string",
+                            "title": "DLM ID",
+                            "description": "DLM-Identifikator"
+                        },
+                        "shape_are": {
+                            "type": "number",
+                            "title": "Shape Area",
+                            "description": ""
+                        },
+                        "deaths": {
+                            "type": "integer",
+                            "title": "Deaths",
+                            "description": ""
+                        },
+                        "death_rate": {
+                            "type": "number",
+                            "title": "Death rate",
+                            "description": ""
+                        },
+                        "cases": {
+                            "type": "integer",
+                            "title": "Cases",
+                            "description": ""
+                        },
+                        "cases_per_100k": {
+                            "type": "number",
+                            "title": "Cases per 100k persons",
+                            "description": ""
+                        },
+                        "cases7_per_100k": {
+                            "type": "number",
+                            "title": "Cases per 100k persons in the last 7 days",
+                            "description": ""
+                        },
+                        "cases_per_population": {
+                            "type": "number",
+                            "title": "Percentage of cases in the Landkreis population",
+                            "description": ""
+                        },
+                        "bl": {
+                            "type": "string",
+                            "title": "Land",
+                            "description": "Bundesland"
+                        },
+                        "bl_id": {
+                            "type": "string",
+                            "title": "Land ID",
+                            "description": ""
+                        },
+                        "county": {
+                            "type": "string",
+                            "title": "Short name",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "recovered": {
+                            "type": "integer",
+                            "title": "recovered",
+                            "description": ""
+                        },
+                        "ewz_bl": {
+                            "type": "integer",
+                            "title": "EWZ_BL",
+                            "description": ""
+                        },
+                        "cases7_bl": {
+                            "type": "integer",
+                            "title": "cases7_bl",
+                            "description": ""
+                        },
+                        "death7_bl": {
+                            "type": "integer",
+                            "title": "death7_bl",
+                            "description": ""
+                        },
+                        "cases7_lk": {
+                            "type": "integer",
+                            "title": "cases7_lk",
+                            "description": ""
+                        },
+                        "death7_lk": {
+                            "type": "integer",
+                            "title": "death7_lk",
+                            "description": ""
+                        },
+                        "cases7_p_1": {
+                            "type": "string",
+                            "title": "cases7_p_1",
+                            "description": ""
+                        },
+                        "admunitid": {
+                            "type": "integer",
+                            "title": "AdmUnitId",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

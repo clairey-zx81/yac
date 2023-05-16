@@ -1,0 +1,816 @@
+{
+    "title": "pcr-necropoles-merovingiennes@arscan",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/pcr-necropoles-merovingiennes@arscan"
+        }
+    ],
+    "definitions": {
+        "pcr-necropoles-merovingiennes@arscan": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/pcr-necropoles-merovingiennes@arscan_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "pcr-necropoles-merovingiennes@arscan_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": "Point géographique"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": "Forme vectorielle"
+                        },
+                        "auteur": {
+                            "type": "string",
+                            "title": "auteur",
+                            "description": "Auteur de la notice"
+                        },
+                        "code_pcr": {
+                            "type": "integer",
+                            "title": "code_PCR",
+                            "description": "Code du site crée pour le PR (nuémro unique)"
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "Commune",
+                            "description": "Commune où se situe le site lors de la fouille"
+                        },
+                        "region": {
+                            "type": "string",
+                            "title": "région",
+                            "description": "Région administrative de la commune"
+                        },
+                        "departeme": {
+                            "type": "integer",
+                            "title": "département",
+                            "description": "Code du département de la commune"
+                        },
+                        "nom_de_sit": {
+                            "type": "string",
+                            "title": "nom_de_site",
+                            "description": "Nom du site archéologique"
+                        },
+                        "type_topon": {
+                            "type": "string",
+                            "title": "toponyme",
+                            "description": "Type de toponyme"
+                        },
+                        "resposable": {
+                            "type": "string",
+                            "title": "responsable",
+                            "description": "Responsable d'opérations"
+                        },
+                        "organisme": {
+                            "type": "string",
+                            "title": "organisme",
+                            "description": "Organisme ou opérateur d'archéologie préventive"
+                        },
+                        "coord_x": {
+                            "type": "integer",
+                            "title": "coord_x",
+                            "description": "Coordonnée X (Lambert 93)"
+                        },
+                        "coord_y": {
+                            "type": "integer",
+                            "title": "coord_y",
+                            "description": "Coordonnée Y (Lambert 93)"
+                        },
+                        "coord_z": {
+                            "type": "integer",
+                            "title": "coord_Z",
+                            "description": "Coordonnée Z (NGF)"
+                        },
+                        "type_topog": {
+                            "type": "string",
+                            "title": "Topgraphie",
+                            "description": "Type de situation topographique"
+                        },
+                        "annee_foui": {
+                            "type": "string",
+                            "title": "annee_fouile",
+                            "description": "Année de la fin de la fouille"
+                        },
+                        "surface_fo": {
+                            "type": "string",
+                            "title": "surface_fouillée",
+                            "description": "Surface effective fouillée (en m²)\n"
+                        },
+                        "surface_es": {
+                            "type": "string",
+                            "title": "surface_estimée",
+                            "description": "Surface estimé de l'ensemble funéraire (en m²)"
+                        },
+                        "depot_mo": {
+                            "type": "string",
+                            "title": "dépôt_mobilier",
+                            "description": "Lieu du dépôt du mobilier\n"
+                        },
+                        "type_datat": {
+                            "type": "string",
+                            "title": "type_datatation",
+                            "description": "Type(s) de datation effectué(s)"
+                        },
+                        "nombre_sep": {
+                            "type": "integer",
+                            "title": "nombre_sep_bas_empire",
+                            "description": "Nombre de sépultures datées du Bas Empire"
+                        },
+                        "nombre_s_1": {
+                            "type": "integer",
+                            "title": "nombre_sep_proto_mero",
+                            "description": "Nombre de sépultures dates de l'époque proto-mérovingienne"
+                        },
+                        "nombre_s_2": {
+                            "type": "integer",
+                            "title": "nombre_sep_mero_ancien",
+                            "description": "Nombre de sépultures datées de l'époque méro-ancien (V + W)"
+                        },
+                        "nombre_s_3": {
+                            "type": "integer",
+                            "title": "nombre_sep_mero_anc_1",
+                            "description": "Nombre de sépultures datées de l'époque méro-ancien 1"
+                        },
+                        "nombre_s_4": {
+                            "type": "integer",
+                            "title": "nombre_sep_mero_anc_2",
+                            "description": "Nombre de sépultures datées de l'époque méro-ancien 2"
+                        },
+                        "nombre_s_5": {
+                            "type": "integer",
+                            "title": "nombre_sep_mero_recent",
+                            "description": "Nombre de sépultures datées de l'époque méro-récent (Y + Z)"
+                        },
+                        "nombre_s_6": {
+                            "type": "integer",
+                            "title": "nombre_sep_mero_rec_1",
+                            "description": "Nombre de sépultures datées de l'époque mero-récent 1"
+                        },
+                        "nombre_s_7": {
+                            "type": "integer",
+                            "title": "nombre_sep_mero_rec_2",
+                            "description": "Nombre de sépultures datées de l'époque mero-récent 2"
+                        },
+                        "nombre_s_8": {
+                            "type": "integer",
+                            "title": "nombre_sep_mero_ind",
+                            "description": "Nombre de sépultures datées de l'époque mérovingienne sans précision"
+                        },
+                        "nombre_s_9": {
+                            "type": "integer",
+                            "title": "nombre_sep_mero_total",
+                            "description": "Nombre de sépultures datées de l'époque mérovingienne (T + U + X + AA)"
+                        },
+                        "nombre_s10": {
+                            "type": "integer",
+                            "title": "nombre_sep_caro",
+                            "description": "Nombre de sépultures datées de l'époque carolingienne"
+                        },
+                        "nombre_s11": {
+                            "type": "integer",
+                            "title": "nombre_sep_ind",
+                            "description": "Nombre de sépultures dont la datation reste indéterminée"
+                        },
+                        "total_nb_s": {
+                            "type": "integer",
+                            "title": "total_nb_sep",
+                            "description": "Nombre total de sépultures du site"
+                        },
+                        "nb_sep_nec": {
+                            "type": "integer",
+                            "title": "nb_sep_necropole",
+                            "description": "Nombre de sépultures organisées en nécropole"
+                        },
+                        "nb_sep_dis": {
+                            "type": "integer",
+                            "title": "nb_sep_dispersées",
+                            "description": "Nombre de sépultures dispersées"
+                        },
+                        "nb_sep_rel": {
+                            "type": "integer",
+                            "title": "nb_sep_relegation",
+                            "description": "Nombre de sépultures de relégation"
+                        },
+                        "type_ensem": {
+                            "type": "string",
+                            "title": "Type_ensemble_funeraire",
+                            "description": "Type d'ensemble funéraire représenté"
+                        },
+                        "nb_sep_est": {
+                            "type": "string",
+                            "title": "nb_sep_estimé",
+                            "description": "Nombre de sépultures estimé au total"
+                        },
+                        "edifice_as": {
+                            "type": "string",
+                            "title": "edifice_associé",
+                            "description": "Édifice associé (civil, militaire ou religieux)"
+                        },
+                        "dedicace_c": {
+                            "type": "string",
+                            "title": "dedicace_culte",
+                            "description": "Dédicace du lieu de culte"
+                        },
+                        "habitat_as": {
+                            "type": "string",
+                            "title": "habitat_associé",
+                            "description": "Présence ou absence d'un habitat associé"
+                        },
+                        "voies_anci": {
+                            "type": "string",
+                            "title": "voies_anciennes",
+                            "description": "Présence ou absence d'une ou de plusieurs voies anciennes\n"
+                        },
+                        "limites_ne": {
+                            "type": "string",
+                            "title": "limites_necropole",
+                            "description": "Présence ou absence de limite(s) de la nécropole"
+                        },
+                        "chemins_ne": {
+                            "type": "string",
+                            "title": "chemins_necropoles",
+                            "description": "Présence ou absence de chemin(s) dans la nécropole"
+                        },
+                        "nb_steles": {
+                            "type": "integer",
+                            "title": "nb_steles",
+                            "description": "Nombre de stèles funéraires"
+                        },
+                        "nb_sep_san": {
+                            "type": "integer",
+                            "title": "nb_sep_sans_contenant",
+                            "description": "Nombre de sépultures sans contenant apparent"
+                        },
+                        "nb_sarco_p": {
+                            "type": "integer",
+                            "title": "nb_sarco_pierre",
+                            "description": "Nombre de sarcophages en pierre"
+                        },
+                        "nb_sarco_1": {
+                            "type": "integer",
+                            "title": "nb_sarco_plâtre",
+                            "description": "Nombre de sarcophages en plâtre"
+                        },
+                        "nb_coffrag": {
+                            "type": "integer",
+                            "title": "nb_coffrage",
+                            "description": "Nombre de coffrages"
+                        },
+                        "nb_cercuei": {
+                            "type": "integer",
+                            "title": "nb_cercueil",
+                            "description": "Nombre de cercueils"
+                        },
+                        "contenant": {
+                            "type": "integer",
+                            "title": "contenant_autre",
+                            "description": "Nombre de contenants autres"
+                        },
+                        "type_decor": {
+                            "type": "string",
+                            "title": "type_decor_sarco",
+                            "description": "Type de décor sur les cuves"
+                        },
+                        "nb_reducti": {
+                            "type": "integer",
+                            "title": "nb_reduction_int",
+                            "description": "Nombre de réduction interne"
+                        },
+                        "nb_reduc_1": {
+                            "type": "integer",
+                            "title": "nb_reduction_ext",
+                            "description": "Nombre de réduction externe"
+                        },
+                        "ossuaire": {
+                            "type": "integer",
+                            "title": "ossuaire",
+                            "description": "Nombre d'ossuaire"
+                        },
+                        "nmi_reduct": {
+                            "type": "integer",
+                            "title": "nmi_reduction",
+                            "description": "Nombre Minimum d'Individus dans ces réductions et ossuaires"
+                        },
+                        "nb_hommes": {
+                            "type": "integer",
+                            "title": "nb_hommes",
+                            "description": "Nombre de sujets masculins"
+                        },
+                        "nb_femmes": {
+                            "type": "integer",
+                            "title": "nb_femmes",
+                            "description": "Nombre de sujets féminins"
+                        },
+                        "nb_sexe_in": {
+                            "type": "integer",
+                            "title": "nb_sexe_ind",
+                            "description": "Nombre de sujets adultes de sexe indéterminé"
+                        },
+                        "nb_immatur": {
+                            "type": "integer",
+                            "title": "nb_immatures",
+                            "description": "Nombre de sujets immatures"
+                        },
+                        "patho_trau": {
+                            "type": "string",
+                            "title": "patho_trauma",
+                            "description": "Présence ou absence de traumatismes"
+                        },
+                        "patho_infe": {
+                            "type": "string",
+                            "title": "patho_infection",
+                            "description": "Présence ou absence de maladies infectieuses"
+                        },
+                        "metrique_c": {
+                            "type": "string",
+                            "title": "metrique_crane",
+                            "description": "Métrique crânienne réalisée ?"
+                        },
+                        "metrique_p": {
+                            "type": "string",
+                            "title": "metrique_post_crane",
+                            "description": "Métrique post-crânienne réalisée ?"
+                        },
+                        "nb_armes_o": {
+                            "type": "integer",
+                            "title": "nb_armes_offensives",
+                            "description": "Nombre d'armes offensives"
+                        },
+                        "nb_armes_d": {
+                            "type": "integer",
+                            "title": "nb_armes_defensives",
+                            "description": "Nombre d'armes défensives"
+                        },
+                        "nb_plaques": {
+                            "type": "integer",
+                            "title": "nb_plaques_boucles",
+                            "description": "Nombre de plaques_boucles"
+                        },
+                        "nb_boucles": {
+                            "type": "integer",
+                            "title": "nb_boucles_simples",
+                            "description": "Nombre de boucles simples"
+                        },
+                        "nb_chaines": {
+                            "type": "integer",
+                            "title": "nb_chaines",
+                            "description": "Nombre de chaines"
+                        },
+                        "nb_fibules": {
+                            "type": "integer",
+                            "title": "nb_fibules_uniques",
+                            "description": "Nombre de fibules uniques"
+                        },
+                        "nb_paire_d": {
+                            "type": "integer",
+                            "title": "nb_paire_de_fibules",
+                            "description": "Nombre de paires de fibules"
+                        },
+                        "nb_jarreti": {
+                            "type": "integer",
+                            "title": "nb_jarretiere",
+                            "description": "Nombre de jarretières"
+                        },
+                        "nb_bagues": {
+                            "type": "integer",
+                            "title": "nb_bagues",
+                            "description": "Nombre de bagues"
+                        },
+                        "nb_collier": {
+                            "type": "integer",
+                            "title": "nb_collier_perles",
+                            "description": "Nombre de colliers de perles"
+                        },
+                        "nb_boucl_1": {
+                            "type": "integer",
+                            "title": "nb_boucles_oreille",
+                            "description": "Nombre de boucles d'oreille"
+                        },
+                        "nb_bracele": {
+                            "type": "integer",
+                            "title": "nb_bracelet",
+                            "description": "Nombre de bracelets"
+                        },
+                        "nb_vases_c": {
+                            "type": "integer",
+                            "title": "nb_vases_ceramique",
+                            "description": "Nombre de vases en céramique"
+                        },
+                        "nb_vases_v": {
+                            "type": "integer",
+                            "title": "nb_vases_verre",
+                            "description": "Nombre de vases en verre"
+                        },
+                        "nb_vases_m": {
+                            "type": "integer",
+                            "title": "nb_vases_metal",
+                            "description": "Nombre de vases en métal"
+                        },
+                        "nb_coffret": {
+                            "type": "integer",
+                            "title": "nb_coffret_ou_pyxide",
+                            "description": "Nombre de coffret ou de pyxide"
+                        },
+                        "nb_aumonie": {
+                            "type": "integer",
+                            "title": "nb_aumonieres",
+                            "description": "Nombre d'aumônière"
+                        },
+                        "nb_plaqu_1": {
+                            "type": "integer",
+                            "title": "nb_plaques_chatelaines",
+                            "description": "Nombre de plaques de châtelaines"
+                        },
+                        "nb_monnaie": {
+                            "type": "integer",
+                            "title": "nb_monnaies",
+                            "description": "Nombre de monnaies"
+                        },
+                        "nb_aiguill": {
+                            "type": "integer",
+                            "title": "nb_aiguilles_ou_epingles,N,10,0",
+                            "description": "Nombre d'aiguilles ou d'épingles"
+                        },
+                        "nb_pince_a": {
+                            "type": "integer",
+                            "title": "nb_pince_a_echarder",
+                            "description": "Nombre de pinces à écharder"
+                        },
+                        "nb_peignes": {
+                            "type": "integer",
+                            "title": "nb_peignes",
+                            "description": "Nombre de peignes"
+                        },
+                        "nb_forces": {
+                            "type": "integer",
+                            "title": "nb_forces",
+                            "description": "Nombre de forces"
+                        },
+                        "nb_briquet": {
+                            "type": "integer",
+                            "title": "nb_briquets",
+                            "description": "Nombre de briquets"
+                        },
+                        "nb_fiches": {
+                            "type": "integer",
+                            "title": "nb_fiches_beliere",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

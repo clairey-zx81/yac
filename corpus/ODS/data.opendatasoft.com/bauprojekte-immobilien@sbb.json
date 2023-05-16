@@ -1,0 +1,521 @@
+{
+    "title": "bauprojekte-immobilien@sbb",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/bauprojekte-immobilien@sbb"
+        }
+    ],
+    "definitions": {
+        "bauprojekte-immobilien@sbb": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/bauprojekte-immobilien@sbb_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "bauprojekte-immobilien@sbb_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "url_virtual_tour": {
+                            "type": "string",
+                            "title": "Link to the virtual tour",
+                            "description": "url_virtual-tour"
+                        },
+                        "key": {
+                            "type": "string",
+                            "title": "Schlüssel",
+                            "description": "Schlüssel es Datensatz"
+                        },
+                        "subtitle": {
+                            "type": "string",
+                            "title": "Title",
+                            "description": "Postal code"
+                        },
+                        "teaser_image": {
+                            "type": "string",
+                            "title": "Promotional image",
+                            "description": "Image in the advertisement"
+                        },
+                        "project_phase_2_label": {
+                            "type": "string",
+                            "title": "2. Projektphase",
+                            "description": "Postal code"
+                        },
+                        "langcode": {
+                            "type": "string",
+                            "title": "Language",
+                            "description": "ISO language code"
+                        },
+                        "project_phase_1_value": {
+                            "type": "string",
+                            "title": "project_phase_1_value",
+                            "description": "Postal code"
+                        },
+                        "project_phase_0_label": {
+                            "type": "string",
+                            "title": "0. Projektphase",
+                            "description": "Postal code"
+                        },
+                        "id": {
+                            "type": "string",
+                            "title": "ID",
+                            "description": "ID"
+                        },
+                        "zip": {
+                            "type": "integer",
+                            "title": "zip",
+                            "description": "Postal code"
+                        },
+                        "completion": {
+                            "type": "string",
+                            "title": "Project end",
+                            "description": "End of the construction project"
+                        },
+                        "city": {
+                            "type": "string",
+                            "title": "Locality",
+                            "description": "Locality"
+                        },
+                        "title": {
+                            "type": "string",
+                            "title": "Title",
+                            "description": "Postal code"
+                        },
+                        "start": {
+                            "type": "string",
+                            "title": "start",
+                            "description": "Valid from"
+                        },
+                        "current_planning_phase_label": {
+                            "type": "string",
+                            "title": "Current planning phase",
+                            "description": "current_planning_phase_label"
+                        },
+                        "description": {
+                            "type": "string",
+                            "title": "Description",
+                            "description": "Beschreibung der Anlage"
+                        },
+                        "building_zone": {
+                            "type": "string",
+                            "title": "Construction zone",
+                            "description": "Construction zone"
+                        },
+                        "project_phase_0_value": {
+                            "type": "string",
+                            "title": "Termin 0. Projektphase",
+                            "description": "Postal code"
+                        },
+                        "project_phase_1_label": {
+                            "type": "string",
+                            "title": "1. Projektphase",
+                            "description": "Postal code"
+                        },
+                        "banner_image": {
+                            "type": "string",
+                            "title": "Banner link",
+                            "description": "Link to the banner image"
+                        },
+                        "address": {
+                            "type": "string",
+                            "title": "Address",
+                            "description": "Address of the service"
+                        },
+                        "project_phase_2_value": {
+                            "type": "string",
+                            "title": "Termin 2. Projektphase",
+                            "description": "Postal code"
+                        },
+                        "project_phase_3_label": {
+                            "type": "string",
+                            "title": "3. Projektphase",
+                            "description": "Postal code"
+                        },
+                        "project_phase_3_value": {
+                            "type": "string",
+                            "title": "Termin 3. Projektphase",
+                            "description": "Postal code"
+                        },
+                        "project_phase_4_value": {
+                            "type": "string",
+                            "title": "Termin 4. Projektphase",
+                            "description": "Postal code"
+                        },
+                        "project_phase_4_label": {
+                            "type": "string",
+                            "title": "4. Projektphase",
+                            "description": "Postal code"
+                        },
+                        "country": {
+                            "type": "string",
+                            "title": "Country",
+                            "description": "Country"
+                        },
+                        "current_planning_phase_id": {
+                            "type": "string",
+                            "title": "Current planning phase ID",
+                            "description": "current_planning_phase_id"
+                        },
+                        "website_url": {
+                            "type": "string",
+                            "title": "Link to the website",
+                            "description": "website_url"
+                        },
+                        "factsheet": {
+                            "type": "string",
+                            "title": "Factsheet",
+                            "description": "Marketing description of the construction project"
+                        },
+                        "geopos": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geopos",
+                            "description": "Geoposition of the data set"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,931 @@
+{
+    "title": "europeenne2019_carto@eurometrostrasbourg",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/europeenne2019_carto@eurometrostrasbourg"
+        }
+    ],
+    "definitions": {
+        "europeenne2019_carto@eurometrostrasbourg": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/europeenne2019_carto@eurometrostrasbourg_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "europeenne2019_carto@eurometrostrasbourg_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "id_bureau": {
+                            "type": "string",
+                            "title": "id_Bureau",
+                            "description": ""
+                        },
+                        "bureau": {
+                            "type": "string",
+                            "title": "Bureau",
+                            "description": ""
+                        },
+                        "inscrits": {
+                            "type": "string",
+                            "title": "Inscrits",
+                            "description": ""
+                        },
+                        "abstentions": {
+                            "type": "string",
+                            "title": "Abstentions",
+                            "description": ""
+                        },
+                        "votants": {
+                            "type": "string",
+                            "title": "Votants",
+                            "description": ""
+                        },
+                        "blancs": {
+                            "type": "string",
+                            "title": "Blancs",
+                            "description": ""
+                        },
+                        "nuls": {
+                            "type": "string",
+                            "title": "Nuls",
+                            "description": ""
+                        },
+                        "exprimes": {
+                            "type": "string",
+                            "title": "Exprimés",
+                            "description": ""
+                        },
+                        "nom10": {
+                            "type": "string",
+                            "title": "nom10",
+                            "description": ""
+                        },
+                        "pctg10": {
+                            "type": "string",
+                            "title": "pctg10",
+                            "description": ""
+                        },
+                        "score10": {
+                            "type": "string",
+                            "title": "score10",
+                            "description": ""
+                        },
+                        "nom11": {
+                            "type": "string",
+                            "title": "nom11",
+                            "description": ""
+                        },
+                        "pctg11": {
+                            "type": "string",
+                            "title": "pctg11",
+                            "description": ""
+                        },
+                        "score11": {
+                            "type": "string",
+                            "title": "score11",
+                            "description": ""
+                        },
+                        "nom12": {
+                            "type": "string",
+                            "title": "nom12",
+                            "description": ""
+                        },
+                        "pctg12": {
+                            "type": "string",
+                            "title": "pctg12",
+                            "description": ""
+                        },
+                        "score12": {
+                            "type": "string",
+                            "title": "score12",
+                            "description": ""
+                        },
+                        "nom13": {
+                            "type": "string",
+                            "title": "nom13",
+                            "description": ""
+                        },
+                        "pctg13": {
+                            "type": "string",
+                            "title": "pctg13",
+                            "description": ""
+                        },
+                        "score13": {
+                            "type": "string",
+                            "title": "score13",
+                            "description": ""
+                        },
+                        "nom14": {
+                            "type": "string",
+                            "title": "nom14",
+                            "description": ""
+                        },
+                        "pctg14": {
+                            "type": "string",
+                            "title": "pctg14",
+                            "description": ""
+                        },
+                        "score14": {
+                            "type": "string",
+                            "title": "score14",
+                            "description": ""
+                        },
+                        "nom15": {
+                            "type": "string",
+                            "title": "nom15",
+                            "description": ""
+                        },
+                        "pctg15": {
+                            "type": "string",
+                            "title": "pctg15",
+                            "description": ""
+                        },
+                        "score15": {
+                            "type": "string",
+                            "title": "score15",
+                            "description": ""
+                        },
+                        "nom16": {
+                            "type": "string",
+                            "title": "nom16",
+                            "description": ""
+                        },
+                        "pctg16": {
+                            "type": "string",
+                            "title": "pctg16",
+                            "description": ""
+                        },
+                        "score16": {
+                            "type": "string",
+                            "title": "score16",
+                            "description": ""
+                        },
+                        "nom17": {
+                            "type": "string",
+                            "title": "nom17",
+                            "description": ""
+                        },
+                        "pctg17": {
+                            "type": "string",
+                            "title": "pctg17",
+                            "description": ""
+                        },
+                        "score17": {
+                            "type": "string",
+                            "title": "score17",
+                            "description": ""
+                        },
+                        "nom18": {
+                            "type": "string",
+                            "title": "nom18",
+                            "description": ""
+                        },
+                        "pctg18": {
+                            "type": "string",
+                            "title": "pctg18",
+                            "description": ""
+                        },
+                        "score18": {
+                            "type": "string",
+                            "title": "score18",
+                            "description": ""
+                        },
+                        "nom19": {
+                            "type": "string",
+                            "title": "nom19",
+                            "description": ""
+                        },
+                        "pctg19": {
+                            "type": "string",
+                            "title": "pctg19",
+                            "description": ""
+                        },
+                        "score19": {
+                            "type": "string",
+                            "title": "score19",
+                            "description": ""
+                        },
+                        "nom1": {
+                            "type": "string",
+                            "title": "nom1",
+                            "description": ""
+                        },
+                        "pctg1": {
+                            "type": "string",
+                            "title": "pctg1",
+                            "description": ""
+                        },
+                        "score1": {
+                            "type": "string",
+                            "title": "score1",
+                            "description": ""
+                        },
+                        "nom20": {
+                            "type": "string",
+                            "title": "nom20",
+                            "description": ""
+                        },
+                        "pctg20": {
+                            "type": "string",
+                            "title": "pctg20",
+                            "description": ""
+                        },
+                        "score20": {
+                            "type": "string",
+                            "title": "score20",
+                            "description": ""
+                        },
+                        "nom21": {
+                            "type": "string",
+                            "title": "nom21",
+                            "description": ""
+                        },
+                        "pctg21": {
+                            "type": "string",
+                            "title": "pctg21",
+                            "description": ""
+                        },
+                        "score21": {
+                            "type": "string",
+                            "title": "score21",
+                            "description": ""
+                        },
+                        "nom22": {
+                            "type": "string",
+                            "title": "nom22",
+                            "description": ""
+                        },
+                        "pctg22": {
+                            "type": "string",
+                            "title": "pctg22",
+                            "description": ""
+                        },
+                        "score22": {
+                            "type": "string",
+                            "title": "score22",
+                            "description": ""
+                        },
+                        "nom23": {
+                            "type": "string",
+                            "title": "nom23",
+                            "description": ""
+                        },
+                        "pctg23": {
+                            "type": "string",
+                            "title": "pctg23",
+                            "description": ""
+                        },
+                        "score23": {
+                            "type": "string",
+                            "title": "score23",
+                            "description": ""
+                        },
+                        "nom24": {
+                            "type": "string",
+                            "title": "nom24",
+                            "description": ""
+                        },
+                        "pctg24": {
+                            "type": "string",
+                            "title": "pctg24",
+                            "description": ""
+                        },
+                        "score24": {
+                            "type": "string",
+                            "title": "score24",
+                            "description": ""
+                        },
+                        "nom25": {
+                            "type": "string",
+                            "title": "nom25",
+                            "description": ""
+                        },
+                        "pctg25": {
+                            "type": "string",
+                            "title": "pctg25",
+                            "description": ""
+                        },
+                        "score25": {
+                            "type": "string",
+                            "title": "score25",
+                            "description": ""
+                        },
+                        "nom26": {
+                            "type": "string",
+                            "title": "nom26",
+                            "description": ""
+                        },
+                        "pctg26": {
+                            "type": "string",
+                            "title": "pctg26",
+                            "description": ""
+                        },
+                        "score26": {
+                            "type": "string",
+                            "title": "score26",
+                            "description": ""
+                        },
+                        "nom27": {
+                            "type": "string",
+                            "title": "nom27",
+                            "description": ""
+                        },
+                        "pctg27": {
+                            "type": "string",
+                            "title": "pctg27",
+                            "description": ""
+                        },
+                        "score27": {
+                            "type": "string",
+                            "title": "score27",
+                            "description": ""
+                        },
+                        "nom28": {
+                            "type": "string",
+                            "title": "nom28",
+                            "description": ""
+                        },
+                        "pctg28": {
+                            "type": "string",
+                            "title": "pctg28",
+                            "description": ""
+                        },
+                        "score28": {
+                            "type": "string",
+                            "title": "score28",
+                            "description": ""
+                        },
+                        "nom29": {
+                            "type": "string",
+                            "title": "nom29",
+                            "description": ""
+                        },
+                        "pctg29": {
+                            "type": "string",
+                            "title": "pctg29",
+                            "description": ""
+                        },
+                        "score29": {
+                            "type": "string",
+                            "title": "score29",
+                            "description": ""
+                        },
+                        "nom2": {
+                            "type": "string",
+                            "title": "nom2",
+                            "description": ""
+                        },
+                        "pctg2": {
+                            "type": "string",
+                            "title": "pctg2",
+                            "description": ""
+                        },
+                        "score2": {
+                            "type": "string",
+                            "title": "score2",
+                            "description": ""
+                        },
+                        "nom30": {
+                            "type": "string",
+                            "title": "nom30",
+                            "description": ""
+                        },
+                        "pctg30": {
+                            "type": "string",
+                            "title": "pctg30",
+                            "description": ""
+                        },
+                        "score30": {
+                            "type": "string",
+                            "title": "score30",
+                            "description": ""
+                        },
+                        "nom31": {
+                            "type": "string",
+                            "title": "nom31",
+                            "description": ""
+                        },
+                        "pctg31": {
+                            "type": "string",
+                            "title": "pctg31",
+                            "description": ""
+                        },
+                        "score31": {
+                            "type": "string",
+                            "title": "score31",
+                            "description": ""
+                        },
+                        "nom32": {
+                            "type": "string",
+                            "title": "nom32",
+                            "description": ""
+                        },
+                        "pctg32": {
+                            "type": "string",
+                            "title": "pctg32",
+                            "description": ""
+                        },
+                        "score32": {
+                            "type": "string",
+                            "title": "score32",
+                            "description": ""
+                        },
+                        "nom33": {
+                            "type": "string",
+                            "title": "nom33",
+                            "description": ""
+                        },
+                        "pctg33": {
+                            "type": "string",
+                            "title": "pctg33",
+                            "description": ""
+                        },
+                        "score33": {
+                            "type": "string",
+                            "title": "score33",
+                            "description": ""
+                        },
+                        "nom34": {
+                            "type": "string",
+                            "title": "nom34",
+                            "description": ""
+                        },
+                        "pctg34": {
+                            "type": "string",
+                            "title": "pctg34",
+                            "description": ""
+                        },
+                        "score34": {
+                            "type": "string",
+                            "title": "score34",
+                            "description": ""
+                        },
+                        "nom3": {
+                            "type": "string",
+                            "title": "nom3",
+                            "description": ""
+                        },
+                        "pctg3": {
+                            "type": "string",
+                            "title": "pctg3",
+                            "description": ""
+                        },
+                        "score3": {
+                            "type": "string",
+                            "title": "score3",
+                            "description": ""
+                        },
+                        "nom4": {
+                            "type": "string",
+                            "title": "nom4",
+                            "description": ""
+                        },
+                        "pctg4": {
+                            "type": "string",
+                            "title": "pctg4",
+                            "description": ""
+                        },
+                        "score4": {
+                            "type": "string",
+                            "title": "score4",
+                            "description": ""
+                        },
+                        "nom5": {
+                            "type": "string",
+                            "title": "nom5",
+                            "description": ""
+                        },
+                        "pctg5": {
+                            "type": "string",
+                            "title": "pctg5",
+                            "description": ""
+                        },
+                        "score5": {
+                            "type": "string",
+                            "title": "score5",
+                            "description": ""
+                        },
+                        "nom6": {
+                            "type": "string",
+                            "title": "nom6",
+                            "description": ""
+                        },
+                        "pctg6": {
+                            "type": "string",
+                            "title": "pctg6",
+                            "description": ""
+                        },
+                        "score6": {
+                            "type": "string",
+                            "title": "score6",
+                            "description": ""
+                        },
+                        "nom7": {
+                            "type": "string",
+                            "title": "nom7",
+                            "description": ""
+                        },
+                        "pctg7": {
+                            "type": "string",
+                            "title": "pctg7",
+                            "description": ""
+                        },
+                        "score7": {
+                            "type": "string",
+                            "title": "score7",
+                            "description": ""
+                        },
+                        "nom8": {
+                            "type": "string",
+                            "title": "nom8",
+                            "description": ""
+                        },
+                        "pctg8": {
+                            "type": "string",
+                            "title": "pctg8",
+                            "description": ""
+                        },
+                        "score8": {
+                            "type": "string",
+                            "title": "score8",
+                            "description": ""
+                        },
+                        "nom9": {
+                            "type": "string",
+                            "title": "nom9",
+                            "description": ""
+                        },
+                        "pctg9": {
+                            "type": "string",
+                            "title": "pctg9",
+                            "description": ""
+                        },
+                        "score9": {
+                            "type": "string",
+                            "title": "score9",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

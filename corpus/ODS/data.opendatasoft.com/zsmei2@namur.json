@@ -1,0 +1,606 @@
+{
+    "title": "zsmei2@namur",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/zsmei2@namur"
+        }
+    ],
+    "definitions": {
+        "zsmei2@namur": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/zsmei2@namur_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "zsmei2@namur_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "annee": {
+                            "type": "integer",
+                            "title": "Année",
+                            "description": ""
+                        },
+                        "code": {
+                            "type": "string",
+                            "title": "Code",
+                            "description": ""
+                        },
+                        "quart_nom": {
+                            "type": "string",
+                            "title": "Quartier",
+                            "description": ""
+                        },
+                        "quart_code": {
+                            "type": "string",
+                            "title": "Quartier code",
+                            "description": ""
+                        },
+                        "quart_typologie": {
+                            "type": "string",
+                            "title": "Typologie du quartier",
+                            "description": ""
+                        },
+                        "htot": {
+                            "type": "integer",
+                            "title": "Total Hommes",
+                            "description": ""
+                        },
+                        "ftot": {
+                            "type": "integer",
+                            "title": "Total Femmes",
+                            "description": ""
+                        },
+                        "indtotal": {
+                            "type": "integer",
+                            "title": "Total Individus",
+                            "description": ""
+                        },
+                        "mentotal": {
+                            "type": "integer",
+                            "title": "Total Ménages",
+                            "description": ""
+                        },
+                        "indicateur": {
+                            "type": "string",
+                            "title": "indicateur",
+                            "description": ""
+                        },
+                        "valeur_ind": {
+                            "type": "number",
+                            "title": "valeur_ind",
+                            "description": "valeur de base de l'indicateur"
+                        },
+                        "categorie_men": {
+                            "type": "string",
+                            "title": "Catégorie",
+                            "description": ""
+                        },
+                        "valeur": {
+                            "type": "number",
+                            "title": "Valeur",
+                            "description": "valeur de base multipliée par 100"
+                        },
+                        "genre": {
+                            "type": "string",
+                            "title": "genre",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        },
+                        "menif": {
+                            "type": "integer",
+                            "title": "MenIF",
+                            "description": ""
+                        },
+                        "menih": {
+                            "type": "integer",
+                            "title": "MenIH",
+                            "description": ""
+                        },
+                        "menmf": {
+                            "type": "integer",
+                            "title": "MenMF",
+                            "description": ""
+                        },
+                        "menmh": {
+                            "type": "integer",
+                            "title": "MenMH",
+                            "description": ""
+                        },
+                        "mencae": {
+                            "type": "integer",
+                            "title": "MenCAE",
+                            "description": ""
+                        },
+                        "mencse": {
+                            "type": "integer",
+                            "title": "MenCSE",
+                            "description": ""
+                        },
+                        "mencoa": {
+                            "type": "integer",
+                            "title": "MenCOA",
+                            "description": ""
+                        },
+                        "mencos": {
+                            "type": "integer",
+                            "title": "MenCOS",
+                            "description": ""
+                        },
+                        "menaut": {
+                            "type": "integer",
+                            "title": "MenAUT",
+                            "description": ""
+                        },
+                        "men1": {
+                            "type": "integer",
+                            "title": "Men1",
+                            "description": ""
+                        },
+                        "men2": {
+                            "type": "integer",
+                            "title": "Men2",
+                            "description": ""
+                        },
+                        "men3": {
+                            "type": "integer",
+                            "title": "Men3",
+                            "description": ""
+                        },
+                        "men4": {
+                            "type": "integer",
+                            "title": "Men4",
+                            "description": ""
+                        },
+                        "men5": {
+                            "type": "integer",
+                            "title": "Men5",
+                            "description": ""
+                        },
+                        "men6": {
+                            "type": "integer",
+                            "title": "Men6",
+                            "description": ""
+                        },
+                        "indaut": {
+                            "type": "integer",
+                            "title": "IndAUT",
+                            "description": ""
+                        },
+                        "indcae": {
+                            "type": "integer",
+                            "title": "IndCAE",
+                            "description": ""
+                        },
+                        "indcaa": {
+                            "type": "string",
+                            "title": "IndCAA",
+                            "description": ""
+                        },
+                        "indcse": {
+                            "type": "integer",
+                            "title": "IndCSE",
+                            "description": ""
+                        },
+                        "indcoa": {
+                            "type": "integer",
+                            "title": "IndCOA",
+                            "description": ""
+                        },
+                        "indcos": {
+                            "type": "integer",
+                            "title": "IndCOS",
+                            "description": ""
+                        },
+                        "indcol": {
+                            "type": "integer",
+                            "title": "IndCOL",
+                            "description": ""
+                        },
+                        "indmono": {
+                            "type": "string",
+                            "title": "IndMONO",
+                            "description": ""
+                        },
+                        "indiso": {
+                            "type": "string",
+                            "title": "IndISO",
+                            "description": ""
+                        },
+                        "ind1": {
+                            "type": "string",
+                            "title": "Ind1",
+                            "description": ""
+                        },
+                        "ind2": {
+                            "type": "string",
+                            "title": "Ind2",
+                            "description": ""
+                        },
+                        "ind3": {
+                            "type": "string",
+                            "title": "Ind3",
+                            "description": ""
+                        },
+                        "ind4": {
+                            "type": "string",
+                            "title": "Ind4",
+                            "description": ""
+                        },
+                        "ind5": {
+                            "type": "string",
+                            "title": "Ind5",
+                            "description": ""
+                        },
+                        "ind6": {
+                            "type": "string",
+                            "title": "Ind6",
+                            "description": ""
+                        },
+                        "categorie_lib": {
+                            "type": "string",
+                            "title": "Type de ménages",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

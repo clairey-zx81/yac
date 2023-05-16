@@ -1,0 +1,519 @@
+{
+    "title": "espaces_verts@parisdata",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/espaces_verts@parisdata"
+        }
+    ],
+    "definitions": {
+        "espaces_verts@parisdata": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/espaces_verts@parisdata_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "espaces_verts@parisdata_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "nsq_espace_vert": {
+                            "type": "integer",
+                            "title": "Identifiant espace vert",
+                            "description": ""
+                        },
+                        "nom_ev": {
+                            "type": "string",
+                            "title": "Nom de l'espace vert",
+                            "description": ""
+                        },
+                        "type_ev": {
+                            "type": "string",
+                            "title": "Typologie d'espace vert",
+                            "description": ""
+                        },
+                        "categorie": {
+                            "type": "string",
+                            "title": "Catégorie",
+                            "description": ""
+                        },
+                        "adresse_numero": {
+                            "type": "integer",
+                            "title": "Adresse - Numéro",
+                            "description": ""
+                        },
+                        "adresse_complement": {
+                            "type": "string",
+                            "title": "Adresse - Complément",
+                            "description": ""
+                        },
+                        "adresse_typevoie": {
+                            "type": "string",
+                            "title": "Adresse - type voie",
+                            "description": ""
+                        },
+                        "adresse_libellevoie": {
+                            "type": "string",
+                            "title": "Adresse - Libellé voie",
+                            "description": ""
+                        },
+                        "adresse_codepostal": {
+                            "type": "string",
+                            "title": "Code postal",
+                            "description": ""
+                        },
+                        "poly_area": {
+                            "type": "integer",
+                            "title": "Surface calculée",
+                            "description": ""
+                        },
+                        "surface_totale_reelle": {
+                            "type": "integer",
+                            "title": "Superficie totale réelle",
+                            "description": "surface réelle « terrain » "
+                        },
+                        "surface_horticole": {
+                            "type": "integer",
+                            "title": "Surface horticole",
+                            "description": ""
+                        },
+                        "presence_cloture": {
+                            "type": "string",
+                            "title": "Présence cloture",
+                            "description": ""
+                        },
+                        "perimeter": {
+                            "type": "number",
+                            "title": "Périmètre",
+                            "description": ""
+                        },
+                        "annee_ouverture": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année de l'ouverture",
+                            "description": ""
+                        },
+                        "annee_renovation": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année de rénovation",
+                            "description": ""
+                        },
+                        "ancien_nom_ev": {
+                            "type": "string",
+                            "title": "Ancien nom de l'espace vert",
+                            "description": ""
+                        },
+                        "annee_changement_nom": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année de changement de nom",
+                            "description": ""
+                        },
+                        "nb_entites": {
+                            "type": "integer",
+                            "title": "Nombre d'entités",
+                            "description": ""
+                        },
+                        "ouvert_ferme": {
+                            "type": "string",
+                            "title": "Ouverture 24h_24h",
+                            "description": "Ouverture de l’espace vert 24h/24h"
+                        },
+                        "id_division": {
+                            "type": "integer",
+                            "title": "ID_DIVISION",
+                            "description": ""
+                        },
+                        "id_atelier_horticole": {
+                            "type": "integer",
+                            "title": "ID_ATELIER_HORTICOLE",
+                            "description": ""
+                        },
+                        "ida3d_enb": {
+                            "type": "string",
+                            "title": "IDA3D_ENB",
+                            "description": ""
+                        },
+                        "site_villes": {
+                            "type": "string",
+                            "title": "SITE_VILLES",
+                            "description": ""
+                        },
+                        "id_eqpt": {
+                            "type": "string",
+                            "title": "ID_EQPT",
+                            "description": ""
+                        },
+                        "competence": {
+                            "type": "string",
+                            "title": "Compétence",
+                            "description": ""
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "url_plan": {
+                            "type": "string",
+                            "title": "URL_PLAN",
+                            "description": ""
+                        },
+                        "geom_x_y": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo point",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

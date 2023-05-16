@@ -1,0 +1,468 @@
+{
+    "title": "emplacements-pmr-databusters@digitalwallonia",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/emplacements-pmr-databusters@digitalwallonia"
+        }
+    ],
+    "definitions": {
+        "emplacements-pmr-databusters@digitalwallonia": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/emplacements-pmr-databusters@digitalwallonia_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "emplacements-pmr-databusters@digitalwallonia_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "title": "Identifiant",
+                            "description": "Ce champ contient un identifiant unique local. "
+                        },
+                        "municipality": {
+                            "type": "string",
+                            "title": "Nom de la commune",
+                            "description": "Ce champ contient le nom de la commune dans laquelle se situe l'emplacement PMR. "
+                        },
+                        "ins_code": {
+                            "type": "string",
+                            "title": "Code INS",
+                            "description": "Ce champ contient le code INS de la commune où se situe l'emplacement PMR. "
+                        },
+                        "zone_address": {
+                            "type": "string",
+                            "title": "Partie de commune",
+                            "description": "Ce champ continent le nom de la partie de commune où se situe l'emplacement PMR, conforme à l'appelation dans StatBel"
+                        },
+                        "ins_zone_address": {
+                            "type": "string",
+                            "title": "Code INS de la partie de commune",
+                            "description": "Ce champ contient le code INS de la partie de commune où se situe l'emplacement PMR. "
+                        },
+                        "street_name": {
+                            "type": "string",
+                            "title": "Nom de rue",
+                            "description": "Ce champ renseigne le nom de la voirie où se situe l'emplacement PMR"
+                        },
+                        "street_number": {
+                            "type": "string",
+                            "title": "Code rue BeSTAddress",
+                            "description": "Ce champ contient le code de la voirie où se situe l'emplacement PMR dans la base de données BeSTAdress"
+                        },
+                        "street_number_rrn": {
+                            "type": "string",
+                            "title": "Code rue national",
+                            "description": "Code de la voirie où se situe l'emplacement PMR dans le registre national"
+                        },
+                        "house_number": {
+                            "type": "string",
+                            "title": "Numéro de police (maison)",
+                            "description": "Ce champ contient le numéro de police (numéro de maison) le plus proche de l'emplacement PMR."
+                        },
+                        "distance": {
+                            "type": "string",
+                            "title": "Distance au point d'adresse",
+                            "description": "Ce champ indique la distance, en mètres, entre l'emplacement PMR et le point d'adresse le plus proche introduit via les autres champs"
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Coordonnées",
+                            "description": "Ce champ indique les coordonnées de l'emplacement PMR. Il respecte le format WGS 1984"
+                        },
+                        "available_places": {
+                            "type": "integer",
+                            "title": "Nombre de places",
+                            "description": "Ce champ précise le nombre de places à disposition."
+                        },
+                        "length": {
+                            "type": "string",
+                            "title": "Longueur",
+                            "description": "Ce champ indique la longueur, en mètres, de l'emplacement PMR."
+                        },
+                        "width": {
+                            "type": "string",
+                            "title": "Largeur",
+                            "description": "Ce champ indique la largeur, en mètres, de l'emplacement PMR. "
+                        },
+                        "modalities": {
+                            "type": "string",
+                            "title": "Modalités",
+                            "description": "Ce champ décrit les modalités de réservation et informations des disponibilités de l'emplacement PMR."
+                        },
+                        "availability": {
+                            "type": "string",
+                            "title": "Disponibilité",
+                            "description": "Ce champ précise si l'emplacement PMR est équipé de capteurs permettant d'accéder à des informations sur sa disponibilité en temps réels."
+                        },
+                        "equipment": {
+                            "type": "string",
+                            "title": "Equipement",
+                            "description": "Ce champ décrit les équipements présents sur l'emplacement PMR : arceau vélo, bornes de rechargement, installations relatives à l'accessibilité, …"
+                        },
+                        "created_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de création de la donnée",
+                            "description": "Ce champ indique la date de création de la donnée dans le jeu. Il respecte le format ISO 8601 : année-mois-jour (YYYY-MM-DD)"
+                        },
+                        "last_modified_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de dernière modification de la donnée",
+                            "description": "Ce champ indique la date de la dernière modification de la donnée dans le jeu. Il respecte le format ISO 8601 : année-mois-jour (YYYY-MM-DD)."
+                        },
+                        "picture": {
+                            "type": "string",
+                            "title": "Photo",
+                            "description": "Ce champ contient une url renvoyant à une photo de l'emplacement PMR."
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

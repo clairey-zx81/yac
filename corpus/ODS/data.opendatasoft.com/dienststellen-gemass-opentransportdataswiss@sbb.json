@@ -1,0 +1,561 @@
+{
+    "title": "dienststellen-gemass-opentransportdataswiss@sbb",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/dienststellen-gemass-opentransportdataswiss@sbb"
+        }
+    ],
+    "definitions": {
+        "dienststellen-gemass-opentransportdataswiss@sbb": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dienststellen-gemass-opentransportdataswiss@sbb_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "dienststellen-gemass-opentransportdataswiss@sbb_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "nummer": {
+                            "type": "integer",
+                            "title": "Content-Type: text/plain; charset=utf-8\n",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "bpuic": {
+                            "type": "integer",
+                            "title": "OPUIC",
+                            "description": "Identification of the stop according to UIC specification"
+                        },
+                        "bezeichnung_offiziell": {
+                            "type": "string",
+                            "title": "Stop name",
+                            "description": "Official name of the stop"
+                        },
+                        "abkuerzung": {
+                            "type": "string",
+                            "title": "Station abbreviation",
+                            "description": "Abbreviation code for the station/operating point"
+                        },
+                        "ortschaftsname": {
+                            "type": "string",
+                            "title": "LOCALITYNAME",
+                            "description": "Name of the locality"
+                        },
+                        "gemeindename": {
+                            "type": "string",
+                            "title": "MUNICIPALITY NAME",
+                            "description": "Name of the municipality where the stop is located."
+                        },
+                        "bfs_nummer": {
+                            "type": "integer",
+                            "title": "BFS Nummer Gemeinde",
+                            "description": "Number of the municipality according to FSO"
+                        },
+                        "bezirksname": {
+                            "type": "string",
+                            "title": "DISTRICT NAME",
+                            "description": "Name of the district "
+                        },
+                        "bezirksnum": {
+                            "type": "integer",
+                            "title": "FSO_NUMBER",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "kantonsname": {
+                            "type": "string",
+                            "title": "CANTON NAME",
+                            "description": "Name of the canton in which the stop is located"
+                        },
+                        "kantonskuerzel": {
+                            "type": "string",
+                            "title": "CANTON ABBREVIATION",
+                            "description": "Abbreviation of the canton in which the stop is located"
+                        },
+                        "kantonsnum": {
+                            "type": "integer",
+                            "title": "CANTON NO.",
+                            "description": "Number of the canton in which the stop is located (FSO)"
+                        },
+                        "land_iso2_geo": {
+                            "type": "string",
+                            "title": "COUNTRY_ISO2_GEO",
+                            "description": "ISO country code of the stop"
+                        },
+                        "bp_art_bezeichnung_de": {
+                            "type": "string",
+                            "title": "OP_TYPE_DESIGNATION_DE",
+                            "description": "Designation of the standardisation of an operating control point."
+                        },
+                        "bp_betriebspunkt_art_id": {
+                            "type": "string",
+                            "title": "OP_OPERATING_POINT_TYPE_ID",
+                            "description": "ID for standardisation of an operating control point."
+                        },
+                        "bpof_art_bezeichnung_de": {
+                            "type": "string",
+                            "title": "OPOF_TYPE_DESIGNATION_DE",
+                            "description": "Designation of the standardisation of an operating control point without a timetable."
+                        },
+                        "bpof_betriebspunkt_art_id": {
+                            "type": "string",
+                            "title": "OPOF_OPERATING_POINT_TYPE_ID",
+                            "description": "ID for the standardisation of an operating control point without a timetable."
+                        },
+                        "bptf_art_bezeichnung_de": {
+                            "type": "string",
+                            "title": "OPTF_TYPE_DESIGNATION_DE",
+                            "description": "Designation of the standardisation of a technical timetable point/pure operating control point."
+                        },
+                        "e_lv95": {
+                            "type": "number",
+                            "title": "Osten LV 95 Format",
+                            "description": "Ost-West Koordinate"
+                        },
+                        "n_lv95": {
+                            "type": "number",
+                            "title": "N_LV95",
+                            "description": "North coordinate according to the Swiss coordinate system LV95."
+                        },
+                        "z_lv95": {
+                            "type": "integer",
+                            "title": "Z_LV95",
+                            "description": "Height in metres"
+                        },
+                        "e_lv03": {
+                            "type": "number",
+                            "title": "Osten LV 03 Format",
+                            "description": "Ost-West Koordinate"
+                        },
+                        "n_lv03": {
+                            "type": "number",
+                            "title": "N_LV03",
+                            "description": "North coordinate according to the Swiss coordinate system LV03."
+                        },
+                        "z_lv03": {
+                            "type": "integer",
+                            "title": "Z_LV03",
+                            "description": "Height in metres"
+                        },
+                        "e_wgs84": {
+                            "type": "number",
+                            "title": "Osten WGS84 Format",
+                            "description": "Ost-West Koordinate"
+                        },
+                        "n_wgs84": {
+                            "type": "number",
+                            "title": "N_WGS84",
+                            "description": "Width according to WGS84"
+                        },
+                        "z_wgs84": {
+                            "type": "integer",
+                            "title": "Z_WGS84",
+                            "description": "Height in metres"
+                        },
+                        "bpvh_verkehrsmittel_text_de": {
+                            "type": "string",
+                            "title": "Verkehrsmitteltext",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "go_identifikation": {
+                            "type": "integer",
+                            "title": "BO_IDENTIFICATION",
+                            "description": "Swiss Administration ID (SAID), part of the future Swiss ID for business organisation identification"
+                        },
+                        "go_nummer": {
+                            "type": "integer",
+                            "title": "tc-number",
+                            "description": "Number of the business organisation"
+                        },
+                        "go_abkuerzung_de": {
+                            "type": "string",
+                            "title": "BO_ABBREVIATION_DE",
+                            "description": "Abbreviation for the business organisation"
+                        },
+                        "go_bezeichnung_de": {
+                            "type": "string",
+                            "title": "BO_DESIGNATION_DE",
+                            "description": "Name of the business organisation"
+                        },
+                        "lod": {
+                            "type": "string",
+                            "title": "lod",
+                            "description": "Linked Open Data representation of the stop"
+                        },
+                        "geopos": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geopos",
+                            "description": "Geoposition of the data set"
+                        },
+                        "sloid": {
+                            "type": "string",
+                            "title": "SLOID",
+                            "description": ""
+                        },
+                        "is_haltestelle": {
+                            "type": "integer",
+                            "title": "IS_STOP",
+                            "description": "Service point is a stop"
+                        },
+                        "is_bedienpunkt": {
+                            "type": "integer",
+                            "title": "IS_BEDIENPUNKT",
+                            "description": ""
+                        },
+                        "is_verkehrspunkt": {
+                            "type": "integer",
+                            "title": "IS_VERKEHRSPUNKT",
+                            "description": ""
+                        },
+                        "plz": {
+                            "type": "string",
+                            "title": "plz",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

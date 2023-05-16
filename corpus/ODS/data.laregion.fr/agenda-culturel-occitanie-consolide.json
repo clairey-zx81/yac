@@ -1,0 +1,708 @@
+{
+    "title": "agenda-culturel-occitanie-consolide",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/agenda-culturel-occitanie-consolide"
+        }
+    ],
+    "definitions": {
+        "agenda-culturel-occitanie-consolide": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/agenda-culturel-occitanie-consolide_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "agenda-culturel-occitanie-consolide_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "title_fr": {
+                            "type": "string",
+                            "title": "title_fr",
+                            "description": ""
+                        },
+                        "description_fr": {
+                            "type": "string",
+                            "title": "description_fr",
+                            "description": ""
+                        },
+                        "firstdate": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "firstdate",
+                            "description": ""
+                        },
+                        "lastdate": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "lastdate",
+                            "description": ""
+                        },
+                        "duree": {
+                            "type": "integer",
+                            "title": "Duree",
+                            "description": "= firsttimestart - firsttimeend\n"
+                        },
+                        "agenda_source": {
+                            "type": "string",
+                            "title": "agenda_source",
+                            "description": ""
+                        },
+                        "type_evenement": {
+                            "type": "string",
+                            "title": "type_événement",
+                            "description": ""
+                        },
+                        "firsttimestart": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "firsttimestart",
+                            "description": ""
+                        },
+                        "firsttimeend": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "firsttimeend",
+                            "description": ""
+                        },
+                        "lasttimestart": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "lasttimestart",
+                            "description": ""
+                        },
+                        "lasttimeend": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "lasttimeend",
+                            "description": ""
+                        },
+                        "timings": {
+                            "type": "string",
+                            "title": "timings",
+                            "description": ""
+                        },
+                        "longdescription_fr": {
+                            "type": "string",
+                            "title": "longdescription_fr",
+                            "description": ""
+                        },
+                        "age_min": {
+                            "type": "integer",
+                            "title": "age_min",
+                            "description": ""
+                        },
+                        "infos_pratiques": {
+                            "type": "string",
+                            "title": "infos_pratiques",
+                            "description": ""
+                        },
+                        "image": {
+                            "type": "string",
+                            "title": "image",
+                            "description": ""
+                        },
+                        "imagecredits": {
+                            "type": "string",
+                            "title": "imagecredits",
+                            "description": ""
+                        },
+                        "conditions": {
+                            "type": "string",
+                            "title": "conditions",
+                            "description": ""
+                        },
+                        "tarif": {
+                            "type": "string",
+                            "title": "tarif",
+                            "description": ""
+                        },
+                        "evenement_associe": {
+                            "type": "string",
+                            "title": "evenement_associé",
+                            "description": ""
+                        },
+                        "sub_region": {
+                            "type": "string",
+                            "title": "sub_region",
+                            "description": ""
+                        },
+                        "location_name": {
+                            "type": "string",
+                            "title": "location_name",
+                            "description": ""
+                        },
+                        "location_description_fr": {
+                            "type": "string",
+                            "title": "location_description_fr",
+                            "description": ""
+                        },
+                        "location_website": {
+                            "type": "string",
+                            "title": "location_website",
+                            "description": ""
+                        },
+                        "location_address": {
+                            "type": "string",
+                            "title": "location_address",
+                            "description": ""
+                        },
+                        "location_postalcode": {
+                            "type": "integer",
+                            "title": "location_postalcode",
+                            "description": ""
+                        },
+                        "location_city": {
+                            "type": "string",
+                            "title": "location_city",
+                            "description": ""
+                        },
+                        "cedex": {
+                            "type": "string",
+                            "title": "cedex",
+                            "description": ""
+                        },
+                        "location_department": {
+                            "type": "string",
+                            "title": "location_department",
+                            "description": ""
+                        },
+                        "location_region": {
+                            "type": "string",
+                            "title": "location_region",
+                            "description": ""
+                        },
+                        "location_countrycode": {
+                            "type": "string",
+                            "title": "location_countrycode",
+                            "description": ""
+                        },
+                        "location_coordinates": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "location_coordinates",
+                            "description": ""
+                        },
+                        "location_coordinates0": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "location_coordinates",
+                            "description": ""
+                        },
+                        "accessibility_label_fr": {
+                            "type": "string",
+                            "title": "accessibility_label_fr",
+                            "description": ""
+                        },
+                        "location_website0": {
+                            "type": "string",
+                            "title": "location_website",
+                            "description": ""
+                        },
+                        "location_phone": {
+                            "type": "string",
+                            "title": "location_phone",
+                            "description": ""
+                        },
+                        "courriel_site": {
+                            "type": "string",
+                            "title": "courriel_site",
+                            "description": ""
+                        },
+                        "contributor_organization": {
+                            "type": "string",
+                            "title": "contributor_organization",
+                            "description": ""
+                        },
+                        "category": {
+                            "type": "string",
+                            "title": "category",
+                            "description": ""
+                        },
+                        "contributor_contactname": {
+                            "type": "string",
+                            "title": "contributor_contactname",
+                            "description": ""
+                        },
+                        "site_web_porteur": {
+                            "type": "string",
+                            "title": "site_web_porteur",
+                            "description": ""
+                        },
+                        "contributor_contactnumber": {
+                            "type": "string",
+                            "title": "contributor_contactnumber",
+                            "description": ""
+                        },
+                        "contributor_email": {
+                            "type": "string",
+                            "title": "contributor_email",
+                            "description": ""
+                        },
+                        "adresse_porteur": {
+                            "type": "string",
+                            "title": "adresse_porteur",
+                            "description": ""
+                        },
+                        "cp_porteur": {
+                            "type": "string",
+                            "title": "'cp_porteur'",
+                            "description": ""
+                        },
+                        "com_porteur": {
+                            "type": "string",
+                            "title": "'com_porteur'",
+                            "description": ""
+                        },
+                        "cedex_porteur": {
+                            "type": "string",
+                            "title": "'cedex_porteur'",
+                            "description": ""
+                        },
+                        "dep_porteur": {
+                            "type": "string",
+                            "title": "'dep_porteur'",
+                            "description": ""
+                        },
+                        "langue": {
+                            "type": "string",
+                            "title": "'langue'",
+                            "description": ""
+                        },
+                        "format": {
+                            "type": "string",
+                            "title": "'format'",
+                            "description": ""
+                        },
+                        "nb_total": {
+                            "type": "string",
+                            "title": "'nb_total'",
+                            "description": ""
+                        },
+                        "nb_place_physique": {
+                            "type": "string",
+                            "title": "'nb_place_physique'",
+                            "description": ""
+                        },
+                        "nb_place_virtuelle": {
+                            "type": "string",
+                            "title": "'nb_place_virtuelle'",
+                            "description": ""
+                        },
+                        "registrationurl": {
+                            "type": "string",
+                            "title": "registrationurl",
+                            "description": ""
+                        },
+                        "photos": {
+                            "type": "string",
+                            "title": "'photos'",
+                            "description": ""
+                        },
+                        "sponsor": {
+                            "type": "string",
+                            "title": "'sponsor'",
+                            "description": ""
+                        },
+                        "partenaire": {
+                            "type": "string",
+                            "title": "'partenaire'",
+                            "description": ""
+                        },
+                        "keywords_fr": {
+                            "type": "string",
+                            "title": "keywords_fr",
+                            "description": ""
+                        },
+                        "tags": {
+                            "type": "string",
+                            "title": "tags",
+                            "description": ""
+                        },
+                        "uid": {
+                            "type": "integer",
+                            "title": "uid",
+                            "description": ""
+                        },
+                        "url_canonique": {
+                            "type": "string",
+                            "title": "'url_canonique'",
+                            "description": ""
+                        },
+                        "origin_title": {
+                            "type": "string",
+                            "title": "origin_title",
+                            "description": ""
+                        },
+                        "origin_url": {
+                            "type": "string",
+                            "title": "origin_url",
+                            "description": ""
+                        },
+                        "origin_oaurl": {
+                            "type": "string",
+                            "title": "origin_oaurl",
+                            "description": ""
+                        },
+                        "updatedat": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "updatedat",
+                            "description": ""
+                        },
+                        "location_uid": {
+                            "type": "integer",
+                            "title": "location_uid",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,501 @@
+{
+    "title": "bd-sol-proprietes-herault@data-herault-occitanie",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/bd-sol-proprietes-herault@data-herault-occitanie"
+        }
+    ],
+    "definitions": {
+        "bd-sol-proprietes-herault@data-herault-occitanie": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/bd-sol-proprietes-herault@data-herault-occitanie_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "bd-sol-proprietes-herault@data-herault-occitanie_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id_sol": {
+                            "type": "integer",
+                            "title": "id_sol",
+                            "description": "identifiant unique du polygone"
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "commune",
+                            "description": "commune du département de l'Hérault sur laquelle se situe le polygone de sol"
+                        },
+                        "idsol": {
+                            "type": "number",
+                            "title": "Identifiant de l’unité agropédologique",
+                            "description": "numéro identifiant du code du sol"
+                        },
+                        "code_sol": {
+                            "type": "string",
+                            "title": "Code de l’unité agropédologique",
+                            "description": "précise le code du sol défini selon la nomenclature établie par l’INRA et l’ACH 34 dans les années 1980 pour le département de l’Hérault. Cette nomenclature vise à être synthétique tout en donnant un grand nombre d’informations pratiques. Ce code indique la nature des roches, la position topographique et donne des informations complémentaires sur la texture et la pierrosité, l’existence d’une alternance ou d’une superposition de roches."
+                        },
+                        "designation": {
+                            "type": "string",
+                            "title": "Désignation de l’unité agropédologique",
+                            "description": "apporte une description littérale du sol "
+                        },
+                        "pos": {
+                            "type": "string",
+                            "title": "Position",
+                            "description": "indique la position topographique du polygone de sol."
+                        },
+                        "prof": {
+                            "type": "string",
+                            "title": "Profondeur",
+                            "description": "estime un ordre de grandeur de la profondeur du sol. L’unité est le centimètre. Il s’agit bien ici de valeurs estimées, la base de données sol n’ayant pas une visée scientifique mais pratique avant tout. C’est pourquoi les données sont exprimées suivant des intervalles de valeurs « glissants » d’une amplitude de 20cm au sein des classes établies."
+                        },
+                        "code_prof": {
+                            "type": "number",
+                            "title": "Code Profondeur",
+                            "description": "correspond à des classes de profondeur"
+                        },
+                        "text": {
+                            "type": "string",
+                            "title": "Texture",
+                            "description": "estime un intervalle de texture du sol. La classification des textures est basée sur le triangle de Hénin."
+                        },
+                        "text_dom": {
+                            "type": "string",
+                            "title": "Texture dominante",
+                            "description": "indique la texture dominante qui correspond au premier terme du champ « Texture »."
+                        },
+                        "code_text": {
+                            "type": "number",
+                            "title": "Code texture",
+                            "description": "correspond à des classes de texture dominantes"
+                        },
+                        "pier": {
+                            "type": "string",
+                            "title": "Pierrosité",
+                            "description": "estime un degré de pierrosité du sol. Les valeurs sont des pourcentages estimés."
+                        },
+                        "code_pier": {
+                            "type": "number",
+                            "title": "Code pierrosité",
+                            "description": "indique des classes de pierrosité"
+                        },
+                        "ru": {
+                            "type": "string",
+                            "title": "Réserve utile",
+                            "description": "estime des valeurs de réserve utile en mm/m. Ils sont exprimés sous forme d’intervalles d’amplitude 20 mm/m ou 10 mm/m suivant le niveau de précision disponible."
+                        },
+                        "code_ru": {
+                            "type": "string",
+                            "title": "Code réserve utile",
+                            "description": "indique des classes de RU"
+                        },
+                        "ph": {
+                            "type": "string",
+                            "title": "ph",
+                            "description": "estime des intervalles de pH."
+                        },
+                        "med_ph": {
+                            "type": "number",
+                            "title": "Médiane pH",
+                            "description": "précise la médiane de cet intervalle"
+                        },
+                        "ecart_ph": {
+                            "type": "number",
+                            "title": "Ecart pH",
+                            "description": "précise l’écart de cet intervalle"
+                        },
+                        "icucs": {
+                            "type": "integer",
+                            "title": "Indice d’interprétation de l’expert 3M",
+                            "description": "Indice d'Interprétation de l'expert des unités cartographiques de sols  (valeurs de 1 à 4 - 1= faible, 2= moyen, 3=bon, 4= qualité maximale). Valeurs disponibles pour les polygones issus des mises à jour réalisées par Montpellier Méditerranée Métropole."
+                        },
+                        "iddiz": {
+                            "type": "number",
+                            "title": "Indice de densité d’information 3M",
+                            "description": "Indice de Densité d'Information de la Zone (donne une indication de la qualité et de la précision des unités de sols et du GDPA, fonction de la qualité des données et informations collectées). Ainsi, un indice inférieur à 2,5 pourrait nécessiter des observations et données complémentaires. Valeurs disponibles pour les polygones issus des mises à jour réalisées par Montpellier Méditerranée Métropole"
+                        },
+                        "source": {
+                            "type": "string",
+                            "title": "source",
+                            "description": "champ permettant d'assurer le suivi des mises à jour par rapport à la base de données sol initiale (2011)\nBDSOL initiale = polygone issu de la base de données sol initiale\nMAJ 3M2019 = polygone issu de la base de données sol initiale mis à jour en juin 2019 par Montpellier Méditerranée Métropole\n"
+                        },
+                        "st_area_shape": {
+                            "type": "number",
+                            "title": "st_area(shape)",
+                            "description": ""
+                        },
+                        "st_perimeter_shape": {
+                            "type": "number",
+                            "title": "st_perimeter(shape)",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        },
+                        "ind_conf": {
+                            "type": "number",
+                            "title": "Indice de confiance",
+                            "description": "code de l'indice de confiance de la commune sur laquelle se situe l'unité de sol. S'exprime de 1 à 5 (disponible pour les polygones issus de la base de données sol initiale)"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

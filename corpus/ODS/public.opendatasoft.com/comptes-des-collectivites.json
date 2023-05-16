@@ -1,0 +1,622 @@
+{
+    "title": "comptes-des-collectivites",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/comptes-des-collectivites"
+        }
+    ],
+    "definitions": {
+        "comptes-des-collectivites": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/comptes-des-collectivites_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "comptes-des-collectivites_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "annee": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année",
+                            "description": ""
+                        },
+                        "dep": {
+                            "type": "string",
+                            "title": "Code Département",
+                            "description": ""
+                        },
+                        "depcom": {
+                            "type": "string",
+                            "title": "Code Commune",
+                            "description": ""
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "Commune",
+                            "description": ""
+                        },
+                        "population": {
+                            "type": "integer",
+                            "title": "Population",
+                            "description": ""
+                        },
+                        "produits_total": {
+                            "type": "integer",
+                            "title": "Total Produits",
+                            "description": ""
+                        },
+                        "prod_impots_locaux": {
+                            "type": "integer",
+                            "title": "Produits Impôts Locaux",
+                            "description": ""
+                        },
+                        "prod_autres_impots_taxes": {
+                            "type": "integer",
+                            "title": "Produits Autres Impôts Taxes",
+                            "description": ""
+                        },
+                        "prod_dotation": {
+                            "type": "integer",
+                            "title": "Produits Dotation",
+                            "description": ""
+                        },
+                        "charges_total": {
+                            "type": "integer",
+                            "title": "Charges Total",
+                            "description": ""
+                        },
+                        "charges_personnel": {
+                            "type": "integer",
+                            "title": "Charges Personnel",
+                            "description": ""
+                        },
+                        "charges_achats": {
+                            "type": "integer",
+                            "title": "Charges Achats",
+                            "description": ""
+                        },
+                        "charges_financieres": {
+                            "type": "integer",
+                            "title": "Charges Financières",
+                            "description": ""
+                        },
+                        "charges_contingents": {
+                            "type": "integer",
+                            "title": "Charges Contingents",
+                            "description": ""
+                        },
+                        "charges_subventions": {
+                            "type": "integer",
+                            "title": "Charges Subventions",
+                            "description": ""
+                        },
+                        "resultat_comptable": {
+                            "type": "integer",
+                            "title": "Résultat Comptable",
+                            "description": ""
+                        },
+                        "invest_ressources_total": {
+                            "type": "integer",
+                            "title": "Total Investissement Ressources",
+                            "description": ""
+                        },
+                        "invest_ress_emprunts": {
+                            "type": "integer",
+                            "title": "Investissement Ressources Emprunts",
+                            "description": ""
+                        },
+                        "invest_ress_subventions": {
+                            "type": "integer",
+                            "title": "Investissement Ressource Subventions",
+                            "description": ""
+                        },
+                        "invest_ress_fctva": {
+                            "type": "integer",
+                            "title": "Investissement Ressource FCTVA",
+                            "description": ""
+                        },
+                        "invest_ress_retours": {
+                            "type": "integer",
+                            "title": "Investissement Ressources Retours de Biens Affectés, Concédés",
+                            "description": ""
+                        },
+                        "invest_emplois_total": {
+                            "type": "integer",
+                            "title": "Total des Emplois Investissement",
+                            "description": ""
+                        },
+                        "invest_empl_equipements": {
+                            "type": "integer",
+                            "title": "Investissement Emploi Equipements",
+                            "description": ""
+                        },
+                        "invest_empl_remboursement_emprunts": {
+                            "type": "integer",
+                            "title": "Investissement Emploi Remboursement Emprunts",
+                            "description": ""
+                        },
+                        "invest_empl_charges": {
+                            "type": "integer",
+                            "title": "Investissement Emploi Charges à répartir",
+                            "description": ""
+                        },
+                        "invest_empl_immobilisations": {
+                            "type": "integer",
+                            "title": "Investissement Emploi Immobilisations Affectées, Concédées",
+                            "description": ""
+                        },
+                        "excedent_brut": {
+                            "type": "integer",
+                            "title": "Excédent Brut",
+                            "description": ""
+                        },
+                        "cap_autofinancement": {
+                            "type": "integer",
+                            "title": "Capacité d'autofinancement",
+                            "description": ""
+                        },
+                        "cap_autofinancement_nette": {
+                            "type": "integer",
+                            "title": "Capacité d'autofinancement Nette du remboursement en capital des emprunts",
+                            "description": ""
+                        },
+                        "dette_encours_total": {
+                            "type": "integer",
+                            "title": "Dette Encours total de la dette au 31 décembre N",
+                            "description": ""
+                        },
+                        "dette_encours_bancaire": {
+                            "type": "string",
+                            "title": "Dette Encours des dettes bancaires net de l'aide du fonds de soutien pour la sortie des emprunts toxiques",
+                            "description": ""
+                        },
+                        "avance_tresor": {
+                            "type": "integer",
+                            "title": "Avance Trésor",
+                            "description": ""
+                        },
+                        "dette_annuite": {
+                            "type": "integer",
+                            "title": "Annuité de la dette",
+                            "description": ""
+                        },
+                        "fond_de_roulement": {
+                            "type": "integer",
+                            "title": "Fonds de Roulement",
+                            "description": ""
+                        },
+                        "taxe_habitation": {
+                            "type": "integer",
+                            "title": "Produits Taxe d'habitation (y compris THLV)",
+                            "description": ""
+                        },
+                        "taxe_habitation_base": {
+                            "type": "integer",
+                            "title": "Base Taxe d'habitation (y compris THLV)",
+                            "description": ""
+                        },
+                        "taxe_foncier_bati": {
+                            "type": "integer",
+                            "title": "Produits Taxe foncière sur les propriétés bâties",
+                            "description": ""
+                        },
+                        "taxe_foncier_bati_base": {
+                            "type": "integer",
+                            "title": "Base Taxe foncière sur les propriétés bâties",
+                            "description": ""
+                        },
+                        "taxe_non_bati": {
+                            "type": "integer",
+                            "title": "Produits Taxe foncière sur les propriétés non bâties",
+                            "description": ""
+                        },
+                        "taxe_non_bati_base": {
+                            "type": "integer",
+                            "title": "Base Taxe foncière sur les propriétés non bâties",
+                            "description": ""
+                        },
+                        "taxe_add_non_bati": {
+                            "type": "integer",
+                            "title": "Produits Taxe additionnelle à la taxe foncière sur les propriétés non bâties",
+                            "description": ""
+                        },
+                        "taxe_add_non_bati_base": {
+                            "type": "integer",
+                            "title": "Base Taxe additionnelle à la taxe foncière sur les propriétés non bâties",
+                            "description": ""
+                        },
+                        "cotis_fonciere_entreprises": {
+                            "type": "integer",
+                            "title": "Produits Cotisation foncière des entreprises",
+                            "description": ""
+                        },
+                        "cotis_fonciere_entreprises_base": {
+                            "type": "integer",
+                            "title": "Base Cotisation foncière des entreprises",
+                            "description": ""
+                        },
+                        "cotisation_valeur_ajoutee_entreprises": {
+                            "type": "integer",
+                            "title": "Cotisation sur la valeur ajoutée des entreprises",
+                            "description": ""
+                        },
+                        "impot_forfait_entreprise_reseau": {
+                            "type": "integer",
+                            "title": "Imposition forfaitaire sur les entreprises de réseau",
+                            "description": ""
+                        },
+                        "taxe_surf_commerciales": {
+                            "type": "integer",
+                            "title": "Taxe sur les surfaces commerciales",
+                            "description": ""
+                        },
+                        "compensation_relais_2010": {
+                            "type": "integer",
+                            "title": "Compensation Relais 2010",
+                            "description": ""
+                        },
+                        "taxe_professionnelle": {
+                            "type": "integer",
+                            "title": "Produits Taxe Professionnelle",
+                            "description": ""
+                        },
+                        "taxe_professionnelle_base": {
+                            "type": "string",
+                            "title": "Base Taxe Professionnelle",
+                            "description": ""
+                        },
+                        "geopoint": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geopoint",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "serviceParameter": {
+      "allOf": [
+        {
+          "$ref": "http://json-schema.org/draft-04/schema#"
+        },
+        {
+          "note": "spec specifies \"default\" which is equivalent to JSON Schema's, not reproduced here",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "optional": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      ],
+      "description": "A JSON Schema with a required \"name\" member"
+    }
+  },
+  "description": "One service as described by the SMD spec",
+  "properties": {
+    "additionalParameters": {
+      "description": "additional parameters in addition to the defined ones; false means none allowed",
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "$ref": "http://json-schema.org/draft-04/schema#"
+        }
+      ]
+    },
+    "contentType": {
+      "default": "application/json",
+      "description": "Any MIME type",
+      "format": "mediaType",
+      "note": "defines a mediaType format",
+      "type": "string"
+    },
+    "envelope": {
+      "default": "URL",
+      "description": "The envelope used by this service",
+      "enum": [
+        "URL",
+        "PATH",
+        "JSON",
+        "JSON-RPC-1.0",
+        "JSON-RPC-1.1",
+        "JSON-RPC-2.0"
+      ]
+    },
+    "jsonpCallbackParameter": {
+      "$ref": "#/definitions/serviceParameter",
+      "FIXME": "didn't understand much except that it is a parameter"
+    },
+    "name": {
+      "type": "string"
+    },
+    "parameters": {
+      "items": {
+        "$ref": "#/definitions/serviceParameter"
+      },
+      "type": "array"
+    },
+    "returns": {
+      "oneOf": [
+        {
+          "$ref": "http://json-schema.org/draft-04/schema#"
+        },
+        {
+          "properties": {
+            "services": {
+              "$ref": "#"
+            },
+            "type": {
+              "$ref": "http://json-schema.org/draft-04/schema#"
+            }
+          },
+          "required": [
+            "type",
+            "services"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "target": {
+      "description": "URL used for method call request, resolved within the SMD context",
+      "format": "uri",
+      "type": "string"
+    },
+    "transport": {
+      "default": "POST",
+      "description": "The transport used by this service",
+      "enum": [
+        "POST",
+        "GET",
+        "REST",
+        "JSONP",
+        "TCP/IP"
+      ]
+    }
+  },
+  "type": "object"
+}

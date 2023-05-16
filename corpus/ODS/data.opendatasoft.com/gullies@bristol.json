@@ -1,0 +1,523 @@
+{
+    "title": "gullies@bristol",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/gullies@bristol"
+        }
+    ],
+    "definitions": {
+        "gullies@bristol": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/gullies@bristol_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "gullies@bristol_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "objectid": {
+                            "type": "string",
+                            "title": "OBJECTID",
+                            "description": ""
+                        },
+                        "site_code": {
+                            "type": "integer",
+                            "title": "USRN",
+                            "description": ""
+                        },
+                        "intouch_id": {
+                            "type": "integer",
+                            "title": "InTouch ID",
+                            "description": ""
+                        },
+                        "site_name": {
+                            "type": "string",
+                            "title": "Location",
+                            "description": ""
+                        },
+                        "asset_number": {
+                            "type": "number",
+                            "title": "Plot Number",
+                            "description": ""
+                        },
+                        "feature_type_name": {
+                            "type": "string",
+                            "title": "Type",
+                            "description": ""
+                        },
+                        "feat_cent_east": {
+                            "type": "number",
+                            "title": "Easting",
+                            "description": ""
+                        },
+                        "feat_cent_north": {
+                            "type": "number",
+                            "title": "Northing",
+                            "description": ""
+                        },
+                        "central_asset_id": {
+                            "type": "integer",
+                            "title": "Central Asset ID",
+                            "description": ""
+                        },
+                        "depth_to_invert": {
+                            "type": "integer",
+                            "title": "Depth to invert",
+                            "description": ""
+                        },
+                        "length": {
+                            "type": "integer",
+                            "title": "Length",
+                            "description": ""
+                        },
+                        "number_of": {
+                            "type": "integer",
+                            "title": "Number of",
+                            "description": ""
+                        },
+                        "pot_depth": {
+                            "type": "integer",
+                            "title": "Pot Depth",
+                            "description": ""
+                        },
+                        "cleaned_by_hand": {
+                            "type": "string",
+                            "title": "Clean by Hand",
+                            "description": ""
+                        },
+                        "gully_construction": {
+                            "type": "string",
+                            "title": "Construction Material",
+                            "description": ""
+                        },
+                        "gully_type": {
+                            "type": "string",
+                            "title": "Gully Type",
+                            "description": ""
+                        },
+                        "lid_type": {
+                            "type": "string",
+                            "title": "Lid Material",
+                            "description": ""
+                        },
+                        "over_40_mph": {
+                            "type": "string",
+                            "title": "Over 40mph",
+                            "description": ""
+                        },
+                        "resileint_network": {
+                            "type": "string",
+                            "title": "Resilient Network",
+                            "description": ""
+                        },
+                        "surface_water_flood_risk": {
+                            "type": "string",
+                            "title": "Surface Water Flood Risk",
+                            "description": ""
+                        },
+                        "traffic_management": {
+                            "type": "string",
+                            "title": "Traffic Management",
+                            "description": ""
+                        },
+                        "gully_state_on_departure": {
+                            "type": "string",
+                            "title": "GULLY_STATE_ON_DEPARTURE",
+                            "description": ""
+                        },
+                        "inspection_number": {
+                            "type": "integer",
+                            "title": "INSPECTION_NUMBER",
+                            "description": ""
+                        },
+                        "inspector_name": {
+                            "type": "string",
+                            "title": "INSPECTOR_NAME",
+                            "description": ""
+                        },
+                        "silt_depth_on_arrival": {
+                            "type": "integer",
+                            "title": "SILT_DEPTH_ON_ARRIVAL",
+                            "description": ""
+                        },
+                        "silt_depth_on_departure": {
+                            "type": "integer",
+                            "title": "SILT_DEPTH_ON_DEPARTURE",
+                            "description": ""
+                        },
+                        "latest_inspection": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "LATEST_INSPECTION",
+                            "description": ""
+                        },
+                        "latest_job": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "LATEST_JOB",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

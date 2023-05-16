@@ -1,0 +1,653 @@
+{
+    "title": "liste-uai-avec-coordonnees@enseignement-agricole",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/liste-uai-avec-coordonnees@enseignement-agricole"
+        }
+    ],
+    "definitions": {
+        "liste-uai-avec-coordonnees@enseignement-agricole": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/liste-uai-avec-coordonnees@enseignement-agricole_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "liste-uai-avec-coordonnees@enseignement-agricole_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "annee_scolaire": {
+                            "type": "string",
+                            "title": "Année scolaire",
+                            "description": "annee_scolaire"
+                        },
+                        "uai_id_cdn": {
+                            "type": "integer",
+                            "title": "uai_id_cdn",
+                            "description": "Identifiant"
+                        },
+                        "uai_codedger": {
+                            "type": "string",
+                            "title": "uai_codedger",
+                            "description": "Code DGER"
+                        },
+                        "uai_type": {
+                            "type": "string",
+                            "title": "uai_type",
+                            "description": "Type"
+                        },
+                        "uai_libelle_administratif": {
+                            "type": "string",
+                            "title": "uai_libelle_administratif",
+                            "description": "Libellé administratif"
+                        },
+                        "uai_libelle_communication": {
+                            "type": "string",
+                            "title": "uai_libelle_communication",
+                            "description": "Libellé public"
+                        },
+                        "uai_debut_validite": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "uai_debut_validite",
+                            "description": "Début de validité"
+                        },
+                        "uai_fin_validite": {
+                            "type": "string",
+                            "title": "uai_fin_validite",
+                            "description": "Fin de validité"
+                        },
+                        "uai_siteweb": {
+                            "type": "string",
+                            "title": "uai_siteweb",
+                            "description": "Site internet"
+                        },
+                        "uai_telephone": {
+                            "type": "string",
+                            "title": "uai_telephone",
+                            "description": "Téléphone"
+                        },
+                        "uai_mail": {
+                            "type": "string",
+                            "title": "uai_mail",
+                            "description": "Mél"
+                        },
+                        "uai_fax": {
+                            "type": "string",
+                            "title": "uai_fax",
+                            "description": "Télécopie"
+                        },
+                        "uai_facebook": {
+                            "type": "string",
+                            "title": "uai_facebook",
+                            "description": ""
+                        },
+                        "uai_instagram": {
+                            "type": "string",
+                            "title": "uai_instagram",
+                            "description": ""
+                        },
+                        "uai_twitter": {
+                            "type": "string",
+                            "title": "uai_twitter",
+                            "description": ""
+                        },
+                        "uai_ministere_principal": {
+                            "type": "string",
+                            "title": "Ministère de tutelle",
+                            "description": "uai_ministere_principal"
+                        },
+                        "uai_secteur": {
+                            "type": "string",
+                            "title": "Secteur",
+                            "description": "uai_secteur"
+                        },
+                        "uai_nature": {
+                            "type": "string",
+                            "title": "uai_nature",
+                            "description": "Nature"
+                        },
+                        "uaiprive_orgaffiliation": {
+                            "type": "string",
+                            "title": "Affiliation",
+                            "description": "uaiprive_orgaffiliation"
+                        },
+                        "uaiprive_typecontrat": {
+                            "type": "string",
+                            "title": "uaiprive_typecontrat",
+                            "description": "Contrat"
+                        },
+                        "uai_code_siret": {
+                            "type": "integer",
+                            "title": "uai_code_siret",
+                            "description": "Siret"
+                        },
+                        "uai_code_educnationale": {
+                            "type": "string",
+                            "title": "uai_code_educnationale",
+                            "description": "Code Education nationale"
+                        },
+                        "uai_libelle_educnationale": {
+                            "type": "string",
+                            "title": "uai_libelle_educnationale",
+                            "description": "Libellé de l'Education nationale"
+                        },
+                        "uai_eleve": {
+                            "type": "string",
+                            "title": "Elèves",
+                            "description": "uai_eleve"
+                        },
+                        "uai_etudiant": {
+                            "type": "string",
+                            "title": "Etudiants",
+                            "description": "uai_etudiant"
+                        },
+                        "uai_adulte": {
+                            "type": "string",
+                            "title": "Adultes",
+                            "description": "uai_adulte"
+                        },
+                        "uai_apprenti": {
+                            "type": "string",
+                            "title": "Apprentis",
+                            "description": "uai_apprenti"
+                        },
+                        "uai_code_commume": {
+                            "type": "string",
+                            "title": "uai_code_commume",
+                            "description": "Code commune"
+                        },
+                        "uai_commune": {
+                            "type": "string",
+                            "title": "uai_commune",
+                            "description": "Commune"
+                        },
+                        "uai_code_region": {
+                            "type": "string",
+                            "title": "uai_code_region",
+                            "description": "Code région"
+                        },
+                        "uai_region": {
+                            "type": "string",
+                            "title": "uai_region",
+                            "description": "Région"
+                        },
+                        "uai_code_departement": {
+                            "type": "string",
+                            "title": "uai_code_departement",
+                            "description": "Code département"
+                        },
+                        "uai_departement": {
+                            "type": "string",
+                            "title": "uai_departement",
+                            "description": "Département"
+                        },
+                        "adressepostale_ligne1": {
+                            "type": "string",
+                            "title": "adressepostale_ligne1",
+                            "description": "Adresse postale ligne 1"
+                        },
+                        "adressepostale_ligne2": {
+                            "type": "string",
+                            "title": "adressepostale_ligne2",
+                            "description": "Adresse postale ligne 2"
+                        },
+                        "adressepostale_ligne3": {
+                            "type": "string",
+                            "title": "adressepostale_ligne3",
+                            "description": "Adresse postale ligne 3"
+                        },
+                        "adressepostale_ligne4": {
+                            "type": "string",
+                            "title": "adressepostale_ligne4",
+                            "description": "Adresse postale ligne 4"
+                        },
+                        "adressepostale_ligne5": {
+                            "type": "string",
+                            "title": "adressepostale_ligne5",
+                            "description": "Adresse postale ligne 5"
+                        },
+                        "adressepostale_ligne6": {
+                            "type": "string",
+                            "title": "adressepostale_ligne6",
+                            "description": "Adresse postale ligne 6"
+                        },
+                        "adressegeographique_ligne1": {
+                            "type": "string",
+                            "title": "adressegeographique_ligne1",
+                            "description": "Adresse géographique ligne 1"
+                        },
+                        "adressegeographique_ligne2": {
+                            "type": "string",
+                            "title": "adressegeographique_ligne2",
+                            "description": "Adresse géographique ligne 2"
+                        },
+                        "adressegeographique_ligne3": {
+                            "type": "string",
+                            "title": "adressegeographique_ligne3",
+                            "description": "Adresse géographique ligne 3"
+                        },
+                        "adressegeographique_ligne4": {
+                            "type": "string",
+                            "title": "adressegeographique_ligne4",
+                            "description": "Adresse géographique ligne 4"
+                        },
+                        "adressegeographique_ligne5": {
+                            "type": "string",
+                            "title": "adressegeographique_ligne5",
+                            "description": "Adresse géographique ligne 5"
+                        },
+                        "adressegeographique_ligne6": {
+                            "type": "string",
+                            "title": "adressegeographique_ligne6",
+                            "description": "Adresse géographique ligne 6"
+                        },
+                        "uai_niveau": {
+                            "type": "integer",
+                            "title": "uai_niveau",
+                            "description": "Niveau"
+                        },
+                        "uainiveau1_codedger": {
+                            "type": "string",
+                            "title": "uainiveau1_codedger",
+                            "description": "Code DGER niveau 1"
+                        },
+                        "uainiveau1_libelle_administratif": {
+                            "type": "string",
+                            "title": "uainiveau1_libelle_administratif",
+                            "description": "Libellé administratif niveau 1"
+                        },
+                        "uainiveau2_codedger": {
+                            "type": "string",
+                            "title": "uainiveau2_codedger",
+                            "description": "Code DGER niveau 2"
+                        },
+                        "uainiveau2_libelle_administratif": {
+                            "type": "string",
+                            "title": "uainiveau2_libelle_administratif",
+                            "description": "Libellé administratif niveau 2"
+                        },
+                        "date_jeu_donnees": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "date_jeu_donnees",
+                            "description": "Date des données"
+                        },
+                        "internat": {
+                            "type": "string",
+                            "title": "internat",
+                            "description": ""
+                        },
+                        "demi_pension": {
+                            "type": "string",
+                            "title": "demi_pension",
+                            "description": ""
+                        },
+                        "residence_eleves": {
+                            "type": "string",
+                            "title": "residence_eleves",
+                            "description": ""
+                        },
+                        "coordonnees_geo_": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "coordonnees_geo ",
+                            "description": ""
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geom",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

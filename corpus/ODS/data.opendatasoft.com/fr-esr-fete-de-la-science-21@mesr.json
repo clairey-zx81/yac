@@ -1,0 +1,764 @@
+{
+    "title": "fr-esr-fete-de-la-science-21@mesr",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/fr-esr-fete-de-la-science-21@mesr"
+        }
+    ],
+    "definitions": {
+        "fr-esr-fete-de-la-science-21@mesr": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/fr-esr-fete-de-la-science-21@mesr_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "fr-esr-fete-de-la-science-21@mesr_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "dates": {
+                            "type": "string",
+                            "title": "dates",
+                            "description": ""
+                        },
+                        "selection": {
+                            "type": "string",
+                            "title": "selection",
+                            "description": ""
+                        },
+                        "identifiant": {
+                            "type": "string",
+                            "title": "identifiant",
+                            "description": ""
+                        },
+                        "titre_fr": {
+                            "type": "string",
+                            "title": "Titre",
+                            "description": ""
+                        },
+                        "description_fr": {
+                            "type": "string",
+                            "title": "Description",
+                            "description": ""
+                        },
+                        "description_longue_fr": {
+                            "type": "string",
+                            "title": "Description longue",
+                            "description": ""
+                        },
+                        "detail_des_conditions_fr": {
+                            "type": "string",
+                            "title": "Détail des conditions de visite pour le grand public",
+                            "description": ""
+                        },
+                        "description_longue_html_fr": {
+                            "type": "string",
+                            "title": "Description longue - HTML",
+                            "description": ""
+                        },
+                        "type_d_animation": {
+                            "type": "string",
+                            "title": "type_d_animation",
+                            "description": ""
+                        },
+                        "image": {
+                            "type": "string",
+                            "title": "image",
+                            "description": ""
+                        },
+                        "derniere_mise_a_jour": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "derniere_mise_a_jour",
+                            "description": ""
+                        },
+                        "resume_horaires_fr": {
+                            "type": "string",
+                            "title": "Résumé horaires",
+                            "description": ""
+                        },
+                        "horaires_detailles_fr": {
+                            "type": "string",
+                            "title": "Horaires détaillés",
+                            "description": ""
+                        },
+                        "resume_dates_fr": {
+                            "type": "string",
+                            "title": "Résumé dates",
+                            "description": ""
+                        },
+                        "premiere_ouverture": {
+                            "type": "string",
+                            "title": "premiere_ouverture",
+                            "description": ""
+                        },
+                        "premiere_fermeture": {
+                            "type": "string",
+                            "title": "premiere_fermeture",
+                            "description": ""
+                        },
+                        "thematiques": {
+                            "type": "string",
+                            "title": "thematiques",
+                            "description": ""
+                        },
+                        "accessibilite_fr": {
+                            "type": "string",
+                            "title": "Accessibilité",
+                            "description": ""
+                        },
+                        "en_une": {
+                            "type": "string",
+                            "title": "en_une",
+                            "description": ""
+                        },
+                        "contributeur_organisation": {
+                            "type": "string",
+                            "title": "contributeur_organisation",
+                            "description": ""
+                        },
+                        "statut": {
+                            "type": "string",
+                            "title": "statut",
+                            "description": ""
+                        },
+                        "lien": {
+                            "type": "string",
+                            "title": "lien",
+                            "description": ""
+                        },
+                        "identifiant_du_lieu": {
+                            "type": "string",
+                            "title": "identifiant_du_lieu",
+                            "description": ""
+                        },
+                        "nom_du_lieu": {
+                            "type": "string",
+                            "title": "nom_du_lieu",
+                            "description": ""
+                        },
+                        "adresse": {
+                            "type": "string",
+                            "title": "adresse",
+                            "description": ""
+                        },
+                        "code_postal": {
+                            "type": "string",
+                            "title": "code_postal",
+                            "description": ""
+                        },
+                        "ville": {
+                            "type": "string",
+                            "title": "ville",
+                            "description": ""
+                        },
+                        "departement": {
+                            "type": "string",
+                            "title": "departement",
+                            "description": ""
+                        },
+                        "region": {
+                            "type": "string",
+                            "title": "region",
+                            "description": ""
+                        },
+                        "pays": {
+                            "type": "string",
+                            "title": "pays",
+                            "description": ""
+                        },
+                        "telephone_du_lieu": {
+                            "type": "string",
+                            "title": "telephone_du_lieu",
+                            "description": ""
+                        },
+                        "acces_itineraire_fr": {
+                            "type": "string",
+                            "title": "Accès / Itinéraire",
+                            "description": ""
+                        },
+                        "animateurs": {
+                            "type": "string",
+                            "title": "animateurs",
+                            "description": ""
+                        },
+                        "organisateur": {
+                            "type": "string",
+                            "title": "organisateur",
+                            "description": ""
+                        },
+                        "partenaire": {
+                            "type": "string",
+                            "title": "partenaire",
+                            "description": ""
+                        },
+                        "geolocalisation": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geolocalisation",
+                            "description": ""
+                        },
+                        "horaires_iso": {
+                            "type": "string",
+                            "title": "horaires_iso",
+                            "description": ""
+                        },
+                        "evenements_lies": {
+                            "type": "string",
+                            "title": "evenements_lies",
+                            "description": ""
+                        },
+                        "public_specifique": {
+                            "type": "string",
+                            "title": "public_specifique",
+                            "description": ""
+                        },
+                        "date_debut": {
+                            "type": "string",
+                            "title": "date_debut",
+                            "description": ""
+                        },
+                        "date_debut_jour": {
+                            "type": "string",
+                            "title": "date_debut_jour",
+                            "description": ""
+                        },
+                        "date_debut_mois": {
+                            "type": "string",
+                            "title": "date_debut_mois",
+                            "description": ""
+                        },
+                        "date_fin": {
+                            "type": "string",
+                            "title": "date_fin",
+                            "description": ""
+                        },
+                        "date_fin_jour": {
+                            "type": "string",
+                            "title": "date_fin_jour",
+                            "description": ""
+                        },
+                        "date_fin_mois": {
+                            "type": "string",
+                            "title": "date_fin_mois",
+                            "description": ""
+                        },
+                        "derniere_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "derniere_date",
+                            "description": ""
+                        },
+                        "derniere_fermeture": {
+                            "type": "string",
+                            "title": "derniere_fermeture",
+                            "description": ""
+                        },
+                        "derniere_ouverture": {
+                            "type": "string",
+                            "title": "derniere_ouverture",
+                            "description": ""
+                        },
+                        "grandpublic_horaires_iso": {
+                            "type": "string",
+                            "title": "grandpublic_horaires_iso",
+                            "description": ""
+                        },
+                        "grandpublic_horaires_detailles_fr": {
+                            "type": "string",
+                            "title": "grandpublic_horaires_detailles_fr",
+                            "description": ""
+                        },
+                        "code_com": {
+                            "type": "string",
+                            "title": "code_com",
+                            "description": ""
+                        },
+                        "annulation": {
+                            "type": "string",
+                            "title": "annulation",
+                            "description": ""
+                        },
+                        "description_html_fr": {
+                            "type": "string",
+                            "title": "description_html_fr",
+                            "description": ""
+                        },
+                        "page": {
+                            "type": "integer",
+                            "title": "page",
+                            "description": ""
+                        },
+                        "lib_commune": {
+                            "type": "string",
+                            "title": "lib_commune",
+                            "description": ""
+                        },
+                        "lien_canonique": {
+                            "type": "string",
+                            "title": "lien_canonique",
+                            "description": ""
+                        },
+                        "enligne_lien": {
+                            "type": "string",
+                            "title": "enligne_lien",
+                            "description": ""
+                        },
+                        "grandpublic_reservation_lien_d_inscription": {
+                            "type": "string",
+                            "title": "grandpublic_reservation_lien_d_inscription",
+                            "description": ""
+                        },
+                        "grandpublic_reservation_email": {
+                            "type": "string",
+                            "title": "grandpublic_reservation_email",
+                            "description": ""
+                        },
+                        "grandpublic_reservation_telephone": {
+                            "type": "string",
+                            "title": "grandpublic_reservation_telephone",
+                            "description": ""
+                        },
+                        "detail_des_conditions_scolaire_fr": {
+                            "type": "string",
+                            "title": "Détail des conditions de visite pour les scolaires",
+                            "description": ""
+                        },
+                        "scolaire_reservation_lien_d_inscription": {
+                            "type": "string",
+                            "title": "scolaire_reservation_lien_d_inscription",
+                            "description": ""
+                        },
+                        "scolaire_reservation_email": {
+                            "type": "string",
+                            "title": "scolaire_reservation_email",
+                            "description": ""
+                        },
+                        "scolaire_reservation_telephone": {
+                            "type": "string",
+                            "title": "scolaire_reservation_telephone",
+                            "description": ""
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "type",
+                            "description": ""
+                        },
+                        "type_animation_project": {
+                            "type": "string",
+                            "title": "type_animation_project",
+                            "description": ""
+                        },
+                        "capacite": {
+                            "type": "string",
+                            "title": "capacite",
+                            "description": ""
+                        },
+                        "renewed": {
+                            "type": "string",
+                            "title": "Evènement reconduit",
+                            "description": ""
+                        },
+                        "pinned_to_homepage": {
+                            "type": "string",
+                            "title": "pinned_to_homepage",
+                            "description": ""
+                        },
+                        "creation_de_la_fiche": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "creation_de_la_fiche",
+                            "description": ""
+                        },
+                        "evenement_envergure_lie": {
+                            "type": "string",
+                            "title": "evenement_envergure_lie",
+                            "description": ""
+                        },
+                        "accessibilite_details": {
+                            "type": "string",
+                            "title": "accessibilite_details",
+                            "description": ""
+                        },
+                        "cr": {
+                            "type": "string",
+                            "title": "CR",
+                            "description": ""
+                        },
+                        "organisateur_logo": {
+                            "type": "string",
+                            "title": "organisateur_logo",
+                            "description": ""
+                        },
+                        "organisateur_url": {
+                            "type": "string",
+                            "title": "organisateur_url",
+                            "description": ""
+                        },
+                        "modalite": {
+                            "type": "string",
+                            "title": "modalite",
+                            "description": ""
+                        },
+                        "autres_organisations": {
+                            "type": "string",
+                            "title": "autres_organisations",
+                            "description": ""
+                        },
+                        "unitesrecherche": {
+                            "type": "string",
+                            "title": "unitesrecherche",
+                            "description": ""
+                        },
+                        "unitesrecherche_rnsr": {
+                            "type": "string",
+                            "title": "unitesrecherche_rnsr",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

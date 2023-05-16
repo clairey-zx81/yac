@@ -1,0 +1,591 @@
+{
+    "title": "ecoles-elementaires@agen",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/ecoles-elementaires@agen"
+        }
+    ],
+    "definitions": {
+        "ecoles-elementaires@agen": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ecoles-elementaires@agen_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "ecoles-elementaires@agen_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "idacteur": {
+                            "type": "number",
+                            "title": "idacteur",
+                            "description": ""
+                        },
+                        "idcategori": {
+                            "type": "number",
+                            "title": "idcategori",
+                            "description": ""
+                        },
+                        "idsouscate": {
+                            "type": "number",
+                            "title": "idsouscate",
+                            "description": ""
+                        },
+                        "idsoussous": {
+                            "type": "number",
+                            "title": "idsoussous",
+                            "description": ""
+                        },
+                        "actnom": {
+                            "type": "string",
+                            "title": "Nom",
+                            "description": ""
+                        },
+                        "actservice": {
+                            "type": "string",
+                            "title": "actservice",
+                            "description": ""
+                        },
+                        "idsecteura": {
+                            "type": "number",
+                            "title": "idsecteura",
+                            "description": ""
+                        },
+                        "actactivit": {
+                            "type": "string",
+                            "title": "actactivit",
+                            "description": ""
+                        },
+                        "actdescrip": {
+                            "type": "string",
+                            "title": "actdescrip",
+                            "description": ""
+                        },
+                        "actvignett": {
+                            "type": "string",
+                            "title": "actvignett",
+                            "description": ""
+                        },
+                        "actphoto1": {
+                            "type": "string",
+                            "title": "actphoto1",
+                            "description": ""
+                        },
+                        "actvigne_1": {
+                            "type": "string",
+                            "title": "actvigne_1",
+                            "description": ""
+                        },
+                        "actphoto2": {
+                            "type": "string",
+                            "title": "actphoto2",
+                            "description": ""
+                        },
+                        "actvigne_2": {
+                            "type": "string",
+                            "title": "actvigne_2",
+                            "description": ""
+                        },
+                        "actphoto3": {
+                            "type": "string",
+                            "title": "actphoto3",
+                            "description": ""
+                        },
+                        "actadresse": {
+                            "type": "string",
+                            "title": "Adresse",
+                            "description": ""
+                        },
+                        "actadres_1": {
+                            "type": "string",
+                            "title": "actadres_1",
+                            "description": ""
+                        },
+                        "actcodepos": {
+                            "type": "number",
+                            "title": "actcodepos",
+                            "description": ""
+                        },
+                        "actville": {
+                            "type": "string",
+                            "title": "actville",
+                            "description": ""
+                        },
+                        "acttelepho": {
+                            "type": "string",
+                            "title": "Téléphone",
+                            "description": ""
+                        },
+                        "actcellula": {
+                            "type": "string",
+                            "title": "actcellula",
+                            "description": ""
+                        },
+                        "actfax": {
+                            "type": "string",
+                            "title": "actfax",
+                            "description": ""
+                        },
+                        "actsiteweb": {
+                            "type": "string",
+                            "title": "Site web",
+                            "description": ""
+                        },
+                        "actemail": {
+                            "type": "string",
+                            "title": "actemail",
+                            "description": ""
+                        },
+                        "acthoraire": {
+                            "type": "string",
+                            "title": "acthoraire",
+                            "description": ""
+                        },
+                        "idhandicap": {
+                            "type": "string",
+                            "title": "idhandicap",
+                            "description": ""
+                        },
+                        "actnomlien": {
+                            "type": "string",
+                            "title": "actnomlien",
+                            "description": ""
+                        },
+                        "actlien1": {
+                            "type": "string",
+                            "title": "actlien1",
+                            "description": ""
+                        },
+                        "actnomli_1": {
+                            "type": "string",
+                            "title": "actnomli_1",
+                            "description": ""
+                        },
+                        "actlien2": {
+                            "type": "string",
+                            "title": "actlien2",
+                            "description": ""
+                        },
+                        "actnomli_2": {
+                            "type": "string",
+                            "title": "actnomli_2",
+                            "description": ""
+                        },
+                        "actlien3": {
+                            "type": "string",
+                            "title": "actlien3",
+                            "description": ""
+                        },
+                        "actnomli_3": {
+                            "type": "string",
+                            "title": "actnomli_3",
+                            "description": ""
+                        },
+                        "actlien4": {
+                            "type": "string",
+                            "title": "actlien4",
+                            "description": ""
+                        },
+                        "actnomli_4": {
+                            "type": "string",
+                            "title": "actnomli_4",
+                            "description": ""
+                        },
+                        "actlien5": {
+                            "type": "string",
+                            "title": "actlien5",
+                            "description": ""
+                        },
+                        "actpresent": {
+                            "type": "number",
+                            "title": "actpresent",
+                            "description": ""
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "title": "latitude",
+                            "description": ""
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "title": "longitude",
+                            "description": ""
+                        },
+                        "en_ligne": {
+                            "type": "number",
+                            "title": "en_ligne",
+                            "description": ""
+                        },
+                        "id_villeag": {
+                            "type": "integer",
+                            "title": "id_villeag",
+                            "description": ""
+                        },
+                        "ogc_fid": {
+                            "type": "integer",
+                            "title": "ogc_fid",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

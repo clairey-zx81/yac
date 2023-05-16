@@ -1,0 +1,263 @@
+{
+  "$schema": "http://json-schema.org/draft-04/hyper-schema",
+  "definitions": {
+    "automatic_review_apps": {
+      "description": "enable automatic review apps for pull requests",
+      "example": true,
+      "readOnly": true,
+      "type": [
+        "boolean"
+      ]
+    },
+    "base_name": {
+      "description": "A unique prefix that will be used to create review app names",
+      "example": "singular-app",
+      "readOnly": true,
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "deploy_target": {
+      "definitions": {
+        "id": {
+          "description": "unique identifier of deploy target",
+          "example": "us",
+          "pattern": "(^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$|^[a-z]{2}$)",
+          "readOnly": true,
+          "type": [
+            "string"
+          ]
+        },
+        "type": {
+          "description": "type of deploy target",
+          "example": "region",
+          "pattern": "(^space$|^region$)",
+          "readOnly": true,
+          "type": [
+            "string"
+          ]
+        }
+      },
+      "description": "the deploy target for the review apps of a pipeline",
+      "links": [],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/review-app-config/definitions/deploy_target/definitions/id"
+        },
+        "type": {
+          "$ref": "#/definitions/review-app-config/definitions/deploy_target/definitions/type"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "destroy_stale_apps": {
+      "description": "automatically destroy review apps when they haven't been deployed for a number of days",
+      "example": true,
+      "readOnly": true,
+      "type": [
+        "boolean"
+      ]
+    },
+    "id": {
+      "description": "unique identifier of pipeline",
+      "example": "01234567-89ab-cdef-0123-456789abcdef",
+      "format": "uuid",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "repo": {
+      "description": "repository name",
+      "example": "heroku/homebrew-brew",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "repo_id": {
+      "description": "repository id",
+      "example": "123456",
+      "readOnly": true,
+      "type": [
+        "integer"
+      ]
+    },
+    "stale_days": {
+      "description": "number of days without a deployment after which to consider a review app stale",
+      "example": "5",
+      "readOnly": true,
+      "type": [
+        "integer"
+      ]
+    },
+    "wait_for_ci": {
+      "description": "If true, review apps are created only when CI passes",
+      "example": true,
+      "readOnly": true,
+      "type": [
+        "boolean"
+      ]
+    }
+  },
+  "description": "Review apps can be configured for pipelines.",
+  "links": [
+    {
+      "description": "Enable review apps for a pipeline",
+      "href": "/pipelines/{(%23%2Fdefinitions%2Fpipeline%2Fdefinitions%2Fid)}/review-app-config",
+      "method": "POST",
+      "rel": "create",
+      "schema": {
+        "properties": {
+          "automatic_review_apps": {
+            "$ref": "#/definitions/review-app-config/definitions/automatic_review_apps",
+            "description": "If true, this will trigger the creation of review apps when pull-requests are opened in the repo."
+          },
+          "base_name": {
+            "$ref": "#/definitions/review-app-config/definitions/base_name",
+            "description": "A unique prefix that will be used to create review app names"
+          },
+          "deploy_target": {
+            "$ref": "#/definitions/review-app-config/definitions/deploy_target",
+            "description": "Provides a key/value pair to specify whether to use a common runtime or a private space"
+          },
+          "destroy_stale_apps": {
+            "$ref": "#/definitions/review-app-config/definitions/destroy_stale_apps",
+            "description": "If true, this will trigger automatic deletion of review apps when they're stale"
+          },
+          "repo": {
+            "$ref": "#/definitions/review-app-config/definitions/repo",
+            "description": "The full_name of the repository that you want enable review-apps from."
+          },
+          "stale_days": {
+            "$ref": "#/definitions/review-app-config/definitions/stale_days",
+            "description": "If destroy_stale_apps is true, then apps will be destroyed after this many days"
+          },
+          "wait_for_ci": {
+            "$ref": "#/definitions/review-app-config/definitions/wait_for_ci",
+            "description": "If true, review apps will only be created when CI passes"
+          }
+        },
+        "required": [
+          "repo"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "targetSchema": {
+        "$ref": "#/definitions/review-app-config"
+      },
+      "title": "Enable"
+    },
+    {
+      "description": "Get review apps configuration for a pipeline",
+      "href": "/pipelines/{(%23%2Fdefinitions%2Fpipeline%2Fdefinitions%2Fid)}/review-app-config",
+      "method": "GET",
+      "rel": "self",
+      "targetSchema": {
+        "$ref": "#/definitions/review-app-config"
+      },
+      "title": "Info"
+    },
+    {
+      "description": "Update review app configuration for a pipeline",
+      "href": "/pipelines/{(%23%2Fdefinitions%2Fpipeline%2Fdefinitions%2Fid)}/review-app-config",
+      "method": "PATCH",
+      "rel": "update",
+      "schema": {
+        "properties": {
+          "automatic_review_apps": {
+            "$ref": "#/definitions/review-app-config/definitions/automatic_review_apps",
+            "description": "If true, this will trigger the creation of review apps when pull-requests are opened in the repo"
+          },
+          "base_name": {
+            "$ref": "#/definitions/review-app-config/definitions/base_name",
+            "description": "A unique prefix that will be used to create review app names"
+          },
+          "deploy_target": {
+            "$ref": "#/definitions/review-app-config/definitions/deploy_target",
+            "description": "Provides a key/value pair to specify whether to use a common runtime or a private space"
+          },
+          "destroy_stale_apps": {
+            "$ref": "#/definitions/review-app-config/definitions/destroy_stale_apps",
+            "description": "If true, this will trigger automatic deletion of review apps when they're stale"
+          },
+          "stale_days": {
+            "$ref": "#/definitions/review-app-config/definitions/stale_days",
+            "description": "If destroy_stale_apps is true, then apps will be destroyed after this many days"
+          },
+          "wait_for_ci": {
+            "$ref": "#/definitions/review-app-config/definitions/wait_for_ci",
+            "description": "If true, review apps will only be created when CI passes"
+          }
+        },
+        "type": [
+          "object"
+        ]
+      },
+      "targetSchema": {
+        "$ref": "#/definitions/review-app-config"
+      },
+      "title": "Update"
+    },
+    {
+      "description": "Disable review apps for a pipeline",
+      "href": "/pipelines/{(%23%2Fdefinitions%2Fpipeline%2Fdefinitions%2Fid)}/review-app-config",
+      "method": "DELETE",
+      "rel": "destroy",
+      "targetSchema": {
+        "$ref": "#/definitions/review-app-config"
+      },
+      "title": "Delete"
+    }
+  ],
+  "properties": {
+    "automatic_review_apps": {
+      "$ref": "#/definitions/review-app-config/definitions/automatic_review_apps"
+    },
+    "base_name": {
+      "$ref": "#/definitions/review-app-config/definitions/base_name"
+    },
+    "deploy_target": {
+      "$ref": "#/definitions/review-app-config/definitions/deploy_target"
+    },
+    "destroy_stale_apps": {
+      "$ref": "#/definitions/review-app-config/definitions/destroy_stale_apps"
+    },
+    "pipeline_id": {
+      "$ref": "#/definitions/review-app-config/definitions/id"
+    },
+    "repo": {
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/review-app-config/definitions/repo_id"
+        }
+      },
+      "strictProperties": true,
+      "type": [
+        "object"
+      ]
+    },
+    "stale_days": {
+      "$ref": "#/definitions/review-app-config/definitions/stale_days"
+    },
+    "wait_for_ci": {
+      "$ref": "#/definitions/review-app-config/definitions/wait_for_ci"
+    }
+  },
+  "stability": "production",
+  "strictProperties": false,
+  "title": "Heroku Platform API - Review App Configuration",
+  "type": [
+    "object"
+  ]
+}

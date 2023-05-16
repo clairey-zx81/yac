@@ -1,0 +1,606 @@
+{
+    "title": "jardins-remarquables-tmvl@toursmetropole",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/jardins-remarquables-tmvl@toursmetropole"
+        }
+    ],
+    "definitions": {
+        "jardins-remarquables-tmvl@toursmetropole": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/jardins-remarquables-tmvl@toursmetropole_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "jardins-remarquables-tmvl@toursmetropole_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "code_id": {
+                            "type": "string",
+                            "title": "code_id",
+                            "description": ""
+                        },
+                        "nom_du_jardin": {
+                            "type": "string",
+                            "title": "nom_du_jardin",
+                            "description": ""
+                        },
+                        "adresse": {
+                            "type": "string",
+                            "title": "adresse",
+                            "description": ""
+                        },
+                        "code_postal": {
+                            "type": "string",
+                            "title": "code_postal",
+                            "description": ""
+                        },
+                        "ville": {
+                            "type": "string",
+                            "title": "ville",
+                            "description": ""
+                        },
+                        "region": {
+                            "type": "string",
+                            "title": "region",
+                            "description": ""
+                        },
+                        "departement": {
+                            "type": "string",
+                            "title": "departement",
+                            "description": ""
+                        },
+                        "coordonnees_x": {
+                            "type": "number",
+                            "title": "coordonnees_x",
+                            "description": ""
+                        },
+                        "coordonnees_y": {
+                            "type": "number",
+                            "title": "coordonnees_y",
+                            "description": ""
+                        },
+                        "descriptif": {
+                            "type": "string",
+                            "title": "descriptif",
+                            "description": ""
+                        },
+                        "site_web": {
+                            "type": "string",
+                            "title": "site_web",
+                            "description": ""
+                        },
+                        "facebook": {
+                            "type": "string",
+                            "title": "facebook",
+                            "description": ""
+                        },
+                        "twitter": {
+                            "type": "string",
+                            "title": "twitter",
+                            "description": ""
+                        },
+                        "instagram": {
+                            "type": "string",
+                            "title": "instagram",
+                            "description": ""
+                        },
+                        "dailymotion": {
+                            "type": "string",
+                            "title": "dailymotion",
+                            "description": ""
+                        },
+                        "tag_annee_de_labellisation": {
+                            "type": "string",
+                            "title": "tag_annee_de_labellisation",
+                            "description": ""
+                        },
+                        "tag_jardin_remarquable": {
+                            "type": "string",
+                            "title": "tag_jardin_remarquable",
+                            "description": ""
+                        },
+                        "tag_maison_des_illustres": {
+                            "type": "string",
+                            "title": "tag_maison_des_illustres",
+                            "description": ""
+                        },
+                        "tag_monument_historique": {
+                            "type": "string",
+                            "title": "tag_monument_historique",
+                            "description": ""
+                        },
+                        "tag_protection_site": {
+                            "type": "string",
+                            "title": "tag_protection_site",
+                            "description": ""
+                        },
+                        "tag_tourisme_et_handicap": {
+                            "type": "string",
+                            "title": "tag_tourisme_et_handicap",
+                            "description": ""
+                        },
+                        "tag_musee_de_france": {
+                            "type": "string",
+                            "title": "tag_musee_de_france",
+                            "description": ""
+                        },
+                        "tag_architecture_contemporaine_remarquable": {
+                            "type": "string",
+                            "title": "tag_architecture_contemporaine_remarquable",
+                            "description": ""
+                        },
+                        "tag_vpah": {
+                            "type": "string",
+                            "title": "tag_vpah",
+                            "description": ""
+                        },
+                        "tag_patrimoine_mondial_de_lunesco": {
+                            "type": "string",
+                            "title": "tag_patrimoine_mondial_de_lunesco",
+                            "description": ""
+                        },
+                        "tag_jardin_prive": {
+                            "type": "string",
+                            "title": "tag_jardin_prive",
+                            "description": ""
+                        },
+                        "tag_jardin_contemporain": {
+                            "type": "string",
+                            "title": "tag_jardin_contemporain",
+                            "description": ""
+                        },
+                        "tag_parc_paysager": {
+                            "type": "string",
+                            "title": "tag_parc_paysager",
+                            "description": ""
+                        },
+                        "tag_jardin_regulier": {
+                            "type": "string",
+                            "title": "tag_jardin_regulier",
+                            "description": ""
+                        },
+                        "tag_jardin_de_collection": {
+                            "type": "string",
+                            "title": "tag_jardin_de_collection",
+                            "description": ""
+                        },
+                        "tag_jardin_public": {
+                            "type": "string",
+                            "title": "tag_jardin_public",
+                            "description": ""
+                        },
+                        "tag_jardin_vivrier": {
+                            "type": "string",
+                            "title": "tag_jardin_vivrier",
+                            "description": ""
+                        },
+                        "tag_jardin_inspiration_medievale": {
+                            "type": "string",
+                            "title": "tag_jardin_inspiration_medievale",
+                            "description": ""
+                        },
+                        "coordonnees_geographiques": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "coordonnees_geographiques",
+                            "description": ""
+                        },
+                        "x_commune_code": {
+                            "type": "integer",
+                            "title": "x_commune_code",
+                            "description": ""
+                        },
+                        "x_commune_name": {
+                            "type": "string",
+                            "title": "x_commune_name",
+                            "description": ""
+                        },
+                        "x_epci_code": {
+                            "type": "string",
+                            "title": "x_epci_code",
+                            "description": ""
+                        },
+                        "x_epci_name": {
+                            "type": "string",
+                            "title": "x_epci_name",
+                            "description": ""
+                        },
+                        "x_arrondissement_code": {
+                            "type": "string",
+                            "title": "x_arrondissement_code",
+                            "description": ""
+                        },
+                        "x_arrondissement_name": {
+                            "type": "string",
+                            "title": "x_arrondissement_name",
+                            "description": ""
+                        },
+                        "x_departement_code": {
+                            "type": "string",
+                            "title": "x_departement_code",
+                            "description": ""
+                        },
+                        "x_departement_name": {
+                            "type": "string",
+                            "title": "x_departement_name",
+                            "description": ""
+                        },
+                        "x_region_code": {
+                            "type": "integer",
+                            "title": "x_region_code",
+                            "description": ""
+                        },
+                        "x_region_name": {
+                            "type": "string",
+                            "title": "x_region_name",
+                            "description": ""
+                        },
+                        "x_commune_code_postal": {
+                            "type": "string",
+                            "title": "x_commune_code_postal",
+                            "description": ""
+                        },
+                        "x_commune_code_insee": {
+                            "type": "integer",
+                            "title": "x_commune_code_insee",
+                            "description": ""
+                        },
+                        "geo_point": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

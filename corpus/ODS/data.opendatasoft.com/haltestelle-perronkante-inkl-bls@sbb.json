@@ -1,0 +1,481 @@
+{
+    "title": "haltestelle-perronkante-inkl-bls@sbb",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/haltestelle-perronkante-inkl-bls@sbb"
+        }
+    ],
+    "definitions": {
+        "haltestelle-perronkante-inkl-bls@sbb": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/haltestelle-perronkante-inkl-bls@sbb_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "haltestelle-perronkante-inkl-bls@sbb_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "linie": {
+                            "type": "integer",
+                            "title": "Linie",
+                            "description": "Bezeichnung der Linie"
+                        },
+                        "km": {
+                            "type": "number",
+                            "title": "KM",
+                            "description": "Kilometrierung der Linie. Kongruent zu den Markierung entlang der Strecke"
+                        },
+                        "bps": {
+                            "type": "string",
+                            "title": "Abkuerzung Bahnhof",
+                            "description": "eindeutige Abkürzung gemäss Dienststellen Liste. Diese Liste ist unter https://opendata.swiss/de/dataset/haltestellen-des-offentlichen-verkehrs abgespeichert"
+                        },
+                        "bps_name": {
+                            "type": "string",
+                            "title": "Haltestellen Name",
+                            "description": "offizieller Name der Haltestelle"
+                        },
+                        "perrontyp": {
+                            "type": "string",
+                            "title": "Perrontyp",
+                            "description": "Typ des Perron:  - Mittelperron (zwischen zwei Geleisen) - Hausperron (neben dem Bahnhofsgebäude) - Aussenperron (nur 1 Geleise liegt an)"
+                        },
+                        "p_nr": {
+                            "type": "string",
+                            "title": "Perron Nummer",
+                            "description": "betroffene Perronnummer"
+                        },
+                        "kundengleis_nr": {
+                            "type": "string",
+                            "title": "Kundengleis Nr.",
+                            "description": ""
+                        },
+                        "kanten_l": {
+                            "type": "number",
+                            "title": "Perronkantenlänge",
+                            "description": "Bauliche Länge des Perrons"
+                        },
+                        "pk_h": {
+                            "type": "string",
+                            "title": "Perronkantenhöhe",
+                            "description": "Höhe des Perrons  P 35 (35 cm ab Schiene) P 55 (55 cm ab Schiene"
+                        },
+                        "bem_hohe": {
+                            "type": "string",
+                            "title": "Bemerkung Höhe",
+                            "description": ""
+                        },
+                        "hilfstritt": {
+                            "type": "string",
+                            "title": "Hilfstritt",
+                            "description": "gibt es einen Hilfstritt um z.B P55 zu erreichen"
+                        },
+                        "h_verl": {
+                            "type": "string",
+                            "title": "Höhenverlauf",
+                            "description": "Höhenverlauf"
+                        },
+                        "material": {
+                            "type": "string",
+                            "title": "Material",
+                            "description": "Typisierung der Kantenart"
+                        },
+                        "bem_material": {
+                            "type": "string",
+                            "title": "Bemerkung Material",
+                            "description": ""
+                        },
+                        "kantenkrone": {
+                            "type": "string",
+                            "title": "Kantenart",
+                            "description": "Aus was besteht die Perronkante"
+                        },
+                        "bem_kantenkrone": {
+                            "type": "string",
+                            "title": "Bemerkung Kantenkrone",
+                            "description": ""
+                        },
+                        "auftritt": {
+                            "type": "string",
+                            "title": "Auftritt",
+                            "description": "Beschaffenheit des Hilfstritt"
+                        },
+                        "erfmandant": {
+                            "type": "string",
+                            "title": "ErfMandant",
+                            "description": ""
+                        },
+                        "fid": {
+                            "type": "integer",
+                            "title": "FID",
+                            "description": "Identifikation der Anlage um der SBB Feedback zu geben"
+                        },
+                        "1_koord": {
+                            "type": "string",
+                            "title": "1_koord",
+                            "description": "Startkoordinate der Perronkante"
+                        },
+                        "2_koord": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "2_koord",
+                            "description": "Endkoordinate der Perronkante"
+                        },
+                        "bpuic": {
+                            "type": "integer",
+                            "title": "BPUIC",
+                            "description": "Identifikation der Haltestelle gemäss der Spetzifikation der UIC"
+                        },
+                        "lod": {
+                            "type": "string",
+                            "title": "lod",
+                            "description": "Linked Open Data Repräsentation der Haltestelle"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

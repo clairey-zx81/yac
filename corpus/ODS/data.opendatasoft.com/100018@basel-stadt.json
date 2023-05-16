@@ -1,0 +1,520 @@
+{
+    "title": "100018@basel-stadt",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/100018@basel-stadt"
+        }
+    ],
+    "definitions": {
+        "100018@basel-stadt": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/100018@basel-stadt_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "100018@basel-stadt_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": "Coordinates"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "begehrenid": {
+                            "type": "integer",
+                            "title": "RequestID",
+                            "description": "Identification number of the request. A request may contain several address allocations."
+                        },
+                        "lokalitaid": {
+                            "type": "integer",
+                            "title": "LocalityID",
+                            "description": "Identification number of the location"
+                        },
+                        "belegungid": {
+                            "type": "integer",
+                            "title": "OccupancyID",
+                            "description": "Identification number of the occupancy"
+                        },
+                        "bezeichng": {
+                            "type": "string",
+                            "title": "Description",
+                            "description": "Description of the occupancy"
+                        },
+                        "artbeg_id": {
+                            "type": "integer",
+                            "title": "RequestID",
+                            "description": "Identification number of the type of request"
+                        },
+                        "artbeg_bez": {
+                            "type": "string",
+                            "title": "Request type",
+                            "description": "Description of the type of request"
+                        },
+                        "eingangsdatum": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date received",
+                            "description": "Date received"
+                        },
+                        "entscheid_datum": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Decision date",
+                            "description": "Decision date"
+                        },
+                        "entsch_id": {
+                            "type": "integer",
+                            "title": "Decision ID",
+                            "description": "Identification number of the decision category"
+                        },
+                        "entsch_bez": {
+                            "type": "string",
+                            "title": "Decision description",
+                            "description": "Name of the decision category"
+                        },
+                        "strassenid": {
+                            "type": "integer",
+                            "title": "StreetID",
+                            "description": "Street number"
+                        },
+                        "belgartid": {
+                            "type": "integer",
+                            "title": "Occupancy typeID",
+                            "description": "Identification number of the type of occupancy"
+                        },
+                        "belgartbez": {
+                            "type": "string",
+                            "title": "Occupancy type description",
+                            "description": "Name of the type of occupancy"
+                        },
+                        "belaartid": {
+                            "type": "integer",
+                            "title": "LoadID",
+                            "description": "Identification number of the load type"
+                        },
+                        "belaartbez": {
+                            "type": "string",
+                            "title": "Load type description",
+                            "description": "Name of the load type"
+                        },
+                        "merkmal_id": {
+                            "type": "integer",
+                            "title": "CharacteristicID",
+                            "description": "Identification number of the characteristic of the business"
+                        },
+                        "merkmalbez": {
+                            "type": "string",
+                            "title": "Business characteristic description",
+                            "description": "Name of the characteristic of the business"
+                        },
+                        "merkmalwrt": {
+                            "type": "string",
+                            "title": "Characteristic value",
+                            "description": "Value of the characteristic of the business, e.g. construction costs"
+                        },
+                        "einheit_id": {
+                            "type": "integer",
+                            "title": "Unit ID",
+                            "description": "Identification number of the unit"
+                        },
+                        "einheitbez": {
+                            "type": "string",
+                            "title": "Occupancy unit description",
+                            "description": "Unit in which the occupancy is measured. Costs are calculated based on the unit. For example, m2 or weeks."
+                        },
+                        "belestatid": {
+                            "type": "integer",
+                            "title": "Occupancy status ID",
+                            "description": "Identification number of the occupancy status"
+                        },
+                        "belestatbe": {
+                            "type": "string",
+                            "title": "Occupancy status description",
+                            "description": "Name of the occupancy status"
+                        },
+                        "idunique": {
+                            "type": "string",
+                            "title": "IDUnique",
+                            "description": ""
+                        },
+                        "datumeing": {
+                            "type": "string",
+                            "title": "DatumEing",
+                            "description": ""
+                        },
+                        "datuments": {
+                            "type": "string",
+                            "title": "DatumEnts",
+                            "description": ""
+                        },
+                        "datum_von": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Datum_von",
+                            "description": ""
+                        },
+                        "datum_bis": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Datum_bis",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

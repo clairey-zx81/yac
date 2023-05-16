@@ -1,0 +1,472 @@
+{
+    "title": "heritage-sites@vancouver",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/heritage-sites@vancouver"
+        }
+    ],
+    "definitions": {
+        "heritage-sites@vancouver": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/heritage-sites@vancouver_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "heritage-sites@vancouver_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "title": "ID",
+                            "description": "Unique ID for this record"
+                        },
+                        "streetnumber": {
+                            "type": "string",
+                            "title": "StreetNumber",
+                            "description": "Number assigned to the street where the heritage property is located"
+                        },
+                        "streetname": {
+                            "type": "string",
+                            "title": "StreetName",
+                            "description": "Name of street where the heritage property is located"
+                        },
+                        "additionallocationinformation": {
+                            "type": "string",
+                            "title": "AdditionalLocationInformation",
+                            "description": "Location description for sites that do not have civic addresses, or to provide a location description in addition to a civic address"
+                        },
+                        "category": {
+                            "type": "string",
+                            "title": "Category",
+                            "description": "The type of heritage resource, i.e. buildings, streetscapes, and landscape resources"
+                        },
+                        "buildingnamespecifics": {
+                            "type": "string",
+                            "title": "BuildingNameSpecifics",
+                            "description": "Either a current (common) name or a historical name associated with the heritage site"
+                        },
+                        "evaluationgroup": {
+                            "type": "string",
+                            "title": "EvaluationGroup",
+                            "description": "Evaluation Group (A, B, or C) - indicates the building's evaluation category under the Heritage Register. These are general classifications and are based on any combination of historic, architectural, cultural, spiritual, scientific or social values. Some sites in this data set do not have an evaluation group, but may otherwise have heritage status and have therefore been included"
+                        },
+                        "municipaldesignationm": {
+                            "type": "string",
+                            "title": "MunicipalDesignationM",
+                            "description": "Buildings or sites that are protected by a legal heritage designation by the City of Vancouver"
+                        },
+                        "provincialdesignationp": {
+                            "type": "string",
+                            "title": "ProvincialDesignationP",
+                            "description": "Buildings or sites that are protected by a legal heritage designation by the Province of British Columbia"
+                        },
+                        "heritagerevitalizationagreementh": {
+                            "type": "string",
+                            "title": "HeritageRevitalizationAgreementH",
+                            "description": "Buildings or sites are the subject of a Heritage Revitalization Agreement"
+                        },
+                        "interiordesignationi": {
+                            "type": "string",
+                            "title": "InteriorDesignationI",
+                            "description": "Specific interior features and fixtures in the building are protected"
+                        },
+                        "landscapedesignationl": {
+                            "type": "string",
+                            "title": "LandscapeDesignationL",
+                            "description": "Certain landscape features are protected."
+                        },
+                        "heritageconservationareaca": {
+                            "type": "string",
+                            "title": "HeritageConservationAreaCA",
+                            "description": "Scheduled as protected within a Heritage Conservation Area"
+                        },
+                        "heritageconservationcovenanthc": {
+                            "type": "string",
+                            "title": "HeritageConservationCovenantHC",
+                            "description": "The building, or some portion thereof, is protected by a Heritage Conservation Covenant registered on title at the Land Title Office"
+                        },
+                        "federaldesignationf": {
+                            "type": "string",
+                            "title": "FederalDesignationF",
+                            "description": "The site is identified by the Federal Government as a National Historic Site.  However, it is not legally protected unless it also has municipal or provincial designation, a Heritage Conservation Covenant or a Heritage Revitalization Agreement"
+                        },
+                        "status": {
+                            "type": "string",
+                            "title": "Status",
+                            "description": "Status of this asset on the Vancouver Heritage Register"
+                        },
+                        "dateoflastupdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "DateofLastUpdate",
+                            "description": "Last update date of this record"
+                        },
+                        "localarea": {
+                            "type": "string",
+                            "title": "LocalArea",
+                            "description": "Local (planning) area where the heritage property is located. City Council approved twenty-two local areas in 1969, as a basis for the organization of community services and city departments. For more information, see the Local area boundary dataset."
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geom",
+                            "description": "Spatial representation of feature"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

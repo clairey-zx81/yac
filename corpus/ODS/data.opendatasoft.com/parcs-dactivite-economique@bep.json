@@ -1,0 +1,561 @@
+{
+    "title": "parcs-dactivite-economique@bep",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/parcs-dactivite-economique@bep"
+        }
+    ],
+    "definitions": {
+        "parcs-dactivite-economique@bep": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/parcs-dactivite-economique@bep_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "parcs-dactivite-economique@bep_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "objectid": {
+                            "type": "integer",
+                            "title": "OBJECTID",
+                            "description": ""
+                        },
+                        "nomparccarto": {
+                            "type": "string",
+                            "title": "NOMPARCCARTO",
+                            "description": ""
+                        },
+                        "superficie": {
+                            "type": "string",
+                            "title": "SUPERFICIE",
+                            "description": ""
+                        },
+                        "nsitid": {
+                            "type": "integer",
+                            "title": "NSITID",
+                            "description": ""
+                        },
+                        "shape_area": {
+                            "type": "number",
+                            "title": "Shape__Area",
+                            "description": ""
+                        },
+                        "shape_length": {
+                            "type": "number",
+                            "title": "Shape__Length",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        },
+                        "nomparc": {
+                            "type": "string",
+                            "title": "Nom du parc d'activité économique",
+                            "description": ""
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "Type d'activité économique",
+                            "description": ""
+                        },
+                        "localisation": {
+                            "type": "string",
+                            "title": "Localisation",
+                            "description": ""
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "Commune",
+                            "description": ""
+                        },
+                        "prixvente": {
+                            "type": "integer",
+                            "title": "Prix de vente",
+                            "description": ""
+                        },
+                        "prixvente2": {
+                            "type": "integer",
+                            "title": "Prix de vente 2",
+                            "description": ""
+                        },
+                        "url_pae": {
+                            "type": "string",
+                            "title": "Page web",
+                            "description": ""
+                        },
+                        "nomparcweb": {
+                            "type": "string",
+                            "title": "NOMPARCWEB",
+                            "description": ""
+                        },
+                        "hallrelais": {
+                            "type": "string",
+                            "title": "Hall relais",
+                            "description": ""
+                        },
+                        "gaz": {
+                            "type": "string",
+                            "title": "Gaz",
+                            "description": ""
+                        },
+                        "fibreoptique": {
+                            "type": "string",
+                            "title": "Fibre optique",
+                            "description": ""
+                        },
+                        "adsl": {
+                            "type": "string",
+                            "title": "ADSL",
+                            "description": ""
+                        },
+                        "coaxial": {
+                            "type": "string",
+                            "title": "Coaxial",
+                            "description": ""
+                        },
+                        "assainissementcollectif": {
+                            "type": "string",
+                            "title": "Assainissement collectif",
+                            "description": ""
+                        },
+                        "dist_anvers": {
+                            "type": "string",
+                            "title": "Distance Anvers",
+                            "description": ""
+                        },
+                        "dist_bruxelles": {
+                            "type": "string",
+                            "title": "Distance Bruxelles",
+                            "description": ""
+                        },
+                        "dist_charleroi": {
+                            "type": "string",
+                            "title": "Distance Charleroi",
+                            "description": ""
+                        },
+                        "dist_gand": {
+                            "type": "string",
+                            "title": "Distance Gand",
+                            "description": ""
+                        },
+                        "dist_liege": {
+                            "type": "string",
+                            "title": "Distance Liège",
+                            "description": ""
+                        },
+                        "dist_namur": {
+                            "type": "string",
+                            "title": "Distance Namur",
+                            "description": ""
+                        },
+                        "rte_acces_1": {
+                            "type": "string",
+                            "title": "Route d'accès 1",
+                            "description": ""
+                        },
+                        "rte_acces_2": {
+                            "type": "string",
+                            "title": "Route d'accès 2",
+                            "description": ""
+                        },
+                        "rte_acces_3": {
+                            "type": "string",
+                            "title": "Route d'accès 3",
+                            "description": ""
+                        },
+                        "aeroport_1": {
+                            "type": "string",
+                            "title": "Aéroport 1",
+                            "description": ""
+                        },
+                        "aeroport_2": {
+                            "type": "string",
+                            "title": "Aéroport 2",
+                            "description": ""
+                        },
+                        "aeroport_3": {
+                            "type": "string",
+                            "title": "Aéroport 3",
+                            "description": ""
+                        },
+                        "gare_1": {
+                            "type": "string",
+                            "title": "Gare 1",
+                            "description": ""
+                        },
+                        "gare_2": {
+                            "type": "string",
+                            "title": "Gare 2",
+                            "description": ""
+                        },
+                        "tec_1": {
+                            "type": "string",
+                            "title": "TEC_1",
+                            "description": ""
+                        },
+                        "tec_2": {
+                            "type": "string",
+                            "title": "TEC_2",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

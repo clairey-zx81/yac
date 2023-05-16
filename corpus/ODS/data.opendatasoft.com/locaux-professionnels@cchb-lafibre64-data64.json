@@ -1,0 +1,541 @@
+{
+    "title": "locaux-professionnels@cchb-lafibre64-data64",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/locaux-professionnels@cchb-lafibre64-data64"
+        }
+    ],
+    "definitions": {
+        "locaux-professionnels@cchb-lafibre64-data64": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/locaux-professionnels@cchb-lafibre64-data64_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "locaux-professionnels@cchb-lafibre64-data64_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "libelle_de_la_commune": {
+                            "type": "string",
+                            "title": "Commune",
+                            "description": ""
+                        },
+                        "code_prefixe": {
+                            "type": "string",
+                            "title": "CODE PREFIXE",
+                            "description": ""
+                        },
+                        "section": {
+                            "type": "string",
+                            "title": "SECTION",
+                            "description": ""
+                        },
+                        "numero_de_parcelle": {
+                            "type": "string",
+                            "title": "NUMERO DE PARCELLE",
+                            "description": ""
+                        },
+                        "batiment": {
+                            "type": "string",
+                            "title": "BATIMENT",
+                            "description": ""
+                        },
+                        "entree": {
+                            "type": "string",
+                            "title": "ENTREE",
+                            "description": ""
+                        },
+                        "niveau": {
+                            "type": "string",
+                            "title": "NIVEAU",
+                            "description": ""
+                        },
+                        "porte": {
+                            "type": "string",
+                            "title": "PORTE",
+                            "description": ""
+                        },
+                        "code_commune_de_l_invariant": {
+                            "type": "string",
+                            "title": "CODE COMMUNE DE L'INVARIANT",
+                            "description": ""
+                        },
+                        "numero_invariant_du_local": {
+                            "type": "string",
+                            "title": "NUMERO INVARIANT DU LOCAL",
+                            "description": ""
+                        },
+                        "cle_de_l_invariant": {
+                            "type": "string",
+                            "title": "CLE DE L'INVARIANT",
+                            "description": ""
+                        },
+                        "code_rivoli": {
+                            "type": "string",
+                            "title": "CODE RIVOLI",
+                            "description": ""
+                        },
+                        "numero_de_voirie_de_situation_du_local": {
+                            "type": "string",
+                            "title": "NUMERO DE VOIRIE DE SITUATION DU LOCAL",
+                            "description": ""
+                        },
+                        "indice_de_repetition_b_t_q_de_situation_du_local": {
+                            "type": "string",
+                            "title": "INDICE DE REPETITION (B, T, Q ...) DE SITUATION DU LOCAL",
+                            "description": ""
+                        },
+                        "categorie_du_local": {
+                            "type": "string",
+                            "title": "CATEGORIE DU LOCAL",
+                            "description": ""
+                        },
+                        "numero_de_secteur_d_evaluation": {
+                            "type": "string",
+                            "title": "NUMERO DE SECTEUR D'EVALUATION",
+                            "description": ""
+                        },
+                        "coefficient_de_localisation": {
+                            "type": "integer",
+                            "title": "COEFFICIENT DE LOCALISATION",
+                            "description": ""
+                        },
+                        "surface_p1": {
+                            "type": "string",
+                            "title": "SURFACE P1",
+                            "description": ""
+                        },
+                        "surface_p2": {
+                            "type": "string",
+                            "title": "SURFACE P2",
+                            "description": ""
+                        },
+                        "code_insee": {
+                            "type": "string",
+                            "title": "code_insee",
+                            "description": ""
+                        },
+                        "surface_p3": {
+                            "type": "string",
+                            "title": "SURFACE P3",
+                            "description": ""
+                        },
+                        "surface_pk1": {
+                            "type": "string",
+                            "title": "SURFACE PK1",
+                            "description": ""
+                        },
+                        "surface_pk2": {
+                            "type": "string",
+                            "title": "SURFACE PK2",
+                            "description": ""
+                        },
+                        "surface_reelle_totale": {
+                            "type": "integer",
+                            "title": "SURFACE REELLE TOTALE",
+                            "description": ""
+                        },
+                        "surface_ponderee_totale": {
+                            "type": "integer",
+                            "title": "SURFACE PONDEREE TOTALE",
+                            "description": ""
+                        },
+                        "annee_de_reference_du_local_pour_locaux_exc1": {
+                            "type": "string",
+                            "title": "ANNEE DE REFERENCE DU LOCAL (POUR LOCAUX EXC1)",
+                            "description": ""
+                        },
+                        "valeur_venale_du_local_pour_locaux_exc1": {
+                            "type": "string",
+                            "title": "VALEUR VENALE DU LOCAL (POUR LOCAUX EXC1)",
+                            "description": ""
+                        },
+                        "abattement_service_public_pour_locaux_exc1": {
+                            "type": "string",
+                            "title": "ABATTEMENT SERVICE PUBLIC (POUR LOCAUX EXC1)",
+                            "description": ""
+                        },
+                        "taux_de_reduction": {
+                            "type": "string",
+                            "title": "TAUX DE REDUCTION",
+                            "description": ""
+                        },
+                        "valeur_locative_revisee_brute_de_l_annee": {
+                            "type": "string",
+                            "title": "VALEUR LOCATIVE REVISEE BRUTE DE L'ANNEE",
+                            "description": ""
+                        },
+                        "date_de_realisation_du_changement": {
+                            "type": "string",
+                            "title": "DATE DE REALISATION DU CHANGEMENT",
+                            "description": ""
+                        },
+                        "nature_du_changement": {
+                            "type": "string",
+                            "title": "NATURE DU CHANGEMENT",
+                            "description": ""
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geom",
+                            "description": ""
+                        },
+                        "centroid": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "centroid",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

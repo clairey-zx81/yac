@@ -1,0 +1,506 @@
+{
+    "title": "gestion-des-arbres-arbres@sicoval-haute-garonne",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/gestion-des-arbres-arbres@sicoval-haute-garonne"
+        }
+    ],
+    "definitions": {
+        "gestion-des-arbres-arbres@sicoval-haute-garonne": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/gestion-des-arbres-arbres@sicoval-haute-garonne_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "gestion-des-arbres-arbres@sicoval-haute-garonne_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "objectid": {
+                            "type": "integer",
+                            "title": "(OBJECTID) Référence de l'arbre",
+                            "description": ""
+                        },
+                        "nom_commun": {
+                            "type": "string",
+                            "title": "Nom commun",
+                            "description": ""
+                        },
+                        "nom_latin": {
+                            "type": "string",
+                            "title": "Nom Latin",
+                            "description": ""
+                        },
+                        "localisation": {
+                            "type": "string",
+                            "title": "Localisation",
+                            "description": ""
+                        },
+                        "hauteur": {
+                            "type": "string",
+                            "title": "Hauteur",
+                            "description": ""
+                        },
+                        "diametre": {
+                            "type": "string",
+                            "title": "Diamètre",
+                            "description": ""
+                        },
+                        "perimetre_tronc": {
+                            "type": "string",
+                            "title": "Périmètre du tronc",
+                            "description": ""
+                        },
+                        "categorie": {
+                            "type": "string",
+                            "title": "Catégorie",
+                            "description": ""
+                        },
+                        "emplacement": {
+                            "type": "string",
+                            "title": "Emplacement",
+                            "description": ""
+                        },
+                        "milieu": {
+                            "type": "string",
+                            "title": "Milieu",
+                            "description": ""
+                        },
+                        "observation": {
+                            "type": "string",
+                            "title": "Observations",
+                            "description": ""
+                        },
+                        "houppier": {
+                            "type": "string",
+                            "title": "Houppier",
+                            "description": ""
+                        },
+                        "tronc": {
+                            "type": "string",
+                            "title": "Tronc",
+                            "description": ""
+                        },
+                        "collet": {
+                            "type": "string",
+                            "title": "Collet",
+                            "description": ""
+                        },
+                        "expertise": {
+                            "type": "string",
+                            "title": "Expertise?",
+                            "description": ""
+                        },
+                        "remarque_expertise": {
+                            "type": "string",
+                            "title": "Remarques de l'expertise",
+                            "description": ""
+                        },
+                        "demande_inter": {
+                            "type": "string",
+                            "title": "Demande d'intervention ?",
+                            "description": ""
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "Commune de l'arbre",
+                            "description": ""
+                        },
+                        "etat_general": {
+                            "type": "string",
+                            "title": "Etat général de l'arbre",
+                            "description": ""
+                        },
+                        "formes": {
+                            "type": "string",
+                            "title": "FORMES",
+                            "description": ""
+                        },
+                        "arbre_remarquable": {
+                            "type": "string",
+                            "title": "Arbre remarquable?",
+                            "description": ""
+                        },
+                        "empietement_dom_prive": {
+                            "type": "string",
+                            "title": "Empiétement en domaine privé?",
+                            "description": ""
+                        },
+                        "date_traitement_python": {
+                            "type": "string",
+                            "title": "DATE_TRAITEMENT_PYTHON",
+                            "description": ""
+                        },
+                        "rq_technique_python": {
+                            "type": "string",
+                            "title": "RQ_TECHNIQUE_PYTHON",
+                            "description": ""
+                        },
+                        "code_insee": {
+                            "type": "string",
+                            "title": "CODE_INSEE",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

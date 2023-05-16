@@ -1,0 +1,606 @@
+{
+    "title": "inclusion_numerique_lieux@eurometrostrasbourg",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/inclusion_numerique_lieux@eurometrostrasbourg"
+        }
+    ],
+    "definitions": {
+        "inclusion_numerique_lieux@eurometrostrasbourg": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/inclusion_numerique_lieux@eurometrostrasbourg_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "inclusion_numerique_lieux@eurometrostrasbourg_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geocodage": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geocodage",
+                            "description": ""
+                        },
+                        "structure_nom_complet": {
+                            "type": "string",
+                            "title": "structure_nom_complet",
+                            "description": "Nom complet de la structure "
+                        },
+                        "besoin_couvert": {
+                            "type": "string",
+                            "title": "besoin_couvert",
+                            "description": "Besoins couverts par la structure en matière d’inclusion et de médiation numérique"
+                        },
+                        "structure_nom_usage": {
+                            "type": "string",
+                            "title": "structure_nom_usage",
+                            "description": "Nom d'usage de la structure "
+                        },
+                        "rattachement_vems": {
+                            "type": "string",
+                            "title": "rattachement_vems",
+                            "description": "Rattachement à la Ville et Eurométropole de Strasbourg"
+                        },
+                        "rattachement_autre": {
+                            "type": "string",
+                            "title": "rattachement_autre",
+                            "description": "Autre rattachement"
+                        },
+                        "lieu_adresse_denomination": {
+                            "type": "string",
+                            "title": "lieu_adresse_denomination",
+                            "description": "Dénomination du lieu"
+                        },
+                        "lieu_adresse_complete": {
+                            "type": "string",
+                            "title": "lieu_adresse_complete",
+                            "description": "Adresse"
+                        },
+                        "lieu_adresse_commune": {
+                            "type": "string",
+                            "title": "lieu_adresse_commune",
+                            "description": "Ville"
+                        },
+                        "lieu_adresse_cp": {
+                            "type": "string",
+                            "title": "lieu_adresse_cp",
+                            "description": "Code postal"
+                        },
+                        "structure_description_services": {
+                            "type": "string",
+                            "title": "structure_description_services",
+                            "description": "Description détaillée de la structure"
+                        },
+                        "usager_tel_fixe": {
+                            "type": "string",
+                            "title": "usager_tel_fixe",
+                            "description": "Numéro de téléphone fixe"
+                        },
+                        "usager_tel_portable": {
+                            "type": "string",
+                            "title": "usager_tel_portable",
+                            "description": "Numéro de téléphone portable"
+                        },
+                        "usager_mail": {
+                            "type": "string",
+                            "title": "usager_mail",
+                            "description": "Mail"
+                        },
+                        "url_web": {
+                            "type": "string",
+                            "title": "url_web",
+                            "description": "Lien site internet"
+                        },
+                        "ouv_lu_ma": {
+                            "type": "string",
+                            "title": "ouv_lu_ma",
+                            "description": "Horaire lundi matin"
+                        },
+                        "ouv_lu_am": {
+                            "type": "string",
+                            "title": "ouv_lu_am",
+                            "description": "Horaire lundi après-midi"
+                        },
+                        "ouv_ma_ma": {
+                            "type": "string",
+                            "title": "ouv_ma_ma",
+                            "description": "Horaire mardi matin"
+                        },
+                        "ouv_ma_am": {
+                            "type": "string",
+                            "title": "ouv_ma_am",
+                            "description": "Horaire mardi après-midi"
+                        },
+                        "ouv_me_ma": {
+                            "type": "string",
+                            "title": "ouv_me_ma",
+                            "description": "Horaire mercredi matin"
+                        },
+                        "ouv_me_am": {
+                            "type": "string",
+                            "title": "ouv_me_am",
+                            "description": "Horaire mercredi après-midi"
+                        },
+                        "ouv_je_ma": {
+                            "type": "string",
+                            "title": "ouv_je_ma",
+                            "description": "Horaire jeudi matin"
+                        },
+                        "ouv_je_am": {
+                            "type": "string",
+                            "title": "ouv_je_am",
+                            "description": "Horaire jeudi après-midi"
+                        },
+                        "ouv_ve_ma": {
+                            "type": "string",
+                            "title": "ouv_ve_ma",
+                            "description": "Horaire vendredi matin"
+                        },
+                        "ouv_ve_am": {
+                            "type": "string",
+                            "title": "ouv_ve_am",
+                            "description": "Horaire vendredi après-midi"
+                        },
+                        "ouv_sa_ma": {
+                            "type": "string",
+                            "title": "ouv_sa_ma",
+                            "description": "Horaire samedi matin"
+                        },
+                        "ouv_sa_am": {
+                            "type": "string",
+                            "title": "ouv_sa_am",
+                            "description": "Horaire samedi après-midi"
+                        },
+                        "ouv_di_ma": {
+                            "type": "string",
+                            "title": "ouv_di_ma",
+                            "description": "Horaire dimanche matin"
+                        },
+                        "ouv_di_am": {
+                            "type": "string",
+                            "title": "ouv_di_am",
+                            "description": "Horaire dimanche après-midi"
+                        },
+                        "ouv_infos": {
+                            "type": "string",
+                            "title": "ouv_infos",
+                            "description": "Précisions supplémentaires concernant les horaires d'ouvertures"
+                        },
+                        "accueil_rdv": {
+                            "type": "string",
+                            "title": "accueil_rdv",
+                            "description": "Accueil sur rendez-vous"
+                        },
+                        "accueil_libre": {
+                            "type": "string",
+                            "title": "accueil_libre",
+                            "description": "Accueil libre"
+                        },
+                        "acces_bus": {
+                            "type": "string",
+                            "title": "acces_bus",
+                            "description": "Accès en bus"
+                        },
+                        "acces_tram": {
+                            "type": "string",
+                            "title": "acces_tram",
+                            "description": "Accès en tram"
+                        },
+                        "equipement_pc_fixe": {
+                            "type": "integer",
+                            "title": "equipement_pc_fixe",
+                            "description": "Ordinateurs fixes mis à disposition"
+                        },
+                        "equipement_pc_portable": {
+                            "type": "string",
+                            "title": "equipement_pc_portable",
+                            "description": "Ordinateurs portables mis à disposition"
+                        },
+                        "equipement_tabeltte": {
+                            "type": "string",
+                            "title": "equipement_tabeltte",
+                            "description": "Tablettes mise à disposition"
+                        },
+                        "offre_payant": {
+                            "type": "string",
+                            "title": "offre_payant",
+                            "description": "Offre payante"
+                        },
+                        "offre_gratuit": {
+                            "type": "string",
+                            "title": "offre_gratuit",
+                            "description": "Offre gratuite"
+                        },
+                        "accompagnement_individuel": {
+                            "type": "string",
+                            "title": "accompagnement_individuel",
+                            "description": "Accompagnement individuel"
+                        },
+                        "accompagnement_collectif": {
+                            "type": "string",
+                            "title": "accompagnement_collectif",
+                            "description": "Accompagnement collectif"
+                        },
+                        "effectif_intervenant": {
+                            "type": "integer",
+                            "title": "effectif_intervenant",
+                            "description": "Nombre de médiateurs et d'aidants numériques"
+                        },
+                        "formation_volume_annuel": {
+                            "type": "integer",
+                            "title": "formation_volume_annuel",
+                            "description": "Nombre de formations et d'ateliers dispensés par an"
+                        },
+                        "reseau_social1": {
+                            "type": "string",
+                            "title": "reseau_social1",
+                            "description": "url réseau social 1"
+                        },
+                        "reseau_social2": {
+                            "type": "string",
+                            "title": "reseau_social2",
+                            "description": "url réseau social 2"
+                        },
+                        "reseau_social3": {
+                            "type": "string",
+                            "title": "reseau_social3",
+                            "description": "url réseau social 3"
+                        },
+                        "offre_public": {
+                            "type": "string",
+                            "title": "offre_public",
+                            "description": "Types de publics auxquels s'adresse l'offre"
+                        },
+                        "label": {
+                            "type": "string",
+                            "title": "label",
+                            "description": "Labellisations"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

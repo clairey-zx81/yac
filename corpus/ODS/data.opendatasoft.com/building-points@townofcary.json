@@ -1,0 +1,556 @@
+{
+    "title": "building-points@townofcary",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/building-points@townofcary"
+        }
+    ],
+    "definitions": {
+        "building-points@townofcary": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/building-points@townofcary_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "building-points@townofcary_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "pin": {
+                            "type": "string",
+                            "title": "PIN",
+                            "description": "Parcel Identification Number (12 digit)\nThe PIN geographically locates each parcel, in that it is made up of a combination of easting and northing grid coordinates. The PIN zeros in on a parcel starting with the four-digit \"Map Number\" (10,000 feet-by-10,000 feet area), to a two-digit \"Block Number\" (1,000 feet-by-1,000 feet), to four-digit \"Parcel Number.\" Therefore, the PIN Mapping System will provide \"intelligent\" parcel numbers, which can be used to geographically locate parcels."
+                        },
+                        "owner": {
+                            "type": "string",
+                            "title": "Owner",
+                            "description": "Building owner's name (part 1)"
+                        },
+                        "owner2": {
+                            "type": "string",
+                            "title": "Owner 2",
+                            "description": "Building owner's name (part 2)"
+                        },
+                        "owneradd1": {
+                            "type": "string",
+                            "title": "Owner Address 1",
+                            "description": "Building owner's address (part 1)"
+                        },
+                        "owneradd2": {
+                            "type": "string",
+                            "title": "Owner Address 2",
+                            "description": "Building owner's address (part 2)"
+                        },
+                        "owneradd3": {
+                            "type": "string",
+                            "title": "Owner Address 3",
+                            "description": "Building owner's address (part 3)"
+                        },
+                        "location": {
+                            "type": "string",
+                            "title": "Location",
+                            "description": "Physical location of the building"
+                        },
+                        "building_type": {
+                            "type": "string",
+                            "title": "Building Type",
+                            "description": "Building type description"
+                        },
+                        "building_sub_type": {
+                            "type": "string",
+                            "title": "Building Sub-type",
+                            "description": "Building sub-type description"
+                        },
+                        "bldgstyle": {
+                            "type": "string",
+                            "title": "Building Style",
+                            "description": "Style of building"
+                        },
+                        "yearbuilt": {
+                            "type": "string",
+                            "title": "Year Built",
+                            "description": "Year the building was constructed"
+                        },
+                        "units": {
+                            "type": "number",
+                            "title": "Units",
+                            "description": "Number of units in the building"
+                        },
+                        "sqft": {
+                            "type": "number",
+                            "title": "Square Footage",
+                            "description": "Building square footage"
+                        },
+                        "rooms": {
+                            "type": "number",
+                            "title": "Rooms",
+                            "description": "Number of rooms in the building"
+                        },
+                        "storyheight": {
+                            "type": "string",
+                            "title": "Story Height",
+                            "description": "Number of stories in the building"
+                        },
+                        "rooftype": {
+                            "type": "string",
+                            "title": "Roof Type",
+                            "description": "Type of roof"
+                        },
+                        "roof_floorsys": {
+                            "type": "string",
+                            "title": "Roof Floor System",
+                            "description": "Roof floor system type"
+                        },
+                        "extwall": {
+                            "type": "string",
+                            "title": "Exterior Wall",
+                            "description": "Exterior wall type "
+                        },
+                        "basement": {
+                            "type": "string",
+                            "title": "Basement",
+                            "description": "Does the building have a basement"
+                        },
+                        "percentbasement": {
+                            "type": "number",
+                            "title": "Percent Basement",
+                            "description": "Percent that is basement"
+                        },
+                        "bathrooms": {
+                            "type": "string",
+                            "title": "Bathrooms",
+                            "description": "Number of bathrooms"
+                        },
+                        "bldgvalue": {
+                            "type": "number",
+                            "title": "Building Value",
+                            "description": "Revenue department assessed value for the building"
+                        },
+                        "utilities": {
+                            "type": "string",
+                            "title": "Utilities",
+                            "description": "Utilities connected to the building:\nAll - All Utilities\nE - Electric\nG - Natural/Propane Gas\nS - Sewer\nW - Water"
+                        },
+                        "realid": {
+                            "type": "string",
+                            "title": "Real ID",
+                            "description": "Real Estate Identification Number \nThis is a number that is usually assigned by the respective county's revenue department."
+                        },
+                        "additionyr": {
+                            "type": "string",
+                            "title": "Addition Year",
+                            "description": "Year of last addition to the building."
+                        },
+                        "effectiveyr": {
+                            "type": "string",
+                            "title": "Effective Year",
+                            "description": ""
+                        },
+                        "remodelyr": {
+                            "type": "string",
+                            "title": "Remodel Year",
+                            "description": "Year of last remodel to the building."
+                        },
+                        "streetnumber": {
+                            "type": "string",
+                            "title": "Street Number",
+                            "description": "Numeric portion of the physical location of the building. "
+                        },
+                        "streetmisc": {
+                            "type": "string",
+                            "title": "Street Misc",
+                            "description": "This portion of the physical location of the building that may describe an apartment, suite or floor."
+                        },
+                        "streetprefix": {
+                            "type": "string",
+                            "title": "Street Prefix",
+                            "description": "Pre-directional portion of the physical location of the building."
+                        },
+                        "streetname": {
+                            "type": "string",
+                            "title": "Street Name",
+                            "description": "Street name portion of the physical location of the building."
+                        },
+                        "streettype": {
+                            "type": "string",
+                            "title": "Street Type",
+                            "description": "Street type portion of the physical location of the building."
+                        },
+                        "streetsuffix": {
+                            "type": "string",
+                            "title": "Street Suffix",
+                            "description": "Post-directional portion of the physical location of the building."
+                        },
+                        "phycity": {
+                            "type": "string",
+                            "title": "Physical City",
+                            "description": "ZIP code city where building is located (Wake County only)"
+                        },
+                        "phyzip": {
+                            "type": "string",
+                            "title": "Physical Zip",
+                            "description": "ZIP code where building is located (Wake County only)"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

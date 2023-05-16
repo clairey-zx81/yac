@@ -1,0 +1,516 @@
+{
+    "title": "arcep_regions@lareunion",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/arcep_regions@lareunion"
+        }
+    ],
+    "definitions": {
+        "arcep_regions@lareunion": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/arcep_regions@lareunion_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "arcep_regions@lareunion_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "code_region": {
+                            "type": "string",
+                            "title": "Code région",
+                            "description": ""
+                        },
+                        "nom_region": {
+                            "type": "string",
+                            "title": "Nom région",
+                            "description": ""
+                        },
+                        "logements": {
+                            "type": "number",
+                            "title": "Logements",
+                            "description": ""
+                        },
+                        "etablissements": {
+                            "type": "integer",
+                            "title": "Établissements",
+                            "description": ""
+                        },
+                        "nombre_locaux_ipe_t3_2022_somme_tous_oi": {
+                            "type": "integer",
+                            "title": "Nombre locaux IPE T3 2022 (somme tous OI)",
+                            "description": ""
+                        },
+                        "meilleure_estimation_des_locaux_t2_2022": {
+                            "type": "number",
+                            "title": "Meilleure estimation des locaux T2 2022",
+                            "description": ""
+                        },
+                        "t4_2017": {
+                            "type": "integer",
+                            "title": "T4 2017",
+                            "description": ""
+                        },
+                        "t1_2018": {
+                            "type": "integer",
+                            "title": "T1 2018",
+                            "description": ""
+                        },
+                        "t2_2018": {
+                            "type": "integer",
+                            "title": "T2 2018",
+                            "description": ""
+                        },
+                        "t3_2018": {
+                            "type": "integer",
+                            "title": "T3 2018",
+                            "description": ""
+                        },
+                        "t4_2018": {
+                            "type": "integer",
+                            "title": "T4 2018",
+                            "description": ""
+                        },
+                        "t1_2019": {
+                            "type": "integer",
+                            "title": "T1 2019",
+                            "description": ""
+                        },
+                        "t2_2019": {
+                            "type": "integer",
+                            "title": "T2 2019",
+                            "description": ""
+                        },
+                        "t3_2019": {
+                            "type": "integer",
+                            "title": "T3 2019",
+                            "description": ""
+                        },
+                        "t4_2019": {
+                            "type": "integer",
+                            "title": "T4 2019",
+                            "description": ""
+                        },
+                        "t1_2020": {
+                            "type": "integer",
+                            "title": "T1 2020",
+                            "description": ""
+                        },
+                        "t2_2020": {
+                            "type": "integer",
+                            "title": "T2 2020",
+                            "description": ""
+                        },
+                        "t3_2020": {
+                            "type": "integer",
+                            "title": "T3 2020",
+                            "description": ""
+                        },
+                        "t4_2020": {
+                            "type": "integer",
+                            "title": "T4 2020",
+                            "description": ""
+                        },
+                        "t1_2021": {
+                            "type": "integer",
+                            "title": "T1 2021",
+                            "description": ""
+                        },
+                        "t2_2021": {
+                            "type": "number",
+                            "title": "T2 2021",
+                            "description": ""
+                        },
+                        "t3_2021": {
+                            "type": "number",
+                            "title": "T3 2021",
+                            "description": ""
+                        },
+                        "t4_2021": {
+                            "type": "number",
+                            "title": "T4 2021",
+                            "description": ""
+                        },
+                        "t1_2022": {
+                            "type": "integer",
+                            "title": "T1 2022",
+                            "description": ""
+                        },
+                        "t2_2022": {
+                            "type": "integer",
+                            "title": "T2 2022",
+                            "description": ""
+                        },
+                        "t3_2022": {
+                            "type": "integer",
+                            "title": "T3 2022",
+                            "description": ""
+                        },
+                        "taux_de_couverture": {
+                            "type": "number",
+                            "title": "Taux de couverture",
+                            "description": ""
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geom",
+                            "description": ""
+                        },
+                        "centroid": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "centroid",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

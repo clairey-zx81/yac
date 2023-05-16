@@ -1,0 +1,616 @@
+{
+    "title": "repertoire-des-ressources-documentaires@culture",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/repertoire-des-ressources-documentaires@culture"
+        }
+    ],
+    "definitions": {
+        "repertoire-des-ressources-documentaires@culture": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/repertoire-des-ressources-documentaires@culture_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "repertoire-des-ressources-documentaires@culture_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "type_d_etablissement": {
+                            "type": "string",
+                            "title": "Type d’établissement",
+                            "description": ""
+                        },
+                        "mots_cles": {
+                            "type": "string",
+                            "title": "Mots-clés",
+                            "description": ""
+                        },
+                        "nom_de_l_etablissement": {
+                            "type": "string",
+                            "title": "Nom de l’établissement",
+                            "description": ""
+                        },
+                        "etablissement_precisions": {
+                            "type": "string",
+                            "title": "Etablissement_précisions",
+                            "description": ""
+                        },
+                        "adresse_des_visiteurs": {
+                            "type": "string",
+                            "title": "Adresse des visiteurs",
+                            "description": ""
+                        },
+                        "adresse_precisions": {
+                            "type": "string",
+                            "title": "Adresse_précisions",
+                            "description": ""
+                        },
+                        "newsletter_generique": {
+                            "type": "string",
+                            "title": "Newsletter générique",
+                            "description": ""
+                        },
+                        "reseaux_sociaux": {
+                            "type": "string",
+                            "title": "Réseaux sociaux",
+                            "description": ""
+                        },
+                        "reseaux_sociaux_precisions": {
+                            "type": "string",
+                            "title": "Réseaux sociaux_précisions",
+                            "description": ""
+                        },
+                        "site_internet": {
+                            "type": "string",
+                            "title": "Site Internet",
+                            "description": ""
+                        },
+                        "site_internet_precisions": {
+                            "type": "string",
+                            "title": "Site Internet_précisions",
+                            "description": ""
+                        },
+                        "revue_en_ligne": {
+                            "type": "string",
+                            "title": "Revue en ligne",
+                            "description": ""
+                        },
+                        "bases_de_donnees": {
+                            "type": "string",
+                            "title": "Bases de données",
+                            "description": ""
+                        },
+                        "catalogue_des_collections": {
+                            "type": "string",
+                            "title": "Catalogue des collections",
+                            "description": ""
+                        },
+                        "ressources_en_ligne": {
+                            "type": "string",
+                            "title": "Ressources en ligne",
+                            "description": ""
+                        },
+                        "ressources_pedagogiques": {
+                            "type": "string",
+                            "title": "Ressources pédagogiques",
+                            "description": ""
+                        },
+                        "dossiers_du_mois": {
+                            "type": "string",
+                            "title": "Dossiers du mois",
+                            "description": ""
+                        },
+                        "exposition_virtuelle": {
+                            "type": "string",
+                            "title": "Exposition virtuelle",
+                            "description": ""
+                        },
+                        "centre_de_documentation_cd": {
+                            "type": "string",
+                            "title": "Centre de documentation_CD",
+                            "description": ""
+                        },
+                        "conditions_d_acces_cd": {
+                            "type": "string",
+                            "title": "Conditions d’accès_CD",
+                            "description": ""
+                        },
+                        "horaires_cd": {
+                            "type": "string",
+                            "title": "Horaires_CD",
+                            "description": ""
+                        },
+                        "contact_cd_telephone": {
+                            "type": "string",
+                            "title": "Contact_CD_téléphone",
+                            "description": ""
+                        },
+                        "contact_cd_mail": {
+                            "type": "string",
+                            "title": "Contact_CD_mail",
+                            "description": ""
+                        },
+                        "catalogue_cd": {
+                            "type": "string",
+                            "title": "Catalogue_CD",
+                            "description": ""
+                        },
+                        "reseau_documentaire_cd": {
+                            "type": "string",
+                            "title": "Réseau documentaire_CD",
+                            "description": ""
+                        },
+                        "services_proposes_cd": {
+                            "type": "string",
+                            "title": "Services proposés_CD",
+                            "description": ""
+                        },
+                        "description_des_fonds_cd": {
+                            "type": "string",
+                            "title": "Description des fonds_CD",
+                            "description": ""
+                        },
+                        "centre_d_archives_ca": {
+                            "type": "string",
+                            "title": "Centre d’archives_CA",
+                            "description": ""
+                        },
+                        "conditions_d_acces_ca": {
+                            "type": "string",
+                            "title": "Conditions d’accès_CA",
+                            "description": ""
+                        },
+                        "horaires_ca": {
+                            "type": "string",
+                            "title": "Horaires_CA",
+                            "description": ""
+                        },
+                        "contact_ca_telephone": {
+                            "type": "string",
+                            "title": "Contact_CA_téléphone",
+                            "description": ""
+                        },
+                        "contact_ca_mail": {
+                            "type": "string",
+                            "title": "Contact_CA_mail",
+                            "description": ""
+                        },
+                        "catalogue_ca": {
+                            "type": "string",
+                            "title": "Catalogue_CA",
+                            "description": ""
+                        },
+                        "reseau_documentaire_ca": {
+                            "type": "string",
+                            "title": "Réseau documentaire_CA",
+                            "description": ""
+                        },
+                        "services_proposes_ca": {
+                            "type": "string",
+                            "title": "Services proposés_CA",
+                            "description": ""
+                        },
+                        "description_des_fonds_ca": {
+                            "type": "string",
+                            "title": "Description des fonds_CA",
+                            "description": ""
+                        },
+                        "bibliotheque_bi": {
+                            "type": "string",
+                            "title": "Bibliothèque_BI",
+                            "description": ""
+                        },
+                        "conditions_d_acces_bi": {
+                            "type": "string",
+                            "title": "Conditions d’accès_BI",
+                            "description": ""
+                        },
+                        "horaires_bi": {
+                            "type": "string",
+                            "title": "Horaires_BI",
+                            "description": ""
+                        },
+                        "contact_bi_telephone": {
+                            "type": "string",
+                            "title": "Contact_BI_téléphone",
+                            "description": ""
+                        },
+                        "contact_bi_mail": {
+                            "type": "string",
+                            "title": "Contact_BI_mail",
+                            "description": ""
+                        },
+                        "catalogue_bi": {
+                            "type": "string",
+                            "title": "Catalogue_BI",
+                            "description": ""
+                        },
+                        "reseau_documentaire_bi": {
+                            "type": "string",
+                            "title": "Réseau documentaire_BI",
+                            "description": ""
+                        },
+                        "services_proposes_bi": {
+                            "type": "string",
+                            "title": "Services proposés_BI",
+                            "description": ""
+                        },
+                        "description_des_fonds_bi": {
+                            "type": "string",
+                            "title": "Description des fonds_BI",
+                            "description": ""
+                        },
+                        "departement_de_recherche": {
+                            "type": "string",
+                            "title": "Département de recherche",
+                            "description": ""
+                        },
+                        "liste_de_sites": {
+                            "type": "string",
+                            "title": "Liste de sites",
+                            "description": ""
+                        },
+                        "autres_informations_a_signaler": {
+                            "type": "string",
+                            "title": "Autres informations à signaler",
+                            "description": ""
+                        },
+                        "coordonnees_geographiques": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "coordonnees_geographiques",
+                            "description": ""
+                        },
+                        "regions": {
+                            "type": "string",
+                            "title": "regions",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,497 @@
+{
+    "title": "les-denaturalises-de-vichy@culture",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/les-denaturalises-de-vichy@culture"
+        }
+    ],
+    "definitions": {
+        "les-denaturalises-de-vichy@culture": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/les-denaturalises-de-vichy@culture_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "les-denaturalises-de-vichy@culture_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "ordre": {
+                            "type": "integer",
+                            "title": "Ordre",
+                            "description": ""
+                        },
+                        "nom": {
+                            "type": "string",
+                            "title": "Nom",
+                            "description": ""
+                        },
+                        "prenom": {
+                            "type": "string",
+                            "title": "Prénom",
+                            "description": ""
+                        },
+                        "lieu_de_naissance": {
+                            "type": "string",
+                            "title": "Lieu de naissance",
+                            "description": ""
+                        },
+                        "pays_de_naissance_topographie_actuelle": {
+                            "type": "string",
+                            "title": "Pays de naissance (topographie actuelle)",
+                            "description": ""
+                        },
+                        "pays_de_naissance_coordonnees": {
+                            "type": "string",
+                            "title": "Pays de naissance (coordonnées)",
+                            "description": ""
+                        },
+                        "date_de_naissance": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de naissance",
+                            "description": ""
+                        },
+                        "residence_lors_du_retrait_topographie_actuelle": {
+                            "type": "string",
+                            "title": "Résidence lors du retrait (topographie actuelle)",
+                            "description": ""
+                        },
+                        "residence_coordonnees": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Résidence (coordonnées)",
+                            "description": "Résidence lors du retrait"
+                        },
+                        "date_de_naturalisation": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de naturalisation",
+                            "description": ""
+                        },
+                        "type_de_naturalisation": {
+                            "type": "string",
+                            "title": "Type de naturalisation",
+                            "description": ""
+                        },
+                        "numero_de_dossier": {
+                            "type": "string",
+                            "title": "Numéro de dossier",
+                            "description": ""
+                        },
+                        "cote_du_dossier_aux_archives_nationales": {
+                            "type": "string",
+                            "title": "Cote du dossier aux Archives nationales",
+                            "description": ""
+                        },
+                        "url_fiche_descriptive": {
+                            "type": "string",
+                            "title": "URL fiche descriptive",
+                            "description": ""
+                        },
+                        "date_de_decret_de_retrait": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de décret de retrait",
+                            "description": ""
+                        },
+                        "date_de_publication_du_retrait_au_journal_officiel": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de publication du retrait au Journal officiel",
+                            "description": ""
+                        },
+                        "date_de_seance_de_la_commission_de_revision": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de séance de la commission de révision",
+                            "description": ""
+                        },
+                        "numero_de_seance_de_la_commission_de_revision": {
+                            "type": "string",
+                            "title": "Numéro de séance de la commission de révision",
+                            "description": ""
+                        },
+                        "commission_de_retrait": {
+                            "type": "string",
+                            "title": "Commission de retrait",
+                            "description": ""
+                        },
+                        "deportation": {
+                            "type": "string",
+                            "title": "Déportation",
+                            "description": ""
+                        },
+                        "url_base_de_donnees_du_memorial_de_la_shoah": {
+                            "type": "string",
+                            "title": "URL Base de données du Mémorial de la Shoah",
+                            "description": ""
+                        },
+                        "decision_apres_recours": {
+                            "type": "string",
+                            "title": "Décision après recours",
+                            "description": ""
+                        },
+                        "date_du_decret_de_decision_apres_recours": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date du décret de décision après recours",
+                            "description": ""
+                        },
+                        "publication_de_la_decision_apres_recours_au_journal_officiel": {
+                            "type": "string",
+                            "title": "Publication de la décision après recours au Journal officiel",
+                            "description": ""
+                        },
+                        "remarque": {
+                            "type": "string",
+                            "title": "Remarque",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

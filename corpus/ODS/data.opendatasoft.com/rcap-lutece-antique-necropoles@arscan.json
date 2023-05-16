@@ -1,0 +1,651 @@
+{
+    "title": "rcap-lutece-antique-necropoles@arscan",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/rcap-lutece-antique-necropoles@arscan"
+        }
+    ],
+    "definitions": {
+        "rcap-lutece-antique-necropoles@arscan": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/rcap-lutece-antique-necropoles@arscan_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "rcap-lutece-antique-necropoles@arscan_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "id": {
+                            "type": "string",
+                            "title": "id",
+                            "description": ""
+                        },
+                        "geo_fid": {
+                            "type": "integer",
+                            "title": "geo_fid",
+                            "description": ""
+                        },
+                        "geo_creati": {
+                            "type": "integer",
+                            "title": "geo_creati",
+                            "description": ""
+                        },
+                        "geo_modifi": {
+                            "type": "integer",
+                            "title": "geo_modifi",
+                            "description": ""
+                        },
+                        "datdebnum": {
+                            "type": "string",
+                            "title": "DatDebNum",
+                            "description": ""
+                        },
+                        "datfinnum": {
+                            "type": "string",
+                            "title": "DatFinNum",
+                            "description": ""
+                        },
+                        "nature": {
+                            "type": "string",
+                            "title": "Nature",
+                            "description": ""
+                        },
+                        "proto": {
+                            "type": "integer",
+                            "title": "Proto",
+                            "description": ""
+                        },
+                        "agefer": {
+                            "type": "integer",
+                            "title": "AgeFer",
+                            "description": ""
+                        },
+                        "ltfinale": {
+                            "type": "integer",
+                            "title": "LTFinale",
+                            "description": ""
+                        },
+                        "antiquite": {
+                            "type": "integer",
+                            "title": "Antiquite",
+                            "description": ""
+                        },
+                        "hautempire": {
+                            "type": "integer",
+                            "title": "HautEmpire",
+                            "description": ""
+                        },
+                        "siecle_1av": {
+                            "type": "integer",
+                            "title": "Siecle_1av",
+                            "description": ""
+                        },
+                        "siecle_1ap": {
+                            "type": "integer",
+                            "title": "Siecle_1ap",
+                            "description": ""
+                        },
+                        "siecle_2ap": {
+                            "type": "integer",
+                            "title": "Siecle_2ap",
+                            "description": ""
+                        },
+                        "siecle_3he": {
+                            "type": "integer",
+                            "title": "Siecle_3HE",
+                            "description": ""
+                        },
+                        "anttardive": {
+                            "type": "integer",
+                            "title": "AntTardive",
+                            "description": ""
+                        },
+                        "siecle_3at": {
+                            "type": "integer",
+                            "title": "Siecle_3AT",
+                            "description": ""
+                        },
+                        "siecle_4": {
+                            "type": "integer",
+                            "title": "Siecle_4",
+                            "description": ""
+                        },
+                        "siecle_5at": {
+                            "type": "integer",
+                            "title": "Siecle_5AT",
+                            "description": ""
+                        },
+                        "moyen_age": {
+                            "type": "integer",
+                            "title": "Moyen_Age",
+                            "description": ""
+                        },
+                        "haut_ma": {
+                            "type": "integer",
+                            "title": "Haut_MA",
+                            "description": ""
+                        },
+                        "siecle_5ma": {
+                            "type": "integer",
+                            "title": "Siecle_5MA",
+                            "description": ""
+                        },
+                        "siecle_6": {
+                            "type": "integer",
+                            "title": "Siecle_6",
+                            "description": ""
+                        },
+                        "siecle_7": {
+                            "type": "integer",
+                            "title": "Siecle_7",
+                            "description": ""
+                        },
+                        "siecle_8": {
+                            "type": "integer",
+                            "title": "Siecle_8",
+                            "description": ""
+                        },
+                        "siecle_9": {
+                            "type": "integer",
+                            "title": "Siecle_9",
+                            "description": ""
+                        },
+                        "siecle_10": {
+                            "type": "integer",
+                            "title": "Siecle_10",
+                            "description": ""
+                        },
+                        "contempo": {
+                            "type": "integer",
+                            "title": "Contempo",
+                            "description": ""
+                        },
+                        "moderne": {
+                            "type": "integer",
+                            "title": "Moderne",
+                            "description": ""
+                        },
+                        "siecle_11": {
+                            "type": "integer",
+                            "title": "Siecle_11",
+                            "description": ""
+                        },
+                        "siecle_12": {
+                            "type": "integer",
+                            "title": "Siecle_12",
+                            "description": ""
+                        },
+                        "siecle_13": {
+                            "type": "integer",
+                            "title": "Siecle_13",
+                            "description": ""
+                        },
+                        "siecle_14": {
+                            "type": "integer",
+                            "title": "Siecle_14",
+                            "description": ""
+                        },
+                        "siecle_16": {
+                            "type": "integer",
+                            "title": "Siecle_16",
+                            "description": ""
+                        },
+                        "siecle_19": {
+                            "type": "integer",
+                            "title": "Siecle_19",
+                            "description": ""
+                        },
+                        "ltancienne": {
+                            "type": "integer",
+                            "title": "LTAncienne",
+                            "description": ""
+                        },
+                        "ltmoyenne": {
+                            "type": "integer",
+                            "title": "LTMoyenne",
+                            "description": ""
+                        },
+                        "bas_ma": {
+                            "type": "integer",
+                            "title": "Bas_MA",
+                            "description": ""
+                        },
+                        "siecle15ma": {
+                            "type": "integer",
+                            "title": "Siecle15MA",
+                            "description": ""
+                        },
+                        "siecle15mo": {
+                            "type": "integer",
+                            "title": "Siecle15MO",
+                            "description": ""
+                        },
+                        "datdeb": {
+                            "type": "string",
+                            "title": "DatDeb",
+                            "description": ""
+                        },
+                        "datfin": {
+                            "type": "string",
+                            "title": "DatFin",
+                            "description": ""
+                        },
+                        "siecledeb": {
+                            "type": "string",
+                            "title": "SiecleDeb",
+                            "description": ""
+                        },
+                        "sieclefin": {
+                            "type": "string",
+                            "title": "SiecleFin",
+                            "description": ""
+                        },
+                        "id_site": {
+                            "type": "integer",
+                            "title": "ID_Site",
+                            "description": ""
+                        },
+                        "id_notice": {
+                            "type": "integer",
+                            "title": "ID_Notice",
+                            "description": ""
+                        },
+                        "siecle18mo": {
+                            "type": "integer",
+                            "title": "Siecle18MO",
+                            "description": ""
+                        },
+                        "siecle_17": {
+                            "type": "integer",
+                            "title": "Siecle_17",
+                            "description": ""
+                        },
+                        "siecle18co": {
+                            "type": "integer",
+                            "title": "Siecle18CO",
+                            "description": ""
+                        },
+                        "date": {
+                            "type": "string",
+                            "title": "date",
+                            "description": ""
+                        },
+                        "id_st_rapp": {
+                            "type": "string",
+                            "title": "ID_St_Rapp",
+                            "description": ""
+                        },
+                        "fonction": {
+                            "type": "string",
+                            "title": "fonction",
+                            "description": ""
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "type",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

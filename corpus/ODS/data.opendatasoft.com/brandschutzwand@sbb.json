@@ -1,0 +1,526 @@
+{
+    "title": "brandschutzwand@sbb",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/brandschutzwand@sbb"
+        }
+    ],
+    "definitions": {
+        "brandschutzwand@sbb": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/brandschutzwand@sbb_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "brandschutzwand@sbb_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "n": {
+                            "type": "number",
+                            "title": "N",
+                            "description": ""
+                        },
+                        "e": {
+                            "type": "number",
+                            "title": "E",
+                            "description": ""
+                        },
+                        "linie": {
+                            "type": "integer",
+                            "title": "LINIE",
+                            "description": ""
+                        },
+                        "km": {
+                            "type": "number",
+                            "title": "KM",
+                            "description": ""
+                        },
+                        "bezeichnung": {
+                            "type": "string",
+                            "title": "BEZEICHNUNG",
+                            "description": ""
+                        },
+                        "lage": {
+                            "type": "string",
+                            "title": "LAGE",
+                            "description": ""
+                        },
+                        "objekt_name": {
+                            "type": "string",
+                            "title": "OBJEKT-NAME",
+                            "description": ""
+                        },
+                        "typ": {
+                            "type": "string",
+                            "title": "TYP",
+                            "description": ""
+                        },
+                        "be_nr": {
+                            "type": "integer",
+                            "title": "BE-NR",
+                            "description": ""
+                        },
+                        "material": {
+                            "type": "string",
+                            "title": "MATERIAL",
+                            "description": ""
+                        },
+                        "bem_material": {
+                            "type": "string",
+                            "title": "Bem. Material",
+                            "description": ""
+                        },
+                        "b_jahr": {
+                            "type": "string",
+                            "title": "B-JAHR",
+                            "description": ""
+                        },
+                        "besonderheit": {
+                            "type": "string",
+                            "title": "BESONDERHEIT",
+                            "description": ""
+                        },
+                        "netz_auf_wand": {
+                            "type": "string",
+                            "title": "NETZ AUF WAND",
+                            "description": ""
+                        },
+                        "h_ab_sok": {
+                            "type": "number",
+                            "title": "H AB SOK",
+                            "description": ""
+                        },
+                        "lange": {
+                            "type": "number",
+                            "title": "LaNGE",
+                            "description": ""
+                        },
+                        "distanz_zu_gl": {
+                            "type": "number",
+                            "title": "DISTANZ ZU GL",
+                            "description": ""
+                        },
+                        "fundationsart": {
+                            "type": "string",
+                            "title": "FUNDATIONSART",
+                            "description": ""
+                        },
+                        "bem_fundation": {
+                            "type": "string",
+                            "title": "BEM FUNDATION",
+                            "description": ""
+                        },
+                        "eigentumer": {
+                            "type": "string",
+                            "title": "EIGENTuMER",
+                            "description": ""
+                        },
+                        "anteil_eigentum": {
+                            "type": "integer",
+                            "title": "ANTEIL EIGENTUM",
+                            "description": ""
+                        },
+                        "eigentumer_gruppe": {
+                            "type": "string",
+                            "title": "EIGENTuMER GRUPPE",
+                            "description": ""
+                        },
+                        "miteigentumer": {
+                            "type": "string",
+                            "title": "MITEIGENTuMER",
+                            "description": ""
+                        },
+                        "anteil_miteigentum": {
+                            "type": "string",
+                            "title": "ANTEIL MITEIGENTUM",
+                            "description": ""
+                        },
+                        "miteigentumer_gruppe": {
+                            "type": "string",
+                            "title": "MITEIGENTuMER GRUPPE",
+                            "description": ""
+                        },
+                        "miteigentumer_bemerkung": {
+                            "type": "string",
+                            "title": "MITEIGENTuMER BEMERKUNG",
+                            "description": ""
+                        },
+                        "lauf_nr": {
+                            "type": "integer",
+                            "title": "LAUF_NR",
+                            "description": ""
+                        },
+                        "geopos2": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geopos2",
+                            "description": ""
+                        },
+                        "geopos": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geopos",
+                            "description": ""
+                        },
+                        "geoshape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geoshape",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

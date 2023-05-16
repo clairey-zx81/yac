@@ -1,0 +1,577 @@
+{
+    "title": "development-activity-monitor@melbournetestbed",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/development-activity-monitor@melbournetestbed"
+        }
+    ],
+    "definitions": {
+        "development-activity-monitor@melbournetestbed": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/development-activity-monitor@melbournetestbed_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "development-activity-monitor@melbournetestbed_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "data_format": {
+                            "type": "string",
+                            "title": "data_format",
+                            "description": "Denoting if the data is in the pre May 2016 or Post May 2016 data format. \n"
+                        },
+                        "development_key": {
+                            "type": "string",
+                            "title": "development_key",
+                            "description": "Development key"
+                        },
+                        "status": {
+                            "type": "string",
+                            "title": "status",
+                            "description": "Development status"
+                        },
+                        "year_completed": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "year_completed",
+                            "description": "Year of building completion if building is completed"
+                        },
+                        "clue_small_area": {
+                            "type": "string",
+                            "title": "clue_small_area",
+                            "description": "CLUE Small Area\n"
+                        },
+                        "clue_block": {
+                            "type": "integer",
+                            "title": "clue_block",
+                            "description": "CLUE Block\n"
+                        },
+                        "street_address": {
+                            "type": "string",
+                            "title": "street_address",
+                            "description": "Street Address"
+                        },
+                        "property_id": {
+                            "type": "string",
+                            "title": "property_id",
+                            "description": "Primary property ID\n"
+                        },
+                        "property_id_2": {
+                            "type": "string",
+                            "title": "property_id_2",
+                            "description": "Secondary property ID\n"
+                        },
+                        "property_id_3": {
+                            "type": "string",
+                            "title": "property_id_3",
+                            "description": "Tertiary property ID"
+                        },
+                        "property_id_4": {
+                            "type": "string",
+                            "title": "property_id_4",
+                            "description": "Quaternary property ID"
+                        },
+                        "property_id_5": {
+                            "type": "string",
+                            "title": "property_id_5",
+                            "description": "Quinary property ID"
+                        },
+                        "floors_above": {
+                            "type": "integer",
+                            "title": "floors_above",
+                            "description": "Number of floors above ground"
+                        },
+                        "resi_dwellings": {
+                            "type": "integer",
+                            "title": "resi_dwellings",
+                            "description": "Number of residential dwellings"
+                        },
+                        "studio_dwe": {
+                            "type": "integer",
+                            "title": "studio_dwe",
+                            "description": "Number of studio bedroom dwellings if known"
+                        },
+                        "one_bdrm_dwe": {
+                            "type": "integer",
+                            "title": "one_bdrm_dwe",
+                            "description": "Number of one bedroom dwellings if known"
+                        },
+                        "two_bdrm_dwe": {
+                            "type": "integer",
+                            "title": "two_bdrm_dwe",
+                            "description": "Number of two bedroom dwellings if known"
+                        },
+                        "three_bdrm_dwe": {
+                            "type": "integer",
+                            "title": "three_bdrm_dwe",
+                            "description": "Number of three or more bedroom dwellings if known"
+                        },
+                        "student_apartments": {
+                            "type": "integer",
+                            "title": "student_apartments",
+                            "description": "Number of student apartments if known\n"
+                        },
+                        "student_beds": {
+                            "type": "integer",
+                            "title": "student_beds",
+                            "description": "Number of student beds if known"
+                        },
+                        "student_accommodation_units": {
+                            "type": "integer",
+                            "title": "student_accommodation_units",
+                            "description": "Total number of student beds within the development"
+                        },
+                        "institutional_accom_beds": {
+                            "type": "integer",
+                            "title": "institutional_accom_beds",
+                            "description": "Number of institutional accommodation beds\n"
+                        },
+                        "hotel_rooms": {
+                            "type": "integer",
+                            "title": "hotel_rooms",
+                            "description": "Number of hotel rooms"
+                        },
+                        "serviced_apartments": {
+                            "type": "integer",
+                            "title": "serviced_apartments",
+                            "description": "Number of serviced apartments"
+                        },
+                        "hotels_serviced_apartments": {
+                            "type": "integer",
+                            "title": "hotels_serviced_apartments",
+                            "description": "Number of hotel rooms and serviced apartments"
+                        },
+                        "hostel_beds": {
+                            "type": "integer",
+                            "title": "hostel_beds",
+                            "description": "Number of hostel beds"
+                        },
+                        "childcare_places": {
+                            "type": "integer",
+                            "title": "childcare_places",
+                            "description": "Number of childcare places"
+                        },
+                        "office_flr": {
+                            "type": "integer",
+                            "title": "office_flr",
+                            "description": "Amount of net lettable office space in meters squared"
+                        },
+                        "retail_flr": {
+                            "type": "integer",
+                            "title": "retail_flr",
+                            "description": "Amount of net lettable retail space in meters squared"
+                        },
+                        "industrial_flr": {
+                            "type": "integer",
+                            "title": "industrial_flr",
+                            "description": "Amount of net lettable industrial space in meters squared\n"
+                        },
+                        "storage_flr": {
+                            "type": "integer",
+                            "title": "storage_flr",
+                            "description": "Amount of net lettable storage space in meters squared\n"
+                        },
+                        "education_flr": {
+                            "type": "integer",
+                            "title": "education_flr",
+                            "description": "Amount of net lettable education space in meters squared"
+                        },
+                        "hospital_flr": {
+                            "type": "integer",
+                            "title": "hospital_flr",
+                            "description": "Amount of net lettable hospital space in meters squared"
+                        },
+                        "recreation_flr": {
+                            "type": "integer",
+                            "title": "recreation_flr",
+                            "description": "Amount of net lettable recreation space in meters squared"
+                        },
+                        "publicdispaly_flr": {
+                            "type": "integer",
+                            "title": "publicdispaly_flr",
+                            "description": "Amount of net lettable public display space in meters squared"
+                        },
+                        "community_flr": {
+                            "type": "integer",
+                            "title": "community_flr",
+                            "description": "Amount of net lettable community space in meters squared"
+                        },
+                        "car_spaces": {
+                            "type": "integer",
+                            "title": "car_spaces",
+                            "description": "Number of car parking space if known"
+                        },
+                        "bike_spaces": {
+                            "type": "integer",
+                            "title": "bike_spaces",
+                            "description": "Number of bike parking space if known"
+                        },
+                        "town_planning_application": {
+                            "type": "string",
+                            "title": "town_planning_application",
+                            "description": ""
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "title": "longitude",
+                            "description": ""
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "title": "latitude",
+                            "description": ""
+                        },
+                        "geopoint": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geopoint",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

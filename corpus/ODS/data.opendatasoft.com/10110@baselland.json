@@ -1,0 +1,541 @@
+{
+    "title": "10110@baselland",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/10110@baselland"
+        }
+    ],
+    "definitions": {
+        "10110@baselland": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/10110@baselland_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "10110@baselland_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "bfs_nummer": {
+                            "type": "integer",
+                            "title": "BFS_Nummer",
+                            "description": ""
+                        },
+                        "gemeinde": {
+                            "type": "string",
+                            "title": "Gemeinde",
+                            "description": ""
+                        },
+                        "bezirk_nummer": {
+                            "type": "integer",
+                            "title": "Bezirk_Nummer",
+                            "description": ""
+                        },
+                        "bezirk": {
+                            "type": "string",
+                            "title": "Bezirk",
+                            "description": ""
+                        },
+                        "grossregion_code": {
+                            "type": "integer",
+                            "title": "Grossregion_Code",
+                            "description": ""
+                        },
+                        "grossregion": {
+                            "type": "string",
+                            "title": "Grossregion",
+                            "description": ""
+                        },
+                        "agglomeration_2012_code": {
+                            "type": "integer",
+                            "title": "Agglomeration_2012_Code",
+                            "description": ""
+                        },
+                        "agglomeration_2012": {
+                            "type": "string",
+                            "title": "Agglomeration_2012",
+                            "description": ""
+                        },
+                        "agglomerationsgrossenklasse_2012_code": {
+                            "type": "integer",
+                            "title": "Agglomerationsgrössenklasse_2012_Code",
+                            "description": ""
+                        },
+                        "agglomerationsgrossenklasse_2012": {
+                            "type": "string",
+                            "title": "Agglomerationsgrössenklasse_2012",
+                            "description": ""
+                        },
+                        "stadtischer_charakter_2012_code": {
+                            "type": "integer",
+                            "title": "Städtischer_Charakter_2012_Code",
+                            "description": ""
+                        },
+                        "stadtischer_charakter_2012": {
+                            "type": "string",
+                            "title": "Städtischer_Charakter_2012",
+                            "description": ""
+                        },
+                        "statistische_stadt_2012_code": {
+                            "type": "integer",
+                            "title": "Statistische_Stadt_2012_Code",
+                            "description": ""
+                        },
+                        "statistische_stadt_2012": {
+                            "type": "string",
+                            "title": "Statistische_Stadt_2012",
+                            "description": ""
+                        },
+                        "stadtisch_landlich_code": {
+                            "type": "integer",
+                            "title": "Städtisch_Ländlich_Code",
+                            "description": ""
+                        },
+                        "stadtisch_landlich": {
+                            "type": "string",
+                            "title": "Städtisch_Ländlich",
+                            "description": ""
+                        },
+                        "gemeindetypologie_2012_9_code": {
+                            "type": "integer",
+                            "title": "Gemeindetypologie_2012_9_Code",
+                            "description": ""
+                        },
+                        "gemeindetypologie_2012_9": {
+                            "type": "string",
+                            "title": "Gemeindetypologie_2012_9",
+                            "description": ""
+                        },
+                        "gemeindetypologie_2012_25_code": {
+                            "type": "integer",
+                            "title": "Gemeindetypologie_2012_25_Code",
+                            "description": ""
+                        },
+                        "gemeindetypologie_2012_25": {
+                            "type": "string",
+                            "title": "Gemeindetypologie_2012_25",
+                            "description": ""
+                        },
+                        "arbeitsmarktgrossregion_2018_code": {
+                            "type": "integer",
+                            "title": "Arbeitsmarktgrossregion_2018_Code",
+                            "description": ""
+                        },
+                        "arbeitsmarktgrossregion_2018": {
+                            "type": "string",
+                            "title": "Arbeitsmarktgrossregion_2018",
+                            "description": ""
+                        },
+                        "arbeitsmarktregion_2018_code": {
+                            "type": "integer",
+                            "title": "Arbeitsmarktregion_2018_Code",
+                            "description": ""
+                        },
+                        "arbeitsmarktregion_2018": {
+                            "type": "string",
+                            "title": "Arbeitsmarktregion_2018",
+                            "description": ""
+                        },
+                        "berggebiet_code": {
+                            "type": "integer",
+                            "title": "Berggebiet_Code",
+                            "description": ""
+                        },
+                        "berggebiet": {
+                            "type": "string",
+                            "title": "Berggebiet",
+                            "description": ""
+                        },
+                        "urbanisierungsgrad_2011_code": {
+                            "type": "integer",
+                            "title": "Urbanisierungsgrad_2011_Code",
+                            "description": ""
+                        },
+                        "urbanisierungsgrad_2011": {
+                            "type": "string",
+                            "title": "Urbanisierungsgrad_2011",
+                            "description": ""
+                        },
+                        "erweiterte_stadt_2011_code": {
+                            "type": "integer",
+                            "title": "Erweiterte_Stadt_2011_Code",
+                            "description": ""
+                        },
+                        "erweiterte_stadt_2011": {
+                            "type": "string",
+                            "title": "Erweiterte_Stadt_2011",
+                            "description": ""
+                        },
+                        "funktionales_stadtisches_gebiet_2014_code": {
+                            "type": "integer",
+                            "title": "Funktionales_städtisches_Gebiet_2014_Code",
+                            "description": ""
+                        },
+                        "funktionales_stadtisches_gebiet_2014": {
+                            "type": "string",
+                            "title": "Funktionales_städtisches_Gebiet_2014",
+                            "description": ""
+                        },
+                        "geometry": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geometrie",
+                            "description": ""
+                        },
+                        "centroid": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geometrisches_Zentrum",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

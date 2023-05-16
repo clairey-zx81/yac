@@ -1,0 +1,433 @@
+{
+    "title": "ec_habitat_naturel_s@scnbdx",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/ec_habitat_naturel_s@scnbdx"
+        }
+    ],
+    "definitions": {
+        "ec_habitat_naturel_s@scnbdx": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ec_habitat_naturel_s@scnbdx_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "ec_habitat_naturel_s@scnbdx_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "gid": {
+                            "type": "integer",
+                            "title": "gid",
+                            "description": "Clé primaire"
+                        },
+                        "milieu": {
+                            "type": "string",
+                            "title": "milieu",
+                            "description": "Milieu concerné : \nListe des valeurs possibles : \nBOISEMENTS_MARECAGEUX : Boisements marécageux\nBOISEMENTS_MESOPHILES_OU_MESOHYGROPHILES : Boisements mésophiles ou mésohygrophiles\nBOISEMENTS_RIVULAIRES_DE_BOIS_TENDRE : Boisements rivulaires de bois tendre\nCULTURES_ET_PLANTATIONS : Cultures et plantations\nFOURRES : Fourrés\nFRICHES : Friches\nHAIES_ET_ALIGNEMENTS_D_ARBRES : Haies et alignements d'arbres\nLANDES : Landes\nMILIEUX_AQUATIQUES : Milieux aquatiques\nMILIEUX_TOURBEUX : Milieux tourbeux\nOURLETS_ET_LISIERES : Ourlets et lisières\nPELOUSES : Pelouses\nPINEDES : Pinèdes\nPRAIRIES_ET_PELOUSES_CALCAIRES : Prairies et pelouses calcaires\nPRAIRIES_HYGROPHILES : Prairies hygrophiles\nPRAIRIES_MESOPHILES : Prairies mésophiles\nVEGETATIONS_AQUATIQUES : Végétations aquatiques\nVEGETATIONS_HUMIDES : Végétations humides\nVEGETATIONS_RUDERALES : Végétations rudérales\nVEGETATIONS_RUPICOLES : Végétations rupicoles\nZONES_ANTHROPISEES : Zones anthropisées\nAUTRE : Autre\n"
+                        },
+                        "geom_err": {
+                            "type": "string",
+                            "title": "geom_err",
+                            "description": "Code d'erreur géométrique : \nListe des valeurs possibles : \n9999 : Polygone compose et / ou à sections multiples\n9998 : Linéaire compose et / ou à sections multiples\n9996 : La géométrie contient des informations LRS\n9995 : Nombre de dimensions différent de 2 ou 3\n9994 : Présence d'un arc de cercle\n9000 : Erreur autre\n13343 : Polygone de moins de 4 points\n13349 : Polygone papillon\n13350 : Deux éléments d'un polygone archipel se touchent\n13351 : Deux éléments d'un polygone archipel  se touchent\n13356 : Point double\n13366 : Combinaison invalide d'intérieur / extérieur d'un polygone\n13367 : Orientation invalide d'intérieur / extérieur d'un polygone\n"
+                        },
+                        "sous_milieux": {
+                            "type": "string",
+                            "title": "sous_milieux",
+                            "description": "Sous-milieu concerné"
+                        },
+                        "enjeu_typo": {
+                            "type": "string",
+                            "title": "enjeu_typo",
+                            "description": "Enjeu de la végétation à dire d'expert : \nListe des valeurs possibles : \nFAIBLE : Faible\nMOYEN : Moyen\nFORT : Fort\nTRES_FORT : Très fort\nNUL_EEE : Enjeu nul ou présence d'Espèces Exotiques et Envahissantes\nNON_EVALUE : Non évalué\n"
+                        },
+                        "code_eur": {
+                            "type": "string",
+                            "title": "code_eur",
+                            "description": "Code(s) des habitats dans la typologie européenne N2000 si éligible : \nListe des valeurs possibles : \n1130 : Estuaires\n1410 : Prés-salés méditerranéens (Juncetalia maritimi)\n2190 : Dépressions humides intradunaires\n2330 : Dunes intérieures avec pelouses ouvertes à Corynephorus et Agrostis\n3110 : Eaux oligotrophes très peu minéralisées des plaines sablonneuses (Littorelletalia uniflorae)\n3130 : Eaux stagnantes, oligotrophes à mésotrophes avec végétation des Littorelletea uniflorae et/ou des Isoeto-Nanojuncetea\n3140 : Eaux oligomésotrophes calcaires avec végétation benthique à Chara spp.\n3150 : Lacs eutrophes naturels avec végétation du Magnopotamion ou de l'Hydrocharition\n3160 : Lacs et mares dystrophes naturels\n3260 : Rivières des étages planitiaire à montagnard avec végétation du Ranunculion fluitantis et du Callitricho-Batrachion\n3270 : Rivières avec berges vaseuses avec végétation du Chenopodion rubri p.p. et du Bidention p.p.\n4020 : Landes humides atlantiques tempérées à Erica ciliaris et Erica tetralix\n4030 : Landes sèches européennes\n6210 : Pelouses sèches semi-naturelles et faciès d'embuissonnement sur calcaires (Festuco-Brometalia) (* sites d'orchidées remarquables)\n6230 : Formations herbeuses à Nardus, riches en espèces, sur substrats siliceux des zones montagnardes (et des zones submontagnardes de l'Europe continentale)\n6410 : Prairies à Molinia sur sols calcaires, tourbeux ou argilo-limoneux (Molinion caeruleae)\n6430 : Mégaphorbiaies hygrophiles d'ourlets planitiaires et des étages montagnard à alpin\n6510 : Prairies maigres de fauche de basse altitude (Alopecurus pratensis, Sanguisorba officinalis)\n7110 : Tourbières hautes actives\n7150 : Dépressions sur substrats tourbeux du Rhynchosporion\n9180 : Forêts de pentes, éboulis ou ravins du Tilio-Acerion\n9190 : Vieilles chênaies acidophiles des plaines sablonneuses à Quercus robur\n9230 : Chênaies galicio-portugaises à Quercus robur et Quercus pyrenaica\n9340 : Forêts à Quercus ilex et Quercus rotundifolia\n37_2 : Prairies humides eutrophes\n4030_4 : Landes sèches européennes\n91E0 : Forêts alluviales à Alnus glutinosa et Fraxinus excelsior\n91F0 : Forêts mixtes à Quercus robur, Ulmus laevis, Ulmus minor, Fraxinus excelsior ou Fraxinus angustifolia, riveraines des grands fleuves (Ulmenion minoris)\nNON_RENSEIGNE : Non renseigné\n"
+                        },
+                        "code_eunis": {
+                            "type": "string",
+                            "title": "code_eunis",
+                            "description": "Code(s) des habitats dans la typologie européenne EUNIS"
+                        },
+                        "alias_eunis": {
+                            "type": "string",
+                            "title": "alias_eunis",
+                            "description": "Alias du code(s) des habitats dans la typologie européenne EUNIS"
+                        },
+                        "cdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "cdate",
+                            "description": "Date de création"
+                        },
+                        "mdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "mdate",
+                            "description": "Date de modification"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

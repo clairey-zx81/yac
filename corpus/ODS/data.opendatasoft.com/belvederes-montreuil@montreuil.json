@@ -1,0 +1,491 @@
+{
+    "title": "belvederes-montreuil@montreuil",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/belvederes-montreuil@montreuil"
+        }
+    ],
+    "definitions": {
+        "belvederes-montreuil@montreuil": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/belvederes-montreuil@montreuil_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "belvederes-montreuil@montreuil_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "objectid": {
+                            "type": "string",
+                            "title": "objectid",
+                            "description": ""
+                        },
+                        "idunique": {
+                            "type": "string",
+                            "title": "idunique",
+                            "description": " Identifiant SIG"
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "type",
+                            "description": "Grand type de belvédère selon la relation au sol et la possibilité d’arrêt. \nSol : Arrêt piéton possible (y compris voirie à trottoir)\nVoie : Pas d’arrêt, vue fugitive (voie ferrée, autoroute, grande route) Bâti : Belvédère sur un bâtiment ou un équipement, accessible par celui-ci"
+                        },
+                        "sous_type": {
+                            "type": "string",
+                            "title": "sous_type",
+                            "description": "Sous-type de belvédère dans chacun des grands types.\n\nPour « Sol » : Aire d'autoroute, Aire de route, Bois, Chemin, Cimetière, Clairière, Escalier, Friche, Jardin, Parc, Passerelle, Piste cyclable, Place, Rando, Rocher, Rue, Square, Talus, Terrain de sports, Terrasse, \n\nPour « Voie » : Autoroute, Métro aérien, Pont, Route, Voie ferrée, Voie rapide \n\nPour « Bâti » : Ballon, Clocher, Dôme, IGH, Toit terrasse, Tour, Tour défensive"
+                        },
+                        "nom_belv": {
+                            "type": "string",
+                            "title": "nom_belv",
+                            "description": "Nom complet usuel du belvédère ou de son lieu-dit"
+                        },
+                        "insee": {
+                            "type": "string",
+                            "title": "insee",
+                            "description": "Code Insee de la commune"
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "commune",
+                            "description": "Nom de la commune"
+                        },
+                        "source": {
+                            "type": "string",
+                            "title": "source",
+                            "description": "Source des plans de base"
+                        },
+                        "angle_vue": {
+                            "type": "integer",
+                            "title": "angle_vue",
+                            "description": "Angle du cône du vue offert par le belvédère (en degrés)"
+                        },
+                        "vue_axiale": {
+                            "type": "string",
+                            "title": "vue_axiale",
+                            "description": "Belvédère offrant une vue axiale par rapport à son accès principal\n0 = non, 1 = oui"
+                        },
+                        "vue_latera": {
+                            "type": "string",
+                            "title": "vue_latera",
+                            "description": "Belvédère offrant une vue latérale par rapport à son accès principal\n0 = non, 1 = oui"
+                        },
+                        "vue_obstru": {
+                            "type": "string",
+                            "title": "vue_obstru",
+                            "description": "Vue potentielle mais obstruée par de la végétation ou des\nconstructions légères"
+                        },
+                        "amenagemen": {
+                            "type": "string",
+                            "title": "amenagemen",
+                            "description": "Présence ou non d’un aménagement d’accueil du public (jardin, esplanade, balustrade, table d’orientation, banc…)"
+                        },
+                        "date_verif": {
+                            "type": "string",
+                            "title": "date_verif",
+                            "description": "Date de la dernière vérification par le créateur de la donnée"
+                        },
+                        "type_verif": {
+                            "type": "string",
+                            "title": "type_verif",
+                            "description": "Type de vérification effectué par le créateur de la donnée (terrain,\nplan, photo aérienne, photo du sol…)"
+                        },
+                        "remarques": {
+                            "type": "string",
+                            "title": "remarques",
+                            "description": " Champ libre pour toute information complémentaire"
+                        },
+                        "nom_court": {
+                            "type": "string",
+                            "title": "nom_court",
+                            "description": "Nom plus court que Nom_belv (notamment pour étiqueter le\nbelvédère sur une carte)"
+                        },
+                        "elements_v": {
+                            "type": "string",
+                            "title": "elements_v",
+                            "description": "Principaux éléments vus depuis le belvédère"
+                        },
+                        "point_x": {
+                            "type": "string",
+                            "title": "point_x",
+                            "description": " Coordonnée X (Longitude)"
+                        },
+                        "point_y": {
+                            "type": "string",
+                            "title": "point_y",
+                            "description": "Coordonnée Y (latitude)"
+                        },
+                        "id_belv": {
+                            "type": "string",
+                            "title": "id_belv",
+                            "description": "identifiant du belvédère"
+                        },
+                        "accessible": {
+                            "type": "string",
+                            "title": "accessible",
+                            "description": "Niveau d'accessibilité au public (fermé, payant, libre…)"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

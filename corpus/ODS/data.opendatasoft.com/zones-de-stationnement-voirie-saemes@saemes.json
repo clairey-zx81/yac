@@ -1,0 +1,483 @@
+{
+    "title": "zones-de-stationnement-voirie-saemes@saemes",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/zones-de-stationnement-voirie-saemes@saemes"
+        }
+    ],
+    "definitions": {
+        "zones-de-stationnement-voirie-saemes@saemes": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/zones-de-stationnement-voirie-saemes@saemes_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "zones-de-stationnement-voirie-saemes@saemes_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "source_data": {
+                            "type": "string",
+                            "title": "Source data",
+                            "description": ""
+                        },
+                        "ndeg_zone": {
+                            "type": "string",
+                            "title": "N° zone",
+                            "description": ""
+                        },
+                        "code_parking": {
+                            "type": "string",
+                            "title": "Code parking",
+                            "description": ""
+                        },
+                        "nom_zone_de_stationnement_voirie": {
+                            "type": "string",
+                            "title": "Nom zone de stationnement voirie",
+                            "description": ""
+                        },
+                        "rues_concernees": {
+                            "type": "string",
+                            "title": "rues concernées",
+                            "description": ""
+                        },
+                        "code_postal": {
+                            "type": "string",
+                            "title": "Code postal",
+                            "description": ""
+                        },
+                        "ville": {
+                            "type": "string",
+                            "title": "Ville",
+                            "description": ""
+                        },
+                        "coordonnees_zone": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "coordonnées zone",
+                            "description": ""
+                        },
+                        "nom_de_zone": {
+                            "type": "string",
+                            "title": "Nom de zone",
+                            "description": ""
+                        },
+                        "jours_et_horaires_payants": {
+                            "type": "string",
+                            "title": "Jours et horaires payants",
+                            "description": ""
+                        },
+                        "duree_de_stationnement_maximale": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Durée de stationnement maximale",
+                            "description": ""
+                        },
+                        "gratuite": {
+                            "type": "string",
+                            "title": "Gratuité",
+                            "description": ""
+                        },
+                        "date_d_application_des_tarifs": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date d'application des tarifs",
+                            "description": ""
+                        },
+                        "horaire_vl_15mn_15_min": {
+                            "type": "string",
+                            "title": "horaire : VL : 15mn : 15 min",
+                            "description": ""
+                        },
+                        "horaire_vl_20mn_20_min": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "horaire : VL : 20mn : 20 min",
+                            "description": ""
+                        },
+                        "horaire_vl_1h00_1_hr": {
+                            "type": "string",
+                            "title": "horaire : VL : 1h00 : 1 hr",
+                            "description": ""
+                        },
+                        "horaire_vl_2h00_2_hr": {
+                            "type": "string",
+                            "title": "horaire : VL : 2h00 : 2 hr",
+                            "description": ""
+                        },
+                        "horaire_vl_3h00_3_hr": {
+                            "type": "string",
+                            "title": "horaire : VL : 3h00 : 3 hr",
+                            "description": ""
+                        },
+                        "horaire_vl_4h00_4_hr": {
+                            "type": "string",
+                            "title": "horaire : VL : 4h00 : 4 hr",
+                            "description": ""
+                        },
+                        "horaire_vl_5h00_5_hr": {
+                            "type": "number",
+                            "title": "horaire : VL : 5h00 : 5 hr",
+                            "description": ""
+                        },
+                        "geo": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

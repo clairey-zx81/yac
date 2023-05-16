@@ -1,0 +1,273 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "device_auth": {
+      "additionalProperties": false,
+      "properties": {
+        "root_password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "root_password"
+      ],
+      "title": "Device Auth",
+      "type": "object"
+    },
+    "device_count": {
+      "description": "Total number of devices in the fabric that needs to be zero-touch provisioned",
+      "title": "Number of fabric devices",
+      "type": "integer"
+    },
+    "device_to_ztp": {
+      "items": {
+        "properties": {
+          "hostname": {
+            "pattern": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$",
+            "title": "Device hostname can be optionally specified.",
+            "type": "string"
+          },
+          "loopback_ip": {
+            "format": "ipv4",
+            "title": "Loopback IP address",
+            "type": "string"
+          },
+          "mgmt_ip": {
+            "format": "ipv4",
+            "title": "Management IP address",
+            "type": "string"
+          },
+          "serial_number": {
+            "title": "Device serial number",
+            "type": "string"
+          },
+          "supplemental_day_0_cfg": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Name(s) of the supplemental day-0 config(s) that can be optionally specified for this device",
+            "type": [
+              "string",
+              "array"
+            ]
+          },
+          "to_ztp": {
+            "title": "Include or ignore device in ZTP workflow",
+            "type": "boolean"
+          },
+          "underlay_asn": {
+            "title": "Underlay eBGP autonomous system number",
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "serial_number",
+          "hostname"
+        ],
+        "type": "object"
+      },
+      "title": "List of device serial numbers for the devices to be ZTPed",
+      "type": "array"
+    },
+    "disable_vlan_vn_uniqueness_check": {
+      "default": false,
+      "description": "True if vlan-vn uniqueness validation checks needs to be disabled, false if enable all complex validations",
+      "type": "boolean"
+    },
+    "enterprise_style": {
+      "default": true,
+      "description": "True if enterprise style, false if sp-style configuration",
+      "type": "boolean"
+    },
+    "fabric_asn_pool": {
+      "items": {
+        "description": "List of the ASN pools that could be used to configure the eBGP peers for the IP fabric",
+        "properties": {
+          "asn_max": {
+            "type": "integer"
+          },
+          "asn_min": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "asn_min",
+          "asn_max"
+        ],
+        "title": "eBGP ASN Pool for fabric underlay network",
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "fabric_cluster_id": {
+      "type": "integer"
+    },
+    "fabric_display_name": {
+      "type": "string"
+    },
+    "fabric_fq_name": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "fabric_subnets": {
+      "items": {
+        "description": "List of the subnet prefixes that could be carved out for the p2p networks between fabric devices.",
+        "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}(/([0-9]|[1-2][0-9]|3[0-2]))?$",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "import_configured": {
+      "default": false,
+      "description": "Not importing configured interfaces by default. Set this option to true if configured interfaces need to be imported as part of onboarding.",
+      "type": "boolean"
+    },
+    "interface_filters": {
+      "items": {
+        "additionalProperties": false,
+        "default": {},
+        "description": "filter object having op and expr fields",
+        "examples": [
+          {
+            "expr": "^ge-",
+            "op": "regex"
+          },
+          {
+            "expr": "^xe",
+            "op": "regex"
+          }
+        ],
+        "maxProperties": 2,
+        "properties": {
+          "expr": {
+            "type": "string"
+          },
+          "op": {
+            "enum": [
+              "regex"
+            ]
+          }
+        },
+        "title": "filter object",
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "loopback_subnets": {
+      "items": {
+        "description": "List of the subnet prefixes that fabric device loopback ips can be allocated.",
+        "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}(/([0-9]|[1-2][0-9]|3[0-2]))?$",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "management_subnets": {
+      "items": {
+        "additionalProperties": false,
+        "description": "List of the management network subnets for the fabric",
+        "properties": {
+          "cidr": {
+            "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}(/([0-9]|[1-2][0-9]|3[0-2]))?$",
+            "type": "string"
+          },
+          "gateway": {
+            "format": "ipv4",
+            "type": "string"
+          }
+        },
+        "required": [
+          "cidr",
+          "gateway"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "node_profiles": {
+      "items": {
+        "additionalProperties": false,
+        "description": "List of node profiles to be used by the fabric.",
+        "properties": {
+          "node_profile_name": {
+            "type": "string"
+          },
+          "serial_nums": {
+            "description": "Optional list of serial numbers of fabric devices that we want to associate with this node profile.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "node_profile_name"
+        ],
+        "title": "Node profile",
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "os_version": {
+      "type": "string"
+    },
+    "overlay_ibgp_asn": {
+      "default": 64512,
+      "title": "iBGP ASN for Contrail overlay network",
+      "type": "integer"
+    },
+    "overlay_loopback_subnets": {
+      "items": {
+        "description": "List of the subnet prefixes that fabric device overlay loopback ips can be allocated.",
+        "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}(/([0-9]|[1-2][0-9]|3[0-2]))?$",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "pnf_servicechain_subnets": {
+      "items": {
+        "description": "List of the subnet prefixes that could be carved out for service chaining between fabric devices.",
+        "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}(/([0-9]|[1-2][0-9]|3[0-2]))?$",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "supplemental_day_0_cfg": {
+      "items": {
+        "properties": {
+          "cfg": {
+            "title": "config blob that contains the supplemental day-0 config",
+            "type": "string"
+          },
+          "name": {
+            "title": "name for the config",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "cfg"
+        ],
+        "type": "object"
+      },
+      "title": "List of day 0 config that can be used to supplement the ZTP config",
+      "type": "array"
+    }
+  },
+  "required": [
+    "fabric_fq_name",
+    "management_subnets",
+    "loopback_subnets",
+    "fabric_subnets",
+    "fabric_asn_pool",
+    "device_auth",
+    "node_profiles"
+  ],
+  "title": "fabric info",
+  "type": "object"
+}

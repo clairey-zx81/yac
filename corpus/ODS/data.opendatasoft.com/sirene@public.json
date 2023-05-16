@@ -1,0 +1,998 @@
+{
+    "title": "sirene@public",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/sirene@public"
+        }
+    ],
+    "definitions": {
+        "sirene@public": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/sirene@public_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "sirene@public_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "siren": {
+                            "type": "string",
+                            "title": "Identifiant de l'entreprise",
+                            "description": "Le numéro SIREN est le numéro unique d'identification attribué à chaque entreprise par l'INSEE.\nCe numéro est un simple numéro d'ordre, composé de 8 chiffres plus 1 chiffre de contrôle permettant de vérifier sa validité.\nIl est attribué une seule fois et n'est supprimé du répertoire qu'au moment de la disparition de la personne juridique (décès ou cessation de toute activité pour un entrepreneur individuel, dissolution pour une personne morale). Il ne sera plus jamais utilisé pour immatriculer une autre unité SIREN.\n\nhttp://sirene.fr/sirene/data-premium/variable/siren"
+                        },
+                        "nic": {
+                            "type": "string",
+                            "title": "Numéro interne de classement de l'établissement",
+                            "description": "Le NIC est un Numéro Interne de Classement qui permet de distinguer les établissements d'une même entreprise. Il est composé de 5 chiffres. Par association au SIREN, il forme le SIRET.\nIl est composé de quatre chiffres et d'un cinquième qui permet de contrôler la validité du n° SIRET.\n\nhttp://sirene.fr/sirene/data-premium/variable/nic"
+                        },
+                        "l1_normalisee": {
+                            "type": "string",
+                            "title": "Première ligne de l’adressage de l’établissement",
+                            "description": ""
+                        },
+                        "l2_normalisee": {
+                            "type": "string",
+                            "title": "Deuxième ligne de l’adressage de l’établissement",
+                            "description": ""
+                        },
+                        "l3_normalisee": {
+                            "type": "string",
+                            "title": "Troisième ligne de l’adressage de l’établissement",
+                            "description": ""
+                        },
+                        "l4_normalisee": {
+                            "type": "string",
+                            "title": "Quatrième ligne de l’adressage de l’établissement",
+                            "description": ""
+                        },
+                        "l5_normalisee": {
+                            "type": "string",
+                            "title": "Cinquième ligne de l’adressage de l’établissement",
+                            "description": ""
+                        },
+                        "l6_normalisee": {
+                            "type": "string",
+                            "title": "Sixième ligne de l’adressage de l’établissement",
+                            "description": ""
+                        },
+                        "l7_normalisee": {
+                            "type": "string",
+                            "title": "Septième ligne de l’adressage de l’établissement",
+                            "description": ""
+                        },
+                        "l1_declaree": {
+                            "type": "string",
+                            "title": "Première ligne de l’adressage déclaré pour l’établissement",
+                            "description": ""
+                        },
+                        "l2_declaree": {
+                            "type": "string",
+                            "title": "Deuxième ligne de l’adressage déclaré pour l’établissement",
+                            "description": ""
+                        },
+                        "l3_declaree": {
+                            "type": "string",
+                            "title": "Troisième ligne de l’adressage déclaré pour l’établissement",
+                            "description": ""
+                        },
+                        "l4_declaree": {
+                            "type": "string",
+                            "title": "Quatrième ligne de l’adressage déclaré pour l’établissement",
+                            "description": ""
+                        },
+                        "l5_declaree": {
+                            "type": "string",
+                            "title": "Cinquième ligne de l’adressage déclaré pour l’établissement",
+                            "description": ""
+                        },
+                        "l6_declaree": {
+                            "type": "string",
+                            "title": "Sixième ligne de l’adressage déclaré pour l’établissement",
+                            "description": ""
+                        },
+                        "l7_declaree": {
+                            "type": "string",
+                            "title": "Septième ligne de l’adressage déclaré pour l’établissement",
+                            "description": ""
+                        },
+                        "numvoie": {
+                            "type": "string",
+                            "title": "Numéro dans la voie",
+                            "description": ""
+                        },
+                        "indrep": {
+                            "type": "string",
+                            "title": "Indice de répétition",
+                            "description": ""
+                        },
+                        "typvoie": {
+                            "type": "string",
+                            "title": "Type de voie de localisation de l'établissement",
+                            "description": ""
+                        },
+                        "libvoie": {
+                            "type": "string",
+                            "title": "Libellé de voie de localisation de l'établissement",
+                            "description": ""
+                        },
+                        "codpos": {
+                            "type": "string",
+                            "title": "Code postal",
+                            "description": ""
+                        },
+                        "cedex": {
+                            "type": "string",
+                            "title": "Code CEDEX",
+                            "description": ""
+                        },
+                        "rpet": {
+                            "type": "string",
+                            "title": "Région de localisation de l'établissement",
+                            "description": ""
+                        },
+                        "depet": {
+                            "type": "string",
+                            "title": "Département de localisation de l'établissement",
+                            "description": ""
+                        },
+                        "arronet": {
+                            "type": "string",
+                            "title": "Arrondissement de localisation de l'établissement",
+                            "description": ""
+                        },
+                        "ctonet": {
+                            "type": "string",
+                            "title": "Canton de localisation de l'établissement",
+                            "description": ""
+                        },
+                        "comet": {
+                            "type": "string",
+                            "title": "Commune de localisation de l'établissement",
+                            "description": ""
+                        },
+                        "libcom": {
+                            "type": "string",
+                            "title": "Libellé de la commune de localisation de l'établissement",
+                            "description": ""
+                        },
+                        "du": {
+                            "type": "string",
+                            "title": "Département de l'unité urbaine de la localisation de l'établissement",
+                            "description": ""
+                        },
+                        "tu": {
+                            "type": "integer",
+                            "title": "Taille de l'unité urbaine",
+                            "description": ""
+                        },
+                        "uu": {
+                            "type": "string",
+                            "title": "Numéro de l'unité urbaine",
+                            "description": ""
+                        },
+                        "epci": {
+                            "type": "string",
+                            "title": "EPCI de l'établissement",
+                            "description": ""
+                        },
+                        "tcd": {
+                            "type": "string",
+                            "title": "Tranche de commune détaillée",
+                            "description": ""
+                        },
+                        "zemet": {
+                            "type": "string",
+                            "title": "Zone d'emploi",
+                            "description": ""
+                        },
+                        "siege": {
+                            "type": "string",
+                            "title": "Qualité de siège ou non de l'établissement",
+                            "description": ""
+                        },
+                        "enseigne": {
+                            "type": "string",
+                            "title": "Enseigne ou nom de l'exploitation",
+                            "description": ""
+                        },
+                        "ind_publipo": {
+                            "type": "string",
+                            "title": "Indicateur du champ du publipostage",
+                            "description": ""
+                        },
+                        "diffcom": {
+                            "type": "string",
+                            "title": "Statut de diffusion de l'établissement",
+                            "description": ""
+                        },
+                        "amintret": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année et mois d'introduction de l'établissement dans la base de diffusion",
+                            "description": ""
+                        },
+                        "natetab": {
+                            "type": "string",
+                            "title": "Nature de l'établissement d'un entrepreneur individuel",
+                            "description": ""
+                        },
+                        "libnatetab": {
+                            "type": "string",
+                            "title": "Libellé de la nature de l'établissement",
+                            "description": ""
+                        },
+                        "apet700": {
+                            "type": "string",
+                            "title": "Activité principale de l'établissement",
+                            "description": ""
+                        },
+                        "libapet": {
+                            "type": "string",
+                            "title": "Libellé de l'activité principale de l'établissement",
+                            "description": ""
+                        },
+                        "dapet": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année de validité de l'activité principale de l'établissement",
+                            "description": ""
+                        },
+                        "tefet": {
+                            "type": "string",
+                            "title": "Tranche d'effectif salarié de l'établissement",
+                            "description": ""
+                        },
+                        "libtefet": {
+                            "type": "string",
+                            "title": "Libellé de la tranche d'effectif de l'établissement",
+                            "description": ""
+                        },
+                        "efetcent": {
+                            "type": "string",
+                            "title": "Effectif salarié de l'établissement à la centaine près",
+                            "description": ""
+                        },
+                        "defet": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année de validité de l'effectif salarié de l'établissement",
+                            "description": ""
+                        },
+                        "origine": {
+                            "type": "string",
+                            "title": "Origine de la création de l'établissement",
+                            "description": ""
+                        },
+                        "dcret": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année et mois de création de l'établissement",
+                            "description": ""
+                        },
+                        "ddebact": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de début d'activité",
+                            "description": ""
+                        },
+                        "activnat": {
+                            "type": "string",
+                            "title": "Nature de l'activité de l'établissement",
+                            "description": ""
+                        },
+                        "lieuact": {
+                            "type": "string",
+                            "title": "Lieu de l'activité de l'établissement",
+                            "description": ""
+                        },
+                        "actisurf": {
+                            "type": "integer",
+                            "title": "Type de magasin",
+                            "description": ""
+                        },
+                        "saisonat": {
+                            "type": "string",
+                            "title": "Caractère saisonnier ou non de l'activité de l'établissement",
+                            "description": ""
+                        },
+                        "modet": {
+                            "type": "string",
+                            "title": "Modalité de l'activité principale de l'établissement",
+                            "description": ""
+                        },
+                        "prodet": {
+                            "type": "string",
+                            "title": "Caractère productif de l'établissement",
+                            "description": ""
+                        },
+                        "prodpart": {
+                            "type": "string",
+                            "title": "Participation particulière à la production de l'établissement",
+                            "description": ""
+                        },
+                        "auxilt": {
+                            "type": "string",
+                            "title": "Caractère auxiliaire de l'activité de l'établissement",
+                            "description": ""
+                        },
+                        "nomen_long": {
+                            "type": "string",
+                            "title": "Nom ou raison sociale de l'entreprise",
+                            "description": ""
+                        },
+                        "sigle": {
+                            "type": "string",
+                            "title": "Sigle de l'entreprise",
+                            "description": ""
+                        },
+                        "nom": {
+                            "type": "string",
+                            "title": "Nom de naissance",
+                            "description": ""
+                        },
+                        "prenom": {
+                            "type": "string",
+                            "title": "Prénom",
+                            "description": ""
+                        },
+                        "civilite": {
+                            "type": "string",
+                            "title": "Civilité des entrepreneurs individuels",
+                            "description": ""
+                        },
+                        "rna": {
+                            "type": "string",
+                            "title": "Numéro d’identification au répertoire national des associations",
+                            "description": ""
+                        },
+                        "nicsiege": {
+                            "type": "string",
+                            "title": "Numéro interne de classement de l'établissement siège",
+                            "description": ""
+                        },
+                        "rpen": {
+                            "type": "string",
+                            "title": "Région de localisation du siège de l'entreprise",
+                            "description": ""
+                        },
+                        "depcomen": {
+                            "type": "string",
+                            "title": "Département et commune de localisation du siège de l'entreprise",
+                            "description": ""
+                        },
+                        "adr_mail": {
+                            "type": "string",
+                            "title": "Adresse mail",
+                            "description": ""
+                        },
+                        "nj": {
+                            "type": "integer",
+                            "title": "Nature juridique de l'entreprise",
+                            "description": ""
+                        },
+                        "libnj": {
+                            "type": "string",
+                            "title": "Libellé de la nature juridique",
+                            "description": ""
+                        },
+                        "apen700": {
+                            "type": "string",
+                            "title": "Activité principale de l'entreprise",
+                            "description": ""
+                        },
+                        "libapen": {
+                            "type": "string",
+                            "title": "Libellé de l'activité principale de l'entreprise",
+                            "description": ""
+                        },
+                        "dapen": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année de validité de l'activité principale de l'entreprise",
+                            "description": ""
+                        },
+                        "aprm": {
+                            "type": "string",
+                            "title": "Activité principale au registre des métiers",
+                            "description": ""
+                        },
+                        "ess": {
+                            "type": "string",
+                            "title": "Appartenance au champ de l’économie sociale et solidaire",
+                            "description": ""
+                        },
+                        "dateess": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date ESS",
+                            "description": ""
+                        },
+                        "tefen": {
+                            "type": "string",
+                            "title": "Tranche d'effectif salarié de l'entreprise",
+                            "description": ""
+                        },
+                        "libtefen": {
+                            "type": "string",
+                            "title": "Libellé de la tranche d'effectif de l'entreprise",
+                            "description": ""
+                        },
+                        "efencent": {
+                            "type": "string",
+                            "title": "Effectif salarié de l'entreprise à la centaine près",
+                            "description": ""
+                        },
+                        "defen": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année de validité de l'effectif salarié de l'entreprise",
+                            "description": ""
+                        },
+                        "categorie": {
+                            "type": "string",
+                            "title": "Catégorie d'entreprise",
+                            "description": ""
+                        },
+                        "dcren": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de création de l'entreprise",
+                            "description": ""
+                        },
+                        "amintren": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année et mois d'introduction de l'entreprise dans la base de diffusion",
+                            "description": ""
+                        },
+                        "monoact": {
+                            "type": "string",
+                            "title": "Indice de monoactivité de l'entreprise",
+                            "description": ""
+                        },
+                        "moden": {
+                            "type": "string",
+                            "title": "Modalité de l'activité principale de l'entreprise",
+                            "description": ""
+                        },
+                        "proden": {
+                            "type": "string",
+                            "title": "Caractère productif de l'entreprise",
+                            "description": ""
+                        },
+                        "esaann": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année de validité des rubriques de niveau entreprise en provenance de l'ESA",
+                            "description": ""
+                        },
+                        "tca": {
+                            "type": "integer",
+                            "title": "Tranche de chiffre d'affaires pour les entreprises enquêtées par l'ESA",
+                            "description": ""
+                        },
+                        "esaapen": {
+                            "type": "string",
+                            "title": "Activité principale de l'entreprise issue de l'ESA",
+                            "description": ""
+                        },
+                        "esasec1n": {
+                            "type": "string",
+                            "title": "Première activité secondaire déclarée dans l'ESA",
+                            "description": ""
+                        },
+                        "esasec2n": {
+                            "type": "string",
+                            "title": "Deuxième activité secondaire déclarée dans l'ESA",
+                            "description": ""
+                        },
+                        "esasec3n": {
+                            "type": "string",
+                            "title": "Troisième activité secondaire déclarée dans l'ESA",
+                            "description": ""
+                        },
+                        "esasec4n": {
+                            "type": "string",
+                            "title": "Quatrième activité secondaire déclarée dans l'ESA",
+                            "description": ""
+                        },
+                        "vmaj": {
+                            "type": "string",
+                            "title": "Nature de la mise à jour (création, suppression, modification)",
+                            "description": ""
+                        },
+                        "vmaj1": {
+                            "type": "string",
+                            "title": "Indicateur de mise à jour n°1",
+                            "description": ""
+                        },
+                        "vmaj2": {
+                            "type": "string",
+                            "title": "Indicateur de mise à jour n°2",
+                            "description": ""
+                        },
+                        "vmaj3": {
+                            "type": "string",
+                            "title": "Indicateur de mise à jour n°3",
+                            "description": ""
+                        },
+                        "datemaj": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Date de traitement de la mise à jour",
+                            "description": ""
+                        },
+                        "siret": {
+                            "type": "string",
+                            "title": "SIRET",
+                            "description": ""
+                        },
+                        "libtu": {
+                            "type": "string",
+                            "title": "Libellé de la taille de l'unité urbaine",
+                            "description": ""
+                        },
+                        "libesaapen": {
+                            "type": "string",
+                            "title": "Libellé de l'activité principale de l'entreprise issue de l'ESA",
+                            "description": ""
+                        },
+                        "libmonoact": {
+                            "type": "string",
+                            "title": "Libellé de l'indice de monoactivité de l'entreprise",
+                            "description": ""
+                        },
+                        "liborigine": {
+                            "type": "string",
+                            "title": "Libellé de l'origine de la création de l'établissement",
+                            "description": ""
+                        },
+                        "libtca": {
+                            "type": "string",
+                            "title": "Libellé de la tranche de chiffre d'affaires pour les entreprises enquêtées par l'ESA",
+                            "description": ""
+                        },
+                        "libactivnat": {
+                            "type": "string",
+                            "title": "Libellé de la nature de l'activité de l'établissement",
+                            "description": ""
+                        },
+                        "libmodet": {
+                            "type": "string",
+                            "title": "Libellé de la modalité de l'activité principale de l'établissement",
+                            "description": ""
+                        },
+                        "libactisurf": {
+                            "type": "string",
+                            "title": "Libellé du type de magasin",
+                            "description": ""
+                        },
+                        "libprodpart": {
+                            "type": "string",
+                            "title": "Libellé de la participation particulière à la production de l'établissement",
+                            "description": ""
+                        },
+                        "libessen": {
+                            "type": "string",
+                            "title": "Libellé de l'appartenance au champ de l’économie sociale et solidaire",
+                            "description": ""
+                        },
+                        "libmoden": {
+                            "type": "string",
+                            "title": "Libellé de la modalité de l'activité principale de l'entreprise",
+                            "description": ""
+                        },
+                        "libreg_new": {
+                            "type": "string",
+                            "title": "Libellé de la région de l'établissement",
+                            "description": ""
+                        },
+                        "coordonnees": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "coordonnees",
+                            "description": ""
+                        },
+                        "tel": {
+                            "type": "string",
+                            "title": "Téléphone",
+                            "description": ""
+                        },
+                        "depcomet": {
+                            "type": "string",
+                            "title": "Département et commune de localisation de l'établissement",
+                            "description": ""
+                        },
+                        "nom_dept": {
+                            "type": "string",
+                            "title": "Libellé du département de l'établissement",
+                            "description": ""
+                        },
+                        "code_classe": {
+                            "type": "integer",
+                            "title": "Code Classe",
+                            "description": ""
+                        },
+                        "activite": {
+                            "type": "string",
+                            "title": "Activite",
+                            "description": ""
+                        },
+                        "section": {
+                            "type": "string",
+                            "title": "Section",
+                            "description": ""
+                        },
+                        "sous_classe": {
+                            "type": "string",
+                            "title": "Sous-classe",
+                            "description": ""
+                        },
+                        "code_section": {
+                            "type": "string",
+                            "title": "Code Section",
+                            "description": ""
+                        },
+                        "code_division": {
+                            "type": "integer",
+                            "title": "Code Division",
+                            "description": ""
+                        },
+                        "code_groupe": {
+                            "type": "integer",
+                            "title": "Code Groupe",
+                            "description": ""
+                        },
+                        "iriset": {
+                            "type": "string",
+                            "title": "IRIS de l'établissement",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

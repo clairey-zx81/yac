@@ -1,0 +1,343 @@
+{
+  "$schema": "http://json-schema.org/draft-04/hyper-schema",
+  "definitions": {
+    "buildpack_override": {
+      "description": "a buildpack override",
+      "properties": {
+        "url": {
+          "description": "location of the buildpack",
+          "example": "https://example.com/buildpack.tgz",
+          "type": [
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "object"
+      ]
+    },
+    "created_at": {
+      "description": "when app setup was created",
+      "example": "2012-01-01T12:00:00Z",
+      "format": "date-time",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "failure_message": {
+      "description": "reason that app setup has failed",
+      "example": "invalid app.json",
+      "readOnly": true,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "description": "unique identifier of app setup",
+      "example": "01234567-89ab-cdef-0123-456789abcdef",
+      "format": "uuid",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "identity": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/app-setup/definitions/id"
+        }
+      ]
+    },
+    "manifest_errors": {
+      "description": "errors associated with invalid app.json manifest file",
+      "example": [
+        "config var FOO is required"
+      ],
+      "items": {
+        "type": [
+          "string"
+        ]
+      },
+      "readOnly": true,
+      "type": [
+        "array"
+      ]
+    },
+    "overrides": {
+      "description": "overrides of keys in the app.json manifest file",
+      "example": {
+        "buildpacks": [
+          {
+            "url": "https://example.com/buildpack.tgz"
+          }
+        ],
+        "env": {
+          "BAZ": "qux",
+          "FOO": "bar"
+        }
+      },
+      "properties": {
+        "buildpacks": {
+          "description": "overrides the buildpacks specified in the app.json manifest file",
+          "example": [
+            {
+              "url": "https://example.com/buildpack.tgz"
+            }
+          ],
+          "items": {
+            "$ref": "#/definitions/app-setup/definitions/buildpack_override"
+          },
+          "type": [
+            "array"
+          ]
+        },
+        "env": {
+          "additionalProperties": false,
+          "description": "overrides of the env specified in the app.json manifest file",
+          "example": {
+            "BAZ": "qux",
+            "FOO": "bar"
+          },
+          "patternProperties": {
+            "^\\w+$": {
+              "type": [
+                "string"
+              ]
+            }
+          },
+          "readOnly": true,
+          "type": [
+            "object"
+          ]
+        }
+      },
+      "type": [
+        "object"
+      ]
+    },
+    "postdeploy": {
+      "description": "result of postdeploy script",
+      "properties": {
+        "exit_code": {
+          "description": "The exit code of the postdeploy script",
+          "example": 1,
+          "readOnly": true,
+          "type": [
+            "integer"
+          ]
+        },
+        "output": {
+          "description": "output of the postdeploy script",
+          "example": "assets precompiled",
+          "readOnly": true,
+          "type": [
+            "string"
+          ]
+        }
+      },
+      "readOnly": true,
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "resolved_success_url": {
+      "description": "fully qualified success url",
+      "example": "https://example.herokuapp.com/welcome",
+      "readOnly": true,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "description": "the overall status of app setup",
+      "enum": [
+        "failed",
+        "pending",
+        "succeeded"
+      ],
+      "example": "failed",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "updated_at": {
+      "description": "when app setup was updated",
+      "example": "2012-01-01T12:00:00Z",
+      "format": "date-time",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    }
+  },
+  "description": "An app setup represents an app on Heroku that is setup using an environment, addons, and scripts described in an app.json manifest file.",
+  "links": [
+    {
+      "description": "Create a new app setup from a gzipped tar archive containing an app.json manifest file.",
+      "href": "/app-setups",
+      "method": "POST",
+      "rel": "create",
+      "schema": {
+        "properties": {
+          "app": {
+            "description": "optional parameters for created app",
+            "properties": {
+              "locked": {
+                "$ref": "#/definitions/organization-app/definitions/locked"
+              },
+              "name": {
+                "$ref": "#/definitions/app/definitions/name"
+              },
+              "organization": {
+                "$ref": "#/definitions/organization/definitions/name"
+              },
+              "personal": {
+                "$ref": "#/definitions/organization-app/definitions/personal"
+              },
+              "region": {
+                "$ref": "#/definitions/region/definitions/name"
+              },
+              "space": {
+                "$ref": "#/definitions/space/definitions/name"
+              },
+              "stack": {
+                "$ref": "#/definitions/stack/definitions/name"
+              }
+            },
+            "type": [
+              "object"
+            ]
+          },
+          "overrides": {
+            "$ref": "#/definitions/app-setup/definitions/overrides"
+          },
+          "source_blob": {
+            "description": "gzipped tarball of source code containing app.json manifest file",
+            "properties": {
+              "checksum": {
+                "description": "an optional checksum of the gzipped tarball for verifying its integrity",
+                "example": "SHA256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "readOnly": true,
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "url": {
+                "description": "URL of gzipped tarball of source code containing app.json manifest file",
+                "example": "https://example.com/source.tgz?token=xyz",
+                "readOnly": true,
+                "type": [
+                  "string"
+                ]
+              },
+              "version": {
+                "description": "Version of the gzipped tarball.",
+                "example": "v1.3.0",
+                "readOnly": true,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": [
+              "object"
+            ]
+          }
+        },
+        "required": [
+          "source_blob"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "targetSchema": {
+        "$ref": "#/definitions/app-setup"
+      },
+      "title": "Create"
+    },
+    {
+      "description": "Get the status of an app setup.",
+      "href": "/app-setups/{(%23%2Fdefinitions%2Fapp-setup%2Fdefinitions%2Fidentity)}",
+      "method": "GET",
+      "rel": "self",
+      "targetSchema": {
+        "$ref": "#/definitions/app-setup"
+      },
+      "title": "Info"
+    }
+  ],
+  "properties": {
+    "app": {
+      "description": "identity of app",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/app/definitions/id"
+        },
+        "name": {
+          "$ref": "#/definitions/app/definitions/name"
+        }
+      },
+      "strictProperties": true,
+      "type": [
+        "object"
+      ]
+    },
+    "build": {
+      "description": "identity and status of build",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/build/definitions/id"
+        },
+        "output_stream_url": {
+          "$ref": "#/definitions/build/definitions/output_stream_url"
+        },
+        "status": {
+          "$ref": "#/definitions/build/definitions/status"
+        }
+      },
+      "strictProperties": true,
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "created_at": {
+      "$ref": "#/definitions/app-setup/definitions/created_at"
+    },
+    "failure_message": {
+      "$ref": "#/definitions/app-setup/definitions/failure_message"
+    },
+    "id": {
+      "$ref": "#/definitions/app-setup/definitions/id"
+    },
+    "manifest_errors": {
+      "$ref": "#/definitions/app-setup/definitions/manifest_errors"
+    },
+    "postdeploy": {
+      "$ref": "#/definitions/app-setup/definitions/postdeploy"
+    },
+    "resolved_success_url": {
+      "$ref": "#/definitions/app-setup/definitions/resolved_success_url"
+    },
+    "status": {
+      "$ref": "#/definitions/app-setup/definitions/status"
+    },
+    "updated_at": {
+      "$ref": "#/definitions/app-setup/definitions/updated_at"
+    }
+  },
+  "stability": "production",
+  "strictProperties": true,
+  "title": "Heroku Setup API - App Setup",
+  "type": [
+    "object"
+  ]
+}

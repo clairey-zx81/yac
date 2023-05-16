@@ -1,0 +1,561 @@
+{
+    "title": "curiexplore-pays@mesr",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/curiexplore-pays@mesr"
+        }
+    ],
+    "definitions": {
+        "curiexplore-pays@mesr": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/curiexplore-pays@mesr_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "curiexplore-pays@mesr_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "iso3": {
+                            "type": "string",
+                            "title": "iso3",
+                            "description": ""
+                        },
+                        "name_en": {
+                            "type": "string",
+                            "title": "name_en",
+                            "description": ""
+                        },
+                        "name_fr": {
+                            "type": "string",
+                            "title": "name_fr",
+                            "description": ""
+                        },
+                        "name_native": {
+                            "type": "string",
+                            "title": "name_native",
+                            "description": ""
+                        },
+                        "iso2": {
+                            "type": "string",
+                            "title": "iso2",
+                            "description": ""
+                        },
+                        "borders": {
+                            "type": "string",
+                            "title": "borders",
+                            "description": ""
+                        },
+                        "flag": {
+                            "type": "string",
+                            "title": "flag",
+                            "description": ""
+                        },
+                        "latlng": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "latlng",
+                            "description": ""
+                        },
+                        "wikidata": {
+                            "type": "string",
+                            "title": "wikidata",
+                            "description": ""
+                        },
+                        "bologne": {
+                            "type": "string",
+                            "title": "bologne",
+                            "description": ""
+                        },
+                        "embassy": {
+                            "type": "string",
+                            "title": "embassy",
+                            "description": ""
+                        },
+                        "arab_world": {
+                            "type": "string",
+                            "title": "arab_world",
+                            "description": ""
+                        },
+                        "central_europe_and_the_baltics": {
+                            "type": "string",
+                            "title": "central_europe_and_the_baltics",
+                            "description": ""
+                        },
+                        "east_asia_pacific": {
+                            "type": "string",
+                            "title": "east_asia_pacific",
+                            "description": ""
+                        },
+                        "euro_area": {
+                            "type": "string",
+                            "title": "euro_area",
+                            "description": ""
+                        },
+                        "europe_central_asia": {
+                            "type": "string",
+                            "title": "europe_central_asia",
+                            "description": ""
+                        },
+                        "european_union": {
+                            "type": "string",
+                            "title": "european_union",
+                            "description": ""
+                        },
+                        "high_income": {
+                            "type": "string",
+                            "title": "high_income",
+                            "description": ""
+                        },
+                        "latin_america_caribbean": {
+                            "type": "string",
+                            "title": "latin_america_caribbean",
+                            "description": ""
+                        },
+                        "low_income": {
+                            "type": "string",
+                            "title": "low_income",
+                            "description": ""
+                        },
+                        "lower_middle_income": {
+                            "type": "string",
+                            "title": "lower_middle_income",
+                            "description": ""
+                        },
+                        "middle_east_north_africa": {
+                            "type": "string",
+                            "title": "middle_east_north_africa",
+                            "description": ""
+                        },
+                        "north_america": {
+                            "type": "string",
+                            "title": "north_america",
+                            "description": ""
+                        },
+                        "oecd_members": {
+                            "type": "string",
+                            "title": "oecd_members",
+                            "description": ""
+                        },
+                        "sub_saharan_africa": {
+                            "type": "string",
+                            "title": "sub_saharan_africa",
+                            "description": ""
+                        },
+                        "upper_middle_income": {
+                            "type": "string",
+                            "title": "upper_middle_income",
+                            "description": ""
+                        },
+                        "world": {
+                            "type": "string",
+                            "title": "world",
+                            "description": ""
+                        },
+                        "link": {
+                            "type": "string",
+                            "title": "link",
+                            "description": ""
+                        },
+                        "website": {
+                            "type": "string",
+                            "title": "website",
+                            "description": ""
+                        },
+                        "south_america": {
+                            "type": "string",
+                            "title": "south_america",
+                            "description": ""
+                        },
+                        "central_america_caraibes": {
+                            "type": "string",
+                            "title": "central_america_caraibes",
+                            "description": ""
+                        },
+                        "cocac": {
+                            "type": "string",
+                            "title": "cocac",
+                            "description": ""
+                        },
+                        "continental_europe": {
+                            "type": "string",
+                            "title": "continental_europe",
+                            "description": ""
+                        },
+                        "asia_oceania": {
+                            "type": "string",
+                            "title": "asia_oceania",
+                            "description": ""
+                        },
+                        "cf_mobility": {
+                            "type": "string",
+                            "title": "cf_mobility",
+                            "description": ""
+                        },
+                        "idpaysage": {
+                            "type": "string",
+                            "title": "idPaysage",
+                            "description": ""
+                        },
+                        "curiexplore": {
+                            "type": "string",
+                            "title": "curiexplore",
+                            "description": ""
+                        },
+                        "idh_group": {
+                            "type": "string",
+                            "title": "idh_group",
+                            "description": ""
+                        },
+                        "idh_group_countries": {
+                            "type": "string",
+                            "title": "idh_group_countries",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,484 @@
+{
+    "title": "air-quality-data-continuous@bristol",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/air-quality-data-continuous@bristol"
+        }
+    ],
+    "definitions": {
+        "air-quality-data-continuous@bristol": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/air-quality-data-continuous@bristol_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "air-quality-data-continuous@bristol_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "date_time": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Date Time",
+                            "description": "Date and time of measurement"
+                        },
+                        "nox": {
+                            "type": "number",
+                            "title": "NOx",
+                            "description": "Concentration of oxides of nitrogen"
+                        },
+                        "no2": {
+                            "type": "number",
+                            "title": "NO2",
+                            "description": "Concentration of nitrogen dioxide"
+                        },
+                        "no": {
+                            "type": "number",
+                            "title": "NO",
+                            "description": "Concentration of nitric oxide"
+                        },
+                        "siteid": {
+                            "type": "integer",
+                            "title": "SiteID",
+                            "description": "Site ID for the station"
+                        },
+                        "pm10": {
+                            "type": "number",
+                            "title": "PM10",
+                            "description": "Concentration of particulate matter <10 micron diameter"
+                        },
+                        "nvpm10": {
+                            "type": "number",
+                            "title": "NVPM10",
+                            "description": "Concentration of non - volatile particulate matter <10 micron diameter"
+                        },
+                        "vpm10": {
+                            "type": "number",
+                            "title": "VPM10",
+                            "description": "Concentration of volatile particulate matter <10 micron diameter"
+                        },
+                        "nvpm25": {
+                            "type": "number",
+                            "title": "NVPM2.5",
+                            "description": "Concentration of non volatile particulate matter <2.5 micron diameter"
+                        },
+                        "pm25": {
+                            "type": "number",
+                            "title": "PM2.5",
+                            "description": "Concentration of particulate matter <2.5 micron diameter"
+                        },
+                        "vpm25": {
+                            "type": "number",
+                            "title": "VPM2.5",
+                            "description": "Concentration of volatile particulate matter <2.5 micron diameter"
+                        },
+                        "co": {
+                            "type": "number",
+                            "title": "CO",
+                            "description": "Concentration of carbon monoxide"
+                        },
+                        "o3": {
+                            "type": "number",
+                            "title": "O3",
+                            "description": "Concentration of ozone"
+                        },
+                        "so2": {
+                            "type": "number",
+                            "title": "SO2",
+                            "description": "Concentration of sulphur dioxide"
+                        },
+                        "temp": {
+                            "type": "number",
+                            "title": "Temperature",
+                            "description": "Air temperature"
+                        },
+                        "rh": {
+                            "type": "number",
+                            "title": "RH",
+                            "description": "Relative Humidity"
+                        },
+                        "press": {
+                            "type": "number",
+                            "title": "Air Pressure",
+                            "description": "Air Pressure"
+                        },
+                        "location": {
+                            "type": "string",
+                            "title": "Location",
+                            "description": "Text description of location"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": "Latitude and longitude"
+                        },
+                        "datestart": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "DateStart",
+                            "description": "The date monitoring started"
+                        },
+                        "dateend": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "DateEnd",
+                            "description": "The date monitoring ended"
+                        },
+                        "current": {
+                            "type": "string",
+                            "title": "Current",
+                            "description": "Is the monitor currently operating"
+                        },
+                        "instrumenttype": {
+                            "type": "string",
+                            "title": "Instrument Type",
+                            "description": "Classification of the instrument"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

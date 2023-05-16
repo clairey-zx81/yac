@@ -1,0 +1,482 @@
+{
+    "title": "horodateurs-toulouse-copy@toulouse-metropole",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/horodateurs-toulouse-copy@toulouse-metropole"
+        }
+    ],
+    "definitions": {
+        "horodateurs-toulouse-copy@toulouse-metropole": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/horodateurs-toulouse-copy@toulouse-metropole_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "horodateurs-toulouse-copy@toulouse-metropole_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "mot_dir": {
+                            "type": "string",
+                            "title": "mot_dir",
+                            "description": "Mot directeur du nom de la rue"
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "commune",
+                            "description": "Nom de la commune"
+                        },
+                        "numero_horo": {
+                            "type": "integer",
+                            "title": "numero_horo",
+                            "description": "Numéro de l'horodateur"
+                        },
+                        "id_reglementation": {
+                            "type": "string",
+                            "title": "id_reglementation",
+                            "description": "Identifiant de la réglementation :\n0 : gratuit\n1: sans offre de stationnement\n2a : CV - stationnement payant résidant 24/24h 3a: CV -stationnement payant résidant 18h/9h 2b : FG - stationnement payant résidant 24h/24h\n3b : Faubourg commerçant - stationnement payant résidant 18h/9h 8b : CCV - stationnement payant résidant 18h/9h\n7a : Faubourg commerçant -stationnement payant 9h/19h\n7b : Faubourg commerçant - stationnement payant 8h/19h 6XX : Zone bleue\n"
+                        },
+                        "reglementation": {
+                            "type": "string",
+                            "title": "reglementation",
+                            "description": "Descriptif de la réglementation"
+                        },
+                        "quartier_residant": {
+                            "type": "string",
+                            "title": "quartier_residant",
+                            "description": "quartier residant"
+                        },
+                        "horaire": {
+                            "type": "string",
+                            "title": "horaire",
+                            "description": "plage horaire de la réglementation payante"
+                        },
+                        "tarif_horaire": {
+                            "type": "string",
+                            "title": "tarif_horaire",
+                            "description": "Tarif pour 1h stationné"
+                        },
+                        "maj_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "maj_date",
+                            "description": "Date de mise à jour"
+                        },
+                        "x": {
+                            "type": "string",
+                            "title": "x",
+                            "description": "Longitude"
+                        },
+                        "y": {
+                            "type": "string",
+                            "title": "y",
+                            "description": "Latitude"
+                        },
+                        "tarif_resid": {
+                            "type": "string",
+                            "title": "tarif_resid",
+                            "description": "oui = accessible résidents"
+                        },
+                        "tarif_pro": {
+                            "type": "string",
+                            "title": "tarif_pro",
+                            "description": "oui = accessibles aux professionnels"
+                        },
+                        "insee": {
+                            "type": "integer",
+                            "title": "insee",
+                            "description": "Code Insee sur 5 caractères"
+                        },
+                        "bareme_tarifaire": {
+                            "type": "string",
+                            "title": "bareme_tarifaire",
+                            "description": "Barème tarifaire : CV (centre ville)\nFG (Faubourg) F_COM(Faubourg commerçant) CCV (Ceinture centre-ville)\nZB (Zone bleue)\nTEST\n"
+                        },
+                        "num_zone": {
+                            "type": "integer",
+                            "title": "num_zone",
+                            "description": "Identifiant de la zone de stationnement"
+                        },
+                        "quartier_numero": {
+                            "type": "integer",
+                            "title": "quartier_numero",
+                            "description": "Numéro du quartier"
+                        },
+                        "zone_libelle": {
+                            "type": "string",
+                            "title": "zone_libelle",
+                            "description": "Nom de la zone de stationnement"
+                        },
+                        "duree_max_sta": {
+                            "type": "string",
+                            "title": "duree_max_sta",
+                            "description": "durée maximale de stationnement"
+                        },
+                        "gratuite": {
+                            "type": "string",
+                            "title": "gratuite",
+                            "description": "ui = 1/2 h gratuite (ex dans les faubourg commerçants)"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,487 @@
+{
+    "title": "lycees-donnees-generales@datailedefrance",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/lycees-donnees-generales@datailedefrance"
+        }
+    ],
+    "definitions": {
+        "lycees-donnees-generales@datailedefrance": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/lycees-donnees-generales@datailedefrance_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "lycees-donnees-generales@datailedefrance_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "code_uai": {
+                            "type": "string",
+                            "title": "CODE_UAI",
+                            "description": "Code identifiant de l'établissement"
+                        },
+                        "num_siret": {
+                            "type": "integer",
+                            "title": "NUM_SIRET",
+                            "description": "Numéro SIRET"
+                        },
+                        "code_academie": {
+                            "type": "string",
+                            "title": "CODE_ACADEMIE",
+                            "description": "Identifiant de l'académie"
+                        },
+                        "academie": {
+                            "type": "string",
+                            "title": "ACADEMIE",
+                            "description": "Nom de l'académie"
+                        },
+                        "dep": {
+                            "type": "string",
+                            "title": "DEPARTEMENT",
+                            "description": "Numéro du département"
+                        },
+                        "sigle_uai": {
+                            "type": "string",
+                            "title": "SIGLE_UAI",
+                            "description": "Sigle de la nature de l'établissement"
+                        },
+                        "nature_uai": {
+                            "type": "string",
+                            "title": "NATURE_UAI",
+                            "description": "Nature de l'établissement"
+                        },
+                        "patronyme": {
+                            "type": "string",
+                            "title": "PATRONYME",
+                            "description": "Patronyme de l'établissement"
+                        },
+                        "nom_etablissement": {
+                            "type": "string",
+                            "title": "NOM_ETABLISSEMENT",
+                            "description": "Nom communicant de l'établissement"
+                        },
+                        "statut": {
+                            "type": "string",
+                            "title": "STATUT",
+                            "description": "Statut public ou privé"
+                        },
+                        "contrat_etablissement": {
+                            "type": "string",
+                            "title": "CONTRAT_ETABLISSEMENT",
+                            "description": "Contrats passés entre les établissements privés et l'État"
+                        },
+                        "adresse_postale": {
+                            "type": "string",
+                            "title": "ADRESSE_POSTALE",
+                            "description": "Adresse postale de l'établissement"
+                        },
+                        "code_postal": {
+                            "type": "string",
+                            "title": "CODE_POSTAL",
+                            "description": "Code postal de la commune"
+                        },
+                        "code_insee": {
+                            "type": "string",
+                            "title": "CODE_INSEE",
+                            "description": "Code Insee de la commune"
+                        },
+                        "libelle": {
+                            "type": "string",
+                            "title": "COMMUNE",
+                            "description": "Nom de la commune"
+                        },
+                        "telephone": {
+                            "type": "string",
+                            "title": "TELEPHONE",
+                            "description": "Numéro de téléphone"
+                        },
+                        "fax": {
+                            "type": "string",
+                            "title": "FAX",
+                            "description": "Numéro de fax"
+                        },
+                        "site_web": {
+                            "type": "string",
+                            "title": "SITE_WEB",
+                            "description": "Adresse du site Internet de l'établissement"
+                        },
+                        "mail": {
+                            "type": "string",
+                            "title": "Mail",
+                            "description": ""
+                        },
+                        "ministere_tutelle": {
+                            "type": "string",
+                            "title": "MINISTERE_TUTELLE",
+                            "description": "Ministère de tutelle"
+                        },
+                        "internat": {
+                            "type": "string",
+                            "title": "INTERNAT",
+                            "description": "Présence d'un Internat (oui ou vide)"
+                        },
+                        "annee_construction": {
+                            "type": "string",
+                            "title": "ANNEE_CONSTRUCTION",
+                            "description": "Année de construction de l'établissement"
+                        },
+                        "date_maj": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "DATE_MAJ",
+                            "description": "Date de dernière mise à jour des données de l'établissement"
+                        },
+                        "geo": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "GEO",
+                            "description": "Latitude, longitude "
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

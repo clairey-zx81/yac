@@ -1,0 +1,561 @@
+{
+    "title": "base-comparateur-de-territoires@datailedefrance",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/base-comparateur-de-territoires@datailedefrance"
+        }
+    ],
+    "definitions": {
+        "base-comparateur-de-territoires@datailedefrance": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/base-comparateur-de-territoires@datailedefrance_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "base-comparateur-de-territoires@datailedefrance_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "codgeo": {
+                            "type": "string",
+                            "title": "CODGEO",
+                            "description": "Code du département suivi du numéro de commune ou du numéro d'arrondissement municipal"
+                        },
+                        "libgeo": {
+                            "type": "string",
+                            "title": "LIBGEO",
+                            "description": "Libellé de la commune ou de l'arrondissement municipal pour Paris"
+                        },
+                        "reg": {
+                            "type": "string",
+                            "title": "REG",
+                            "description": "Région"
+                        },
+                        "dep": {
+                            "type": "string",
+                            "title": "DEP",
+                            "description": "Département"
+                        },
+                        "p19_pop": {
+                            "type": "number",
+                            "title": "P19_POP",
+                            "description": "Population en 2019"
+                        },
+                        "p13_pop": {
+                            "type": "number",
+                            "title": "P13_POP",
+                            "description": "Population en 2013"
+                        },
+                        "superf": {
+                            "type": "number",
+                            "title": "SUPERF",
+                            "description": "Superficie (en km2)"
+                        },
+                        "nais1319": {
+                            "type": "number",
+                            "title": "NAIS1319",
+                            "description": "Naissances entre 2013 et 2019"
+                        },
+                        "dece1319": {
+                            "type": "number",
+                            "title": "DECE1319",
+                            "description": "Décès entre 2013 et 2019"
+                        },
+                        "p19_men": {
+                            "type": "number",
+                            "title": "P19_MEN",
+                            "description": "Ménages en 2019"
+                        },
+                        "naisd21": {
+                            "type": "number",
+                            "title": "NAISD21",
+                            "description": "Nombre de naissances domiciliées en 2021"
+                        },
+                        "decesd21": {
+                            "type": "number",
+                            "title": "DECESD21",
+                            "description": "Nombre de décès domiciliés en 2021"
+                        },
+                        "p19_log": {
+                            "type": "number",
+                            "title": "P19_LOG",
+                            "description": "Logements en 2019"
+                        },
+                        "p19_rp": {
+                            "type": "number",
+                            "title": "P19_RP",
+                            "description": "Résidences principales en 2019"
+                        },
+                        "p19_rsecocc": {
+                            "type": "number",
+                            "title": "P19_RSECOCC",
+                            "description": "Rés secondaires et logts occasionnels en 2019"
+                        },
+                        "p19_logvac": {
+                            "type": "number",
+                            "title": "P19_LOGVAC",
+                            "description": "Logements vacants en 2019"
+                        },
+                        "p19_rp_prop": {
+                            "type": "number",
+                            "title": "P19_RP_PROP",
+                            "description": "Rés princ occupées Propriétaires en 2019"
+                        },
+                        "nbmenfisc20": {
+                            "type": "string",
+                            "title": "NBMENFISC20",
+                            "description": "Nombre de ménages fiscaux en 2020"
+                        },
+                        "pimp20": {
+                            "type": "string",
+                            "title": "PIMP20",
+                            "description": "Part des ménages fiscaux imposés en 2020"
+                        },
+                        "med20": {
+                            "type": "string",
+                            "title": "MED20",
+                            "description": "Médiane du niveau vie en 2020"
+                        },
+                        "tp6020": {
+                            "type": "string",
+                            "title": "TP6020",
+                            "description": "Taux de pauvreté en 2020"
+                        },
+                        "p19_emplt": {
+                            "type": "number",
+                            "title": "P19_EMPLT",
+                            "description": "Emplois au LT en 2019"
+                        },
+                        "p19_emplt_sal": {
+                            "type": "number",
+                            "title": "P19_EMPLT_SAL",
+                            "description": "Emplois salariés au LT en 2019"
+                        },
+                        "p13_emplt": {
+                            "type": "number",
+                            "title": "P13_EMPLT",
+                            "description": "Emplois au LT en 2013"
+                        },
+                        "p19_pop1564": {
+                            "type": "number",
+                            "title": "P19_POP1564",
+                            "description": "Pop 15-64 ans en 2019"
+                        },
+                        "p19_chomeur1564": {
+                            "type": "number",
+                            "title": "P19_CHOMEUR1564",
+                            "description": "Chômeurs 15-64 ans en 2019"
+                        },
+                        "p19_act1564": {
+                            "type": "number",
+                            "title": "P19_ACT1564",
+                            "description": "Actifs 15-64 ans en 2019"
+                        },
+                        "ettot20": {
+                            "type": "number",
+                            "title": "ETTOT20",
+                            "description": "Total des ets actifs fin 2020"
+                        },
+                        "etaz20": {
+                            "type": "number",
+                            "title": "ETAZ20",
+                            "description": "Ets actifs agriculture fin 2020"
+                        },
+                        "etbe20": {
+                            "type": "number",
+                            "title": "ETBE20",
+                            "description": "Ets actifs industrie fin 2020"
+                        },
+                        "etfz20": {
+                            "type": "number",
+                            "title": "ETFZ20",
+                            "description": "Ets actifs construction fin 2020"
+                        },
+                        "etgu20": {
+                            "type": "number",
+                            "title": "ETGU20",
+                            "description": "Ets actifs commerce services fin 2020"
+                        },
+                        "etgz20": {
+                            "type": "number",
+                            "title": "ETGZ20",
+                            "description": "dont Ets actifs commerce rep auto fin 2020"
+                        },
+                        "etoq20": {
+                            "type": "number",
+                            "title": "ETOQ20",
+                            "description": "Ets actifs adm publique fin 2020"
+                        },
+                        "ettef120": {
+                            "type": "number",
+                            "title": "ETTEF120",
+                            "description": "Ets actifs de 1 à 9 salariés fin 2020"
+                        },
+                        "ettefp1020": {
+                            "type": "number",
+                            "title": "ETTEFP1020",
+                            "description": "Ets actifs 10 salariés ou plus au 31 décembre 2020"
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geom",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,443 @@
+{
+    "title": "p_info_s@scnbdx",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/p_info_s@scnbdx"
+        }
+    ],
+    "definitions": {
+        "p_info_s@scnbdx": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/p_info_s@scnbdx_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "p_info_s@scnbdx_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "gid": {
+                            "type": "integer",
+                            "title": "gid",
+                            "description": "Clé primaire"
+                        },
+                        "geom_err": {
+                            "type": "string",
+                            "title": "geom_err",
+                            "description": "Code d'anomalie géométrique : \nListe des valeurs possibles : \n9999 : Polygone compose et / ou à sections multiples\n9998 : Linéaire compose et / ou à sections multiples\n9996 : La géométrie contient des informations LRS\n9995 : Nombre de dimensions différent de 2 ou 3\n9994 : Présence d'un arc de cercle\n9000 : Erreur autre\n13343 : Polygone de moins de 4 points\n13349 : Polygone papillon\n13350 : Deux éléments d'un polygone archipel se touchent\n13351 : Deux éléments d'un polygone archipel  se touchent\n13356 : Point double\n13366 : Combinaison invalide d'intérieur / extérieur d'un polygone\n13367 : Orientation invalide d'intérieur / extérieur d'un polygone\n"
+                        },
+                        "ident": {
+                            "type": "string",
+                            "title": "ident",
+                            "description": "Identifiant"
+                        },
+                        "libelle": {
+                            "type": "string",
+                            "title": "libelle",
+                            "description": "Nom de la prescription"
+                        },
+                        "txt": {
+                            "type": "string",
+                            "title": "txt",
+                            "description": "Texte étiquette"
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "type",
+                            "description": "Type de la prescription : \nListe des valeurs possibles : \n01 : Secteur sauvegardé\n02 : Zone d'aménagement concerté\n03 : Zone de préemption dans un espace naturel et sensible\n04 : Périmètre de droit de préemption urbain\n05 : Zone d'aménagement différé\n06 : Zone d'obligation du permis de démolir\n07 : Périmètre de développement prioritaire économie d'énergie\n08 : Périmètre forestier : interdiction ou réglementation des plantations (code rural et de la pêche maritime), plantations à réaliser\n09 : Périmètre minier de concession pour l'exploitation ou le stockage\n10 : Zone de recherche et d'exploitation de carrière\n11 : Périmètre des zones délimitées - divisions foncières soumises à déclaration préalable\n12 : Périmètre de sursis à statuer\n13 : Secteur de programme d'aménagement d'ensemble\n14 : Périmètre de voisinage d'infrastructure de transport terrestre\n15 : Zone agricole protégée\n16 : Site archéologique\n17 : Zone à risque d'exposition au plomb\n18 : Espaces et milieux à préserver, en fonction de l'intérêt écologique (zones humides, dunes, zones boisées côtières...)\n19 : Zone d'assainissement collectif / non collectif / eaux usées / eaux pluviales, schéma de réseaux eau et assainissement, systèmes d'élimination des déchets\n20 : ZPR-ZPE\n21 : Projet de PPRN et PPRM\n22 : Protection des rives des plans d'eau en zone de montagne\n23 : Arrêté du préfet coordonnateur de massif\n24 : Document d'aménagement commercial\n25 : Périmètre de protection des espaces agricoles et naturels péri-urbains\n26 : Lotissement\n27 : Plan d'exposition au bruit des aérodromes\n28 : Dépassement des règles du PLU pour diversité de l'habitat\n29 : Dépassement des règles du PLU pour performance énergétique\n30 : Périmètre PUP\n31 : Périmètre de non application du L 111 6 2\n32 : Secteur à fiscalité particulière en application du L 331-14 (taxe d'aménagement)\n33 : Droit de préemption commercial\n34 : Périmètre d'opération d'intérêt national\n53 : Zone d'effet des canalisations de gaz\n54 : Secteur de référence des normes de stationnement\n55 : Secteur en zonage UP\n59 : Secteur de diversité commerciale à protéger\n60 : Secteur comportant des orientations d'aménagement et de programmation\n61 : Périmètre de développement prioritaire - réseau de chaleur\n99 : Autre\n"
+                        },
+                        "sstype": {
+                            "type": "string",
+                            "title": "sstype",
+                            "description": "Sous-type de la prescription : \nListe des valeurs possibles : \n14-51 : Ligne ferroviaire\n14-52 : Voie routière\n19-51 : Zone d'assainissement collectif\n20-51 : Zone 1 - Espaces de nature\n20-52 : Zone 2a - Secteurs d'intérêt patrimonial\n20-53 : Zone 2b - Secteurs d'intérêt patrimonalial\n20-54  : Zone 3 - Abords du tramway\n20-55 : Zone 4a - Zones résidentielles\n20-56 : Zone 4b - Zones résidentielles\n20-57 : Zone 5 - Axes structurants\n20-58 : Zone 6 - Zones d'activités\n20-59 : Zone 7 - Emprise de l'aéroport\n27-01 : Zone A\n27-02 : Zone B\n27-03 : Zone C\n27-51 : Zone D\n32-51 : Taxe d'aménagement majorée\n"
+                        },
+                        "nomfic": {
+                            "type": "string",
+                            "title": "nomfic",
+                            "description": "Nom du fichier"
+                        },
+                        "urlfic": {
+                            "type": "string",
+                            "title": "urlfic",
+                            "description": "URL ou URI du fichier"
+                        },
+                        "insee": {
+                            "type": "string",
+                            "title": "insee",
+                            "description": "Code Insee : \nListe des valeurs possibles : \n33003 : Ambarès-et-Lagrave\n33004 : Ambès\n33013 : Artigues-Près-Bordeaux\n33032 : Bassens\n33039 : Bègles\n33056 : Blanquefort\n33063 : Bordeaux\n33065 : Bouliac\n33069 : Le Bouscat\n33075 : Bruges\n33096 : Carbon-Blanc\n33119 : Cenon\n33162 : Eysines\n33167 : Floirac\n33192 : Gradignan\n33200 : Le Haillan\n33249 : Lormont\n33273 : Martignas-sur-Jalle\n33281 : Mérignac\n33312 : Parempuyre\n33318 : Pessac\n33376 : Saint-Aubin-de-Médoc\n33434 : Saint-Louis-de-Montferrand\n33449 : Saint-Médard-en-Jalles\n33487 : Saint-Vincent-de-Paul\n33519 : Le Taillan-Médoc\n33522 : Talence\n33550 : Villenave-d'Ornon\n"
+                        },
+                        "cdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "cdate",
+                            "description": "Date de création"
+                        },
+                        "mdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "mdate",
+                            "description": "Date de modification"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

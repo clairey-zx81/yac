@@ -1,0 +1,516 @@
+{
+    "title": "mediatheques-bibliotheques-et-bibliobus@toulouse-metropole",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/mediatheques-bibliotheques-et-bibliobus@toulouse-metropole"
+        }
+    ],
+    "definitions": {
+        "mediatheques-bibliotheques-et-bibliobus@toulouse-metropole": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/mediatheques-bibliotheques-et-bibliobus@toulouse-metropole_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "mediatheques-bibliotheques-et-bibliobus@toulouse-metropole_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "nom": {
+                            "type": "string",
+                            "title": "nom",
+                            "description": ""
+                        },
+                        "adresse": {
+                            "type": "string",
+                            "title": "adresse",
+                            "description": ""
+                        },
+                        "telephone": {
+                            "type": "string",
+                            "title": "telephone",
+                            "description": ""
+                        },
+                        "site_internet": {
+                            "type": "string",
+                            "title": "site_internet",
+                            "description": ""
+                        },
+                        "parking": {
+                            "type": "string",
+                            "title": "parking",
+                            "description": ""
+                        },
+                        "oid": {
+                            "type": "integer",
+                            "title": "oid",
+                            "description": ""
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "commune",
+                            "description": ""
+                        },
+                        "accessibilite_pmr": {
+                            "type": "string",
+                            "title": "accessibilite_pmr",
+                            "description": ""
+                        },
+                        "cd": {
+                            "type": "string",
+                            "title": "cd",
+                            "description": ""
+                        },
+                        "dvd": {
+                            "type": "string",
+                            "title": "dvd",
+                            "description": ""
+                        },
+                        "livres_audio": {
+                            "type": "string",
+                            "title": "livres_audio",
+                            "description": ""
+                        },
+                        "collections_adaptees": {
+                            "type": "string",
+                            "title": "collections_adaptees",
+                            "description": ""
+                        },
+                        "pret_de_jeux": {
+                            "type": "string",
+                            "title": "pret_de_jeux",
+                            "description": ""
+                        },
+                        "pret_de_jeux_video": {
+                            "type": "string",
+                            "title": "pret_de_jeux_video",
+                            "description": ""
+                        },
+                        "pret_de_partitions": {
+                            "type": "string",
+                            "title": "pret_de_partitions",
+                            "description": ""
+                        },
+                        "pret_instruments": {
+                            "type": "string",
+                            "title": "pret_instruments",
+                            "description": ""
+                        },
+                        "pret_de_liseuses": {
+                            "type": "string",
+                            "title": "pret_de_liseuses",
+                            "description": ""
+                        },
+                        "consoles_de_jeu": {
+                            "type": "string",
+                            "title": "consoles_de_jeu",
+                            "description": ""
+                        },
+                        "point_ecoute_musique": {
+                            "type": "string",
+                            "title": "point_ecoute_musique",
+                            "description": ""
+                        },
+                        "point_visionnage_video": {
+                            "type": "string",
+                            "title": "point_visionnage_video",
+                            "description": ""
+                        },
+                        "table_de_travail": {
+                            "type": "string",
+                            "title": "table_de_travail",
+                            "description": ""
+                        },
+                        "wifi": {
+                            "type": "string",
+                            "title": "wifi",
+                            "description": ""
+                        },
+                        "imprimante": {
+                            "type": "string",
+                            "title": "imprimante",
+                            "description": ""
+                        },
+                        "acces_internet": {
+                            "type": "string",
+                            "title": "acces_internet",
+                            "description": ""
+                        },
+                        "boite_de_retour": {
+                            "type": "string",
+                            "title": "boite_de_retour",
+                            "description": ""
+                        },
+                        "portage_a_domicile": {
+                            "type": "string",
+                            "title": "portage_a_domicile",
+                            "description": ""
+                        },
+                        "boitatroc": {
+                            "type": "string",
+                            "title": "boitatroc",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

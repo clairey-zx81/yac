@@ -1,0 +1,758 @@
+{
+    "title": "decp-herault-sport@data-herault-occitanie",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/decp-herault-sport@data-herault-occitanie"
+        }
+    ],
+    "definitions": {
+        "decp-herault-sport@data-herault-occitanie": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/decp-herault-sport@data-herault-occitanie_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "decp-herault-sport@data-herault-occitanie_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "title": "id",
+                            "description": ""
+                        },
+                        "idmarche": {
+                            "type": "integer",
+                            "title": "idMarche",
+                            "description": ""
+                        },
+                        "source": {
+                            "type": "string",
+                            "title": "source",
+                            "description": ""
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "type",
+                            "description": ""
+                        },
+                        "natureobjetmarche": {
+                            "type": "string",
+                            "title": "natureObjetMarche",
+                            "description": ""
+                        },
+                        "objetmarche": {
+                            "type": "string",
+                            "title": "objetMarche",
+                            "description": ""
+                        },
+                        "codecpv_original": {
+                            "type": "string",
+                            "title": "codeCPV_Original",
+                            "description": ""
+                        },
+                        "codecpv": {
+                            "type": "string",
+                            "title": "codeCPV",
+                            "description": ""
+                        },
+                        "codecpv_division": {
+                            "type": "integer",
+                            "title": "codeCPV_division",
+                            "description": ""
+                        },
+                        "referencecpv": {
+                            "type": "string",
+                            "title": "referenceCPV",
+                            "description": ""
+                        },
+                        "datenotification": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "dateNotification",
+                            "description": ""
+                        },
+                        "anneenotification": {
+                            "type": "string",
+                            "title": "anneeNotification",
+                            "description": ""
+                        },
+                        "moisnotification": {
+                            "type": "string",
+                            "title": "moisNotification",
+                            "description": ""
+                        },
+                        "datepublicationdonnees": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "datePublicationDonnees",
+                            "description": ""
+                        },
+                        "dureemois": {
+                            "type": "integer",
+                            "title": "dureeMois",
+                            "description": ""
+                        },
+                        "dureemoisestimee": {
+                            "type": "string",
+                            "title": "dureeMoisEstimee",
+                            "description": ""
+                        },
+                        "dureemoiscalculee": {
+                            "type": "number",
+                            "title": "dureeMoisCalculee",
+                            "description": ""
+                        },
+                        "montant": {
+                            "type": "number",
+                            "title": "montant",
+                            "description": ""
+                        },
+                        "nombretitulairesurmarchepresume": {
+                            "type": "number",
+                            "title": "nombreTitulaireSurMarchePresume",
+                            "description": ""
+                        },
+                        "montantcalcule": {
+                            "type": "number",
+                            "title": "montantCalcule",
+                            "description": ""
+                        },
+                        "formeprix": {
+                            "type": "string",
+                            "title": "formePrix",
+                            "description": ""
+                        },
+                        "lieuexecutioncode": {
+                            "type": "string",
+                            "title": "lieuExecutionCode",
+                            "description": ""
+                        },
+                        "lieuexecutiontypecode": {
+                            "type": "string",
+                            "title": "lieuExecutionTypeCode",
+                            "description": ""
+                        },
+                        "lieuexecutionnom": {
+                            "type": "string",
+                            "title": "lieuExecutionNom",
+                            "description": ""
+                        },
+                        "codedepartementexecution": {
+                            "type": "number",
+                            "title": "codeDepartementExecution",
+                            "description": ""
+                        },
+                        "coderegionexecution": {
+                            "type": "string",
+                            "title": "codeRegionExecution",
+                            "description": ""
+                        },
+                        "libelleregionexecution": {
+                            "type": "string",
+                            "title": "libelleRegionExecution",
+                            "description": ""
+                        },
+                        "nature": {
+                            "type": "string",
+                            "title": "nature",
+                            "description": ""
+                        },
+                        "accord_cadrepresume": {
+                            "type": "string",
+                            "title": "accord-cadrePresume",
+                            "description": ""
+                        },
+                        "procedure": {
+                            "type": "string",
+                            "title": "procedure",
+                            "description": ""
+                        },
+                        "idacheteur": {
+                            "type": "string",
+                            "title": "idAcheteur",
+                            "description": ""
+                        },
+                        "sirenacheteurvalide": {
+                            "type": "string",
+                            "title": "sirenAcheteurValide",
+                            "description": ""
+                        },
+                        "nomacheteur": {
+                            "type": "string",
+                            "title": "nomAcheteur",
+                            "description": ""
+                        },
+                        "coderegionacheteur": {
+                            "type": "string",
+                            "title": "codeRegionAcheteur",
+                            "description": ""
+                        },
+                        "libelleregionacheteur": {
+                            "type": "string",
+                            "title": "libelleRegionAcheteur",
+                            "description": ""
+                        },
+                        "departementacheteur": {
+                            "type": "string",
+                            "title": "departementAcheteur",
+                            "description": ""
+                        },
+                        "libelledepartementacheteur": {
+                            "type": "string",
+                            "title": "libelleDepartementAcheteur",
+                            "description": ""
+                        },
+                        "codepostalacheteur": {
+                            "type": "string",
+                            "title": "codePostalAcheteur",
+                            "description": ""
+                        },
+                        "libellearrondissementacheteur": {
+                            "type": "string",
+                            "title": "libelleArrondissementAcheteur",
+                            "description": ""
+                        },
+                        "codearrondissementacheteur": {
+                            "type": "integer",
+                            "title": "codeArrondissementAcheteur",
+                            "description": ""
+                        },
+                        "libellecommuneacheteur": {
+                            "type": "string",
+                            "title": "libelleCommuneAcheteur",
+                            "description": ""
+                        },
+                        "codecommuneacheteur": {
+                            "type": "string",
+                            "title": "codeCommuneAcheteur",
+                            "description": ""
+                        },
+                        "superficiecommuneacheteur": {
+                            "type": "number",
+                            "title": "superficieCommuneAcheteur",
+                            "description": ""
+                        },
+                        "populationcommuneacheteur": {
+                            "type": "number",
+                            "title": "populationCommuneAcheteur",
+                            "description": ""
+                        },
+                        "geoloccommuneacheteur": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geolocCommuneAcheteur",
+                            "description": ""
+                        },
+                        "typeidentifiantetablissement": {
+                            "type": "string",
+                            "title": "typeIdentifiantEtablissement",
+                            "description": ""
+                        },
+                        "siretetablissement": {
+                            "type": "string",
+                            "title": "siretEtablissement",
+                            "description": ""
+                        },
+                        "siretetablissementvalide": {
+                            "type": "string",
+                            "title": "siretEtablissementValide",
+                            "description": ""
+                        },
+                        "sirenetablissement": {
+                            "type": "string",
+                            "title": "sirenEtablissement",
+                            "description": ""
+                        },
+                        "nicetablissement": {
+                            "type": "string",
+                            "title": "nicEtablissement",
+                            "description": ""
+                        },
+                        "sirenetablissementvalide": {
+                            "type": "string",
+                            "title": "sirenEtablissementValide",
+                            "description": ""
+                        },
+                        "categorieetablissement": {
+                            "type": "string",
+                            "title": "categorieEtablissement",
+                            "description": ""
+                        },
+                        "denominationsocialeetablissement": {
+                            "type": "string",
+                            "title": "denominationSocialeEtablissement",
+                            "description": ""
+                        },
+                        "coderegionetablissement": {
+                            "type": "integer",
+                            "title": "codeRegionEtablissement",
+                            "description": ""
+                        },
+                        "libelleregionetablissement": {
+                            "type": "string",
+                            "title": "libelleRegionEtablissement",
+                            "description": ""
+                        },
+                        "libelledepartementetablissement": {
+                            "type": "string",
+                            "title": "libelleDepartementEtablissement",
+                            "description": ""
+                        },
+                        "departementetablissement": {
+                            "type": "string",
+                            "title": "departementEtablissement",
+                            "description": ""
+                        },
+                        "libellearrondissementetablissement": {
+                            "type": "string",
+                            "title": "libelleArrondissementEtablissement",
+                            "description": ""
+                        },
+                        "codearrondissementetablissement": {
+                            "type": "integer",
+                            "title": "codeArrondissementEtablissement",
+                            "description": ""
+                        },
+                        "codepostaletablissement": {
+                            "type": "string",
+                            "title": "codePostalEtablissement",
+                            "description": ""
+                        },
+                        "adresseetablissement": {
+                            "type": "string",
+                            "title": "adresseEtablissement",
+                            "description": ""
+                        },
+                        "communeetablissement": {
+                            "type": "string",
+                            "title": "communeEtablissement",
+                            "description": ""
+                        },
+                        "codecommuneetablissement": {
+                            "type": "string",
+                            "title": "codeCommuneEtablissement",
+                            "description": ""
+                        },
+                        "codetypeetablissement": {
+                            "type": "string",
+                            "title": "codeTypeEtablissement",
+                            "description": ""
+                        },
+                        "superficiecommuneetablissement": {
+                            "type": "number",
+                            "title": "superficieCommuneEtablissement",
+                            "description": ""
+                        },
+                        "populationcommuneetablissement": {
+                            "type": "number",
+                            "title": "populationCommuneEtablissement",
+                            "description": ""
+                        },
+                        "distanceacheteuretablissement": {
+                            "type": "number",
+                            "title": "distanceAcheteurEtablissement",
+                            "description": ""
+                        },
+                        "geoloccommuneetablissement": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geolocCommuneEtablissement",
+                            "description": ""
+                        },
+                        "typeidentifiant_cotitulaire1": {
+                            "type": "string",
+                            "title": "typeIdentifiant_cotitulaire1",
+                            "description": ""
+                        },
+                        "id_cotitulaire1": {
+                            "type": "string",
+                            "title": "id_cotitulaire1",
+                            "description": ""
+                        },
+                        "denominationsociale_cotitulaire1": {
+                            "type": "string",
+                            "title": "denominationSociale_cotitulaire1",
+                            "description": ""
+                        },
+                        "typeidentifiant_cotitulaire2": {
+                            "type": "string",
+                            "title": "typeIdentifiant_cotitulaire2",
+                            "description": ""
+                        },
+                        "id_cotitulaire2": {
+                            "type": "string",
+                            "title": "id_cotitulaire2",
+                            "description": ""
+                        },
+                        "denominationsociale_cotitulaire2": {
+                            "type": "string",
+                            "title": "denominationSociale_cotitulaire2",
+                            "description": ""
+                        },
+                        "typeidentifiant_cotitulaire3": {
+                            "type": "string",
+                            "title": "typeIdentifiant_cotitulaire3",
+                            "description": ""
+                        },
+                        "id_cotitulaire3": {
+                            "type": "string",
+                            "title": "id_cotitulaire3",
+                            "description": ""
+                        },
+                        "denominationsociale_cotitulaire3": {
+                            "type": "string",
+                            "title": "denominationSociale_cotitulaire3",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

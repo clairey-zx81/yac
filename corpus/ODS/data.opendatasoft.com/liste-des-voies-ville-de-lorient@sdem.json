@@ -1,0 +1,464 @@
+{
+    "title": "liste-des-voies-ville-de-lorient@sdem",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/liste-des-voies-ville-de-lorient@sdem"
+        }
+    ],
+    "definitions": {
+        "liste-des-voies-ville-de-lorient@sdem": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/liste-des-voies-ville-de-lorient@sdem_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "liste-des-voies-ville-de-lorient@sdem_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "cle_interop": {
+                            "type": "string",
+                            "title": "Clé nationale d'interopérabilité des voies",
+                            "description": "Clé nationale d'intéropérabilité"
+                        },
+                        "rivoli": {
+                            "type": "string",
+                            "title": "Code Rivoli",
+                            "description": "Code rivoli"
+                        },
+                        "nom": {
+                            "type": "string",
+                            "title": "Nom de la voie",
+                            "description": "Nom complet de la voie"
+                        },
+                        "nature": {
+                            "type": "string",
+                            "title": "Nature de la voie",
+                            "description": "Nature de la voie"
+                        },
+                        "cle": {
+                            "type": "string",
+                            "title": "Mot clé de la voie",
+                            "description": "Nom clé de la voie"
+                        },
+                        "index": {
+                            "type": "string",
+                            "title": "Index des voies",
+                            "description": "Index de la voie"
+                        },
+                        "longueur": {
+                            "type": "integer",
+                            "title": "Longueur en (m)",
+                            "description": "Longueur de  voie mesurée en mètre"
+                        },
+                        "index_plan": {
+                            "type": "string",
+                            "title": "Index_plan_de_ville",
+                            "description": "Indexation par rapport au plan de ville"
+                        },
+                        "commune_nom": {
+                            "type": "string",
+                            "title": "Nom de la commune",
+                            "description": "Nom officiel de la commune"
+                        },
+                        "source": {
+                            "type": "string",
+                            "title": "Nom de l'organisme ayant créé ou diffusé la voie",
+                            "description": "Nom de l’organisme ayant créé ou diffusé ce nom de voie"
+                        },
+                        "quartier_nom": {
+                            "type": "string",
+                            "title": "Nom du quartier",
+                            "description": "Nom du quartier recoupant principalement la voie"
+                        },
+                        "iris_nom": {
+                            "type": "string",
+                            "title": "Nom de l'IRIS",
+                            "description": "Nom de l'IRIS recoupant principalement la voie"
+                        },
+                        "url_notice": {
+                            "type": "string",
+                            "title": "Notice explicative sur l'origine de la dénomination",
+                            "description": "Notice explicative du nom de voie"
+                        },
+                        "date_delib": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de la dernière délibération",
+                            "description": "Date de la dernière délibération"
+                        },
+                        "date_create": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de création en base de données",
+                            "description": "date de création en base de données"
+                        },
+                        "date_der_maj": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de dernière mise à jour de la voie",
+                            "description": "Date de dernière mise à jour en base de données"
+                        },
+                        "long_centroid": {
+                            "type": "number",
+                            "title": "Longitude (centroïde de la voie)",
+                            "description": "Longitude du centroïde de la voie"
+                        },
+                        "lat_centroid": {
+                            "type": "number",
+                            "title": "Latitude (centroïde de la voie)",
+                            "description": "Latitude du centroïde de la voie"
+                        },
+                        "geo": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo",
+                            "description": "Forme géométrique"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

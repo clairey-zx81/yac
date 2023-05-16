@@ -1,0 +1,541 @@
+{
+    "title": "parque-viviendas@dipcas",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/parque-viviendas@dipcas"
+        }
+    ],
+    "definitions": {
+        "parque-viviendas@dipcas": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/parque-viviendas@dipcas_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "parque-viviendas@dipcas_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "texto": {
+                            "type": "string",
+                            "title": "MUNICIPIO",
+                            "description": ""
+                        },
+                        "cod_mun": {
+                            "type": "string",
+                            "title": "COD_MUN",
+                            "description": "Código INE municipio."
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "vtotal": {
+                            "type": "integer",
+                            "title": "VTOTAL",
+                            "description": "Viviendas totales del municipio."
+                        },
+                        "vdisemina": {
+                            "type": "integer",
+                            "title": "VDISEMINA",
+                            "description": "Viviendas ubicadas en diseminado. Se entiende por diseminado aquellas viviendas que distan más de 200 metros de los límites exteriores del núcleo de población."
+                        },
+                        "vnucelos": {
+                            "type": "integer",
+                            "title": "VNUCLEOS",
+                            "description": "Viviendas ubicadas en núcleos de población. Se considera la definición de núcleo de población establecida por el modelo de datos EIEL. "
+                        },
+                        "vprov": {
+                            "type": "integer",
+                            "title": "VPROV",
+                            "description": "Viviendas totales en la provincia, obtenido de la suma de los totales de cada municipio sin considerar Vilareal y Castelló."
+                        },
+                        "vpor": {
+                            "type": "number",
+                            "title": "VPOR",
+                            "description": "Porcentaje de viviendas del municipio respecto al total provincial"
+                        },
+                        "hab_v": {
+                            "type": "number",
+                            "title": "HAB_V",
+                            "description": "Número de habitantes/Número de viviendas"
+                        },
+                        "habitantes": {
+                            "type": "integer",
+                            "title": "HABITANTES",
+                            "description": "Habitantes del municipio, padrón"
+                        },
+                        "ruinoso": {
+                            "type": "integer",
+                            "title": "RUINOSO",
+                            "description": "Número de viviendas con estado ruinoso."
+                        },
+                        "deficiente": {
+                            "type": "integer",
+                            "title": "DEFICIENTE",
+                            "description": "Número de viviendas con estado deficiente. "
+                        },
+                        "funcional": {
+                            "type": "integer",
+                            "title": "FUNCIONAL",
+                            "description": "Número de viviendas con estado funcional"
+                        },
+                        "otro": {
+                            "type": "integer",
+                            "title": "OTRO",
+                            "description": "Número de viviendas con estado otro."
+                        },
+                        "fun_por": {
+                            "type": "number",
+                            "title": "FUN_POR",
+                            "description": "Porcentaje de viviendas en estado funcional respecto del total municipal."
+                        },
+                        "unifamilia": {
+                            "type": "integer",
+                            "title": "UNIFAMILIA",
+                            "description": "Número de viviendas unifamiliares en el municipio. No se consideran como viviendas unifamiliares aquellas incluidas en: parcelas con varios inmuebles (división horizontal). "
+                        },
+                        "uni_por": {
+                            "type": "number",
+                            "title": "UNI_POR",
+                            "description": "Porcentaje de viviendas unifamiliares respecto del total municipal."
+                        },
+                        "mas_50": {
+                            "type": "integer",
+                            "title": "MAS_50",
+                            "description": "Número de viviendas con más de 50 años."
+                        },
+                        "an40_50": {
+                            "type": "integer",
+                            "title": "AN40_50",
+                            "description": "Número de viviendas con más de 40 años y hasta 50 años."
+                        },
+                        "an20_40": {
+                            "type": "integer",
+                            "title": "AN20_40",
+                            "description": "Número de viviendas con más de 20 años y hasta 40 años."
+                        },
+                        "an5_20": {
+                            "type": "integer",
+                            "title": "AN5_20",
+                            "description": "Número de viviendas con más de 5 años y hasta 20 años."
+                        },
+                        "menos_5": {
+                            "type": "integer",
+                            "title": "MENOS_5",
+                            "description": "Número de viviendas con 5 o menos años."
+                        },
+                        "descon": {
+                            "type": "integer",
+                            "title": "DESCON",
+                            "description": "Viviendas con antigüedad desconocida. "
+                        },
+                        "mas_50_pc": {
+                            "type": "number",
+                            "title": "MAS_50_PC",
+                            "description": "Porcentaje de viviendas con más de 50 años de antigüedad respecto del total municipal."
+                        },
+                        "an40_50_pc": {
+                            "type": "number",
+                            "title": "AN40_50_PC",
+                            "description": "Porcentaje de viviendas con más de 40 y hasta 50 años de antigüedad respecto del total municipal."
+                        },
+                        "an20_40_pc": {
+                            "type": "number",
+                            "title": "AN20_40_PC",
+                            "description": "Porcentaje de viviendas con más de 20 y hasta 40 años de antigüedad respecto del total municipal."
+                        },
+                        "an5_20_pc": {
+                            "type": "number",
+                            "title": "AN5_20_PC",
+                            "description": "Porcentaje de viviendas con más de 5 y hasta 20 años de antigüedad respecto del total municipal."
+                        },
+                        "menos_5_pc": {
+                            "type": "number",
+                            "title": "MENOS_5_PC",
+                            "description": "Porcentaje de viviendas con 5 años de antigüedad o menos respecto del total municipal."
+                        },
+                        "descon_pc": {
+                            "type": "number",
+                            "title": "DESCON_PC",
+                            "description": "Porcentaje de viviendas con antigüedad desconocida respecto al total municipal."
+                        },
+                        "suelo_urba": {
+                            "type": "number",
+                            "title": "SUELO_URBA",
+                            "description": "Superficie en ha de suelo urbano del municipio."
+                        },
+                        "viv_hsu": {
+                            "type": "number",
+                            "title": "VIV_HSU",
+                            "description": "Viviendas totales / superficie de suelo urbano"
+                        },
+                        "shape_area": {
+                            "type": "number",
+                            "title": "SHAPE_AREA",
+                            "description": "Superficie de la entidad"
+                        },
+                        "shape_len": {
+                            "type": "number",
+                            "title": "SHAPE_LEN",
+                            "description": "Perímetro de la entidad"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

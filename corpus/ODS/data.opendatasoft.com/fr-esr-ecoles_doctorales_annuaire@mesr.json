@@ -1,0 +1,591 @@
+{
+    "title": "fr-esr-ecoles_doctorales_annuaire@mesr",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/fr-esr-ecoles_doctorales_annuaire@mesr"
+        }
+    ],
+    "definitions": {
+        "fr-esr-ecoles_doctorales_annuaire@mesr": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/fr-esr-ecoles_doctorales_annuaire@mesr_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "fr-esr-ecoles_doctorales_annuaire@mesr_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "numero_ed": {
+                            "type": "integer",
+                            "title": "Numéro ED",
+                            "description": ""
+                        },
+                        "libelle_ed": {
+                            "type": "string",
+                            "title": "Libellé ED",
+                            "description": ""
+                        },
+                        "sigle_ed": {
+                            "type": "string",
+                            "title": "Sigle ED",
+                            "description": ""
+                        },
+                        "discipline_principale": {
+                            "type": "string",
+                            "title": "Discipline principale",
+                            "description": ""
+                        },
+                        "etablissement_support": {
+                            "type": "string",
+                            "title": "Etablissement support",
+                            "description": "Établissement accrédité à délivrer le doctorat "
+                        },
+                        "etablissements_coaccredites": {
+                            "type": "string",
+                            "title": "Etablissements coaccrédités",
+                            "description": "Liste des établissements co-accrédités à délivrer le doctorat "
+                        },
+                        "etablissements_associes": {
+                            "type": "string",
+                            "title": "Etablissements associés",
+                            "description": "Liste des établissements partenaires"
+                        },
+                        "disciplines_secondaires": {
+                            "type": "string",
+                            "title": "Disciplines secondaires",
+                            "description": ""
+                        },
+                        "annee_de_creation": {
+                            "type": "string",
+                            "title": "Année de création",
+                            "description": "Année de création de l'ED"
+                        },
+                        "annee_d_accreditation": {
+                            "type": "string",
+                            "title": "Année d'accréditation",
+                            "description": "Année de dernière accréditation de l'ED"
+                        },
+                        "duree_d_accreditation": {
+                            "type": "string",
+                            "title": "Durée d'accréditation",
+                            "description": "durée d'accréditation de l'ED"
+                        },
+                        "academie": {
+                            "type": "string",
+                            "title": "Académie",
+                            "description": ""
+                        },
+                        "region": {
+                            "type": "string",
+                            "title": "Région",
+                            "description": ""
+                        },
+                        "departement": {
+                            "type": "string",
+                            "title": "Département",
+                            "description": ""
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "commune",
+                            "description": ""
+                        },
+                        "nom_laboratoires": {
+                            "type": "string",
+                            "title": "Laboratoires",
+                            "description": "Laboratoires liés à l'école doctorale contractualisés par le MESRI et autres structures de recherches"
+                        },
+                        "telephone": {
+                            "type": "string",
+                            "title": "Téléphone",
+                            "description": ""
+                        },
+                        "site_web": {
+                            "type": "string",
+                            "title": "Site web",
+                            "description": "URL de l'école doctorale"
+                        },
+                        "adresse_postale": {
+                            "type": "string",
+                            "title": "Adresse postale",
+                            "description": "Adresse postale de l'école doctorale"
+                        },
+                        "email": {
+                            "type": "string",
+                            "title": "EMAIL",
+                            "description": ""
+                        },
+                        "coordonnees_geographiques": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "coordonnées géographiques",
+                            "description": ""
+                        },
+                        "toutes_disciplines": {
+                            "type": "string",
+                            "title": "Toutes disciplines",
+                            "description": ""
+                        },
+                        "tous_etablissements": {
+                            "type": "string",
+                            "title": "Tous établissements",
+                            "description": "Liste des établissements co-accrédités à délivrer le doctorat et partenaires"
+                        },
+                        "code_etablissement_support": {
+                            "type": "string",
+                            "title": "Code établissement support",
+                            "description": "code UAI "
+                        },
+                        "code_commune": {
+                            "type": "string",
+                            "title": "code_commune",
+                            "description": "Code INSEE de la commune"
+                        },
+                        "code_unite_urbaine": {
+                            "type": "string",
+                            "title": "code_unite_urbaine",
+                            "description": ""
+                        },
+                        "code_departement": {
+                            "type": "string",
+                            "title": "code_departement",
+                            "description": ""
+                        },
+                        "code_academie": {
+                            "type": "string",
+                            "title": "code_academie",
+                            "description": ""
+                        },
+                        "code_region": {
+                            "type": "string",
+                            "title": "code_region",
+                            "description": ""
+                        },
+                        "code_etablissements_associes": {
+                            "type": "string",
+                            "title": "code_etablissements_associes",
+                            "description": "code UAI"
+                        },
+                        "prenom_responsable_ed": {
+                            "type": "string",
+                            "title": "Prénom responsable ED",
+                            "description": ""
+                        },
+                        "nom_responsable_ed": {
+                            "type": "string",
+                            "title": "Nom responsable ED",
+                            "description": ""
+                        },
+                        "code_etablissements_coaccredites": {
+                            "type": "string",
+                            "title": "Code établissements coaccrédités",
+                            "description": "code UAI"
+                        },
+                        "civilite": {
+                            "type": "string",
+                            "title": "Civilité",
+                            "description": ""
+                        },
+                        "unite_urbaine_ou_commune_rurale": {
+                            "type": "string",
+                            "title": "Unite urbaine ou commune rurale",
+                            "description": ""
+                        },
+                        "code_toutes_disc": {
+                            "type": "string",
+                            "title": "code_toutes_disc",
+                            "description": ""
+                        },
+                        "code_disc_pr": {
+                            "type": "number",
+                            "title": "code_disc_pr",
+                            "description": ""
+                        },
+                        "code_disc_sec": {
+                            "type": "string",
+                            "title": "code_disc_sec",
+                            "description": ""
+                        },
+                        "id_tous_etablissements": {
+                            "type": "string",
+                            "title": "id_tous_etablissements",
+                            "description": "identifiants internes des établissements"
+                        },
+                        "code_tous_etablissements": {
+                            "type": "string",
+                            "title": "code_tous_etablissements",
+                            "description": "code UAI des établissements"
+                        },
+                        "id_etablissement_support": {
+                            "type": "string",
+                            "title": "id_etablissement_support",
+                            "description": "identifiant interne"
+                        },
+                        "id_etablissements_coaccredites": {
+                            "type": "string",
+                            "title": "id_etablissements_coaccredites",
+                            "description": "identifiant interne"
+                        },
+                        "id_etablissements_associes": {
+                            "type": "string",
+                            "title": "id_etablissements_associes",
+                            "description": "identifiant interne"
+                        },
+                        "identifiant_laboratoires": {
+                            "type": "string",
+                            "title": "identifiant laboratoires",
+                            "description": "identifiant RNSR des laboratoires"
+                        },
+                        "id_ed": {
+                            "type": "string",
+                            "title": "id_ed",
+                            "description": "identifiant interne de l'ED"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

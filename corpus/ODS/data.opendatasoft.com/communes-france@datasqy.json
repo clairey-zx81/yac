@@ -1,0 +1,572 @@
+{
+    "title": "communes-france@datasqy",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/communes-france@datasqy"
+        }
+    ],
+    "definitions": {
+        "communes-france@datasqy": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/communes-france@datasqy_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "communes-france@datasqy_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "year": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année",
+                            "description": ""
+                        },
+                        "reg_code": {
+                            "type": "string",
+                            "title": "Code Officiel Région",
+                            "description": ""
+                        },
+                        "reg_name": {
+                            "type": "string",
+                            "title": "Nom Officiel Région",
+                            "description": ""
+                        },
+                        "dep_code": {
+                            "type": "string",
+                            "title": "Code Officiel Département",
+                            "description": ""
+                        },
+                        "dep_name": {
+                            "type": "string",
+                            "title": "Nom Officiel Département",
+                            "description": ""
+                        },
+                        "arrdep_code": {
+                            "type": "string",
+                            "title": "Code Officiel Arrondissement départemental",
+                            "description": ""
+                        },
+                        "arrdep_name": {
+                            "type": "string",
+                            "title": "Nom Officiel Arrondissement départemental",
+                            "description": ""
+                        },
+                        "ze2020_code": {
+                            "type": "string",
+                            "title": "Code Officiel Zone emploi 2020",
+                            "description": ""
+                        },
+                        "ze2020_name": {
+                            "type": "string",
+                            "title": "Nom Officiel Zone emploi 2020",
+                            "description": ""
+                        },
+                        "bv2012_code": {
+                            "type": "string",
+                            "title": "Code Officiel Bassin vie 2012",
+                            "description": ""
+                        },
+                        "bv2012_name": {
+                            "type": "string",
+                            "title": "Nom Officiel Bassin vie 2012",
+                            "description": ""
+                        },
+                        "epci_code": {
+                            "type": "string",
+                            "title": "Code Officiel EPCI",
+                            "description": ""
+                        },
+                        "epci_name": {
+                            "type": "string",
+                            "title": "Nom Officiel EPCI",
+                            "description": ""
+                        },
+                        "ept_code": {
+                            "type": "string",
+                            "title": "Code Officiel EPT",
+                            "description": ""
+                        },
+                        "ept_name": {
+                            "type": "string",
+                            "title": "Nom Officiel EPT",
+                            "description": ""
+                        },
+                        "com_code": {
+                            "type": "string",
+                            "title": "Code Officiel Commune",
+                            "description": ""
+                        },
+                        "com_current_code": {
+                            "type": "string",
+                            "title": "Code Officiel Courant Commune",
+                            "description": ""
+                        },
+                        "com_name": {
+                            "type": "string",
+                            "title": "Nom Officiel Commune",
+                            "description": ""
+                        },
+                        "com_name_upper": {
+                            "type": "string",
+                            "title": "Nom Officiel Commune Majuscule",
+                            "description": ""
+                        },
+                        "com_name_lower": {
+                            "type": "string",
+                            "title": "Nom Officiel Commune Minuscule",
+                            "description": ""
+                        },
+                        "com_area_code": {
+                            "type": "string",
+                            "title": "Code Iso 3166-3 Zone",
+                            "description": ""
+                        },
+                        "com_type": {
+                            "type": "string",
+                            "title": "Type",
+                            "description": ""
+                        },
+                        "ze2010_name": {
+                            "type": "string",
+                            "title": "com_ze2010_name",
+                            "description": ""
+                        },
+                        "ze2010_code": {
+                            "type": "string",
+                            "title": "com_ze2010_code",
+                            "description": ""
+                        },
+                        "com_cataeu2010_code": {
+                            "type": "string",
+                            "title": "Code CATAEU2010",
+                            "description": "Ce code indique la catégorie de la commune au sein du découpage en aires urbaines."
+                        },
+                        "com_cataeu2010_name": {
+                            "type": "string",
+                            "title": "Libellé CATAEU2010",
+                            "description": ""
+                        },
+                        "com_uu2010_code": {
+                            "type": "string",
+                            "title": "Code UU2010",
+                            "description": "Code Unité Urbaine 2010"
+                        },
+                        "com_uu2010_status": {
+                            "type": "string",
+                            "title": "Statut Commune UU2010",
+                            "description": "Rural / Urbain"
+                        },
+                        "com_au2010_code": {
+                            "type": "string",
+                            "title": "Code AU2010",
+                            "description": "Aire Urbaine 2010"
+                        },
+                        "com_cateaav2020_code": {
+                            "type": "string",
+                            "title": "Code CATEAAV2020",
+                            "description": "ce code indique la catégorie de la commune au sein du découpage en aires d'attraction des villes."
+                        },
+                        "com_cateaav2020_name": {
+                            "type": "string",
+                            "title": "Libellé CATEAAV2020",
+                            "description": ""
+                        },
+                        "com_uu2020_code": {
+                            "type": "string",
+                            "title": "Code UU2020",
+                            "description": "Code Unité Urbaine 2020"
+                        },
+                        "com_uu2020_status": {
+                            "type": "string",
+                            "title": "Statut Commune UU2020",
+                            "description": "Rural / Urbain"
+                        },
+                        "com_aav2020_code": {
+                            "type": "string",
+                            "title": "Code AAV2020",
+                            "description": "Code géographique de l'aire d'attraction des villes 2020"
+                        },
+                        "com_cv_code": {
+                            "type": "string",
+                            "title": "Code Canton Ville",
+                            "description": ""
+                        },
+                        "com_in_ctu": {
+                            "type": "string",
+                            "title": "Fait Partie d'une CTU",
+                            "description": ""
+                        },
+                        "com_siren_code": {
+                            "type": "string",
+                            "title": "SIREN",
+                            "description": ""
+                        },
+                        "com_is_mountain_area": {
+                            "type": "string",
+                            "title": "Zone Montagne",
+                            "description": "Zone de montagne au 1er Janvier 2017"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,541 @@
+{
+    "title": "background-grids-pollutant-mapping@bristol",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/background-grids-pollutant-mapping@bristol"
+        }
+    ],
+    "definitions": {
+        "background-grids-pollutant-mapping@bristol": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/background-grids-pollutant-mapping@bristol_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "background-grids-pollutant-mapping@bristol_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "x": {
+                            "type": "integer",
+                            "title": "X",
+                            "description": "Centre point of grid square X"
+                        },
+                        "y": {
+                            "type": "integer",
+                            "title": "Y",
+                            "description": "Centre point of grid square Y"
+                        },
+                        "id": {
+                            "type": "string",
+                            "title": "ID",
+                            "description": "Identifier based on coordinates"
+                        },
+                        "gridid": {
+                            "type": "integer",
+                            "title": "GRIDID",
+                            "description": "Unique identifier as integer increment"
+                        },
+                        "no2_2018": {
+                            "type": "number",
+                            "title": "no2_2018",
+                            "description": ""
+                        },
+                        "no2_2019": {
+                            "type": "number",
+                            "title": "no2_2019",
+                            "description": "NO2 in 2019"
+                        },
+                        "no2_2020": {
+                            "type": "number",
+                            "title": "no2_2020",
+                            "description": "NO2 in 2020"
+                        },
+                        "no2_2021": {
+                            "type": "number",
+                            "title": "no2_2021",
+                            "description": "NO2 in 2021"
+                        },
+                        "no2_2022": {
+                            "type": "number",
+                            "title": "no2_2022",
+                            "description": "NO2 in 2022"
+                        },
+                        "no2_2023": {
+                            "type": "number",
+                            "title": "no2_2023",
+                            "description": "NO2 in 2023"
+                        },
+                        "no2_2024": {
+                            "type": "number",
+                            "title": "no2_2024",
+                            "description": ""
+                        },
+                        "nox_2018": {
+                            "type": "number",
+                            "title": "nox_2018",
+                            "description": ""
+                        },
+                        "nox_2019": {
+                            "type": "number",
+                            "title": "nox_2019",
+                            "description": ""
+                        },
+                        "nox_2020": {
+                            "type": "number",
+                            "title": "nox_2020",
+                            "description": ""
+                        },
+                        "nox_2021": {
+                            "type": "number",
+                            "title": "nox_2021",
+                            "description": ""
+                        },
+                        "nox_2022": {
+                            "type": "number",
+                            "title": "nox_2022",
+                            "description": ""
+                        },
+                        "nox_2023": {
+                            "type": "number",
+                            "title": "nox_2023",
+                            "description": ""
+                        },
+                        "nox_2024": {
+                            "type": "number",
+                            "title": "nox_2024",
+                            "description": ""
+                        },
+                        "pm10_2018": {
+                            "type": "number",
+                            "title": "pm10_2018",
+                            "description": ""
+                        },
+                        "pm10_2019": {
+                            "type": "number",
+                            "title": "pm10_2019",
+                            "description": "PM10 in 2019"
+                        },
+                        "pm10_2020": {
+                            "type": "number",
+                            "title": "pm10_2020",
+                            "description": "PM10 in 2020"
+                        },
+                        "pm10_2021": {
+                            "type": "number",
+                            "title": "pm10_2021",
+                            "description": "PM10 in 2021"
+                        },
+                        "pm10_2022": {
+                            "type": "number",
+                            "title": "pm10_2022",
+                            "description": "PM10 in 2022"
+                        },
+                        "pm10_2023": {
+                            "type": "number",
+                            "title": "pm10_2023",
+                            "description": "PM10 in 2023"
+                        },
+                        "pm10_2024": {
+                            "type": "number",
+                            "title": "pm10_2024",
+                            "description": ""
+                        },
+                        "pm2_5_2018": {
+                            "type": "number",
+                            "title": "pm2.5_2018",
+                            "description": ""
+                        },
+                        "pm2_5_2019": {
+                            "type": "number",
+                            "title": "pm2.5_2019",
+                            "description": "PM2.5 in 2019"
+                        },
+                        "pm2_5_2020": {
+                            "type": "number",
+                            "title": "pm2.5_2020",
+                            "description": "PM2.5in 2020"
+                        },
+                        "pm2_5_2021": {
+                            "type": "number",
+                            "title": "pm2.5_2021",
+                            "description": "PM2.5 in 2021"
+                        },
+                        "pm2_5_2022": {
+                            "type": "number",
+                            "title": "pm2.5_2022",
+                            "description": "PM2.5 in 2022"
+                        },
+                        "pm2_5_2023": {
+                            "type": "number",
+                            "title": "pm2.5_2023",
+                            "description": "PM2.5 in 2023"
+                        },
+                        "pm2_5_2024": {
+                            "type": "number",
+                            "title": "pm2.5_2024",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

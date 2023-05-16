@@ -1,0 +1,824 @@
+{
+    "title": "stationnement-en-ouvrage@parisdata",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/stationnement-en-ouvrage@parisdata"
+        }
+    ],
+    "definitions": {
+        "stationnement-en-ouvrage@parisdata": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/stationnement-en-ouvrage@parisdata_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "stationnement-en-ouvrage@parisdata_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "title": "Identifiant",
+                            "description": "Schéma BNLS -L'identifiant unique du parking, délivré par le Point d’accès national. `INSEE-P-xxx` où `INSEE` est le code INSEE de la commune et `xxx` est le numéro d’ordre sur 3 chiffres"
+                        },
+                        "nom": {
+                            "type": "string",
+                            "title": "Nom parc",
+                            "description": "Schéma BNLS - Nom du parking, ou nom donné dans son utilisation quotidienne en majuscules et sans accents. Recommandation : inutile de répéter le mot parking et ne pas dépasser les 64 caractères"
+                        },
+                        "insee": {
+                            "type": "string",
+                            "title": "INSEE",
+                            "description": "Schéma BNLS - Le code INSEE de la commune où le parking est localisé"
+                        },
+                        "adresse": {
+                            "type": "string",
+                            "title": "Adresse principale",
+                            "description": "Schéma BNLS - L'adresse de l’entrée principale du parking, suivi du code postal et du nom de la Commune (séparé par des virgules). Nomenclature pour les lieux proches des sorties d'autoroute ou de nationale : A11 Sortie 7 Le Mans Nord. Nomenclature pour les zones rurales sans adresse : \\\"Croisement de route_1 - route_2\\\" ou \\\"Le long de route_X après le passage à niveau\\\".\""
+                        },
+                        "url": {
+                            "type": "string",
+                            "title": "URL ressource services",
+                            "description": "Schéma BNLS - Une adresse URL (Uniform Resource Locator) pointant vers une ressource disponible sur Internet où l'on peut obtenir d'autres informations pertinente relatives aux horaires d’ouverture et fermeture du parc, tarifs appliquées dans le parc, ressource disponible sur Internet où l'on peut réserver en ligne la place de parking."
+                        },
+                        "type_usagers": {
+                            "type": "string",
+                            "title": "Type usagers",
+                            "description": "Schéma BNLS - Type d'usagers autorisés à entrer dans le parc"
+                        },
+                        "gratuit": {
+                            "type": "integer",
+                            "title": "Gratuit",
+                            "description": "Schéma BNLS - Indiquer si la gratuité est applicable à tous les usagers (hors abonnés, résidents, PMR) 1=Oui et 0 = Non . Il est possible d'indiquer dans le champ `info` toute information supplémentaire relative aux particularités et exceptions (par exemple : \\\"Gratuité le samedi matin de 9h à 13h\\\")"
+                        },
+                        "nb_places": {
+                            "type": "integer",
+                            "title": "Nbre total places",
+                            "description": "Schéma BNLS - Nombre total de places pour les voitures tout statut (PMR, covoiturage, autopartage, voitures électriques)"
+                        },
+                        "nb_pr": {
+                            "type": "integer",
+                            "title": "Nbre place parc relais",
+                            "description": "Schéma BNLS - Nombre de places avec le tarif parc relais"
+                        },
+                        "nb_pmr": {
+                            "type": "integer",
+                            "title": "Nbre place PMR",
+                            "description": "Schéma BNLS - Nombre total de places réservées aux personnes à mobilité réduite (y compris PMR électrique)"
+                        },
+                        "nb_voitures_electriques": {
+                            "type": "integer",
+                            "title": "Nbre place voit elec",
+                            "description": "Schéma BNLS - Nombre total de places réservées aux voitures électriques, disposant d’une infrastructure de recharge opérationnelle (pas les PMR électrique)"
+                        },
+                        "nb_velo": {
+                            "type": "integer",
+                            "title": "Nbre place vélo",
+                            "description": "Schéma BNLS - Le nombre de vélos maximum pouvant y être rangés. Pour les appuis-vélos qui permettent d’attacher deux vélos (e.g arceau) : multiplier le nombre d’appuis par 2 (e.g. pour 5 arceaux = une capacité de 10 places). Les rateliers permettent d'attacher 1 vélo"
+                        },
+                        "nb_2r_el": {
+                            "type": "integer",
+                            "title": "Nbre place velo-2rm elec",
+                            "description": "Schéma BNLS - Nombre d’emplacements vélos ou deux roues motorisés disposant d’une prise dédiée"
+                        },
+                        "nb_autopartage": {
+                            "type": "integer",
+                            "title": "Nbre place autopartage",
+                            "description": "Schéma BNLS - Nombre total de places réservées aux voitures en autopartage"
+                        },
+                        "nb_2_rm": {
+                            "type": "integer",
+                            "title": "Nbre place 2rm",
+                            "description": "Schéma BNLS - Nombre total de places réservées aux motos et scooters"
+                        },
+                        "nb_covoit": {
+                            "type": "integer",
+                            "title": "Nbre place covoiturage",
+                            "description": "Schéma BNLS - Nombre total de places réservées au covoiturage"
+                        },
+                        "hauteur_max": {
+                            "type": "integer",
+                            "title": "Hauteur max",
+                            "description": "Schéma BNLS - Hauteur maximale autorisée à la fois pour l'accès au parking et pour le stationnement du véhicule, en centimètres"
+                        },
+                        "num_siret": {
+                            "type": "string",
+                            "title": "Numéro SIRET",
+                            "description": "Schéma BNLS - Numéro SIRET de la société ou de la collectivité chargée de la gestion de l’ouvrage (14 chiffres)"
+                        },
+                        "xlong": {
+                            "type": "number",
+                            "title": "X longitude parc WGS84",
+                            "description": "Schéma BNLS - La longitude en degrés décimaux virgule comme séparateur décimal, avec au moins 4 chiffres après le point décimal) de la localisation de l'entrée principale du lieu exprimée dans le système de coordonnées WGS84"
+                        },
+                        "ylat": {
+                            "type": "number",
+                            "title": "Y latitude parc WGS84",
+                            "description": "Schéma BNLS - La latitude en degrés décimaux (virgule comme séparateur décimal, avec au moins 4 chiffres après le point décimal) de la localisation de l'entrée principale du lieu exprimée dans le système de coordonnées WGS84"
+                        },
+                        "tarif_pmr": {
+                            "type": "string",
+                            "title": "Tarif PMR",
+                            "description": "Schéma BNLS - Type de tarif horaire pour les PMR"
+                        },
+                        "tarif_1h": {
+                            "type": "number",
+                            "title": "Tarif_1h",
+                            "description": "Schéma BNLS - Tarif à payer pour 1h de stationnement, en euros TTC (durée gratuite comprise, le cas échéant)"
+                        },
+                        "tarif_2h": {
+                            "type": "number",
+                            "title": "Tarif_2h",
+                            "description": "Schéma BNLS -Tarif à payer pour 2h de stationnement, en euros TTC (durée gratuite comprise, le cas échéant)"
+                        },
+                        "tarif_3h": {
+                            "type": "number",
+                            "title": "Tarif_3h",
+                            "description": "Schéma BNLS -Tarif à payer pour 3h de stationnement, en euros TTC (durée gratuite comprise, le cas échéant)"
+                        },
+                        "tarif_4h": {
+                            "type": "number",
+                            "title": "Tarif_4h",
+                            "description": "Schéma BNLS -Tarif à payer pour 4h de stationnement, en euros TTC (durée gratuite comprise, le cas échéant)"
+                        },
+                        "tarif_24h": {
+                            "type": "number",
+                            "title": "Tarif_24h",
+                            "description": "Schéma BNLS - Tarif à payer pour 24h de stationnement, en euros TTC (durée gratuite comprise, le cas échéant)"
+                        },
+                        "abo_resident": {
+                            "type": "number",
+                            "title": "Abonnement résident",
+                            "description": "Schéma BNLS -Abonnement mensuel-type pour un résident de la zone, en euros TTC. En cas de changement de tarif, préciser le tarif moyen sur l'année (prorata temporis).\", \"example\":\"60.99"
+                        },
+                        "abo_non_resident": {
+                            "type": "number",
+                            "title": "Abonnement non résident",
+                            "description": "Schéma BNLS - Abonnement mensuel-type pour un non-résident de la zone, en euros TTC. En cas de changement de tarif, préciser le tarif moyen sur l'année (prorata temporis).\", \"example\":\"79.99"
+                        },
+                        "type_ouvrage": {
+                            "type": "string",
+                            "title": "Type ouvrage",
+                            "description": "Schéma BNLS - Précision sur le type de construction de l'équipement"
+                        },
+                        "info": {
+                            "type": "string",
+                            "title": "Informations",
+                            "description": "Schéma BNLS - Faire remonter des informations ou commentaires, utiles pour un usager du parking, si les champs précédents ne correspondent pas. Si plusieurs informations sont renseignées, le séparateur est le point-virgule. Par exemple : gratuité le samedi matin de 9h à 12h, informations relatives aux services mis à disposition des usagers (présence d’agents de sécurité 24h… - le symbole\"|\" est le séparateur des contenus multivalués"
+                        },
+                        "id_entrees": {
+                            "type": "string",
+                            "title": "Identifiants entrées",
+                            "description": "Schéma VDP - N° identifiant des entrées,  le symbole\"|\" est le séparateur des contenus multivalués"
+                        },
+                        "adress_geo_entrees": {
+                            "type": "string",
+                            "title": "Adresses entrées",
+                            "description": "Schéma VDP - Adresses postales au plus près des entrées du parc,  le symbole\"|\" est le séparateur des contenus multivalués"
+                        },
+                        "arrdt": {
+                            "type": "string",
+                            "title": "Arrondissement",
+                            "description": "Schéma VDP - Arrondissement entrée principale"
+                        },
+                        "deleg": {
+                            "type": "string",
+                            "title": "Délégataire",
+                            "description": "Schéma VDP - Délégataire (gestionnaire du parc)"
+                        },
+                        "tel": {
+                            "type": "string",
+                            "title": "Téléphone",
+                            "description": "Schéma VDP - Téléphone du parc"
+                        },
+                        "horaire_na": {
+                            "type": "string",
+                            "title": "Horaire ouverture non abonnés",
+                            "description": "Schéma VDP - Horaires d'ouverture pour les non abonnés"
+                        },
+                        "asc_surf": {
+                            "type": "string",
+                            "title": "Ascenseur surface",
+                            "description": "Schéma VDP - Présence d'un ascenseur débouchant en surface"
+                        },
+                        "date_ta": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Date application tarif abonnement",
+                            "description": "Schéma VDP - Date d'application du tarif abonnement"
+                        },
+                        "ab_1m_e": {
+                            "type": "number",
+                            "title": "Abonnement mensuel",
+                            "description": "Schéma VDP - Tarif abonnement VL sans réservation 1 mois"
+                        },
+                        "ab_1a_e": {
+                            "type": "number",
+                            "title": "Abonnement annuel",
+                            "description": "Schéma VDP - Tarif abonnement VL sans réservation 1 an"
+                        },
+                        "tarif_pr": {
+                            "type": "string",
+                            "title": "Tarif VL petit rouleur",
+                            "description": "Schéma VDP - Existence d'un tarif Petits rouleurs VL"
+                        },
+                        "pr_1a_mine": {
+                            "type": "number",
+                            "title": "Tarif petit rouleur annuel mini",
+                            "description": "Schéma VDP - Tarif Petits Rouleurs annuel minimum VL"
+                        },
+                        "pr_1a_maxe": {
+                            "type": "number",
+                            "title": "Tarif petit rouleur annuel maxi",
+                            "description": "Schéma VDP - Tarif Petits Rouleurs annuel maximum VL"
+                        },
+                        "tarif_res": {
+                            "type": "string",
+                            "title": "Tarif VL résident",
+                            "description": "Schéma VDP - Existence d'un tarif Résidents VL"
+                        },
+                        "tf_res_1ae": {
+                            "type": "number",
+                            "title": "Tarif résident annuel",
+                            "description": "Schéma VDP - Tarif Résident annuel VL"
+                        },
+                        "date_th": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Date application tarif horaire",
+                            "description": "Schéma VDP - Date d'application du tarif horaire"
+                        },
+                        "tf_15mn_e": {
+                            "type": "number",
+                            "title": "Tarif_15mn",
+                            "description": "Schéma VDP - Tarif VL 15 minutes"
+                        },
+                        "tf_30mn_e": {
+                            "type": "number",
+                            "title": "Tarif_30mn",
+                            "description": "Schéma VDP - Tarif VL 30 minutes"
+                        },
+                        "tf_1h30_e": {
+                            "type": "number",
+                            "title": "Tarif_1h30",
+                            "description": "Schéma VDP - Tarif VL 1 heure 30"
+                        },
+                        "tf_7h_e": {
+                            "type": "number",
+                            "title": "Tarif_7h",
+                            "description": "Schéma VDP - Tarif VL 7 heures"
+                        },
+                        "tf_8h_e": {
+                            "type": "number",
+                            "title": "Tarif_8h",
+                            "description": "Schéma VDP - Tarif VL 8 heures"
+                        },
+                        "tf_9h_e": {
+                            "type": "number",
+                            "title": "Tarif_9h",
+                            "description": "Schéma VDP - Tarif VL 9 heures"
+                        },
+                        "tf_10h_e": {
+                            "type": "number",
+                            "title": "Tarif_10h",
+                            "description": "Schéma VDP - Tarif VL 10 heures"
+                        },
+                        "tf_11h_e": {
+                            "type": "number",
+                            "title": "Tarif_11h",
+                            "description": "Schéma VDP - Tarif VL 11 heures"
+                        },
+                        "tf_12h_e": {
+                            "type": "number",
+                            "title": "Tarif_12h",
+                            "description": "Schéma VDP - Tarif VL 12 heures"
+                        },
+                        "abpmr_1m_e": {
+                            "type": "number",
+                            "title": "Tarif abonnement PMR mensuel",
+                            "description": "Schéma VDP - Tarif de l'abonnement mensuel PMR"
+                        },
+                        "abpmr_1t_e": {
+                            "type": "number",
+                            "title": "Tarif abonnement PMR timestriel",
+                            "description": "Schéma VDP - Tarif de l'abonnement trimestriel PMR"
+                        },
+                        "abpmr_1a_e": {
+                            "type": "number",
+                            "title": "Tarif abonnement PMR annuel",
+                            "description": "Schéma VDP - Tarif de l'abonnement annuel PMR"
+                        },
+                        "mis_a_jour": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Date MaJ données tarif",
+                            "description": "Schéma VDP - Date de mise à jour des données tarifaires"
+                        },
+                        "abve_1m_e": {
+                            "type": "number",
+                            "title": "Tarif abonnement VéhElect mensuel",
+                            "description": "Schéma VDP - Tarif de l'abonnement mensuel Véhicule électrique"
+                        },
+                        "abve_1t_e": {
+                            "type": "number",
+                            "title": "Tarif abonnement VéhElect trimestriel",
+                            "description": "Schéma VDP - Tarif de l'abonnement trimestriel Véhicule électrique"
+                        },
+                        "abve_1a_e": {
+                            "type": "number",
+                            "title": "Tarif abonnement VéhElect annuel",
+                            "description": "Schéma VDP - Tarif de l'abonnement annuel Véhicule électrique"
+                        },
+                        "tmoto_1ehe": {
+                            "type": "number",
+                            "title": "Tarif moto 1ere heure",
+                            "description": "Schéma VDP - Tarif de la 1ère heure pour les motos"
+                        },
+                        "abmoto_1me": {
+                            "type": "number",
+                            "title": "Tarif abonnement moto mensuel",
+                            "description": "Schéma VDP - Tarif de l'abonnement mensuel pour les motos"
+                        },
+                        "abmoto_1te": {
+                            "type": "number",
+                            "title": "Tarif abonnement moto trimestriel",
+                            "description": "Tarif de l'abonnement trimestriel pour les motos"
+                        },
+                        "abmoto_1ae": {
+                            "type": "number",
+                            "title": "Tarif abonnement moto annuel",
+                            "description": "Schéma VDP - Tarif de l'abonnement annuel pour les motos"
+                        },
+                        "tvelo_1m_e": {
+                            "type": "number",
+                            "title": "Tarif abonnement vélo mensuel",
+                            "description": "Schéma VDP - Tarif de l'abonnement mensuel pour les vélos"
+                        },
+                        "point_x_entrees": {
+                            "type": "string",
+                            "title": "Coord X entrées LB93",
+                            "description": "Schéma VDP - Coordonnées X RGF93 Lambert 93 - EPSG 2154 des entrées, le symbole\"|\" est le séparateur des contenus multivalués"
+                        },
+                        "point_y_entrees": {
+                            "type": "string",
+                            "title": "Coord Y entrées LB93",
+                            "description": "Schéma VDP - Coordonnées Y RGF93 Lambert 93 - EPSG 2154 des entrées,  le symbole\"|\" est le séparateur des contenus multivalués"
+                        },
+                        "zones_res": {
+                            "type": "string",
+                            "title": "Code zones résidentielles",
+                            "description": "Schéma VDP - Zones résidentielles concernées par le parc,  le symbole\"|\" est le séparateur des contenus multivalués"
+                        },
+                        "tf_15mn_mo": {
+                            "type": "number",
+                            "title": "Tarif_15mn Moto",
+                            "description": "Schéma VDP - Tarif Moto 15 minutes"
+                        },
+                        "tf_30mn_mo": {
+                            "type": "number",
+                            "title": "Tarif_30mn Moto",
+                            "description": "Schéma VDP - Tarif Moto 30 minutes"
+                        },
+                        "tf_24h_mot": {
+                            "type": "number",
+                            "title": "Tarif_24h Moto",
+                            "description": "Schéma VDP - Tarif Moto 24 heures"
+                        },
+                        "tf_pr_moto": {
+                            "type": "string",
+                            "title": "Tarif moto petit rouleur",
+                            "description": "Schéma VDP - Existence d'un tarif Petits rouleurs Moto"
+                        },
+                        "pr_1a_minm": {
+                            "type": "number",
+                            "title": "Tarif moto petit rouleur annuel mini",
+                            "description": "Schéma VDP - Tarif Petits Rouleurs annuel minimum Moto"
+                        },
+                        "pr_1a_maxm": {
+                            "type": "number",
+                            "title": "Tarif moto petit rouleur annuel maxi",
+                            "description": "Schéma VDP - Tarif Petits Rouleurs annuel maximum Moto"
+                        },
+                        "tf_res_mo": {
+                            "type": "string",
+                            "title": "Tarif moto résident",
+                            "description": "Schéma VDP - Existence d'un tarif Résidents Moto"
+                        },
+                        "tf_res_1am": {
+                            "type": "number",
+                            "title": "Tarif moto résident annuel",
+                            "description": "Schéma VDP - Tarif Résident annuel Moto"
+                        },
+                        "parc_amod": {
+                            "type": "string",
+                            "title": "Parc amodié",
+                            "description": "Schéma VDP - Le parc est-il 100% amodié?"
+                        },
+                        "ab_1a_patt": {
+                            "type": "number",
+                            "title": "Tarif abonnement place attribuée annuel",
+                            "description": "Schéma VDP - Tarif abonnement VL avec réservation 1 an (place attribuée)"
+                        },
+                        "parc_relai": {
+                            "type": "string",
+                            "title": "Parc relais",
+                            "description": "Schéma VDP - Le parc fait-il partie du dispositif Parc relais?"
+                        },
+                        "ab_1m_rela": {
+                            "type": "number",
+                            "title": "Tarif abonnement parc relais annuel",
+                            "description": "Schéma VDP - Tarif de l'abonnement mensuel dispositif Parcs relais"
+                        },
+                        "tf_res_1me": {
+                            "type": "number",
+                            "title": "Tarif résident mensuel",
+                            "description": "Schéma VDP - Tarif de l'abonnement résident mensuel"
+                        },
+                        "pass_2rm": {
+                            "type": "string",
+                            "title": "Parc affilié au dispositif Pass 2RM",
+                            "description": ""
+                        },
+                        "pass_2rm_1h": {
+                            "type": "number",
+                            "title": "Tarif horaire préférentiel Moto Pass 2RM",
+                            "description": ""
+                        },
+                        "pass_2rm_1m": {
+                            "type": "number",
+                            "title": "Tarif de l'abonnement au Pass 2RM mensuel",
+                            "description": ""
+                        },
+                        "pass_2rm_3m": {
+                            "type": "number",
+                            "title": "Tarif de l'abonnement au Pass 2RM trimestriel",
+                            "description": ""
+                        },
+                        "pass_2rm_1a": {
+                            "type": "number",
+                            "title": "Tarif de l'abonnement au Pass 2RM annuel",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": "Schéma VDP - Champ issu de la base SIG permettant de géolocaliser, l'adresse principale du parking. Quand il y en a vous pourvez retrouver la géolocalisation des entrées dans les champs Coord X entrées LB93 et Coord Y entrées LB93"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": "Schéma VDP - Champs calculé sur la base des champs [xlong] et [ylat]"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

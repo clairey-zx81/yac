@@ -1,0 +1,502 @@
+{
+    "title": "zugzahlen@sbb",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/zugzahlen@sbb"
+        }
+    ],
+    "definitions": {
+        "zugzahlen@sbb": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/zugzahlen@sbb_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "zugzahlen@sbb_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "pid_abschnitt": {
+                            "type": "string",
+                            "title": "PID_section",
+                            "description": "Line section"
+                        },
+                        "isb": {
+                            "type": "string",
+                            "title": "IM",
+                            "description": "Infrastructure manager"
+                        },
+                        "strecke_nummer": {
+                            "type": "integer",
+                            "title": "Line_Number",
+                            "description": "Number of the line or nodal point to which the section belongs."
+                        },
+                        "strecke_bezeichnung": {
+                            "type": "string",
+                            "title": "Line_designation",
+                            "description": "Designation of the line"
+                        },
+                        "strecke_art": {
+                            "type": "string",
+                            "title": "Line_type",
+                            "description": "Indicates whether it is a line or a nodal point"
+                        },
+                        "bp_von_abschnitt": {
+                            "type": "string",
+                            "title": "OP_From_Section",
+                            "description": "Operating point where the route starts or the nodal point is located"
+                        },
+                        "bp_von_abschnitt_bezeichnung": {
+                            "type": "string",
+                            "title": "OP_From_Section_Designation",
+                            "description": "Operating point where the route starts or the nodal point is located"
+                        },
+                        "bp_bis_abschnitt": {
+                            "type": "string",
+                            "title": "OP_To_Section",
+                            "description": "Operating point where the route starts or the nodal point is located"
+                        },
+                        "bp_bis_abschnitt_bezeichnung": {
+                            "type": "string",
+                            "title": "BP Bis Abschnitt Bezeichnung",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "in_richtung": {
+                            "type": "string",
+                            "title": "In_direction",
+                            "description": "Indicates whether it is a line or a nodal point"
+                        },
+                        "geschaeftscode": {
+                            "type": "string",
+                            "title": "Business code",
+                            "description": "Classification of traffic"
+                        },
+                        "jahr": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Year",
+                            "description": "Year in question"
+                        },
+                        "anzahl_zuege": {
+                            "type": "number",
+                            "title": "Number_of_trains",
+                            "description": "Number of trains per year"
+                        },
+                        "gesamtbelastung_bruttotonnen": {
+                            "type": "number",
+                            "title": "Total_load_gross_tonnes",
+                            "description": "Total load of the section of the route"
+                        },
+                        "didok": {
+                            "type": "integer",
+                            "title": "Didok number",
+                            "description": "Stop code according to the Didok (Services Documentation) list. Stop code according to the Didok (Services Documentation) list."
+                        },
+                        "bpuic": {
+                            "type": "integer",
+                            "title": "OPUIC",
+                            "description": "Identification of the stop according to UIC specification"
+                        },
+                        "bezeichnung_offiziell": {
+                            "type": "string",
+                            "title": "Stop name",
+                            "description": "Official name of the stop"
+                        },
+                        "lod": {
+                            "type": "string",
+                            "title": "lod",
+                            "description": "Linked Open Data representation of the stop"
+                        },
+                        "geopos": {
+                            "type": "string",
+                            "title": "Geopos",
+                            "description": "Geoposition of the data set"
+                        },
+                        "tu_nummer": {
+                            "type": "integer",
+                            "title": "transport company",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "meteo": {
+                            "type": "string",
+                            "title": "Weather",
+                            "description": "Link zur Wetterprognose"
+                        },
+                        "plz": {
+                            "type": "string",
+                            "title": "Postal code",
+                            "description": "Postal code of the stop"
+                        },
+                        "geopos_von": {
+                            "type": "string",
+                            "title": "Geoposition Ende",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "geopos_bis": {
+                            "type": "string",
+                            "title": "Geoposition Anfang",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "geoshape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo shape",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geopos",
+                            "description": "Geoposition of the data set"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

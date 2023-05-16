@@ -1,0 +1,641 @@
+{
+    "title": "emb2014b_vivienda@bogota-laburbano",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/emb2014b_vivienda@bogota-laburbano"
+        }
+    ],
+    "definitions": {
+        "emb2014b_vivienda@bogota-laburbano": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/emb2014b_vivienda@bogota-laburbano_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "emb2014b_vivienda@bogota-laburbano_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "directorio": {
+                            "type": "string",
+                            "title": "DIRECTORIO",
+                            "description": "Llave número único identificador de vivienda"
+                        },
+                        "nvcbp1": {
+                            "type": "string",
+                            "title": "La vía de acceso a la edificación es:",
+                            "description": "1 Sendero o camino en tierra \n2 Peatonal construida \n3 Vehicular destapada \n4 Vehicular pavimentada"
+                        },
+                        "nvcbp2": {
+                            "type": "string",
+                            "title": "¿Cuál es el estado de la vía?",
+                            "description": " 1 Bueno \n2 Regular \n3 Malo \n4 La están reparando"
+                        },
+                        "nvcbp3": {
+                            "type": "string",
+                            "title": "¿La edificación donde está ubicada la vivienda tiene andén? ",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp4": {
+                            "type": "string",
+                            "title": "¿La edificación está ubicada en un conjunto cerrado? ",
+                            "description": "1 Si \n2 No"
+                        },
+                        "nvcbp5": {
+                            "type": "string",
+                            "title": "La iluminación de la vía de acceso a la edificación en las noches es",
+                            "description": "1 Suficiente\n2 Insuficiente \n3 No tiene"
+                        },
+                        "nvcbp6": {
+                            "type": "integer",
+                            "title": "¿Cuántos pisos tiene la edificación donde está ubicada la vivienda?",
+                            "description": ""
+                        },
+                        "nvcbp7": {
+                            "type": "string",
+                            "title": "¿La edificación donde está ubicada la vivienda tiene ascensor? ",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp8a": {
+                            "type": "string",
+                            "title": "Humedades en el techo o en las paredes?",
+                            "description": "1 Si \n2 No \n3 No sabe/ No responde\n"
+                        },
+                        "nvcbp8b": {
+                            "type": "string",
+                            "title": "Goteras en el techo? ",
+                            "description": "1 Si \n2 No \n3 No sabe/ No responde"
+                        },
+                        "nvcbp8c": {
+                            "type": "string",
+                            "title": "Grietas en techos y paredes? ",
+                            "description": "1 Si \n2 No \n3 No sabe/ No responde"
+                        },
+                        "nvcbp8d": {
+                            "type": "string",
+                            "title": "Fallas en tuberías, cañerías o desagües? ",
+                            "description": "1 Si \n2 No \n3 No sabe/ No responde"
+                        },
+                        "nvcbp8e": {
+                            "type": "string",
+                            "title": "Grietas en el piso? ",
+                            "description": "1 Si \n2 No \n3 No sabe/ No responde"
+                        },
+                        "nvcbp8f": {
+                            "type": "string",
+                            "title": "Cielorrasos o tejas en mal estado? ",
+                            "description": "1 Si \n2 No \n3 No sabe/ No responde"
+                        },
+                        "nvcbp8g": {
+                            "type": "string",
+                            "title": "Escasa ventilación? ",
+                            "description": "1 Si \n2 No \n3 No sabe/ No responde"
+                        },
+                        "nvcbp8h": {
+                            "type": "string",
+                            "title": "Inundación cuando llueve o cuando se crece el río? ",
+                            "description": "1 Si \n2 No \n3 No sabe/ No responde"
+                        },
+                        "nvcbp8i": {
+                            "type": "string",
+                            "title": "Peligro de derrumbe, avalancha o deslizamiento? ",
+                            "description": "1 Si \n2 No \n3 No sabe/ No responde"
+                        },
+                        "nvcbp8j": {
+                            "type": "string",
+                            "title": "Hundimiento del terreno? ",
+                            "description": "1 Si \n2 No \n3 No sabe/ No responde"
+                        },
+                        "nvcbp10": {
+                            "type": "string",
+                            "title": "Tipo de vivienda",
+                            "description": "1 Casa \n2 Apartamento \n3 Cuarto (s) \n4 Otra vivienda (carpa, tienda, vagón, embarcación, refugio natural, etc.)."
+                        },
+                        "nvcbp11a": {
+                            "type": "string",
+                            "title": "Energía eléctrica",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp11aa": {
+                            "type": "integer",
+                            "title": "Estrato tarifa para energía eléctrica",
+                            "description": ""
+                        },
+                        "nvcbp11b": {
+                            "type": "string",
+                            "title": "Acueducto",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp11c": {
+                            "type": "string",
+                            "title": "Alcantarillado",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp11d": {
+                            "type": "string",
+                            "title": "Recolección de basuras",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp11da": {
+                            "type": "integer",
+                            "title": "Recolección de basuras Días por semana",
+                            "description": ""
+                        },
+                        "nvcbp12": {
+                            "type": "string",
+                            "title": "¿Cuál es el material predominante de las paredes exteriores?",
+                            "description": "1 Bloque, ladrillo, piedra, madera pulida \n2 Tapia pisada, adobe \n3 Bahareque revocado \n4 Bahareque sin revocar \n5 Madera burda, tabla, tablón \n6 Material prefabricado \n7 Guadua, caña, esterilla, otro vegetal  \n8 Zinc, tela, lona, cartón, latas, desechos, plástico \n9 Sin paredes"
+                        },
+                        "nvcbp13": {
+                            "type": "string",
+                            "title": "¿Cuál es el material predominante de los pisos?",
+                            "description": "1 Alfombra o tapete de pared a pared \n2 Laminado o flotante \n3 Madera pulida y lacada, parqué 4 Mármol \n5 Baldosa, vinilo, tableta, ladrillo \n6 Madera burda, tabla o tablón, otro vegetal \n7 Cemento, gravilla \n8 Tierra, arena"
+                        },
+                        "nvcbp14a": {
+                            "type": "string",
+                            "title": "Vivienda cerca de fabricas o industrias",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp14b": {
+                            "type": "string",
+                            "title": "Vivienda cerca de aeropuertos",
+                            "description": "1 Si \n2 No"
+                        },
+                        "nvcbp14c": {
+                            "type": "string",
+                            "title": "Vivienda cerca de basureros",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp14d": {
+                            "type": "string",
+                            "title": "Vivienda cerca de plazas de mercado",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp14e": {
+                            "type": "string",
+                            "title": "Vivienda cerca de terminales de buses",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp14f": {
+                            "type": "string",
+                            "title": "Vivienda cerca de bares o prostibulos",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp14g": {
+                            "type": "string",
+                            "title": "Vivienda cerca de expendios de drogas",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp14h": {
+                            "type": "string",
+                            "title": "Vivienda cerca de sitios oscuros o peligrosos",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp14i": {
+                            "type": "string",
+                            "title": "Vivienda cerca de antenas de comunicación, de radiotransmisión (radio, beeper, celular, radioaficionados, etc.), líneas de alta tensión o centrales eléctricas",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp14j": {
+                            "type": "string",
+                            "title": "Vivienda cerca de aguas negras",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp14k": {
+                            "type": "string",
+                            "title": "Vivienda cerca de mataderos",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp14l": {
+                            "type": "string",
+                            "title": "Vivenda cerca de talleres o estaciones de servicio",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp15a": {
+                            "type": "string",
+                            "title": "Ruido",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp15b": {
+                            "type": "string",
+                            "title": "Exceso de anuncios publicitarios",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp15c": {
+                            "type": "string",
+                            "title": "Inseguridad",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp15d": {
+                            "type": "string",
+                            "title": "Contaminación del aire",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp15e": {
+                            "type": "string",
+                            "title": "Malos olores",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp15f": {
+                            "type": "string",
+                            "title": "Manejo inadecuado de basuras",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp15g": {
+                            "type": "string",
+                            "title": "Invasión de andenes",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp15h": {
+                            "type": "string",
+                            "title": "Invasión del espacio público",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp15i": {
+                            "type": "string",
+                            "title": "Animales que causan molestias",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp15j": {
+                            "type": "string",
+                            "title": "Presencia de insectos o roedores",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nvcbp16": {
+                            "type": "integer",
+                            "title": "Cantidad de hogares por vivienda",
+                            "description": "1 Si\n2 No"
+                        },
+                        "estrato": {
+                            "type": "integer",
+                            "title": "ESTRATO",
+                            "description": "Estrato imputado"
+                        },
+                        "fex_c": {
+                            "type": "number",
+                            "title": "Factor de expansión",
+                            "description": "Factor de expansión muestral"
+                        },
+                        "nvcbp9": {
+                            "type": "string",
+                            "title": "¿Algún espacio de la edificación donde está ubicada la vivienda está dedicado a negocios de industria, comercio o servicios?",
+                            "description": "1 Si\n2 No"
+                        },
+                        "nombre_localidad": {
+                            "type": "string",
+                            "title": "NOMBRE_LOCALIDAD",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

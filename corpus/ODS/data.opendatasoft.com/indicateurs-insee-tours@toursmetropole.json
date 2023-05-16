@@ -1,0 +1,717 @@
+{
+    "title": "indicateurs-insee-tours@toursmetropole",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/indicateurs-insee-tours@toursmetropole"
+        }
+    ],
+    "definitions": {
+        "indicateurs-insee-tours@toursmetropole": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/indicateurs-insee-tours@toursmetropole_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "indicateurs-insee-tours@toursmetropole_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "annee_de_reference": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année de référence ",
+                            "description": ""
+                        },
+                        "on_off": {
+                            "type": "string",
+                            "title": "on/off",
+                            "description": ""
+                        },
+                        "code_quartier_ville_de_tours": {
+                            "type": "string",
+                            "title": "Code quartier ville de Tours",
+                            "description": ""
+                        },
+                        "secteurs": {
+                            "type": "string",
+                            "title": "Secteurs",
+                            "description": ""
+                        },
+                        "quartier": {
+                            "type": "string",
+                            "title": "Quartier",
+                            "description": ""
+                        },
+                        "population_municipale_en_2008": {
+                            "type": "number",
+                            "title": "Population municipale en 2008",
+                            "description": ""
+                        },
+                        "population_municipale_en_2013": {
+                            "type": "number",
+                            "title": "Population municipale en 2013",
+                            "description": ""
+                        },
+                        "population_municipale": {
+                            "type": "number",
+                            "title": "Population municipale ",
+                            "description": ""
+                        },
+                        "population_de_moins_de_20_ans": {
+                            "type": "number",
+                            "title": "Population de moins de 20 ans ",
+                            "description": ""
+                        },
+                        "population_de_20_64_ans": {
+                            "type": "number",
+                            "title": "Population de 20 - 64 ans ",
+                            "description": ""
+                        },
+                        "population_de_65_ans_ou_plus": {
+                            "type": "number",
+                            "title": "Population de 65 ans ou plus ",
+                            "description": ""
+                        },
+                        "total_population_de_moins_de_11_ans": {
+                            "type": "number",
+                            "title": "Total Population de moins de 11 ans ",
+                            "description": ""
+                        },
+                        "population_de_0_2_ans": {
+                            "type": "number",
+                            "title": "Population de 0-2 ans ",
+                            "description": ""
+                        },
+                        "population_de_3_5_ans": {
+                            "type": "number",
+                            "title": "Population de 3-5 ans ",
+                            "description": ""
+                        },
+                        "population_de_6_10_ans": {
+                            "type": "number",
+                            "title": "Population de 6-10 ans ",
+                            "description": ""
+                        },
+                        "age_moyen": {
+                            "type": "number",
+                            "title": "Âge moyen ",
+                            "description": ""
+                        },
+                        "indice_de_vieillissement_nombre_de_personnes_de_65_ans_ou_plus_pour_100_jeunes_de_moins_de_20_ans": {
+                            "type": "number",
+                            "title": "Indice de vieillissement  (Nombre de personnes de 65 ans ou plus pour 100 jeunes de moins de 20 ans)",
+                            "description": ""
+                        },
+                        "total_population_active_et_inactive_15_64_ans": {
+                            "type": "number",
+                            "title": "Total Population active et inactive 15-64 ans ",
+                            "description": ""
+                        },
+                        "population_15_64_ans_chomeurs_actifs": {
+                            "type": "number",
+                            "title": "Population 15-64 ans Chômeurs -actifs ",
+                            "description": ""
+                        },
+                        "population_15_64_ans_eleves_etudiants_et_stagiaires_inactifs": {
+                            "type": "number",
+                            "title": "Population 15-64 ans Élèves étudiants\n et stagiaires -inactifs",
+                            "description": ""
+                        },
+                        "population_15_64_ans_retraites_ou_preretraites_inactifs": {
+                            "type": "number",
+                            "title": "Population 15-64 ans Retraités ou préretraités -inactifs",
+                            "description": ""
+                        },
+                        "population_15_64_ans_autres_inactifs": {
+                            "type": "number",
+                            "title": "Population 15-64 ans Autres inactifs ",
+                            "description": ""
+                        },
+                        "population_15_64_ans_actifs_ayant_un_emploi_actifs": {
+                            "type": "number",
+                            "title": "Population 15-64 ans Actifs ayant un emploi -actifs                             ",
+                            "description": ""
+                        },
+                        "csp_des_actifs_occupes_de_15_64_ans_agriculteurs_exploitants": {
+                            "type": "number",
+                            "title": "CSP des actifs occupés de 15-64 ans  Agriculteurs exploitants",
+                            "description": ""
+                        },
+                        "csp_des_actifs_occupes_de_15_64_ans_artisans_commercants_chefs_d_entreprise": {
+                            "type": "number",
+                            "title": "CSP des actifs occupés de 15-64 ans  Artisans, Commerçants, Chefs d'entreprise",
+                            "description": ""
+                        },
+                        "csp_des_actifs_occupes_de_15_64_ans_cadres_et_professions_intellectuelles_superieures": {
+                            "type": "number",
+                            "title": "CSP des actifs occupés de 15-64 ans  Cadres et Professions Intellectuelles Supérieures",
+                            "description": ""
+                        },
+                        "csp_des_actifs_occupes_de_15_64_ans_professions_intermediaires": {
+                            "type": "number",
+                            "title": "CSP des actifs occupés de 15-64 ans  Professions intermédiaires",
+                            "description": ""
+                        },
+                        "csp_des_actifs_occupes_de_15_64_ans_employes": {
+                            "type": "number",
+                            "title": "CSP des actifs occupés de 15-64 ans  Employés",
+                            "description": ""
+                        },
+                        "csp_des_actifs_occupes_de_15_64_ans_ouvriers": {
+                            "type": "number",
+                            "title": "CSP des actifs occupés de 15-64 ans  Ouvriers",
+                            "description": ""
+                        },
+                        "diplome_le_plus_eleve_de_la_population_non_scolarisee_aucun_diplome_ou_bepc_brevet_des_colleges_dnb": {
+                            "type": "number",
+                            "title": "Diplôme le plus élevé de la population non scolarisée  Aucun diplôme ou BEPC, Brevet des collèges, DNB",
+                            "description": ""
+                        },
+                        "diplome_le_plus_eleve_de_la_population_non_scolarisee_cap_ou_bep": {
+                            "type": "number",
+                            "title": "Diplôme le plus élevé de la population non scolarisée  CAP ou BEP",
+                            "description": ""
+                        },
+                        "diplome_le_plus_eleve_de_la_population_non_scolarisee_baccalaureat_general_technologique_professionn": {
+                            "type": "number",
+                            "title": "Diplôme le plus élevé de la population non scolarisée  Baccalauréat (général, technologique, professionnel)",
+                            "description": ""
+                        },
+                        "diplome_le_plus_eleve_de_la_population_non_scolarisee_diplome_de_l_enseignement_superieur": {
+                            "type": "number",
+                            "title": "Diplôme le plus élevé de la population non scolarisée  Diplôme de l'enseignement supérieur",
+                            "description": ""
+                        },
+                        "nombre_de_menages": {
+                            "type": "number",
+                            "title": "Nombre de ménages ",
+                            "description": ""
+                        },
+                        "population_des_menages": {
+                            "type": "number",
+                            "title": "Population des ménages ",
+                            "description": ""
+                        },
+                        "menage_d_une_personne": {
+                            "type": "number",
+                            "title": "Ménage d'une personne ",
+                            "description": ""
+                        },
+                        "autre_menage_sans_famille": {
+                            "type": "number",
+                            "title": "Autre ménage sans famille ",
+                            "description": ""
+                        },
+                        "couple_sans_enfant": {
+                            "type": "number",
+                            "title": "Couple sans enfant ",
+                            "description": ""
+                        },
+                        "couple_avec_enfant_s": {
+                            "type": "number",
+                            "title": "Couple avec enfant(s) ",
+                            "description": ""
+                        },
+                        "famille_monoparentale": {
+                            "type": "number",
+                            "title": "Famille monoparentale ",
+                            "description": ""
+                        },
+                        "nombre_de_residences_principales": {
+                            "type": "number",
+                            "title": "Nombre de résidences principales ",
+                            "description": ""
+                        },
+                        "pieces_des_residences_principales": {
+                            "type": "number",
+                            "title": "Pièces des résidences principales ",
+                            "description": ""
+                        },
+                        "residences_principales_1_piece": {
+                            "type": "number",
+                            "title": "Résidences principales 1 pièce ",
+                            "description": ""
+                        },
+                        "residences_principales_2_pieces": {
+                            "type": "number",
+                            "title": "Résidences principales 2 pièces ",
+                            "description": ""
+                        },
+                        "residences_principales_3_pieces": {
+                            "type": "number",
+                            "title": "Résidences principales 3 pièces ",
+                            "description": ""
+                        },
+                        "residences_principales_4_pieces": {
+                            "type": "number",
+                            "title": "Résidences principales 4 pièces ",
+                            "description": ""
+                        },
+                        "residences_principales_5_pieces_ou_plus": {
+                            "type": "number",
+                            "title": "Résidences principales 5 pièces ou plus ",
+                            "description": ""
+                        },
+                        "proprietaire": {
+                            "type": "number",
+                            "title": "Propriétaire ",
+                            "description": ""
+                        },
+                        "locataire_prive": {
+                            "type": "number",
+                            "title": "Locataire privé ",
+                            "description": ""
+                        },
+                        "locataire_hlm": {
+                            "type": "number",
+                            "title": "Locataire HLM ",
+                            "description": ""
+                        },
+                        "loge_gratuitement": {
+                            "type": "number",
+                            "title": "Logé gratuitement ",
+                            "description": ""
+                        },
+                        "anciennete_d_emmenagement_de_moins_de_2_ans": {
+                            "type": "number",
+                            "title": "Ancienneté d'emménagement de moins de 2 ans ",
+                            "description": ""
+                        },
+                        "anciennete_d_emmenagement_de_2_a_4_ans": {
+                            "type": "number",
+                            "title": "Ancienneté d'emménagement  de 2 à 4 ans ",
+                            "description": ""
+                        },
+                        "anciennete_d_emmenagement_de_5_a_9_ans": {
+                            "type": "number",
+                            "title": "Ancienneté d'emménagement de 5 à 9 ans ",
+                            "description": ""
+                        },
+                        "anciennete_d_emmenagement_de_10_ans_ou_plus": {
+                            "type": "number",
+                            "title": "Ancienneté d'emménagement de 10 ans ou plus ",
+                            "description": ""
+                        },
+                        "menages_sans_voiture": {
+                            "type": "number",
+                            "title": "Ménages sans voiture ",
+                            "description": ""
+                        },
+                        "menages_avec_1_voiture": {
+                            "type": "number",
+                            "title": "Ménages avec 1 voiture ",
+                            "description": ""
+                        },
+                        "menages_avec_2_voitures_ou": {
+                            "type": "number",
+                            "title": "Ménages avec 2 voitures ou + ",
+                            "description": ""
+                        },
+                        "mode_de_transport_pour_aller_travailler_pas_de_transport": {
+                            "type": "number",
+                            "title": "Mode de transport pour aller travailler  Pas de transport ",
+                            "description": ""
+                        },
+                        "mode_de_transport_pour_aller_travailler_marche_a_pied": {
+                            "type": "number",
+                            "title": "Mode de transport pour aller travailler  Marche à pied ",
+                            "description": ""
+                        },
+                        "mode_de_transport_pour_aller_travailler_velo": {
+                            "type": "number",
+                            "title": "Mode de transport pour aller travailler  Vélo ",
+                            "description": ""
+                        },
+                        "mode_de_transport_pour_aller_travailler_deux_roues_motorise": {
+                            "type": "number",
+                            "title": "Mode de transport pour aller travailler  Deux-roues motorisé ",
+                            "description": ""
+                        },
+                        "mode_de_transport_pour_aller_travailler_voiture": {
+                            "type": "number",
+                            "title": "Mode de transport pour aller travailler  Voiture ",
+                            "description": ""
+                        },
+                        "mode_de_transport_pour_aller_travailler_transport_en_commun": {
+                            "type": "number",
+                            "title": "Mode de transport pour aller travailler  Transport en commun ",
+                            "description": ""
+                        },
+                        "total_population_active_ayant_un_emploi_15_64_ans": {
+                            "type": "number",
+                            "title": "Total population active ayant un emploi 15-64 ans ",
+                            "description": ""
+                        },
+                        "total_population_non_scolarisee": {
+                            "type": "number",
+                            "title": "Total population non scolarisée ",
+                            "description": ""
+                        },
+                        "total_actifs_occupes_de_15_ans_ou_plus_habitant_a_tours": {
+                            "type": "number",
+                            "title": "Total actifs occupés de 15 ans ou plus habitant à Tours ",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,581 @@
+{
+    "title": "filaire-de-circulation@eurometrostrasbourg",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/filaire-de-circulation@eurometrostrasbourg"
+        }
+    ],
+    "definitions": {
+        "filaire-de-circulation@eurometrostrasbourg": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/filaire-de-circulation@eurometrostrasbourg_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "filaire-de-circulation@eurometrostrasbourg_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "id_sous_troncon": {
+                            "type": "string",
+                            "title": "id_sous_troncon",
+                            "description": ""
+                        },
+                        "etat": {
+                            "type": "string",
+                            "title": "etat",
+                            "description": ""
+                        },
+                        "nature": {
+                            "type": "string",
+                            "title": "nature",
+                            "description": ""
+                        },
+                        "niveau": {
+                            "type": "string",
+                            "title": "niveau",
+                            "description": ""
+                        },
+                        "source_geometrique": {
+                            "type": "string",
+                            "title": "source_geometrique",
+                            "description": ""
+                        },
+                        "id_troncon": {
+                            "type": "string",
+                            "title": "id_troncon",
+                            "description": ""
+                        },
+                        "nom_commune_droit": {
+                            "type": "string",
+                            "title": "nom_commune_droit",
+                            "description": ""
+                        },
+                        "nom_commune_gauche": {
+                            "type": "string",
+                            "title": "nom_commune_gauche",
+                            "description": ""
+                        },
+                        "nom_voie_droit": {
+                            "type": "string",
+                            "title": "nom_voie_droit",
+                            "description": ""
+                        },
+                        "nom_voie_gauche": {
+                            "type": "string",
+                            "title": "nom_voie_gauche",
+                            "description": ""
+                        },
+                        "nom_route_administrative_droit": {
+                            "type": "string",
+                            "title": "nom_route_administrative_droit",
+                            "description": ""
+                        },
+                        "nom_route_administrative_gauche": {
+                            "type": "string",
+                            "title": "nom_route_administrative_gauche",
+                            "description": ""
+                        },
+                        "nom_quartier_droit": {
+                            "type": "string",
+                            "title": "nom_quartier_droit",
+                            "description": ""
+                        },
+                        "nom_quartier_gauche": {
+                            "type": "string",
+                            "title": "nom_quartier_gauche",
+                            "description": ""
+                        },
+                        "voiture_vitesse": {
+                            "type": "string",
+                            "title": "voiture_vitesse",
+                            "description": ""
+                        },
+                        "voiture_nb_voie": {
+                            "type": "string",
+                            "title": "voiture_nb_voie",
+                            "description": ""
+                        },
+                        "voiture_sens": {
+                            "type": "string",
+                            "title": "voiture_sens",
+                            "description": ""
+                        },
+                        "voiture_type": {
+                            "type": "string",
+                            "title": "voiture_type",
+                            "description": ""
+                        },
+                        "bus_type_droit": {
+                            "type": "string",
+                            "title": "bus_type_droit",
+                            "description": ""
+                        },
+                        "bus_type_gauche": {
+                            "type": "string",
+                            "title": "bus_type_gauche",
+                            "description": ""
+                        },
+                        "cycle_type_droit": {
+                            "type": "string",
+                            "title": "cycle_type_droit",
+                            "description": ""
+                        },
+                        "cycle_sens_droit": {
+                            "type": "string",
+                            "title": "cycle_sens_droit",
+                            "description": ""
+                        },
+                        "cycle_largeur_droit": {
+                            "type": "string",
+                            "title": "cycle_largeur_droit",
+                            "description": ""
+                        },
+                        "cycle_annee_droit": {
+                            "type": "string",
+                            "title": "cycle_annee_droit",
+                            "description": ""
+                        },
+                        "cycle_type_gauche": {
+                            "type": "string",
+                            "title": "cycle_type_gauche",
+                            "description": ""
+                        },
+                        "cycle_sens_gauche": {
+                            "type": "string",
+                            "title": "cycle_sens_gauche",
+                            "description": ""
+                        },
+                        "cycle_largeur_gauche": {
+                            "type": "string",
+                            "title": "cycle_largeur_gauche",
+                            "description": ""
+                        },
+                        "cycle_annee_gauche": {
+                            "type": "string",
+                            "title": "cycle_annee_gauche",
+                            "description": ""
+                        },
+                        "pieton_type_droit": {
+                            "type": "string",
+                            "title": "pieton_type_droit",
+                            "description": ""
+                        },
+                        "pieton_largeur_droit": {
+                            "type": "string",
+                            "title": "pieton_largeur_droit",
+                            "description": ""
+                        },
+                        "pieton_type_gauche": {
+                            "type": "string",
+                            "title": "pieton_type_gauche",
+                            "description": ""
+                        },
+                        "pieton_largeur_gauche": {
+                            "type": "string",
+                            "title": "pieton_largeur_gauche",
+                            "description": ""
+                        },
+                        "voie_cyclable_categorie": {
+                            "type": "string",
+                            "title": "voie_cyclable_categorie",
+                            "description": ""
+                        },
+                        "voie_cyclable_type_liaison": {
+                            "type": "string",
+                            "title": "voie_cyclable_type_liaison",
+                            "description": ""
+                        },
+                        "voie_cyclable_largeur": {
+                            "type": "string",
+                            "title": "voie_cyclable_largeur",
+                            "description": ""
+                        },
+                        "voie_cyclable_sens_circulation": {
+                            "type": "string",
+                            "title": "voie_cyclable_sens_circulation",
+                            "description": ""
+                        },
+                        "voie_cyclable_annee_creation": {
+                            "type": "string",
+                            "title": "voie_cyclable_annee_creation",
+                            "description": ""
+                        },
+                        "voie_cyclable_chaussee_proximite": {
+                            "type": "string",
+                            "title": "voie_cyclable_chaussee_proximite",
+                            "description": ""
+                        },
+                        "voie_cyclable_chaussee_id_sous_troncon": {
+                            "type": "string",
+                            "title": "voie_cyclable_chaussee_id_sous_troncon",
+                            "description": ""
+                        },
+                        "type_zonage": {
+                            "type": "string",
+                            "title": "type_zonage",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

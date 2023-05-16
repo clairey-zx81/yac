@@ -1,0 +1,701 @@
+{
+    "title": "investissement-public-local",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/investissement-public-local"
+        }
+    ],
+    "definitions": {
+        "investissement-public-local": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/investissement-public-local_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "investissement-public-local_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "code_insee16": {
+                            "type": "string",
+                            "title": "Code Insee 2016",
+                            "description": ""
+                        },
+                        "annee": {
+                            "type": "string",
+                            "title": "Année",
+                            "description": ""
+                        },
+                        "nom_dep": {
+                            "type": "string",
+                            "title": "Département",
+                            "description": ""
+                        },
+                        "nom_gfp_2016": {
+                            "type": "string",
+                            "title": "EPCI 2016",
+                            "description": ""
+                        },
+                        "montagne": {
+                            "type": "string",
+                            "title": "Montagne",
+                            "description": ""
+                        },
+                        "touristique": {
+                            "type": "string",
+                            "title": "Touristique",
+                            "description": ""
+                        },
+                        "lbudg": {
+                            "type": "string",
+                            "title": "Commune",
+                            "description": ""
+                        },
+                        "strate16": {
+                            "type": "string",
+                            "title": "Strate de Population 2016",
+                            "description": ""
+                        },
+                        "population": {
+                            "type": "integer",
+                            "title": "Population",
+                            "description": ""
+                        },
+                        "dep_invest_hr": {
+                            "type": "number",
+                            "title": "Dépenses d’Investissement Hors Remboursement de Dette",
+                            "description": ""
+                        },
+                        "dep_invest_hr_ba": {
+                            "type": "number",
+                            "title": "Dépenses d’Investissement Hors Remboursement de Dette (Budget Annexe)",
+                            "description": ""
+                        },
+                        "rec_invest_he": {
+                            "type": "number",
+                            "title": "Recettes d’Investissement Hors Emprunt",
+                            "description": ""
+                        },
+                        "rec_invest_he_ba": {
+                            "type": "number",
+                            "title": "Recettes d’investissement hors emprunt  (Budget Annexe)",
+                            "description": ""
+                        },
+                        "dep_equip": {
+                            "type": "number",
+                            "title": "Dépenses d’équipement",
+                            "description": ""
+                        },
+                        "dep_equip_ba": {
+                            "type": "number",
+                            "title": "Dépenses d’équipement (Budget Annexe)",
+                            "description": ""
+                        },
+                        "dep_equip_brut": {
+                            "type": "number",
+                            "title": "Dépenses d’équipement brutes",
+                            "description": ""
+                        },
+                        "dep_equip_brut_ba": {
+                            "type": "number",
+                            "title": "Dépenses d’équipement brutes (Budget Annexe)",
+                            "description": ""
+                        },
+                        "rem_dette": {
+                            "type": "number",
+                            "title": "Remboursement de dette (hors GAD*)",
+                            "description": ""
+                        },
+                        "rem_dette_ba": {
+                            "type": "number",
+                            "title": "Remboursement de dette (hors GAD*, Budget Annexe)",
+                            "description": ""
+                        },
+                        "emprunt": {
+                            "type": "number",
+                            "title": "Emprunts (hors GAD)",
+                            "description": ""
+                        },
+                        "emprunt_ba": {
+                            "type": "number",
+                            "title": "Emprunts (hors GAD, Budget Annexe)",
+                            "description": ""
+                        },
+                        "dep_fonc": {
+                            "type": "number",
+                            "title": "Dépenses de Fonctionnement",
+                            "description": ""
+                        },
+                        "dep_fonc_ba": {
+                            "type": "number",
+                            "title": "Dépenses de Fonctionnement (Budget Annexe)",
+                            "description": ""
+                        },
+                        "rec_fonc": {
+                            "type": "number",
+                            "title": "Recettes de Fonctionnement",
+                            "description": ""
+                        },
+                        "rec_fonc_ba": {
+                            "type": "number",
+                            "title": "Recettes de Fonctionnement (Budget Annexe)",
+                            "description": ""
+                        },
+                        "stock_dette": {
+                            "type": "number",
+                            "title": "Encours de Dette",
+                            "description": ""
+                        },
+                        "stock_dette_ba": {
+                            "type": "number",
+                            "title": "Encours de dette (Budget Annexe)",
+                            "description": ""
+                        },
+                        "flux_croise_i": {
+                            "type": "integer",
+                            "title": "Flux Croisés Budget Principal - Budgets Annexes",
+                            "description": ""
+                        },
+                        "terrains": {
+                            "type": "number",
+                            "title": "Dépenses d’Equipement Brutes: Terrains",
+                            "description": ""
+                        },
+                        "terrains_ba": {
+                            "type": "number",
+                            "title": "Dépenses d’Equipement Brutes: Terrains (Budget Annexe)",
+                            "description": ""
+                        },
+                        "constructions": {
+                            "type": "number",
+                            "title": "Dépenses d’Equipement Brutes: Constructions",
+                            "description": ""
+                        },
+                        "constructions_ba": {
+                            "type": "number",
+                            "title": "Dépenses d’Equipement Brutes: Constructions (Budget Annexe)",
+                            "description": ""
+                        },
+                        "reseaux": {
+                            "type": "number",
+                            "title": "Dépenses d’Equipement Brutes: Réseaux et Voirie",
+                            "description": ""
+                        },
+                        "reseaux_ba": {
+                            "type": "number",
+                            "title": "Dépenses d’Equipement Brutes: Réseaux et Voirie (Budget Annexe)",
+                            "description": ""
+                        },
+                        "bien_meuble": {
+                            "type": "number",
+                            "title": "Dépenses d’Equipement Brutes: Biens Meubles",
+                            "description": ""
+                        },
+                        "bien_meuble_ba": {
+                            "type": "number",
+                            "title": "Dépenses d’Equipement Brutes: Biens Meubles (Budget Annexe)",
+                            "description": ""
+                        },
+                        "taxe_amenag": {
+                            "type": "number",
+                            "title": "Taxe d’aménagement",
+                            "description": ""
+                        },
+                        "taxe_amenag_ba": {
+                            "type": "integer",
+                            "title": "Taxe d’aménagement (Budget Annexe)",
+                            "description": ""
+                        },
+                        "sub_dot_hfctva": {
+                            "type": "number",
+                            "title": "Subventions d’équipement et dotations reçues hors FCTVA",
+                            "description": ""
+                        },
+                        "sub_dot_hfctva_ba": {
+                            "type": "number",
+                            "title": "Subventions d’équipement et dotations reçues hors FCTVA (Budget Annexe)",
+                            "description": ""
+                        },
+                        "amende": {
+                            "type": "number",
+                            "title": "Amendes de Police",
+                            "description": ""
+                        },
+                        "amende_ba": {
+                            "type": "integer",
+                            "title": "Amendes de Police (Budget Annexe)",
+                            "description": ""
+                        },
+                        "fctva": {
+                            "type": "number",
+                            "title": "FCTVA",
+                            "description": ""
+                        },
+                        "fctva_ba": {
+                            "type": "number",
+                            "title": "FCTVA (Budget Annexe)",
+                            "description": ""
+                        },
+                        "cessions": {
+                            "type": "number",
+                            "title": "Produits Issus des Cessions",
+                            "description": ""
+                        },
+                        "cessions_ba": {
+                            "type": "number",
+                            "title": "Produits Issus des Cessions (Budget Annexe)",
+                            "description": ""
+                        },
+                        "epn": {
+                            "type": "number",
+                            "title": "Epargne Nette",
+                            "description": ""
+                        },
+                        "epn_ba": {
+                            "type": "number",
+                            "title": "Epargne Nette (Budget Annexe)",
+                            "description": ""
+                        },
+                        "rec_invest_hors_planfctva": {
+                            "type": "number",
+                            "title": "Rec Invest Hors Plan Fctva",
+                            "description": ""
+                        },
+                        "rec_invest_hors_planfctva_ba": {
+                            "type": "number",
+                            "title": "Rec Invest Hors Plan Fctva Ba",
+                            "description": ""
+                        },
+                        "plan_relance_fctva_net": {
+                            "type": "number",
+                            "title": "Prêt Relais du Plan de Relance FCTVA",
+                            "description": ""
+                        },
+                        "plan_relance_fctva_net_ba": {
+                            "type": "integer",
+                            "title": "Prêt Relais du Plan de Relance FCTVA  (Budget Annexe)",
+                            "description": ""
+                        },
+                        "remb_avance": {
+                            "type": "number",
+                            "title": "Remboursements d'Avances Versées",
+                            "description": ""
+                        },
+                        "remb_avance_ba": {
+                            "type": "number",
+                            "title": "Remboursements d'Avances Versées (Budget Annexe)",
+                            "description": ""
+                        },
+                        "sub_dot_sstaam": {
+                            "type": "number",
+                            "title": "Autres Subventions d'Equipement Reçues",
+                            "description": ""
+                        },
+                        "sub_dot_sstaam_ba": {
+                            "type": "number",
+                            "title": "Autres Subventions d'Equipement Reçues (Budget Annexe)",
+                            "description": ""
+                        },
+                        "autre_dep_equip_brut": {
+                            "type": "number",
+                            "title": "Autres Dépenses d'Equipement Brutes",
+                            "description": ""
+                        },
+                        "autre_dep_equip_brut_ba": {
+                            "type": "number",
+                            "title": "Autres Dépenses d'Equipement Brutes (Budget Annexe)",
+                            "description": ""
+                        },
+                        "autres_rec_invest": {
+                            "type": "number",
+                            "title": "Autres Recettes d’Investissement",
+                            "description": ""
+                        },
+                        "autres_rec_invest_ba": {
+                            "type": "number",
+                            "title": "Autres Recettes d’Investissement (Budget Annexe)",
+                            "description": ""
+                        },
+                        "vdfr": {
+                            "type": "number",
+                            "title": "Variation de Fonds de Roulement",
+                            "description": ""
+                        },
+                        "vdfr_ba": {
+                            "type": "number",
+                            "title": "Variation de Fonds de Roulement (Budget Annexe)",
+                            "description": ""
+                        },
+                        "siren_epci": {
+                            "type": "string",
+                            "title": "Sirene EPCI",
+                            "description": ""
+                        },
+                        "subvention_204": {
+                            "type": "number",
+                            "title": "Subventions d'Equipement Versées",
+                            "description": ""
+                        },
+                        "subvention_204_ba": {
+                            "type": "integer",
+                            "title": "Subventions d'Equipement Versées (Budget Annexe)",
+                            "description": ""
+                        },
+                        "autre_dep_invest": {
+                            "type": "number",
+                            "title": "Autres Dépenses d’Investissement",
+                            "description": ""
+                        },
+                        "geopoint": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geopoint",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

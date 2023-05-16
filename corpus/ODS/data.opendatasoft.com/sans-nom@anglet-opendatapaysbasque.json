@@ -1,0 +1,1111 @@
+{
+    "title": "sans-nom@anglet-opendatapaysbasque",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/sans-nom@anglet-opendatapaysbasque"
+        }
+    ],
+    "definitions": {
+        "sans-nom@anglet-opendatapaysbasque": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/sans-nom@anglet-opendatapaysbasque_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "sans-nom@anglet-opendatapaysbasque_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "cominsee": {
+                            "type": "string",
+                            "title": "cominsee",
+                            "description": ""
+                        },
+                        "insnumeroinstall": {
+                            "type": "string",
+                            "title": "insnumeroinstall",
+                            "description": ""
+                        },
+                        "insnom": {
+                            "type": "string",
+                            "title": "insnom",
+                            "description": ""
+                        },
+                        "equipementid": {
+                            "type": "string",
+                            "title": "equipementid",
+                            "description": ""
+                        },
+                        "equnom": {
+                            "type": "string",
+                            "title": "equnom",
+                            "description": ""
+                        },
+                        "equnombatiment": {
+                            "type": "string",
+                            "title": "equnombatiment",
+                            "description": ""
+                        },
+                        "equipementtypecode": {
+                            "type": "string",
+                            "title": "equipementtypecode",
+                            "description": ""
+                        },
+                        "equipementtypelib": {
+                            "type": "string",
+                            "title": "equipementtypelib",
+                            "description": ""
+                        },
+                        "equipementfamille": {
+                            "type": "string",
+                            "title": "equipementfamille",
+                            "description": ""
+                        },
+                        "equipementcateg": {
+                            "type": "string",
+                            "title": "equipementcateg",
+                            "description": ""
+                        },
+                        "gestiontypeproprietaireprinclib": {
+                            "type": "string",
+                            "title": "gestiontypeproprietaireprinclib",
+                            "description": ""
+                        },
+                        "gestiontypegestionnaireprinclib": {
+                            "type": "string",
+                            "title": "gestiontypegestionnaireprinclib",
+                            "description": ""
+                        },
+                        "gestiontypeproprietaireseclib": {
+                            "type": "string",
+                            "title": "gestiontypeproprietaireseclib",
+                            "description": ""
+                        },
+                        "gestiontypegestionnaireseclib": {
+                            "type": "string",
+                            "title": "gestiontypegestionnaireseclib",
+                            "description": ""
+                        },
+                        "equgestiondsp": {
+                            "type": "string",
+                            "title": "equgestiondsp",
+                            "description": ""
+                        },
+                        "equdouche": {
+                            "type": "string",
+                            "title": "equdouche",
+                            "description": ""
+                        },
+                        "equeclairage": {
+                            "type": "string",
+                            "title": "equeclairage",
+                            "description": ""
+                        },
+                        "equerpcts": {
+                            "type": "string",
+                            "title": "equerpcts",
+                            "description": ""
+                        },
+                        "equerpref": {
+                            "type": "string",
+                            "title": "equerpref",
+                            "description": ""
+                        },
+                        "equerpl": {
+                            "type": "string",
+                            "title": "equerpl",
+                            "description": ""
+                        },
+                        "equerpn": {
+                            "type": "string",
+                            "title": "equerpn",
+                            "description": ""
+                        },
+                        "equerpo": {
+                            "type": "string",
+                            "title": "equerpo",
+                            "description": ""
+                        },
+                        "equerpoa": {
+                            "type": "string",
+                            "title": "equerpoa",
+                            "description": ""
+                        },
+                        "equerpp": {
+                            "type": "string",
+                            "title": "equerpp",
+                            "description": ""
+                        },
+                        "equerppa": {
+                            "type": "string",
+                            "title": "equerppa",
+                            "description": ""
+                        },
+                        "equerpr": {
+                            "type": "string",
+                            "title": "equerpr",
+                            "description": ""
+                        },
+                        "equerprpe": {
+                            "type": "string",
+                            "title": "equerprpe",
+                            "description": ""
+                        },
+                        "equerpsg": {
+                            "type": "string",
+                            "title": "equerpsg",
+                            "description": ""
+                        },
+                        "equerpx": {
+                            "type": "string",
+                            "title": "equerpx",
+                            "description": ""
+                        },
+                        "equerpcategorie": {
+                            "type": "string",
+                            "title": "equerpcategorie",
+                            "description": ""
+                        },
+                        "equanneeservice": {
+                            "type": "string",
+                            "title": "equanneeservice",
+                            "description": ""
+                        },
+                        "equperiodeservice": {
+                            "type": "string",
+                            "title": "equperiodeservice",
+                            "description": ""
+                        },
+                        "equnbplacetribune": {
+                            "type": "string",
+                            "title": "equnbplacetribune",
+                            "description": ""
+                        },
+                        "naturesollib": {
+                            "type": "string",
+                            "title": "naturesollib",
+                            "description": ""
+                        },
+                        "naturelibelle": {
+                            "type": "string",
+                            "title": "naturelibelle",
+                            "description": ""
+                        },
+                        "equhauteurevolution": {
+                            "type": "string",
+                            "title": "equhauteurevolution",
+                            "description": ""
+                        },
+                        "equlongueurevolution": {
+                            "type": "string",
+                            "title": "equlongueurevolution",
+                            "description": ""
+                        },
+                        "equlargeurevolution": {
+                            "type": "string",
+                            "title": "equlargeurevolution",
+                            "description": ""
+                        },
+                        "equsurfaceevolution": {
+                            "type": "string",
+                            "title": "equsurfaceevolution",
+                            "description": ""
+                        },
+                        "equnbcouloirpiste": {
+                            "type": "string",
+                            "title": "equnbcouloirpiste",
+                            "description": ""
+                        },
+                        "equnbvestiairespo": {
+                            "type": "string",
+                            "title": "equnbvestiairespo",
+                            "description": ""
+                        },
+                        "equvestiairespochauffe": {
+                            "type": "string",
+                            "title": "equvestiairespochauffe",
+                            "description": ""
+                        },
+                        "equnbvestiairearbitre": {
+                            "type": "string",
+                            "title": "equnbvestiairearbitre",
+                            "description": ""
+                        },
+                        "equsanitaire": {
+                            "type": "string",
+                            "title": "equsanitaire",
+                            "description": ""
+                        },
+                        "equouvertsaison": {
+                            "type": "string",
+                            "title": "equouvertsaison",
+                            "description": ""
+                        },
+                        "equproximite": {
+                            "type": "string",
+                            "title": "equproximite",
+                            "description": ""
+                        },
+                        "equsono": {
+                            "type": "string",
+                            "title": "equsono",
+                            "description": ""
+                        },
+                        "equtableaufixe": {
+                            "type": "string",
+                            "title": "equtableaufixe",
+                            "description": ""
+                        },
+                        "equchrono": {
+                            "type": "string",
+                            "title": "equchrono",
+                            "description": ""
+                        },
+                        "equamenagementaucun": {
+                            "type": "string",
+                            "title": "equamenagementaucun",
+                            "description": ""
+                        },
+                        "equutilscolaire": {
+                            "type": "string",
+                            "title": "equutilscolaire",
+                            "description": ""
+                        },
+                        "equutilclub": {
+                            "type": "string",
+                            "title": "equutilclub",
+                            "description": ""
+                        },
+                        "equutilautre": {
+                            "type": "string",
+                            "title": "equutilautre",
+                            "description": ""
+                        },
+                        "equutilindividuel": {
+                            "type": "string",
+                            "title": "equutilindividuel",
+                            "description": ""
+                        },
+                        "equutilperformance": {
+                            "type": "string",
+                            "title": "equutilperformance",
+                            "description": ""
+                        },
+                        "equutilformation": {
+                            "type": "string",
+                            "title": "equutilformation",
+                            "description": ""
+                        },
+                        "equutilrecreation": {
+                            "type": "string",
+                            "title": "equutilrecreation",
+                            "description": ""
+                        },
+                        "equdatederniertravauxreal": {
+                            "type": "string",
+                            "title": "equdatederniertravauxreal",
+                            "description": ""
+                        },
+                        "anneetravauxreallibelle": {
+                            "type": "string",
+                            "title": "anneetravauxreallibelle",
+                            "description": ""
+                        },
+                        "equdatederniertravauxaucun": {
+                            "type": "string",
+                            "title": "equdatederniertravauxaucun",
+                            "description": ""
+                        },
+                        "equtravauxrealconformite": {
+                            "type": "string",
+                            "title": "equtravauxrealconformite",
+                            "description": ""
+                        },
+                        "equtravauxrealnorme": {
+                            "type": "string",
+                            "title": "equtravauxrealnorme",
+                            "description": ""
+                        },
+                        "equtravauxrealusager": {
+                            "type": "string",
+                            "title": "equtravauxrealusager",
+                            "description": ""
+                        },
+                        "equtravauxrealdegradation": {
+                            "type": "string",
+                            "title": "equtravauxrealdegradation",
+                            "description": ""
+                        },
+                        "equtravauxrealvetuste": {
+                            "type": "string",
+                            "title": "equtravauxrealvetuste",
+                            "description": ""
+                        },
+                        "equacceshandimaire": {
+                            "type": "string",
+                            "title": "equacceshandimaire",
+                            "description": ""
+                        },
+                        "equacceshandimtribune": {
+                            "type": "string",
+                            "title": "equacceshandimtribune",
+                            "description": ""
+                        },
+                        "equacceshandimvestiaire": {
+                            "type": "string",
+                            "title": "equacceshandimvestiaire",
+                            "description": ""
+                        },
+                        "equacceshandimsanitaire": {
+                            "type": "string",
+                            "title": "equacceshandimsanitaire",
+                            "description": ""
+                        },
+                        "equacceshandimaucun": {
+                            "type": "string",
+                            "title": "equacceshandimaucun",
+                            "description": ""
+                        },
+                        "equacceshandisaucun": {
+                            "type": "string",
+                            "title": "equacceshandisaucun",
+                            "description": ""
+                        },
+                        "equacceshandisaire": {
+                            "type": "string",
+                            "title": "equacceshandisaire",
+                            "description": ""
+                        },
+                        "equacceshandistribune": {
+                            "type": "string",
+                            "title": "equacceshandistribune",
+                            "description": ""
+                        },
+                        "equacceshandisvestiaire": {
+                            "type": "string",
+                            "title": "equacceshandisvestiaire",
+                            "description": ""
+                        },
+                        "equacceshandissanitaire": {
+                            "type": "string",
+                            "title": "equacceshandissanitaire",
+                            "description": ""
+                        },
+                        "equaccueilclub": {
+                            "type": "string",
+                            "title": "equaccueilclub",
+                            "description": ""
+                        },
+                        "equaccueilsalle": {
+                            "type": "string",
+                            "title": "equaccueilsalle",
+                            "description": ""
+                        },
+                        "equaccueilbuvette": {
+                            "type": "string",
+                            "title": "equaccueilbuvette",
+                            "description": ""
+                        },
+                        "equaccueildopage": {
+                            "type": "string",
+                            "title": "equaccueildopage",
+                            "description": ""
+                        },
+                        "equaccueilmedic": {
+                            "type": "string",
+                            "title": "equaccueilmedic",
+                            "description": ""
+                        },
+                        "equaccueilinfirmerie": {
+                            "type": "string",
+                            "title": "equaccueilinfirmerie",
+                            "description": ""
+                        },
+                        "equaccueilbureau": {
+                            "type": "string",
+                            "title": "equaccueilbureau",
+                            "description": ""
+                        },
+                        "equaccueilreception": {
+                            "type": "string",
+                            "title": "equaccueilreception",
+                            "description": ""
+                        },
+                        "equaccueillocalrangement": {
+                            "type": "string",
+                            "title": "equaccueillocalrangement",
+                            "description": ""
+                        },
+                        "equaccueilautre": {
+                            "type": "string",
+                            "title": "equaccueilautre",
+                            "description": ""
+                        },
+                        "equaccueilaucun": {
+                            "type": "string",
+                            "title": "equaccueilaucun",
+                            "description": ""
+                        },
+                        "equchauffagenon": {
+                            "type": "string",
+                            "title": "equchauffagenon",
+                            "description": ""
+                        },
+                        "equchauffagefuel": {
+                            "type": "string",
+                            "title": "equchauffagefuel",
+                            "description": ""
+                        },
+                        "equchauffagegaz": {
+                            "type": "string",
+                            "title": "equchauffagegaz",
+                            "description": ""
+                        },
+                        "equchauffageelectricite": {
+                            "type": "string",
+                            "title": "equchauffageelectricite",
+                            "description": ""
+                        },
+                        "equchauffagesolaire": {
+                            "type": "string",
+                            "title": "equchauffagesolaire",
+                            "description": ""
+                        },
+                        "equchauffageautre": {
+                            "type": "string",
+                            "title": "equchauffageautre",
+                            "description": ""
+                        },
+                        "equconfortsauna": {
+                            "type": "string",
+                            "title": "equconfortsauna",
+                            "description": ""
+                        },
+                        "equconfortbainbouillonnant": {
+                            "type": "string",
+                            "title": "equconfortbainbouillonnant",
+                            "description": ""
+                        },
+                        "equconfortbainvapeur": {
+                            "type": "string",
+                            "title": "equconfortbainvapeur",
+                            "description": ""
+                        },
+                        "equconfortsolarium": {
+                            "type": "string",
+                            "title": "equconfortsolarium",
+                            "description": ""
+                        },
+                        "equconfortautre": {
+                            "type": "string",
+                            "title": "equconfortautre",
+                            "description": ""
+                        },
+                        "equconfortaucun": {
+                            "type": "string",
+                            "title": "equconfortaucun",
+                            "description": ""
+                        },
+                        "equdemarchehqe": {
+                            "type": "string",
+                            "title": "equdemarchehqe",
+                            "description": ""
+                        },
+                        "equnaturesignal": {
+                            "type": "string",
+                            "title": "equnaturesignal",
+                            "description": ""
+                        },
+                        "equnaturealert": {
+                            "type": "string",
+                            "title": "equnaturealert",
+                            "description": ""
+                        },
+                        "equnatureacpubped": {
+                            "type": "string",
+                            "title": "equnatureacpubped",
+                            "description": ""
+                        },
+                        "equnatureacpubrout": {
+                            "type": "string",
+                            "title": "equnatureacpubrout",
+                            "description": ""
+                        },
+                        "equnatureacpubmec": {
+                            "type": "string",
+                            "title": "equnatureacpubmec",
+                            "description": ""
+                        },
+                        "equnatureacpubnau": {
+                            "type": "string",
+                            "title": "equnatureacpubnau",
+                            "description": ""
+                        },
+                        "equnatureacsecped": {
+                            "type": "string",
+                            "title": "equnatureacsecped",
+                            "description": ""
+                        },
+                        "equnatureacsecrout": {
+                            "type": "string",
+                            "title": "equnatureacsecrout",
+                            "description": ""
+                        },
+                        "equnatureacsecmec": {
+                            "type": "string",
+                            "title": "equnatureacsecmec",
+                            "description": ""
+                        },
+                        "equnatureacsecnau": {
+                            "type": "string",
+                            "title": "equnatureacsecnau",
+                            "description": ""
+                        },
+                        "equnatureloctec": {
+                            "type": "string",
+                            "title": "equnatureloctec",
+                            "description": ""
+                        },
+                        "equnaturelocped": {
+                            "type": "string",
+                            "title": "equnaturelocped",
+                            "description": ""
+                        },
+                        "equnatureautorise": {
+                            "type": "string",
+                            "title": "equnatureautorise",
+                            "description": ""
+                        },
+                        "equnatureclassfedemini": {
+                            "type": "string",
+                            "title": "equnatureclassfedemini",
+                            "description": ""
+                        },
+                        "equnatureestour": {
+                            "type": "string",
+                            "title": "equnatureestour",
+                            "description": ""
+                        },
+                        "equnatureaetreuil": {
+                            "type": "string",
+                            "title": "equnatureaetreuil",
+                            "description": ""
+                        },
+                        "equipementtir10": {
+                            "type": "string",
+                            "title": "equipementtir10",
+                            "description": ""
+                        },
+                        "equipementtir25": {
+                            "type": "string",
+                            "title": "equipementtir25",
+                            "description": ""
+                        },
+                        "equipementtir50": {
+                            "type": "string",
+                            "title": "equipementtir50",
+                            "description": ""
+                        },
+                        "equipementtirplateau": {
+                            "type": "string",
+                            "title": "equipementtirplateau",
+                            "description": ""
+                        },
+                        "equipementtirautre": {
+                            "type": "string",
+                            "title": "equipementtirautre",
+                            "description": ""
+                        },
+                        "equathdev": {
+                            "type": "string",
+                            "title": "equathdev",
+                            "description": ""
+                        },
+                        "equathlonglignedroite": {
+                            "type": "string",
+                            "title": "equathlonglignedroite",
+                            "description": ""
+                        },
+                        "equathnbcouloirligne": {
+                            "type": "string",
+                            "title": "equathnbcouloirligne",
+                            "description": ""
+                        },
+                        "equathnbcouloirhorsligne": {
+                            "type": "string",
+                            "title": "equathnbcouloirhorsligne",
+                            "description": ""
+                        },
+                        "equathriviere": {
+                            "type": "string",
+                            "title": "equathriviere",
+                            "description": ""
+                        },
+                        "equathnbsauttotal": {
+                            "type": "string",
+                            "title": "equathnbsauttotal",
+                            "description": ""
+                        },
+                        "equathnbsauthauteur": {
+                            "type": "string",
+                            "title": "equathnbsauthauteur",
+                            "description": ""
+                        },
+                        "equathnbsautlongueur": {
+                            "type": "string",
+                            "title": "equathnbsautlongueur",
+                            "description": ""
+                        },
+                        "equathnbsauttriple": {
+                            "type": "string",
+                            "title": "equathnbsauttriple",
+                            "description": ""
+                        },
+                        "equathnbsautperche": {
+                            "type": "string",
+                            "title": "equathnbsautperche",
+                            "description": ""
+                        },
+                        "equathnblancertotal": {
+                            "type": "string",
+                            "title": "equathnblancertotal",
+                            "description": ""
+                        },
+                        "equathnblancerpoids": {
+                            "type": "string",
+                            "title": "equathnblancerpoids",
+                            "description": ""
+                        },
+                        "equathnblancerdisque": {
+                            "type": "string",
+                            "title": "equathnblancerdisque",
+                            "description": ""
+                        },
+                        "equathnblancerjavelot": {
+                            "type": "string",
+                            "title": "equathnblancerjavelot",
+                            "description": ""
+                        },
+                        "equathnblancermarteau": {
+                            "type": "string",
+                            "title": "equathnblancermarteau",
+                            "description": ""
+                        },
+                        "equathnblancermarteaumixte": {
+                            "type": "string",
+                            "title": "equathnblancermarteaumixte",
+                            "description": ""
+                        },
+                        "equnatformelib": {
+                            "type": "string",
+                            "title": "equnatformelib",
+                            "description": ""
+                        },
+                        "equnatlongueurbassin": {
+                            "type": "string",
+                            "title": "equnatlongueurbassin",
+                            "description": ""
+                        },
+                        "equnatlargeurbassin": {
+                            "type": "string",
+                            "title": "equnatlargeurbassin",
+                            "description": ""
+                        },
+                        "equnatsurfacebassin": {
+                            "type": "string",
+                            "title": "equnatsurfacebassin",
+                            "description": ""
+                        },
+                        "equnatprofmini": {
+                            "type": "string",
+                            "title": "equnatprofmini",
+                            "description": ""
+                        },
+                        "equnatprofmax": {
+                            "type": "string",
+                            "title": "equnatprofmax",
+                            "description": ""
+                        },
+                        "equnatcouloir": {
+                            "type": "string",
+                            "title": "equnatcouloir",
+                            "description": ""
+                        },
+                        "equnatsurfaceplagebassin": {
+                            "type": "string",
+                            "title": "equnatsurfaceplagebassin",
+                            "description": ""
+                        },
+                        "equdatemaj": {
+                            "type": "string",
+                            "title": "equdatemaj",
+                            "description": ""
+                        },
+                        "equdatecreation": {
+                            "type": "string",
+                            "title": "equdatecreation",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

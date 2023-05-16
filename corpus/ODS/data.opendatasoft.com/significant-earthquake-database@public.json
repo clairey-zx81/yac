@@ -1,0 +1,581 @@
+{
+    "title": "significant-earthquake-database@public",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/significant-earthquake-database@public"
+        }
+    ],
+    "definitions": {
+        "significant-earthquake-database@public": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/significant-earthquake-database@public_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "significant-earthquake-database@public_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "i_d": {
+                            "type": "string",
+                            "title": "ID Earthquake",
+                            "description": ""
+                        },
+                        "flag_tsunami": {
+                            "type": "string",
+                            "title": "Flag Tsunami",
+                            "description": "Indicate when a tsunami was generated by an earthquake"
+                        },
+                        "year": {
+                            "type": "integer",
+                            "title": "Year",
+                            "description": ""
+                        },
+                        "month": {
+                            "type": "string",
+                            "title": "Month",
+                            "description": ""
+                        },
+                        "day": {
+                            "type": "string",
+                            "title": "Day",
+                            "description": ""
+                        },
+                        "focal_depth": {
+                            "type": "integer",
+                            "title": "Focal Depth",
+                            "description": "Valid values: 0 to 700 km\n\nThe depth of the earthquake is given in kilometers."
+                        },
+                        "eq_primary": {
+                            "type": "number",
+                            "title": "EQ Primary",
+                            "description": ""
+                        },
+                        "eq_mag_mw": {
+                            "type": "number",
+                            "title": "Mw Magnitude",
+                            "description": "The Mw magnitude is based on the moment magnitude scale. Moment is a physical quantity proportional to the slip on the fault times the area of the fault surface that slips; it is related to the total energy released in the EQ. The moment can be estimated from seismograms (and also from geodetic measurements). The moment is then converted into a number similar to other earthquake magnitudes by a standard formula. The result is called the moment magnitude. The moment magnitude provides an estimate of earthquake size that is valid over the complete range of magnitudes, a characteristic that was lacking in other magnitude scales. "
+                        },
+                        "eq_mag_ms": {
+                            "type": "number",
+                            "title": "Ms Magnitude",
+                            "description": "The Ms magnitude is the surface-wave magnitude of the earthquake. "
+                        },
+                        "eq_mag_mb": {
+                            "type": "number",
+                            "title": "Mb Magnitude",
+                            "description": "The Mb magnitude is the compressional body wave (P-wave) magnitude. "
+                        },
+                        "eq_mag_ml": {
+                            "type": "number",
+                            "title": "Ml Magnitude",
+                            "description": "The ML magnitude was the original magnitude relationship defined by Richter and Gutenberg for local earthquakes in 1935. It is based on the maximum amplitude of a seismogram recorded on a Wood-Anderson torsion seismograph. Although these instruments are no longer widely in use, ML values are calculated using modern instrumentation with appropriate adjustments. "
+                        },
+                        "eq_mag_mfa": {
+                            "type": "string",
+                            "title": "MFA Magnitude",
+                            "description": "The Mfa magnitudes are computed from the felt area, for earthquakes that occurred before seismic instruments were in general use. "
+                        },
+                        "eq_mag_unk": {
+                            "type": "number",
+                            "title": "Unknown Magnitude",
+                            "description": "The computational method for the earthquake magnitude was unknown and could not be determined from the published sources. "
+                        },
+                        "intensity": {
+                            "type": "integer",
+                            "title": "Intensity",
+                            "description": "Valid values: 1 to 12\n\nThe Modified Mercalli Intensity (Int) is given in Roman Numerals (converted to numbers in the digital database). "
+                        },
+                        "country": {
+                            "type": "string",
+                            "title": "Country",
+                            "description": ""
+                        },
+                        "state": {
+                            "type": "string",
+                            "title": "State",
+                            "description": ""
+                        },
+                        "location_name": {
+                            "type": "string",
+                            "title": "Location name",
+                            "description": ""
+                        },
+                        "region_code": {
+                            "type": "integer",
+                            "title": "Region code",
+                            "description": ""
+                        },
+                        "deaths": {
+                            "type": "integer",
+                            "title": "Earthquake : Deaths",
+                            "description": ""
+                        },
+                        "deaths_description": {
+                            "type": "string",
+                            "title": "Earthquake : Deaths Description",
+                            "description": ""
+                        },
+                        "missing": {
+                            "type": "number",
+                            "title": "Earthquake : Missing",
+                            "description": ""
+                        },
+                        "missing_description": {
+                            "type": "string",
+                            "title": "Earthquake : Missing Description",
+                            "description": ""
+                        },
+                        "injuries": {
+                            "type": "number",
+                            "title": "Earthquake : Injuries",
+                            "description": ""
+                        },
+                        "injuries_description": {
+                            "type": "string",
+                            "title": "Earthquake : Injuries Description",
+                            "description": ""
+                        },
+                        "damage_millions_dollars": {
+                            "type": "number",
+                            "title": "Earthquake : Damage (in M$)",
+                            "description": ""
+                        },
+                        "damage_description": {
+                            "type": "string",
+                            "title": "Earthquake : Damage Description",
+                            "description": ""
+                        },
+                        "houses_destroyed": {
+                            "type": "integer",
+                            "title": "Earthquakes : Houses destroyed",
+                            "description": ""
+                        },
+                        "houses_destroyed_description": {
+                            "type": "string",
+                            "title": "Earthquakes : Houses destroyed Description",
+                            "description": ""
+                        },
+                        "houses_damaged": {
+                            "type": "string",
+                            "title": "Earthquakes : Houses damaged",
+                            "description": ""
+                        },
+                        "houses_damaged_description": {
+                            "type": "string",
+                            "title": "Earthquakes : Houses damaged Description",
+                            "description": ""
+                        },
+                        "total_deaths": {
+                            "type": "integer",
+                            "title": "Total Effects : Deaths",
+                            "description": ""
+                        },
+                        "total_deaths_description": {
+                            "type": "string",
+                            "title": "Total Effects : Deaths Description",
+                            "description": ""
+                        },
+                        "total_missing": {
+                            "type": "number",
+                            "title": "Total Effects : Missing",
+                            "description": ""
+                        },
+                        "total_missing_description": {
+                            "type": "string",
+                            "title": "Total Effects : Missing Description",
+                            "description": ""
+                        },
+                        "total_injuries": {
+                            "type": "number",
+                            "title": "Total Effects : Injuries",
+                            "description": ""
+                        },
+                        "total_injuries_description": {
+                            "type": "string",
+                            "title": "Total Effects : Injuries Description",
+                            "description": ""
+                        },
+                        "total_damage_millions_dollars": {
+                            "type": "string",
+                            "title": "Total Effects : Damages in million Dollars",
+                            "description": ""
+                        },
+                        "total_damage_description": {
+                            "type": "string",
+                            "title": "Total Effects : Damage Description",
+                            "description": ""
+                        },
+                        "total_houses_destroyed": {
+                            "type": "integer",
+                            "title": "Total Effects : Houses Destroyed",
+                            "description": ""
+                        },
+                        "total_houses_destroyed_description": {
+                            "type": "string",
+                            "title": "Total Effects : Houses Destroyed Description",
+                            "description": ""
+                        },
+                        "total_houses_damaged": {
+                            "type": "number",
+                            "title": "Total Effects : Houses Damaged",
+                            "description": ""
+                        },
+                        "total_houses_damaged_description": {
+                            "type": "string",
+                            "title": "Total Effects : Houses Damaged Description",
+                            "description": ""
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Coordinates",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

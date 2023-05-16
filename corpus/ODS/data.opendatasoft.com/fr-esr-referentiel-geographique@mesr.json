@@ -1,0 +1,551 @@
+{
+    "title": "fr-esr-referentiel-geographique@mesr",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/fr-esr-referentiel-geographique@mesr"
+        }
+    ],
+    "definitions": {
+        "fr-esr-referentiel-geographique@mesr": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/fr-esr-referentiel-geographique@mesr_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "fr-esr-referentiel-geographique@mesr_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "regrgp_nom": {
+                            "type": "string",
+                            "title": "REGRGP_NOM",
+                            "description": "Regroupement régional"
+                        },
+                        "reg_nom": {
+                            "type": "string",
+                            "title": "REG_NOM",
+                            "description": "Libellé région"
+                        },
+                        "reg_nom_old": {
+                            "type": "string",
+                            "title": "REG_NOM_OLD",
+                            "description": "Ancien libellé région"
+                        },
+                        "aca_nom": {
+                            "type": "string",
+                            "title": "ACA_NOM",
+                            "description": "Libellé de l'académie"
+                        },
+                        "dep_nom": {
+                            "type": "string",
+                            "title": "DEP_NOM",
+                            "description": "Libellé du département"
+                        },
+                        "com_code": {
+                            "type": "string",
+                            "title": "COM_CODE",
+                            "description": "code commune"
+                        },
+                        "com_code1": {
+                            "type": "string",
+                            "title": "COM_CODE1",
+                            "description": "Code commune, arrondissements marseillais et Lyonnais agrégés"
+                        },
+                        "com_code2": {
+                            "type": "string",
+                            "title": "COM_CODE2",
+                            "description": "Code commune, arrondissements parisien, marseillais et Lyonnais agrégés"
+                        },
+                        "com_id": {
+                            "type": "string",
+                            "title": "COM_ID",
+                            "description": "Id commune"
+                        },
+                        "com_nom_maj_court": {
+                            "type": "string",
+                            "title": "COM_NOM_MAJ_COURT",
+                            "description": "Libellé court de la commune en majuscule"
+                        },
+                        "com_nom_maj": {
+                            "type": "string",
+                            "title": "COM_NOM_MAJ",
+                            "description": "Libellé de la commune en majuscule"
+                        },
+                        "com_nom": {
+                            "type": "string",
+                            "title": "COM_NOM",
+                            "description": "Libellé de la commune"
+                        },
+                        "uu_code": {
+                            "type": "string",
+                            "title": "UU_CODE",
+                            "description": "Code de l'unité urbaine (2020)"
+                        },
+                        "uu_id": {
+                            "type": "string",
+                            "title": "UU_ID",
+                            "description": "ID de l'unité urbaine (2020)"
+                        },
+                        "uucr_id": {
+                            "type": "string",
+                            "title": "UUCR_ID",
+                            "description": "ID de l'unité urbaine ou de la commune rurale (2020)"
+                        },
+                        "uucr_nom": {
+                            "type": "string",
+                            "title": "UUCR_NOM",
+                            "description": "Libellé de l'unité urbaine ou de la commune rurale (2020)"
+                        },
+                        "ze_id": {
+                            "type": "string",
+                            "title": "ZE_ID",
+                            "description": "Id de la zone d'emploi"
+                        },
+                        "dep_code": {
+                            "type": "string",
+                            "title": "DEP_CODE",
+                            "description": "Code département"
+                        },
+                        "dep_id": {
+                            "type": "string",
+                            "title": "DEP_ID",
+                            "description": "Id du département"
+                        },
+                        "dep_nom_num": {
+                            "type": "string",
+                            "title": "DEP_NOM_NUM",
+                            "description": "Libellé du département et code"
+                        },
+                        "dep_num_nom": {
+                            "type": "string",
+                            "title": "DEP_NUM_NOM",
+                            "description": "Code et libellé du département"
+                        },
+                        "aca_code": {
+                            "type": "string",
+                            "title": "ACA_CODE",
+                            "description": "Code académie"
+                        },
+                        "aca_id": {
+                            "type": "string",
+                            "title": "ACA_ID",
+                            "description": "Id académie"
+                        },
+                        "reg_code": {
+                            "type": "string",
+                            "title": "REG_CODE",
+                            "description": "Code région"
+                        },
+                        "reg_id": {
+                            "type": "string",
+                            "title": "REG_ID",
+                            "description": "Id région"
+                        },
+                        "reg_code_old": {
+                            "type": "string",
+                            "title": "REG_CODE_OLD",
+                            "description": "Ancien code région"
+                        },
+                        "reg_id_old": {
+                            "type": "string",
+                            "title": "REG_ID_OLD",
+                            "description": "Ancien Id région"
+                        },
+                        "fd_id": {
+                            "type": "string",
+                            "title": "FD_ID",
+                            "description": "France détaillée"
+                        },
+                        "fr_id": {
+                            "type": "string",
+                            "title": "FR_ID",
+                            "description": "France regroupée"
+                        },
+                        "fe_id": {
+                            "type": "string",
+                            "title": "FE_ID",
+                            "description": "France entière"
+                        },
+                        "uu_id_99": {
+                            "type": "string",
+                            "title": "UU_ID_99",
+                            "description": "Ancien Id unité urbaine (1999)"
+                        },
+                        "au_code": {
+                            "type": "string",
+                            "title": "AU_CODE",
+                            "description": "Code de l'aire urbaine"
+                        },
+                        "au_id": {
+                            "type": "string",
+                            "title": "AU_ID",
+                            "description": "ID de l'aire urbaine"
+                        },
+                        "auc_id": {
+                            "type": "string",
+                            "title": "AUC_ID",
+                            "description": "ID de l'aire urbaine ou de la commune"
+                        },
+                        "auc_nom": {
+                            "type": "string",
+                            "title": "AUC_NOM",
+                            "description": "Libellé de l'aire urbaine ou de la commune"
+                        },
+                        "uu_id_10": {
+                            "type": "string",
+                            "title": "UU_ID_10",
+                            "description": ""
+                        },
+                        "geolocalisation": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geolocalisation",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

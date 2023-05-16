@@ -1,0 +1,453 @@
+{
+    "title": "ta_oaphb_jalons_historiques@arscan",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/ta_oaphb_jalons_historiques@arscan"
+        }
+    ],
+    "definitions": {
+        "ta_oaphb_jalons_historiques@arscan": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ta_oaphb_jalons_historiques@arscan_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "ta_oaphb_jalons_historiques@arscan_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "perimetre": {
+                            "type": "number",
+                            "title": "Perimetre",
+                            "description": "Périmètre couvert par le document. Les mesures sont généralement exprimée dans l’unité du système de coordonnée de la donnée."
+                        },
+                        "surface": {
+                            "type": "number",
+                            "title": "Surface (m2)",
+                            "description": "Surface couverte par le document. Les mesures sont généralement exprimée dans l’unité du système de coordonnée de la donnée."
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "Nom du document",
+                            "description": "Nom du document tel qu'exprimé lors de son géoréférencement"
+                        },
+                        "nbre_pts": {
+                            "type": "integer",
+                            "title": "Nombre de points de calage",
+                            "description": "Nombre de points de calage utilisé pour redresser le document"
+                        },
+                        "rms": {
+                            "type": "number",
+                            "title": "Erreur constatée",
+                            "description": "Mesure quantitative moyenne de l’erreur constatée par rapport au référentiel utilisé soit par mesure et échantillonnage soit sous la forme d’une erreur type RMS. 0 signifie qu’il n’y pas de mesure. Les mesures sont généralement exprimée dans l’unité du système de coordonnée de la donnée."
+                        },
+                        "metho": {
+                            "type": "string",
+                            "title": "Méthode de calage",
+                            "description": "Méthode de transformation utilisée pour recaler le document."
+                        },
+                        "qualite": {
+                            "type": "string",
+                            "title": "Qualité constatée",
+                            "description": "Indicateur subjectif de la qualité donnant une évaluation de la correspondance entre le référentiel utilisé et le document géoréférencé."
+                        },
+                        "nakala_tel": {
+                            "type": "string",
+                            "title": "Lien de téléchargement Nakala (JP2000)",
+                            "description": "Lien de téléchargement du document depuis Nakala. Les fichiers sont déposés en JP2000 haute définition géoréférencés selon la projection EPSG 3857"
+                        },
+                        "nakala_vis": {
+                            "type": "string",
+                            "title": "Vignette de visualisation",
+                            "description": "URI de la vignette de visualisation utilisée dans la fiche"
+                        },
+                        "periode": {
+                            "type": "string",
+                            "title": "Période",
+                            "description": "Période principale représentée dans le document ou la base de donnée"
+                        },
+                        "date_deb": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date début",
+                            "description": "Date la plus ancienne de la donnée"
+                        },
+                        "date_fin": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date fin",
+                            "description": "Date la plus récente de la donnée"
+                        },
+                        "flux_xyz": {
+                            "type": "string",
+                            "title": "Flux XYZ",
+                            "description": "Lien vers le Flux de données selon la norme XYZ intégrable dans un SIG"
+                        },
+                        "iris_insee": {
+                            "type": "string",
+                            "title": "Iris (INSEE)",
+                            "description": "Découpage par quartiers actuels selon l'INSEE"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

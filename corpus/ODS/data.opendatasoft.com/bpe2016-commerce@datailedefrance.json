@@ -1,0 +1,531 @@
+{
+    "title": "bpe2016-commerce@datailedefrance",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/bpe2016-commerce@datailedefrance"
+        }
+    ],
+    "definitions": {
+        "bpe2016-commerce@datailedefrance": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/bpe2016-commerce@datailedefrance_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "bpe2016-commerce@datailedefrance_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "codgeo": {
+                            "type": "string",
+                            "title": "CODGEO",
+                            "description": ""
+                        },
+                        "libgeo": {
+                            "type": "string",
+                            "title": "LIBGEO",
+                            "description": ""
+                        },
+                        "dep": {
+                            "type": "integer",
+                            "title": "DEP",
+                            "description": ""
+                        },
+                        "nom_dept": {
+                            "type": "string",
+                            "title": "Département",
+                            "description": ""
+                        },
+                        "nb_b101": {
+                            "type": "integer",
+                            "title": "Hypermarché",
+                            "description": "Un hypermarché a une surface de vente déclarée supérieure à 2500 m²."
+                        },
+                        "nb_b102": {
+                            "type": "integer",
+                            "title": "Supermarché",
+                            "description": "Un supermarché a une surface de vente déclarée est entre 400 et 2500 m². Le seuil est différent du seuil administratif de la DGCCRF (Direction générale de la concurrence, de la consommation et de la répression des fraudes) fixé à 300m²."
+                        },
+                        "nb_b103": {
+                            "type": "integer",
+                            "title": "Grande surface de bricolage",
+                            "description": "Une grande surface de bricolage a un espace de vente déclarée supérieure à 400 m². Le seuil est différent du seuil administratif de la DGCCRF fixé à 300m²."
+                        },
+                        "nb_b201": {
+                            "type": "integer",
+                            "title": "Supérette",
+                            "description": "La surface de vente déclarée d'une supérette est entre 120 et 400 m². Le seuil est différent du seuil administratif de la DGCCRF. Il est recommandé de regrouper les supérettes avec les épiceries."
+                        },
+                        "nb_b202": {
+                            "type": "integer",
+                            "title": "Epicerie",
+                            "description": "Une épicerie a une surface de vente déclarée inférieure à 120 m². Il est recommandé de regrouper les supérettes avec les épiceries."
+                        },
+                        "nb_b203": {
+                            "type": "integer",
+                            "title": "Boulangerie",
+                            "description": "Cette catégorie comptabilise les boulangeries qu'ils soient avec ou sans pâtisserie. Elle comprend également les terminaux de cuisson, la vente sans fabrication de produits de boulangerie.\nElle ne comprend en revanche pas la vente de pizzas à emporter."
+                        },
+                        "nb_b204": {
+                            "type": "integer",
+                            "title": "Boucherie charcuterie",
+                            "description": "Cette catégorie comprend la vente de volailles, de triperie, et plats préparés à base de viande."
+                        },
+                        "nb_b205": {
+                            "type": "integer",
+                            "title": "Produits surgelés",
+                            "description": "Il s'agit aussi bien des magasins spécialisés que de la livraison à domicile."
+                        },
+                        "nb_b206": {
+                            "type": "integer",
+                            "title": "Poissonnerie",
+                            "description": ""
+                        },
+                        "nb_b301": {
+                            "type": "integer",
+                            "title": "Librairie papeterie journaux",
+                            "description": ""
+                        },
+                        "nb_b302": {
+                            "type": "integer",
+                            "title": "Magasin de vêtements",
+                            "description": ""
+                        },
+                        "nb_b303": {
+                            "type": "integer",
+                            "title": "Magasin d'équipements du foyer",
+                            "description": "Il s'agit par exemple d'établissements vendant de la lustrerie, des ustensiles ménagers, de la vaisselle, des rideaux et voilages."
+                        },
+                        "nb_b304": {
+                            "type": "integer",
+                            "title": "Magasin de chaussures",
+                            "description": ""
+                        },
+                        "nb_b305": {
+                            "type": "integer",
+                            "title": "Magasin d'électroménager et de matériel audio-vidéo",
+                            "description": ""
+                        },
+                        "nb_b306": {
+                            "type": "integer",
+                            "title": "Magasin de meubles",
+                            "description": "Cette catégorie comprend aussi le commerce de sommiers et matelas."
+                        },
+                        "nb_b307": {
+                            "type": "integer",
+                            "title": "Magasin d'articles de sports et de loisirs",
+                            "description": ""
+                        },
+                        "nb_b308": {
+                            "type": "integer",
+                            "title": "Magasin de revêtements murs et sols",
+                            "description": ""
+                        },
+                        "nb_b309": {
+                            "type": "integer",
+                            "title": "Droguerie quincaillerie bricolage",
+                            "description": "La surface de vente déclarée est inférieure à 400 m²."
+                        },
+                        "nb_b310": {
+                            "type": "integer",
+                            "title": "Parfumerie",
+                            "description": "Il s'agit d'établissement dont c'est l'activité principale déclarée. Cette catégorie comprend le commerce de produits de beauté."
+                        },
+                        "nb_b311": {
+                            "type": "integer",
+                            "title": "Horlogerie Bijouterie",
+                            "description": ""
+                        },
+                        "nb_b312": {
+                            "type": "integer",
+                            "title": "Fleuriste",
+                            "description": "Cette catégorie comprend le commerce de plants, arbres et arbustes."
+                        },
+                        "nb_b313": {
+                            "type": "integer",
+                            "title": "Magasin d'optique",
+                            "description": ""
+                        },
+                        "nb_b315": {
+                            "type": "integer",
+                            "title": "Magasin de matériel médical et orthopédique",
+                            "description": ""
+                        },
+                        "nb_b316": {
+                            "type": "integer",
+                            "title": "Station service",
+                            "description": "Il s'agit d'établissements ayant vendu au moins 500 000 litres de carburant au cours de l’année n-1."
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "current_code": {
+                            "type": "string",
+                            "title": "Code Courant Officiel",
+                            "description": ""
+                        },
+                        "dep_name": {
+                            "type": "string",
+                            "title": "Nom Officiel Département",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

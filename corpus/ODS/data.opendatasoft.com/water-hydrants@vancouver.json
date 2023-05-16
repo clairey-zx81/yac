@@ -1,0 +1,539 @@
+{
+    "title": "water-hydrants@vancouver",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/water-hydrants@vancouver"
+        }
+    ],
+    "definitions": {
+        "water-hydrants@vancouver": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/water-hydrants@vancouver_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "water-hydrants@vancouver_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "title": "ID",
+                            "description": "hydrant identifier in the format WH-A99-999 where WH stands for Water Hydrant, A99 is the grid, and the first of the last three numbers is 0 for distribution or transmission subsystem, 1 for Dedicated Fire Protection, 8 for Musqueam owned, and 9 for a private hydrant.  The last two 9's are a sequence number."
+                        },
+                        "subsystem": {
+                            "type": "string",
+                            "title": "SUBSYSTEM",
+                            "description": "the subsystem where DSTR is distribution; TRNS is transmission; and DFPS is dedicated fire protection"
+                        },
+                        "code": {
+                            "type": "string",
+                            "title": "CODE",
+                            "description": "is the manufacturer"
+                        },
+                        "covwaterhydrantunittype": {
+                            "type": "string",
+                            "title": "COVWATERHYDRANTUNITTYPE",
+                            "description": "hydrant model"
+                        },
+                        "distancefromcorner": {
+                            "type": "number",
+                            "title": "DISTANCEFROMCORNER",
+                            "description": "distance in meters to the nearest street corner"
+                        },
+                        "feederlen": {
+                            "type": "number",
+                            "title": "FEEDERLEN",
+                            "description": "distance in meters from the hydrant to the hydrant control valve"
+                        },
+                        "dir": {
+                            "type": "string",
+                            "title": "DIR",
+                            "description": "direction of hydrant lateral"
+                        },
+                        "line": {
+                            "type": "string",
+                            "title": "LINE",
+                            "description": "direction of hydrant lateral"
+                        },
+                        "color": {
+                            "type": "string",
+                            "title": "COLOR",
+                            "description": "Red indicates < 500 Imperial Gallons Per Minute (GPM); Yellow indicates 500 - 1000 IMPERIAL GPM; Green indicates 1000 - 1500 IMPERIAL GPM; Blue indicates > 1500 IMPERIAL GPM; White indicates a PRIVATE HYDRANT"
+                        },
+                        "incomm": {
+                            "type": "string",
+                            "title": "INCOMM",
+                            "description": "in commission yes or no"
+                        },
+                        "chr0": {
+                            "type": "string",
+                            "title": "CHR0",
+                            "description": "contains no data"
+                        },
+                        "chr1": {
+                            "type": "string",
+                            "title": "CHR1",
+                            "description": "contains no data"
+                        },
+                        "street_number": {
+                            "type": "string",
+                            "title": "STREET_NUMBER",
+                            "description": "Number assigned to the street where the hydrant is located"
+                        },
+                        "street": {
+                            "type": "string",
+                            "title": "STREET",
+                            "description": "location plus address or intersection. For example WS 123 Madeup Street means west side in front of 123 Madeup Street; if an intersection it will be the corner and the street and cross street for example NEC Madeup Street & Madeup Drive which means north east corner on Madeup Street where the cross street is Madeup Drive"
+                        },
+                        "oldhydnum": {
+                            "type": "string",
+                            "title": "OLDHYDNUM",
+                            "description": "old hydrant number"
+                        },
+                        "castsub": {
+                            "type": "string",
+                            "title": "CASTSUB",
+                            "description": "sub designation for example Stanley Park"
+                        },
+                        "oocdate": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "OOCDATE",
+                            "description": "last out of commission date"
+                        },
+                        "oocnotes": {
+                            "type": "string",
+                            "title": "OOCNOTES",
+                            "description": "last out of commission notes"
+                        },
+                        "instdate1": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "INSTDATE1",
+                            "description": "date hydrant was installed"
+                        },
+                        "oracleid": {
+                            "type": "string",
+                            "title": "ORACLEID",
+                            "description": "identifier in Oracle database"
+                        },
+                        "active": {
+                            "type": "string",
+                            "title": "ACTIVE",
+                            "description": "all hydrants in this dataset are in service"
+                        },
+                        "remarks": {
+                            "type": "string",
+                            "title": "REMARKS",
+                            "description": "any special notes"
+                        },
+                        "fireuseonly": {
+                            "type": "string",
+                            "title": "FIREUSEONLY",
+                            "description": "a 'Y' (yes) means not available for special use due to a special condition such as releasing water from the hydrant will set off fire alarms at nearby schools, etc."
+                        },
+                        "status": {
+                            "type": "string",
+                            "title": "STATUS",
+                            "description": "all hydrants in this dataset are in service"
+                        },
+                        "compression": {
+                            "type": "string",
+                            "title": "COMPRESSION",
+                            "description": "'Yes' means this is a compression valve type hydrant\n 'N' means a gate valve type hydrant"
+                        },
+                        "adddttm": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "ADDDTTM",
+                            "description": "the date the hydrant was added to the database"
+                        },
+                        "addby": {
+                            "type": "string",
+                            "title": "ADDBY",
+                            "description": "the person or operation that added the hydrant"
+                        },
+                        "modby": {
+                            "type": "string",
+                            "title": "MODBY",
+                            "description": "the last person/operation that modified the record"
+                        },
+                        "feature_id": {
+                            "type": "integer",
+                            "title": "FEATURE_ID",
+                            "description": "GIS internal number"
+                        },
+                        "unitid": {
+                            "type": "integer",
+                            "title": "UNITID",
+                            "description": "Infrastructure management internal number"
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geom",
+                            "description": "Spatial representation of feature"
+                        },
+                        "geo_local_area": {
+                            "type": "string",
+                            "title": "Geo Local Area",
+                            "description": "The local area where the feature is found, derived from the feature's coordinates or address in the source system. The City has 22 local areas (also known as local planning areas).\nFor more details, see the Local area boundary data set."
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

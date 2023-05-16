@@ -1,0 +1,492 @@
+{
+    "title": "base-nationale-des-lieux-de-covoiturage-france",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/base-nationale-des-lieux-de-covoiturage-france"
+        }
+    ],
+    "definitions": {
+        "base-nationale-des-lieux-de-covoiturage-france": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/base-nationale-des-lieux-de-covoiturage-france_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "base-nationale-des-lieux-de-covoiturage-france_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "spot_id": {
+                            "type": "string",
+                            "title": "ID du lieu",
+                            "description": ""
+                        },
+                        "id_local": {
+                            "type": "string",
+                            "title": "ID producteur du lieu",
+                            "description": ""
+                        },
+                        "spot_name": {
+                            "type": "string",
+                            "title": "Nom du lieu",
+                            "description": ""
+                        },
+                        "spot_address": {
+                            "type": "string",
+                            "title": "Adresse du lieu",
+                            "description": ""
+                        },
+                        "spot_com": {
+                            "type": "string",
+                            "title": "Commune du lieu",
+                            "description": ""
+                        },
+                        "spot_com_code": {
+                            "type": "string",
+                            "title": "Code INSEE de la commune",
+                            "description": ""
+                        },
+                        "spot_type": {
+                            "type": "string",
+                            "title": "Type de lieu",
+                            "description": ""
+                        },
+                        "update_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de mise à jour",
+                            "description": ""
+                        },
+                        "open": {
+                            "type": "string",
+                            "title": "Ouvert",
+                            "description": ""
+                        },
+                        "source": {
+                            "type": "integer",
+                            "title": "Source",
+                            "description": ""
+                        },
+                        "xlong": {
+                            "type": "number",
+                            "title": "Longitude",
+                            "description": ""
+                        },
+                        "ylat": {
+                            "type": "number",
+                            "title": "Latitude",
+                            "description": ""
+                        },
+                        "spot_size": {
+                            "type": "integer",
+                            "title": "Nombre de place",
+                            "description": ""
+                        },
+                        "pmr_spot_size": {
+                            "type": "integer",
+                            "title": "Nombre de place réservées aux PMR",
+                            "description": ""
+                        },
+                        "duration": {
+                            "type": "string",
+                            "title": "Durée",
+                            "description": ""
+                        },
+                        "hours": {
+                            "type": "string",
+                            "title": "Horaires",
+                            "description": ""
+                        },
+                        "owner": {
+                            "type": "string",
+                            "title": "Propriétaire",
+                            "description": ""
+                        },
+                        "light": {
+                            "type": "string",
+                            "title": "Lumière",
+                            "description": ""
+                        },
+                        "comments": {
+                            "type": "string",
+                            "title": "Commentaires",
+                            "description": ""
+                        },
+                        "geo_point": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "reg_name": {
+                            "type": "string",
+                            "title": "Nom Officiel Région",
+                            "description": ""
+                        },
+                        "dep_name": {
+                            "type": "string",
+                            "title": "Nom Officiel Département",
+                            "description": ""
+                        },
+                        "reg_code": {
+                            "type": "string",
+                            "title": "Code Officiel Région",
+                            "description": ""
+                        },
+                        "dep_code": {
+                            "type": "string",
+                            "title": "Code Officiel Département",
+                            "description": ""
+                        },
+                        "bin_open": {
+                            "type": "integer",
+                            "title": "Ouvert (binaire)",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,481 @@
+{
+    "title": "lieux-de-mediation-numerique@isere",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/lieux-de-mediation-numerique@isere"
+        }
+    ],
+    "definitions": {
+        "lieux-de-mediation-numerique@isere": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/lieux-de-mediation-numerique@isere_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "lieux-de-mediation-numerique@isere_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": "localisation"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "id_pk": {
+                            "type": "string",
+                            "title": "id_pk",
+                            "description": "identifiant du site"
+                        },
+                        "nom_prestataire": {
+                            "type": "string",
+                            "title": "nom_prestataire",
+                            "description": "Nom du prestataire"
+                        },
+                        "theme_demarches_administratives": {
+                            "type": "string",
+                            "title": "theme_demarches_administratives",
+                            "description": "Site proposant un appui aux démarches administratives"
+                        },
+                        "theme_coup_de_pouce_point_info": {
+                            "type": "string",
+                            "title": "theme_coup_de_pouce_point_info",
+                            "description": "Site proposant un coup de pouce - point info"
+                        },
+                        "theme_informatique_acces_libre_wifi": {
+                            "type": "string",
+                            "title": "theme_informatique_acces_libre_wifi",
+                            "description": "Site proposant un accès libre wifi"
+                        },
+                        "theme_formation_atelier": {
+                            "type": "string",
+                            "title": "theme_formation_atelier",
+                            "description": "Site proposant des formations - ateliers numériques"
+                        },
+                        "theme_reparation_maintenance": {
+                            "type": "string",
+                            "title": "theme_reparation_maintenance",
+                            "description": "Site proposant de la réparation - maintenance matériel informatique"
+                        },
+                        "theme_accompagnement_projet_informatique": {
+                            "type": "string",
+                            "title": "theme_accompagnement_projet_informatique",
+                            "description": "Site proposant un accompagnement aux projets informatiques"
+                        },
+                        "jours_et_horaires_ouverture": {
+                            "type": "string",
+                            "title": "jours_et_horaires_ouverture",
+                            "description": "Plage d'ouverture du site"
+                        },
+                        "remarques_complementaires": {
+                            "type": "string",
+                            "title": "remarques_complementaires",
+                            "description": "Remarques "
+                        },
+                        "type_public_cible": {
+                            "type": "string",
+                            "title": "type_public_cible",
+                            "description": "Public cible du site"
+                        },
+                        "adresse_numero_rue": {
+                            "type": "string",
+                            "title": "adresse_numero_rue",
+                            "description": "numéro de la rue"
+                        },
+                        "adresse_nom_rue": {
+                            "type": "string",
+                            "title": "adresse_nom_rue",
+                            "description": "nom de la rue"
+                        },
+                        "adresse_code_postal": {
+                            "type": "string",
+                            "title": "adresse_code_postal",
+                            "description": "Code postal de la ville"
+                        },
+                        "adresse_nom_commune": {
+                            "type": "string",
+                            "title": "adresse_nom_commune",
+                            "description": "Ville "
+                        },
+                        "territoire_departemental": {
+                            "type": "string",
+                            "title": "territoire_departemental",
+                            "description": "Territoire départemental de rattachement du site"
+                        },
+                        "site_web": {
+                            "type": "string",
+                            "title": "site_web",
+                            "description": "site web du site"
+                        },
+                        "adresse_mail": {
+                            "type": "string",
+                            "title": "adresse_mail",
+                            "description": "adresse mail du site"
+                        },
+                        "numeros_de_telephone": {
+                            "type": "string",
+                            "title": "numeros_de_telephone",
+                            "description": "numéro de téléphone du site"
+                        },
+                        "commentaires": {
+                            "type": "string",
+                            "title": "commentaires",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

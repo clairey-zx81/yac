@@ -1,0 +1,549 @@
+{
+    "title": "grid-and-primary-sites@ukpowernetworks",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/grid-and-primary-sites@ukpowernetworks"
+        }
+    ],
+    "definitions": {
+        "grid-and-primary-sites@ukpowernetworks": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/grid-and-primary-sites@ukpowernetworks_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "grid-and-primary-sites@ukpowernetworks_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "sitefunctionallocation": {
+                            "type": "string",
+                            "title": "SiteFunctionalLocation",
+                            "description": "This is the Site alias in both the Network Control and Asset Management System. It includes the site number"
+                        },
+                        "licencearea": {
+                            "type": "string",
+                            "title": "LicenceArea",
+                            "description": "This holds the Licence Area or DNO (Distribution Network Operator) name"
+                        },
+                        "sitename": {
+                            "type": "string",
+                            "title": "SiteName",
+                            "description": "The Name of the Site as per the UK Power Networks Control and Asset Management System"
+                        },
+                        "sitetype": {
+                            "type": "string",
+                            "title": "SiteType",
+                            "description": "This splits the data between Grid (132kV/66kV) and Primary (11kV - 33kV)"
+                        },
+                        "sitevoltage": {
+                            "type": "integer",
+                            "title": "SiteVoltage",
+                            "description": "Highest voltage on the site"
+                        },
+                        "esqcroverallrisk": {
+                            "type": "string",
+                            "title": "ESQCROverallRisk",
+                            "description": "Electricity Safety, Quality and Continuity Regulations (ESQCR) give each site a risk based on a defined set of criteria"
+                        },
+                        "gridref": {
+                            "type": "string",
+                            "title": "GridRef",
+                            "description": "Ordnance Survey Grid Reference"
+                        },
+                        "siteassetcount": {
+                            "type": "integer",
+                            "title": "SiteAssetCount",
+                            "description": "Total Number of assets on the site"
+                        },
+                        "powertransformercount": {
+                            "type": "integer",
+                            "title": "PowerTransformerCount",
+                            "description": "Number of Power Transformers on the site"
+                        },
+                        "electricalassetcount": {
+                            "type": "integer",
+                            "title": "ElectricalAssetCount",
+                            "description": "Number of assets in the site which form part of the electrical network or monitor/control the network"
+                        },
+                        "civilassetcount": {
+                            "type": "integer",
+                            "title": "CivilAssetCount",
+                            "description": "Number of Civils assets on the site (e.g. buildings; roads; water; waste; etc.)"
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "title": "Longitude",
+                            "description": "Site Longitude (based on the Grid Reference)"
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "title": "Latitude",
+                            "description": "Site Latitude (based on the Grid Reference)"
+                        },
+                        "street": {
+                            "type": "string",
+                            "title": "Street",
+                            "description": "Site Location details"
+                        },
+                        "suburb": {
+                            "type": "string",
+                            "title": "Suburb",
+                            "description": "Site Location details"
+                        },
+                        "towncity": {
+                            "type": "string",
+                            "title": "TownCity",
+                            "description": "Site Location details"
+                        },
+                        "county": {
+                            "type": "string",
+                            "title": "County",
+                            "description": "Site Location details"
+                        },
+                        "postcode": {
+                            "type": "string",
+                            "title": "PostCode",
+                            "description": "Site Location details"
+                        },
+                        "yearcommissioned": {
+                            "type": "string",
+                            "title": "YearCommissioned",
+                            "description": "Year the sites Electrical Network was energised"
+                        },
+                        "datecommissioned": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "DateCommissioned",
+                            "description": "Date the sites Electrical Network was energised"
+                        },
+                        "siteclassification": {
+                            "type": "string",
+                            "title": "SiteClassification",
+                            "description": ""
+                        },
+                        "assessmentdate": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "AssessmentDate",
+                            "description": ""
+                        },
+                        "last_report": {
+                            "type": "string",
+                            "title": "Last_Report",
+                            "description": ""
+                        },
+                        "calculatedresistance": {
+                            "type": "string",
+                            "title": "CalculatedResistance",
+                            "description": ""
+                        },
+                        "measuredresistance_ohm": {
+                            "type": "number",
+                            "title": "MeasuredResistance.Ohm.",
+                            "description": ""
+                        },
+                        "next_assessmentdate": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Next_AssessmentDate",
+                            "description": ""
+                        },
+                        "easting": {
+                            "type": "string",
+                            "title": "Easting",
+                            "description": ""
+                        },
+                        "northing": {
+                            "type": "string",
+                            "title": "Northing",
+                            "description": ""
+                        },
+                        "transratingwinter": {
+                            "type": "string",
+                            "title": "transratingwinter",
+                            "description": ""
+                        },
+                        "transratingsummer": {
+                            "type": "string",
+                            "title": "transratingsummer",
+                            "description": ""
+                        },
+                        "reversepower": {
+                            "type": "string",
+                            "title": "reversepower",
+                            "description": ""
+                        },
+                        "maxdemandsummer": {
+                            "type": "string",
+                            "title": "maxdemandsummer",
+                            "description": ""
+                        },
+                        "maxdemandwinter": {
+                            "type": "string",
+                            "title": "maxdemandwinter",
+                            "description": ""
+                        },
+                        "spatial_coordinates": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Spatial Coordinates",
+                            "description": "Latitude and Longitude, location of the Primary or Grid site."
+                        },
+                        "local_authority": {
+                            "type": "string",
+                            "title": "local_authority",
+                            "description": ""
+                        },
+                        "local_authority_code": {
+                            "type": "string",
+                            "title": "local_authority_code",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

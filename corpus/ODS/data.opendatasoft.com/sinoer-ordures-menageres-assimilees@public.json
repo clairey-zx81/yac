@@ -1,0 +1,536 @@
+{
+    "title": "sinoer-ordures-menageres-assimilees@public",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/sinoer-ordures-menageres-assimilees@public"
+        }
+    ],
+    "definitions": {
+        "sinoer-ordures-menageres-assimilees@public": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/sinoer-ordures-menageres-assimilees@public_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "sinoer-ordures-menageres-assimilees@public_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "niveau_geographique": {
+                            "type": "string",
+                            "title": "Niveau géographique",
+                            "description": ""
+                        },
+                        "nom": {
+                            "type": "string",
+                            "title": "Nom",
+                            "description": ""
+                        },
+                        "annee": {
+                            "type": "string",
+                            "title": "Année",
+                            "description": ""
+                        },
+                        "tonnage_collecte_ordures_menageres_residuelles": {
+                            "type": "number",
+                            "title": "Tonnage collecté Ordures ménagères résiduelles",
+                            "description": ""
+                        },
+                        "tonnage_collecte_verre": {
+                            "type": "number",
+                            "title": "Tonnage collecté Verre",
+                            "description": ""
+                        },
+                        "tonnage_collecte_emballages_journaux_magazines": {
+                            "type": "number",
+                            "title": "Tonnage collecté Emballages, journaux-magazines",
+                            "description": ""
+                        },
+                        "tonnage_collecte_biodechets_dechets_verts": {
+                            "type": "number",
+                            "title": "Tonnage collecté Biodéchets, déchets verts",
+                            "description": ""
+                        },
+                        "tonnage_collecte_encombrants": {
+                            "type": "number",
+                            "title": "Tonnage collecté Encombrants",
+                            "description": ""
+                        },
+                        "tonnage_collecte_dechets_dangereux_y_c_deee": {
+                            "type": "number",
+                            "title": "Tonnage collecté Déchets dangereux (y.c. DEEE)",
+                            "description": ""
+                        },
+                        "ratio_de_collecte_ordures_menageres_residuelles": {
+                            "type": "number",
+                            "title": "Ratio de collecte Ordures ménagères résiduelles",
+                            "description": ""
+                        },
+                        "ratio_de_collecte_verre": {
+                            "type": "number",
+                            "title": "Ratio de collecte Verre",
+                            "description": ""
+                        },
+                        "ratio_de_collecte_emballages_journaux_magazines": {
+                            "type": "number",
+                            "title": "Ratio de collecte Emballages, journaux-magazines",
+                            "description": ""
+                        },
+                        "ratio_de_collecte_biodechets_dechets_verts": {
+                            "type": "number",
+                            "title": "Ratio de collecte Biodéchets, déchets verts",
+                            "description": ""
+                        },
+                        "ratio_de_collecte_encombrants": {
+                            "type": "number",
+                            "title": "Ratio de collecte Encombrants",
+                            "description": ""
+                        },
+                        "ratio_de_collecte_dechets_dangereux_y_c_deee": {
+                            "type": "number",
+                            "title": "Ratio de collecte Déchets dangereux (y.c. DEEE)",
+                            "description": ""
+                        },
+                        "destination_omr_valorisation_matiere": {
+                            "type": "number",
+                            "title": "Destination OMR Valorisation matière",
+                            "description": ""
+                        },
+                        "destination_omr_valorisation_organique": {
+                            "type": "number",
+                            "title": "Destination OMR Valorisation organique",
+                            "description": ""
+                        },
+                        "destination_omr_incineration": {
+                            "type": "number",
+                            "title": "Destination OMR Incinération",
+                            "description": ""
+                        },
+                        "destination_omr_stockage": {
+                            "type": "number",
+                            "title": "Destination OMR Stockage",
+                            "description": ""
+                        },
+                        "destination_omr_autre": {
+                            "type": "number",
+                            "title": "Destination OMR Autre",
+                            "description": ""
+                        },
+                        "tonnage_oma_collecte": {
+                            "type": "number",
+                            "title": "Tonnage OMA collecté",
+                            "description": ""
+                        },
+                        "performance_de_collecte_oma_kg_hab_du_territoire_considere": {
+                            "type": "number",
+                            "title": "Performance de collecte OMA (kg/hab du territoire considéré)",
+                            "description": ""
+                        },
+                        "destination_oma_valorisation_matiere": {
+                            "type": "number",
+                            "title": "Destination OMA Valorisation matière",
+                            "description": ""
+                        },
+                        "destination_oma_valorisation_organique": {
+                            "type": "number",
+                            "title": "Destination OMA Valorisation organique",
+                            "description": ""
+                        },
+                        "destination_oma_incineration": {
+                            "type": "number",
+                            "title": "Destination OMA Incinération",
+                            "description": ""
+                        },
+                        "destination_oma_stockage": {
+                            "type": "number",
+                            "title": "Destination OMA Stockage",
+                            "description": ""
+                        },
+                        "destination_oma_autre": {
+                            "type": "number",
+                            "title": "Destination OMA  Autre",
+                            "description": ""
+                        },
+                        "porte_a_porte_par_rapport_au_tonnage_collecte": {
+                            "type": "number",
+                            "title": "Porte à porte par rapport au tonnage collecté (%)",
+                            "description": ""
+                        },
+                        "apport_volontaire_par_rapport_au_tonnage_collecte": {
+                            "type": "number",
+                            "title": "Apport volontaire par rapport au tonnage collecté (%)",
+                            "description": ""
+                        },
+                        "porte_a_porte_par_rapport_a_la_population_desservie": {
+                            "type": "number",
+                            "title": "Porte à porte par rapport à la population desservie (%) ",
+                            "description": ""
+                        },
+                        "apport_volontaire_par_rapport_a_la_population_desservie": {
+                            "type": "number",
+                            "title": "Apport volontaire par rapport à la population desservie (%) ",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

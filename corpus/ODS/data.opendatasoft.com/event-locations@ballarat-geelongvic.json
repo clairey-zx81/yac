@@ -1,0 +1,656 @@
+{
+    "title": "event-locations@ballarat-geelongvic",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/event-locations@ballarat-geelongvic"
+        }
+    ],
+    "definitions": {
+        "event-locations@ballarat-geelongvic": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/event-locations@ballarat-geelongvic_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "event-locations@ballarat-geelongvic_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "address": {
+                            "type": "string",
+                            "title": "address",
+                            "description": ""
+                        },
+                        "bins_number": {
+                            "type": "integer",
+                            "title": "bins_number",
+                            "description": ""
+                        },
+                        "car_parks_number": {
+                            "type": "string",
+                            "title": "car_parks_number",
+                            "description": ""
+                        },
+                        "event_restrictions": {
+                            "type": "string",
+                            "title": "event_restrictions",
+                            "description": ""
+                        },
+                        "id": {
+                            "type": "integer",
+                            "title": "id",
+                            "description": ""
+                        },
+                        "key_features": {
+                            "type": "string",
+                            "title": "key_features",
+                            "description": ""
+                        },
+                        "open_hours": {
+                            "type": "string",
+                            "title": "open_hours",
+                            "description": ""
+                        },
+                        "description": {
+                            "type": "string",
+                            "title": "description",
+                            "description": ""
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name",
+                            "description": ""
+                        },
+                        "area": {
+                            "type": "integer",
+                            "title": "area",
+                            "description": ""
+                        },
+                        "weight_loading_considerations": {
+                            "type": "string",
+                            "title": "weight_loading_considerations",
+                            "description": ""
+                        },
+                        "bbq_free": {
+                            "type": "string",
+                            "title": "bbq_free",
+                            "description": ""
+                        },
+                        "bbq_paid": {
+                            "type": "string",
+                            "title": "bbq_paid",
+                            "description": ""
+                        },
+                        "power_public_use": {
+                            "type": "string",
+                            "title": "power_public_use",
+                            "description": ""
+                        },
+                        "toilets": {
+                            "type": "string",
+                            "title": "toilets",
+                            "description": ""
+                        },
+                        "toilets_disabled": {
+                            "type": "string",
+                            "title": "toilets_disabled",
+                            "description": ""
+                        },
+                        "parents_room": {
+                            "type": "string",
+                            "title": "parents_room",
+                            "description": ""
+                        },
+                        "showers": {
+                            "type": "string",
+                            "title": "showers",
+                            "description": ""
+                        },
+                        "dogs_on_leash": {
+                            "type": "string",
+                            "title": "dogs_on_leash",
+                            "description": ""
+                        },
+                        "dogs_off_leash": {
+                            "type": "string",
+                            "title": "dogs_off_leash",
+                            "description": ""
+                        },
+                        "water_drinking_fountain": {
+                            "type": "string",
+                            "title": "water_drinking_fountain",
+                            "description": ""
+                        },
+                        "water_animal": {
+                            "type": "string",
+                            "title": "water_animal",
+                            "description": ""
+                        },
+                        "water_mains": {
+                            "type": "string",
+                            "title": "water_mains",
+                            "description": ""
+                        },
+                        "power_3_phase": {
+                            "type": "string",
+                            "title": "power_3_phase",
+                            "description": ""
+                        },
+                        "power_240v": {
+                            "type": "string",
+                            "title": "power_240v",
+                            "description": ""
+                        },
+                        "playground": {
+                            "type": "string",
+                            "title": "playground",
+                            "description": ""
+                        },
+                        "walking_track": {
+                            "type": "string",
+                            "title": "walking_track",
+                            "description": ""
+                        },
+                        "shade": {
+                            "type": "string",
+                            "title": "shade",
+                            "description": ""
+                        },
+                        "lighting": {
+                            "type": "string",
+                            "title": "lighting",
+                            "description": ""
+                        },
+                        "picnic_table": {
+                            "type": "string",
+                            "title": "picnic_table",
+                            "description": ""
+                        },
+                        "park_bench": {
+                            "type": "string",
+                            "title": "park_bench",
+                            "description": ""
+                        },
+                        "bins_public": {
+                            "type": "string",
+                            "title": "bins_public",
+                            "description": ""
+                        },
+                        "transport_bus": {
+                            "type": "string",
+                            "title": "transport_bus",
+                            "description": ""
+                        },
+                        "transport_taxi_uber": {
+                            "type": "string",
+                            "title": "transport_taxi_uber",
+                            "description": ""
+                        },
+                        "transport_train": {
+                            "type": "string",
+                            "title": "transport_train",
+                            "description": ""
+                        },
+                        "surface_grass": {
+                            "type": "string",
+                            "title": "surface_grass",
+                            "description": ""
+                        },
+                        "surface_sealed": {
+                            "type": "string",
+                            "title": "surface_sealed",
+                            "description": ""
+                        },
+                        "surface_concrete": {
+                            "type": "string",
+                            "title": "surface_concrete",
+                            "description": ""
+                        },
+                        "surface_granitic_sand": {
+                            "type": "string",
+                            "title": "surface_granitic_sand",
+                            "description": ""
+                        },
+                        "surface_gravel": {
+                            "type": "string",
+                            "title": "surface_gravel",
+                            "description": ""
+                        },
+                        "surface_paved": {
+                            "type": "string",
+                            "title": "surface_paved",
+                            "description": ""
+                        },
+                        "surface_ashphalt": {
+                            "type": "string",
+                            "title": "surface_ashphalt",
+                            "description": ""
+                        },
+                        "access_disability": {
+                            "type": "string",
+                            "title": "access_disability",
+                            "description": ""
+                        },
+                        "access_steps": {
+                            "type": "string",
+                            "title": "access_steps",
+                            "description": ""
+                        },
+                        "access_gates_locked": {
+                            "type": "string",
+                            "title": "access_gates_locked",
+                            "description": ""
+                        },
+                        "access_gates_unlocked": {
+                            "type": "string",
+                            "title": "access_gates_unlocked",
+                            "description": ""
+                        },
+                        "access_approval_required": {
+                            "type": "string",
+                            "title": "access_approval_required",
+                            "description": ""
+                        },
+                        "access_council_key": {
+                            "type": "string",
+                            "title": "access_council_key",
+                            "description": ""
+                        },
+                        "capacity_small": {
+                            "type": "string",
+                            "title": "capacity_small",
+                            "description": ""
+                        },
+                        "capacity_medium": {
+                            "type": "string",
+                            "title": "capacity_medium",
+                            "description": ""
+                        },
+                        "capacity_large": {
+                            "type": "string",
+                            "title": "capacity_large",
+                            "description": ""
+                        },
+                        "capacity_extra_large": {
+                            "type": "string",
+                            "title": "capacity_extra_large",
+                            "description": ""
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "title": "latitude",
+                            "description": ""
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "title": "longitude",
+                            "description": ""
+                        },
+                        "json_ogc_wkt_crs": {
+                            "type": "string",
+                            "title": "json_ogc_wkt_crs",
+                            "description": ""
+                        },
+                        "json_geometry": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "json_geometry",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

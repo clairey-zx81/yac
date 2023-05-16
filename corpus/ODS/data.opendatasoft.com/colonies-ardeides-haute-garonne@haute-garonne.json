@@ -1,0 +1,541 @@
+{
+    "title": "colonies-ardeides-haute-garonne@haute-garonne",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/colonies-ardeides-haute-garonne@haute-garonne"
+        }
+    ],
+    "definitions": {
+        "colonies-ardeides-haute-garonne@haute-garonne": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/colonies-ardeides-haute-garonne@haute-garonne_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "colonies-ardeides-haute-garonne@haute-garonne_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "nom_commune": {
+                            "type": "string",
+                            "title": "nom_commune",
+                            "description": "Nom officiel de la commune où une colonie a été observée"
+                        },
+                        "code_insee": {
+                            "type": "string",
+                            "title": "code_insee",
+                            "description": "Code INSEE de la commune"
+                        },
+                        "types_d_habitats": {
+                            "type": "string",
+                            "title": "types d’habitats",
+                            "description": ""
+                        },
+                        "reglementation_natura_2000_n2000": {
+                            "type": "string",
+                            "title": "réglementation Natura 2000 (N2000)",
+                            "description": ""
+                        },
+                        "reglementation_reserve_naturelle_regionale_rnr": {
+                            "type": "string",
+                            "title": "réglementation Réserve Naturelle Régionale (RNR)",
+                            "description": ""
+                        },
+                        "reglementation_arrete_prefectoral_de_protection_de_biotope_appb": {
+                            "type": "string",
+                            "title": "réglementation Arrêté Préfectoral de Protection de Biotope (APPB)",
+                            "description": ""
+                        },
+                        "categorie": {
+                            "type": "string",
+                            "title": "catégorie",
+                            "description": ""
+                        },
+                        "aigrette_garzette_egretta_garzetta": {
+                            "type": "string",
+                            "title": "Aigrette garzette (Egretta garzetta)",
+                            "description": "Espèce : nom vernaculaire (nom scientifique)"
+                        },
+                        "effectif_2020_2021_des_couples_d_aigrette_garzette": {
+                            "type": "string",
+                            "title": "Effectif 2020-2021 des couples d'Aigrette garzette",
+                            "description": ""
+                        },
+                        "evolution_des_effectifs_des_couples_d_aigrette_garzette": {
+                            "type": "string",
+                            "title": "Évolution des effectifs des couples d'Aigrette garzette",
+                            "description": ""
+                        },
+                        "crabier_chevelu_ardeola_ralloides": {
+                            "type": "string",
+                            "title": "Crabier chevelu (Ardeola ralloides)",
+                            "description": "Espèce : nom vernaculaire (nom scientifique)"
+                        },
+                        "effectif_2020_2021_des_couples_de_crabier_chevelu": {
+                            "type": "string",
+                            "title": "Effectif 2020-2021 des couples de Crabier chevelu",
+                            "description": ""
+                        },
+                        "evolution_des_effectifs_des_couples_de_cravier_chevelu": {
+                            "type": "string",
+                            "title": "Évolution des effectifs des couples de Cravier chevelu",
+                            "description": ""
+                        },
+                        "bihoreau_gris_nycticorax_nycticorax": {
+                            "type": "string",
+                            "title": "Bihoreau gris (Nycticorax nycticorax)",
+                            "description": "Espèce : nom vernaculaire (nom scientifique)"
+                        },
+                        "effectif_2020_2021_des_couples_de_bihoreau_gris": {
+                            "type": "string",
+                            "title": "Effectif 2020-2021 des couples de Bihoreau gris",
+                            "description": ""
+                        },
+                        "evolution_des_effectifs_des_couples_de_bihoreau_gris": {
+                            "type": "string",
+                            "title": "Évolution des effectifs des couples de Bihoreau gris",
+                            "description": ""
+                        },
+                        "heron_cendre_ardea_cinerea": {
+                            "type": "string",
+                            "title": "Héron cendré (Ardea cinerea)",
+                            "description": "Espèce : nom vernaculaire (nom scientifique)"
+                        },
+                        "effectif_2020_2021_des_couples_de_heron_cendre": {
+                            "type": "string",
+                            "title": "Effectif 2020-2021 des couples de Héron cendré",
+                            "description": ""
+                        },
+                        "evolution_des_effectifs_des_couples_de_heron_cendre": {
+                            "type": "string",
+                            "title": "Évolution des effectifs des couples de Héron cendré",
+                            "description": ""
+                        },
+                        "heron_garde_boeufs_bubulcus_ibis": {
+                            "type": "string",
+                            "title": "Héron garde-bœufs (Bubulcus ibis)",
+                            "description": "Espèce : nom vernaculaire (nom scientifique)"
+                        },
+                        "effectif_2020_2021_des_couples_de_heron_garde_boeufs": {
+                            "type": "string",
+                            "title": "Effectif 2020-2021 des couples de Héron garde-bœufs ",
+                            "description": ""
+                        },
+                        "evolution_des_effectifs_des_couples_de_heron_garde_boeufs": {
+                            "type": "string",
+                            "title": "Évolution des effectifs des couples de Héron garde-bœufs",
+                            "description": ""
+                        },
+                        "heron_pourpre_ardea_purpurea": {
+                            "type": "string",
+                            "title": "Héron pourpré (Ardea purpurea)",
+                            "description": "Espèce : nom vernaculaire (nom scientifique)"
+                        },
+                        "effectif_2020_2021_des_couples_de_heron_pourpre": {
+                            "type": "integer",
+                            "title": "Effectif 2020-2021 des couples de Héron pourpré",
+                            "description": ""
+                        },
+                        "evolution_des_effectifs_des_couples_de_heron_pourpre": {
+                            "type": "string",
+                            "title": "Évolution des effectifs des couples de Héron pourpré",
+                            "description": ""
+                        },
+                        "famille": {
+                            "type": "string",
+                            "title": "famille",
+                            "description": ""
+                        },
+                        "groupe": {
+                            "type": "string",
+                            "title": "groupe",
+                            "description": ""
+                        },
+                        "ordre": {
+                            "type": "string",
+                            "title": "ordre",
+                            "description": ""
+                        },
+                        "nom_dep": {
+                            "type": "string",
+                            "title": "nom_dep",
+                            "description": "Nom du département"
+                        },
+                        "code_dep": {
+                            "type": "string",
+                            "title": "code_dep",
+                            "description": "Code officiel du département"
+                        },
+                        "nom_reg": {
+                            "type": "string",
+                            "title": "nom_reg",
+                            "description": "Nom de la région"
+                        },
+                        "code_reg": {
+                            "type": "string",
+                            "title": "code_reg",
+                            "description": "Code officiel de la région"
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geom",
+                            "description": ""
+                        },
+                        "centroid": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "centroid",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

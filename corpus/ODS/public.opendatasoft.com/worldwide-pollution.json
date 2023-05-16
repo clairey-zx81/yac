@@ -1,0 +1,631 @@
+{
+    "title": "worldwide-pollution",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/worldwide-pollution"
+        }
+    ],
+    "definitions": {
+        "worldwide-pollution": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/worldwide-pollution_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "worldwide-pollution_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "type": "string",
+                            "title": "data",
+                            "description": ""
+                        },
+                        "country": {
+                            "type": "string",
+                            "title": "Country",
+                            "description": ""
+                        },
+                        "filename": {
+                            "type": "string",
+                            "title": "City",
+                            "description": ""
+                        },
+                        "data_location": {
+                            "type": "string",
+                            "title": "Data Location",
+                            "description": ""
+                        },
+                        "data_dates": {
+                            "type": "string",
+                            "title": "Data Dates",
+                            "description": ""
+                        },
+                        "data_pollutants": {
+                            "type": "string",
+                            "title": "Data Pollutants",
+                            "description": ""
+                        },
+                        "data_global_aqi": {
+                            "type": "string",
+                            "title": "Data Global Aqi",
+                            "description": ""
+                        },
+                        "data_location_latitude": {
+                            "type": "string",
+                            "title": "Data Location Latitude",
+                            "description": ""
+                        },
+                        "data_location_longitude": {
+                            "type": "string",
+                            "title": "Data Location Longitude",
+                            "description": ""
+                        },
+                        "geopoint": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geopoint",
+                            "description": ""
+                        },
+                        "data_global_aqi_epa": {
+                            "type": "string",
+                            "title": "Data Global Aqi Epa",
+                            "description": ""
+                        },
+                        "data_global_aqi_epa_info": {
+                            "type": "string",
+                            "title": "Data Global Aqi Epa Info",
+                            "description": ""
+                        },
+                        "data_global_aqi_epa_values": {
+                            "type": "string",
+                            "title": "Data Global Aqi Epa Values",
+                            "description": ""
+                        },
+                        "data_global_aqi_epa_colors": {
+                            "type": "string",
+                            "title": "Data Global Aqi Epa Colors",
+                            "description": ""
+                        },
+                        "data_global_aqi_epa_dominant": {
+                            "type": "string",
+                            "title": "Data Global Aqi Epa Dominant",
+                            "description": ""
+                        },
+                        "data_global_aqi_epa_categories": {
+                            "type": "string",
+                            "title": "Data Global Aqi Epa Categories",
+                            "description": ""
+                        },
+                        "data_global_aqi_epa_categories_category": {
+                            "type": "string",
+                            "title": "Data Global Aqi Epa Categories Category",
+                            "description": ""
+                        },
+                        "data_pollutants_co": {
+                            "type": "string",
+                            "title": "Data Pollutants Co",
+                            "description": ""
+                        },
+                        "data_pollutants_o3": {
+                            "type": "string",
+                            "title": "Data Pollutants O3",
+                            "description": ""
+                        },
+                        "data_pollutants_pm25": {
+                            "type": "string",
+                            "title": "Data Pollutants Pm25",
+                            "description": ""
+                        },
+                        "data_pollutants_no2": {
+                            "type": "string",
+                            "title": "Data Pollutants No2",
+                            "description": ""
+                        },
+                        "data_pollutants_co_aqi": {
+                            "type": "string",
+                            "title": "Data Pollutants Co Aqi",
+                            "description": ""
+                        },
+                        "data_pollutants_co_description": {
+                            "type": "string",
+                            "title": "Data Pollutants Co Description",
+                            "description": ""
+                        },
+                        "data_pollutants_o3_aqi": {
+                            "type": "string",
+                            "title": "Data Pollutants O3 Aqi",
+                            "description": ""
+                        },
+                        "data_pollutants_o3_description": {
+                            "type": "string",
+                            "title": "Data Pollutants O3 Description",
+                            "description": ""
+                        },
+                        "data_pollutants_pm25_aqi": {
+                            "type": "string",
+                            "title": "Data Pollutants Pm25 Aqi",
+                            "description": ""
+                        },
+                        "data_pollutants_pm25_description": {
+                            "type": "string",
+                            "title": "Data Pollutants Pm25 Description",
+                            "description": ""
+                        },
+                        "data_pollutants_no2_aqi": {
+                            "type": "string",
+                            "title": "Data Pollutants No2 Aqi",
+                            "description": ""
+                        },
+                        "data_pollutants_no2_description": {
+                            "type": "string",
+                            "title": "Data Pollutants No2 Description",
+                            "description": ""
+                        },
+                        "data_pollutants_co_aqi_epa": {
+                            "type": "string",
+                            "title": "Data Pollutants Co Aqi Epa",
+                            "description": ""
+                        },
+                        "data_pollutants_o3_aqi_epa": {
+                            "type": "string",
+                            "title": "Data Pollutants O3 Aqi Epa",
+                            "description": ""
+                        },
+                        "data_pollutants_pm25_aqi_epa": {
+                            "type": "string",
+                            "title": "Data Pollutants Pm25 Aqi Epa",
+                            "description": ""
+                        },
+                        "data_pollutants_no2_aqi_epa": {
+                            "type": "string",
+                            "title": "Data Pollutants No2 Aqi Epa",
+                            "description": ""
+                        },
+                        "data_pollutants_co_aqi_epa_values": {
+                            "type": "string",
+                            "title": "Data Pollutants Co Aqi Epa Values",
+                            "description": ""
+                        },
+                        "data_pollutants_co_aqi_epa_categories": {
+                            "type": "string",
+                            "title": "Data Pollutants Co Aqi Epa Categories",
+                            "description": ""
+                        },
+                        "data_pollutants_o3_aqi_epa_values": {
+                            "type": "string",
+                            "title": "Data Pollutants O3 Aqi Epa Values",
+                            "description": ""
+                        },
+                        "data_pollutants_o3_aqi_epa_categories": {
+                            "type": "string",
+                            "title": "Data Pollutants O3 Aqi Epa Categories",
+                            "description": ""
+                        },
+                        "data_pollutants_pm25_aqi_epa_values": {
+                            "type": "string",
+                            "title": "Data Pollutants Pm25 Aqi Epa Values",
+                            "description": ""
+                        },
+                        "data_pollutants_pm25_aqi_epa_categories": {
+                            "type": "string",
+                            "title": "Data Pollutants Pm25 Aqi Epa Categories",
+                            "description": ""
+                        },
+                        "data_pollutants_no2_aqi_epa_values": {
+                            "type": "string",
+                            "title": "Data Pollutants No2 Aqi Epa Values",
+                            "description": ""
+                        },
+                        "data_pollutants_no2_aqi_epa_categories": {
+                            "type": "string",
+                            "title": "Data Pollutants No2 Aqi Epa Categories",
+                            "description": ""
+                        },
+                        "value_co": {
+                            "type": "number",
+                            "title": "Value CO",
+                            "description": ""
+                        },
+                        "value_o3": {
+                            "type": "number",
+                            "title": "Value O3",
+                            "description": ""
+                        },
+                        "value_pm5": {
+                            "type": "number",
+                            "title": "Value PM5",
+                            "description": ""
+                        },
+                        "value_no2": {
+                            "type": "number",
+                            "title": "Value NO2",
+                            "description": ""
+                        },
+                        "date": {
+                            "type": "string",
+                            "title": "date",
+                            "description": ""
+                        },
+                        "value": {
+                            "type": "string",
+                            "title": "value",
+                            "description": ""
+                        },
+                        "color": {
+                            "type": "string",
+                            "title": "color",
+                            "description": ""
+                        },
+                        "dominant": {
+                            "type": "string",
+                            "title": "dominant",
+                            "description": ""
+                        },
+                        "category_co": {
+                            "type": "string",
+                            "title": "Category Co",
+                            "description": ""
+                        },
+                        "category_o3": {
+                            "type": "string",
+                            "title": "Category O3",
+                            "description": ""
+                        },
+                        "category_pm25": {
+                            "type": "string",
+                            "title": "Category Pm25",
+                            "description": ""
+                        },
+                        "category_no2": {
+                            "type": "string",
+                            "title": "Category No2",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,462 @@
+{
+    "title": "registo-de-testamentos-vitais@spms",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/registo-de-testamentos-vitais@spms"
+        }
+    ],
+    "definitions": {
+        "registo-de-testamentos-vitais@spms": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registo-de-testamentos-vitais@spms_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "registo-de-testamentos-vitais@spms_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "tempo": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Período",
+                            "description": ""
+                        },
+                        "ars": {
+                            "type": "string",
+                            "title": "Região",
+                            "description": ""
+                        },
+                        "aces": {
+                            "type": "string",
+                            "title": "Entidade",
+                            "description": ""
+                        },
+                        "ponto_ou_localizacao_geografica": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Localização Geográfica",
+                            "description": ""
+                        },
+                        "testamentos_vitais_ativos_utentes_sexo_masculino_com_idade_65_anos": {
+                            "type": "number",
+                            "title": "Testamentos Vitais ativos utentes sexo Masculino com idade < 65 anos",
+                            "description": ""
+                        },
+                        "testamentos_vitais_ativos_utentes_sexo_masculino_com_idade_65_anos0": {
+                            "type": "number",
+                            "title": "Testamentos Vitais ativos utentes sexo Masculino com idade >= 65 anos",
+                            "description": ""
+                        },
+                        "testamentos_vitais_ativos_utentes_sexo_feminino_com_idade_65_anos": {
+                            "type": "number",
+                            "title": "Testamentos Vitais ativos utentes sexo Feminino com idade < 65 anos",
+                            "description": ""
+                        },
+                        "testamentos_vitais_ativos_utentes_sexo_feminino_com_idade_65_anos0": {
+                            "type": "number",
+                            "title": "Testamentos Vitais ativos utentes sexo  Feminino com idade >= 65 anos",
+                            "description": ""
+                        },
+                        "testamentos_vitais_inativos_utentes_sexo_masculino_com_idade_65_anos": {
+                            "type": "number",
+                            "title": "Testamentos Vitais inativos utentes sexo Masculino com idade < 65 anos",
+                            "description": ""
+                        },
+                        "testamentos_vitais_inativos_utentes_sexo_masculino_com_idade_65_anos0": {
+                            "type": "number",
+                            "title": "Testamentos Vitais inativos utentes sexo Masculino com idade >= 65 anos",
+                            "description": ""
+                        },
+                        "testamentos_vitais_inativos_utentes_sexo_feminino_com_idade_65_anos": {
+                            "type": "number",
+                            "title": "Testamentos Vitais inativos utentes sexo Feminino com idade < 65 anos",
+                            "description": ""
+                        },
+                        "testamentos_vitais_inativos_utentes_sexo_feminino_com_idade_65_anos0": {
+                            "type": "number",
+                            "title": "Testamentos Vitais inativos utentes sexo  Feminino com idade >= 65 anos",
+                            "description": ""
+                        },
+                        "total_testamentos_vitais_ativos_de_utentes": {
+                            "type": "number",
+                            "title": "Total Testamentos Vitais ativos de Utentes ",
+                            "description": ""
+                        },
+                        "total_testamentos_vitais_inativos_de_utentes": {
+                            "type": "number",
+                            "title": "Total Testamentos Vitais inativos de Utentes ",
+                            "description": ""
+                        },
+                        "total_testamentos_vitais_de_utentes": {
+                            "type": "integer",
+                            "title": "Total Testamentos Vitais de Utentes ",
+                            "description": ""
+                        },
+                        "testamentos_vitais_de_utentes_com_nacionalidade_portuguesa": {
+                            "type": "integer",
+                            "title": "Testamentos Vitais de utentes com nacionalidade Portuguesa",
+                            "description": ""
+                        },
+                        "consultas_dos_testamentos_vitais_pelos_utentes_via_area_do_cidadao": {
+                            "type": "number",
+                            "title": "Consultas dos Testamentos Vitais pelos Utentes via Área do Cidadão",
+                            "description": ""
+                        },
+                        "consultas_dos_testamentos_vitais_pelos_profissionais_de_saude_via_portal_da_saude": {
+                            "type": "integer",
+                            "title": "Consultas dos Testamentos Vitais via PDS - Portal do Profissional",
+                            "description": ""
+                        },
+                        "obitos_de_utentes_com_testamento_vital": {
+                            "type": "integer",
+                            "title": "Óbitos de Utentes com Testamento Vital",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

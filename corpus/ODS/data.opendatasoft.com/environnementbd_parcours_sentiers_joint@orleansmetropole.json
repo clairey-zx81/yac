@@ -1,0 +1,777 @@
+{
+    "title": "environnementbd_parcours_sentiers_joint@orleansmetropole",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/environnementbd_parcours_sentiers_joint@orleansmetropole"
+        }
+    ],
+    "definitions": {
+        "environnementbd_parcours_sentiers_joint@orleansmetropole": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/environnementbd_parcours_sentiers_joint@orleansmetropole_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "environnementbd_parcours_sentiers_joint@orleansmetropole_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "objectid": {
+                            "type": "integer",
+                            "title": "OBJECTID",
+                            "description": ""
+                        },
+                        "id": {
+                            "type": "string",
+                            "title": "ID",
+                            "description": ""
+                        },
+                        "nom": {
+                            "type": "string",
+                            "title": "NOM",
+                            "description": ""
+                        },
+                        "longueur": {
+                            "type": "number",
+                            "title": "LONGUEUR",
+                            "description": ""
+                        },
+                        "temps_parc": {
+                            "type": "string",
+                            "title": "TEMPS_PARC",
+                            "description": ""
+                        },
+                        "nbr_pan": {
+                            "type": "number",
+                            "title": "NBR_PAN",
+                            "description": ""
+                        },
+                        "theme_parc": {
+                            "type": "string",
+                            "title": "THEME DE PARC",
+                            "description": ""
+                        },
+                        "type_depl": {
+                            "type": "string",
+                            "title": "TYPE DE DEPLACEMENT",
+                            "description": ""
+                        },
+                        "type_circ": {
+                            "type": "string",
+                            "title": "TYPE DE CIRCUIT",
+                            "description": ""
+                        },
+                        "gest": {
+                            "type": "string",
+                            "title": "GEST",
+                            "description": ""
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "COMMUNE",
+                            "description": ""
+                        },
+                        "code_insee": {
+                            "type": "string",
+                            "title": "CODE_INSEE",
+                            "description": ""
+                        },
+                        "source": {
+                            "type": "string",
+                            "title": "SOURCE",
+                            "description": ""
+                        },
+                        "fait": {
+                            "type": "number",
+                            "title": "FAIT",
+                            "description": ""
+                        },
+                        "id_1": {
+                            "type": "string",
+                            "title": "ID_1",
+                            "description": ""
+                        },
+                        "longueur_1": {
+                            "type": "number",
+                            "title": "LONGUEUR_1",
+                            "description": ""
+                        },
+                        "temps_parcours_estime": {
+                            "type": "string",
+                            "title": "TEMPS_PARCOURS_ESTIME",
+                            "description": ""
+                        },
+                        "commune_1": {
+                            "type": "string",
+                            "title": "COMMUNE_1",
+                            "description": ""
+                        },
+                        "date_visite": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "DATE_VISITE",
+                            "description": ""
+                        },
+                        "nom_sent": {
+                            "type": "string",
+                            "title": "NOM_SENT",
+                            "description": ""
+                        },
+                        "larg_moyen": {
+                            "type": "number",
+                            "title": "LARG_MOYEN",
+                            "description": ""
+                        },
+                        "rev_goudron": {
+                            "type": "number",
+                            "title": "REV_ENROBE",
+                            "description": ""
+                        },
+                        "rev_calcaire": {
+                            "type": "number",
+                            "title": "REV_CALCAIRE",
+                            "description": ""
+                        },
+                        "rev_terre": {
+                            "type": "number",
+                            "title": "REV_TERRE",
+                            "description": ""
+                        },
+                        "rev_sable": {
+                            "type": "number",
+                            "title": "REV_SABLE",
+                            "description": ""
+                        },
+                        "pratica_automne": {
+                            "type": "number",
+                            "title": "PRATICA_AUTOMNE",
+                            "description": ""
+                        },
+                        "confort": {
+                            "type": "number",
+                            "title": "CONFORT",
+                            "description": ""
+                        },
+                        "access": {
+                            "type": "number",
+                            "title": "ACCESS_",
+                            "description": ""
+                        },
+                        "ombrage": {
+                            "type": "number",
+                            "title": "OMBRAGE",
+                            "description": ""
+                        },
+                        "trace": {
+                            "type": "number",
+                            "title": "TRACE",
+                            "description": ""
+                        },
+                        "signaletique": {
+                            "type": "number",
+                            "title": "SIGNALETIQUE",
+                            "description": ""
+                        },
+                        "panneaux": {
+                            "type": "number",
+                            "title": "PANNEAUX",
+                            "description": ""
+                        },
+                        "pan_prat_biodiv": {
+                            "type": "number",
+                            "title": "PAN_PRAT_BIODIV",
+                            "description": ""
+                        },
+                        "pan_pres_gene": {
+                            "type": "number",
+                            "title": "PAN_PRES_GENE",
+                            "description": ""
+                        },
+                        "pan_them_faune": {
+                            "type": "number",
+                            "title": "PAN_THEM_FAUNE",
+                            "description": ""
+                        },
+                        "pan_them_flore": {
+                            "type": "number",
+                            "title": "PAN_THEM_FLORE",
+                            "description": ""
+                        },
+                        "pan_them_milieux": {
+                            "type": "number",
+                            "title": "PAN_THEM_MILIEUX",
+                            "description": ""
+                        },
+                        "pan_nb": {
+                            "type": "number",
+                            "title": "PAN_NB",
+                            "description": ""
+                        },
+                        "pan_etat": {
+                            "type": "number",
+                            "title": "PAN_ETAT",
+                            "description": ""
+                        },
+                        "pan_style": {
+                            "type": "number",
+                            "title": "PAN_STYLE",
+                            "description": ""
+                        },
+                        "pan_original": {
+                            "type": "number",
+                            "title": "PAN_ORIGINAL",
+                            "description": ""
+                        },
+                        "ctre_ville_dense": {
+                            "type": "number",
+                            "title": "CTRE_VILLE_DENSE",
+                            "description": ""
+                        },
+                        "urbain_arbo": {
+                            "type": "number",
+                            "title": "URBAIN_ARBO",
+                            "description": ""
+                        },
+                        "quartier_hab_arbo": {
+                            "type": "number",
+                            "title": "QUARTIER_HAB_ARBO",
+                            "description": ""
+                        },
+                        "friches_urb": {
+                            "type": "number",
+                            "title": "FRICHES_URB",
+                            "description": ""
+                        },
+                        "mix_urb": {
+                            "type": "number",
+                            "title": "MIX_URB",
+                            "description": ""
+                        },
+                        "mix_non_urb": {
+                            "type": "number",
+                            "title": "MIX_NON_URB",
+                            "description": ""
+                        },
+                        "champs": {
+                            "type": "number",
+                            "title": "CHAMPS",
+                            "description": ""
+                        },
+                        "arbori_vign": {
+                            "type": "number",
+                            "title": "ARBORI_VIGN",
+                            "description": ""
+                        },
+                        "bords_plan_eau_arbo": {
+                            "type": "number",
+                            "title": "BORDS_PLAN_EAU_ARBO",
+                            "description": ""
+                        },
+                        "forestier": {
+                            "type": "number",
+                            "title": "FORESTIER",
+                            "description": ""
+                        },
+                        "domi_non_urb": {
+                            "type": "number",
+                            "title": "DOMI_NON_URB",
+                            "description": ""
+                        },
+                        "pts_div_profil_paysag": {
+                            "type": "number",
+                            "title": "PTS_DIV_PROFIL_PAYSAG",
+                            "description": ""
+                        },
+                        "espace_nat": {
+                            "type": "number",
+                            "title": "ESPACE_NAT",
+                            "description": ""
+                        },
+                        "eau": {
+                            "type": "number",
+                            "title": "EAU",
+                            "description": ""
+                        },
+                        "mobilier_amenagmts": {
+                            "type": "number",
+                            "title": "MOBILIER_AMENAGMTS",
+                            "description": ""
+                        },
+                        "hotel_insecte": {
+                            "type": "number",
+                            "title": "HOTEL_INSECTE",
+                            "description": ""
+                        },
+                        "nichoir": {
+                            "type": "number",
+                            "title": "NICHOIR",
+                            "description": ""
+                        },
+                        "observatoire": {
+                            "type": "number",
+                            "title": "OBSERVATOIRE",
+                            "description": ""
+                        },
+                        "parking_voiture": {
+                            "type": "number",
+                            "title": "PARKING_VOITURE",
+                            "description": ""
+                        },
+                        "mobilier_voiture": {
+                            "type": "number",
+                            "title": "MOBILIER_VOITURE",
+                            "description": ""
+                        },
+                        "emplacements_velos": {
+                            "type": "number",
+                            "title": "EMPLACEMENTS_VELOS",
+                            "description": ""
+                        },
+                        "eclairage": {
+                            "type": "number",
+                            "title": "ECLAIRAGE",
+                            "description": ""
+                        },
+                        "bancs": {
+                            "type": "number",
+                            "title": "BANCS",
+                            "description": ""
+                        },
+                        "table_pic_nic": {
+                            "type": "number",
+                            "title": "TABLE_PIC_NIC",
+                            "description": ""
+                        },
+                        "poubelle_tri": {
+                            "type": "number",
+                            "title": "POUBELLE_TRI",
+                            "description": ""
+                        },
+                        "poubelle_noire": {
+                            "type": "number",
+                            "title": "POUBELLE_NOIRE",
+                            "description": ""
+                        },
+                        "tot_pts_mobilier": {
+                            "type": "number",
+                            "title": "TOT_PTS_MOBILIER",
+                            "description": ""
+                        },
+                        "indic_sensi_actuel": {
+                            "type": "number",
+                            "title": "INDIC_SENSI_ACTUEL",
+                            "description": ""
+                        },
+                        "gestionnaire_entretien": {
+                            "type": "string",
+                            "title": "GESTIONNAIRE_ENTRETIEN",
+                            "description": ""
+                        },
+                        "plan_gestion": {
+                            "type": "string",
+                            "title": "PLAN_GESTION",
+                            "description": ""
+                        },
+                        "payeur_crea_pan": {
+                            "type": "string",
+                            "title": "PAYEUR_CREA_PAN",
+                            "description": ""
+                        },
+                        "payeur_instal_pan": {
+                            "type": "string",
+                            "title": "PAYEUR_INSTAL_PAN",
+                            "description": ""
+                        },
+                        "payeur_entretien_pan": {
+                            "type": "string",
+                            "title": "PAYEUR_ENTRETIEN_PAN",
+                            "description": ""
+                        },
+                        "contact_rdv": {
+                            "type": "string",
+                            "title": "CONTACT_RDV",
+                            "description": ""
+                        },
+                        "infos_ibc": {
+                            "type": "number",
+                            "title": "INFOS_IBC",
+                            "description": ""
+                        },
+                        "contenu_pan": {
+                            "type": "string",
+                            "title": "CONTENU_PAN",
+                            "description": ""
+                        },
+                        "source_1": {
+                            "type": "string",
+                            "title": "SOURCE_1",
+                            "description": ""
+                        },
+                        "shape_length": {
+                            "type": "number",
+                            "title": "SHAPE.LEN",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

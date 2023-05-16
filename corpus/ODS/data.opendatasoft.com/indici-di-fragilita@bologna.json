@@ -1,0 +1,507 @@
+{
+    "title": "indici-di-fragilita@bologna",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/indici-di-fragilita@bologna"
+        }
+    ],
+    "definitions": {
+        "indici-di-fragilita@bologna": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/indici-di-fragilita@bologna_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "indici-di-fragilita@bologna_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "area_statistica": {
+                            "type": "string",
+                            "title": "Area statistica",
+                            "description": "Denominazione Area Statistica"
+                        },
+                        "nome_quartiere": {
+                            "type": "string",
+                            "title": "Nome Quartiere",
+                            "description": "Nome del quartiere"
+                        },
+                        "aree_escl": {
+                            "type": "integer",
+                            "title": "Flag Area Esclusa",
+                            "description": "Flag per Aree Statistiche escluse dal campo di osservazione per bassa numerosità della popolazione residente (minore di 150 individui residenti al 31/12/2019)"
+                        },
+                        "pop_res": {
+                            "type": "integer",
+                            "title": "Popolazione residente",
+                            "description": "Popolazione residente al 31/12/2019"
+                        },
+                        "var_5y_pop": {
+                            "type": "number",
+                            "title": "Variazione popolazione ultimi 5 anni",
+                            "description": "Variazione percentuale della popolazione residente dal 1/1/2015 al 31/12/2019"
+                        },
+                        "saldonat": {
+                            "type": "number",
+                            "title": "Tasso incremento demografico medio",
+                            "description": "Tasso d'incremento medio annuo nel quinquennio 2015 – 2019 (Saldo naturale medio annuo / popolazione media x 1000)"
+                        },
+                        "ultra80": {
+                            "type": "number",
+                            "title": "Perc residenti oltre 80 anni",
+                            "description": "Percentuale della popolazione residente con 80 anni e oltre al 31/12/2019"
+                        },
+                        "soli_65": {
+                            "type": "number",
+                            "title": "% residenti oltre 65 anni che vive sola",
+                            "description": "Percentuale della popolazione di 65 anni e oltre che viveva sola al 31/12/2019"
+                        },
+                        "imem_italia": {
+                            "type": "number",
+                            "title": "% ricambio popolaz. italiana tra 20 e 64 anni",
+                            "description": "Percentuale di ricambio della popolazione italiana tra 20 e 64 anni (immigrati + emigrati rapportati alla popolazione media nel quinquennio 2015 – 2019)"
+                        },
+                        "imem_stra": {
+                            "type": "number",
+                            "title": "% ricambio popolaz. straniera tra 20 e 64 anni",
+                            "description": "Percentuale di ricambio della popolazione straniera tra 20 e 64 anni (immigrati + emigrati rapportati alla popolazione media nel quinquennio 2015 - 2019)"
+                        },
+                        "stra_0_19": {
+                            "type": "number",
+                            "title": "% stranieri 0 - 19 anni",
+                            "description": "Percentuale della popolazione residente straniera in età tra 0 e 19 anni sulla popolazione totale in età tra 0 e 19 anni al 31/12/2019"
+                        },
+                        "minori1gen": {
+                            "type": "number",
+                            "title": "% minori in famiglie monogenitoriali sul totale minori",
+                            "description": "Percentuale di minori in famiglie monogenitoriali (non coabitanti) sul totale dei minori al 31/12/2019"
+                        },
+                        "perc_laur": {
+                            "type": "number",
+                            "title": "% laureati sul totale da 25-44 anni",
+                            "description": "Percentuale di laureati in età tra 25 e 44 anni sulla popolazione totale in età tra 25 e 44 anni al Censimento 2011"
+                        },
+                        "perc_ab_no": {
+                            "type": "number",
+                            "title": "% abitazioni non occupate",
+                            "description": "Percentuale di abitazioni non occupate al Censimento 2011"
+                        },
+                        "perfragsan": {
+                            "type": "number",
+                            "title": "% anziani in alta fragilità sanitaria",
+                            "description": "Percentuale di anziani in condizione di fragilità sanitaria alta o molto alta sul totale degli anziani al 31/12/2019"
+                        },
+                        "peraffit": {
+                            "type": "number",
+                            "title": "% abitazioni occupate in affitto",
+                            "description": "Percentuale delle abitazioni occupate in affitto al Censimento 2011"
+                        },
+                        "rmpe_fam": {
+                            "type": "integer",
+                            "title": "Reddito pro capite mediano delle famiglie",
+                            "description": "Reddito mediano pro capite equivalente delle famiglie residenti - Anno fiscale 2018"
+                        },
+                        "perfam_r60": {
+                            "type": "number",
+                            "title": "% famiglio con reddito <13k",
+                            "description": "Percentuale delle famiglie con un reddito mediano pro capite equivalente 2018 inferiore a 13.002 euro (pari al 60% della mediana)"
+                        },
+                        "frag_demo": {
+                            "type": "number",
+                            "title": "Indice potenziale fragilità demografica",
+                            "description": "Indicatore di potenziale fragilità demografica"
+                        },
+                        "frag_soc": {
+                            "type": "number",
+                            "title": "Indice potenziale fragilità sociale",
+                            "description": "Indicatore di potenziale fragilità sociale"
+                        },
+                        "frag_econ": {
+                            "type": "number",
+                            "title": "Indice potenziale fragilità economica",
+                            "description": "Indicatore di potenziale fragilità economica"
+                        },
+                        "frag_compl": {
+                            "type": "number",
+                            "title": "Indice sintetico potenziale fragilità",
+                            "description": "Indicatore sintetico di potenziale fragilità"
+                        },
+                        "cluster_an": {
+                            "type": "integer",
+                            "title": "Gruppo",
+                            "description": "Gruppo di appartenenza per analisi raggruppamenti con caratteristiche di fragilità simili"
+                        },
+                        "yyyy": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Anno",
+                            "description": "Anno al quale gli indicatori si riferiscono"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": "Geometria della zona statistica"
+                        },
+                        "codareast": {
+                            "type": "integer",
+                            "title": "Cod Area Statistica",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": "Centroide dell'area della zona statistica"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,569 @@
+{
+    "title": "ev_charging_points@bristol",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/ev_charging_points@bristol"
+        }
+    ],
+    "definitions": {
+        "ev_charging_points@bristol": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ev_charging_points@bristol_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "ev_charging_points@bristol_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "title": "id",
+                            "description": ""
+                        },
+                        "site_name": {
+                            "type": "string",
+                            "title": "site_name",
+                            "description": ""
+                        },
+                        "instruction_to_stop": {
+                            "type": "string",
+                            "title": "instruction_to_stop",
+                            "description": ""
+                        },
+                        "last_status_update": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "last_status_update",
+                            "description": ""
+                        },
+                        "county": {
+                            "type": "string",
+                            "title": "county",
+                            "description": ""
+                        },
+                        "postcode": {
+                            "type": "string",
+                            "title": "postcode",
+                            "description": ""
+                        },
+                        "power_output": {
+                            "type": "integer",
+                            "title": "power_output",
+                            "description": ""
+                        },
+                        "host_notes": {
+                            "type": "string",
+                            "title": "host_notes",
+                            "description": ""
+                        },
+                        "instruction_before_stop": {
+                            "type": "string",
+                            "title": "instruction_before_stop",
+                            "description": ""
+                        },
+                        "tariff_unit": {
+                            "type": "string",
+                            "title": "tariff_unit",
+                            "description": ""
+                        },
+                        "payg_available": {
+                            "type": "integer",
+                            "title": "payg_available",
+                            "description": ""
+                        },
+                        "instruction_before_start": {
+                            "type": "string",
+                            "title": "instruction_before_start",
+                            "description": ""
+                        },
+                        "charger_type": {
+                            "type": "string",
+                            "title": "charger_type",
+                            "description": ""
+                        },
+                        "show_on_map": {
+                            "type": "integer",
+                            "title": "show_on_map",
+                            "description": ""
+                        },
+                        "location_1": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "location_1",
+                            "description": ""
+                        },
+                        "description": {
+                            "type": "string",
+                            "title": "description",
+                            "description": ""
+                        },
+                        "bay_count": {
+                            "type": "integer",
+                            "title": "bay_count",
+                            "description": ""
+                        },
+                        "in_service": {
+                            "type": "integer",
+                            "title": "in_service",
+                            "description": ""
+                        },
+                        "tariff_description": {
+                            "type": "string",
+                            "title": "tariff_description",
+                            "description": ""
+                        },
+                        "bay_no": {
+                            "type": "integer",
+                            "title": "bay_no",
+                            "description": ""
+                        },
+                        "tariff_price": {
+                            "type": "integer",
+                            "title": "tariff_price",
+                            "description": ""
+                        },
+                        "socket_type": {
+                            "type": "string",
+                            "title": "socket_type",
+                            "description": ""
+                        },
+                        "last_known_status": {
+                            "type": "string",
+                            "title": "last_known_status",
+                            "description": ""
+                        },
+                        "instruction_to_start": {
+                            "type": "string",
+                            "title": "instruction_to_start",
+                            "description": ""
+                        },
+                        "connector1_last_update": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "connector1_last_update",
+                            "description": ""
+                        },
+                        "connector1_status": {
+                            "type": "string",
+                            "title": "connector1_status",
+                            "description": ""
+                        },
+                        "connector1_power_output": {
+                            "type": "integer",
+                            "title": "connector1_power_output",
+                            "description": ""
+                        },
+                        "connector1_socket_type": {
+                            "type": "string",
+                            "title": "connector1_socket_type",
+                            "description": ""
+                        },
+                        "connector2_last_update": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "connector2_last_update",
+                            "description": ""
+                        },
+                        "connector2_status": {
+                            "type": "string",
+                            "title": "connector2_status",
+                            "description": ""
+                        },
+                        "connector2_power_output": {
+                            "type": "string",
+                            "title": "connector2_power_output",
+                            "description": ""
+                        },
+                        "connector2_socket_type": {
+                            "type": "string",
+                            "title": "connector2_socket_type",
+                            "description": ""
+                        },
+                        "connector3_last_update": {
+                            "type": "string",
+                            "title": "connector3_last_update",
+                            "description": ""
+                        },
+                        "connector3_status": {
+                            "type": "string",
+                            "title": "connector3_status",
+                            "description": ""
+                        },
+                        "connector3_power_output": {
+                            "type": "string",
+                            "title": "connector3_power_output",
+                            "description": ""
+                        },
+                        "connector3_socket_type": {
+                            "type": "string",
+                            "title": "connector3_socket_type",
+                            "description": ""
+                        },
+                        "connector4_last_update": {
+                            "type": "string",
+                            "title": "connector4_last_update",
+                            "description": ""
+                        },
+                        "connector4_status": {
+                            "type": "string",
+                            "title": "connector4_status",
+                            "description": ""
+                        },
+                        "connector4_power_output": {
+                            "type": "string",
+                            "title": "connector4_power_output",
+                            "description": ""
+                        },
+                        "connector4_socket_type": {
+                            "type": "string",
+                            "title": "connector4_socket_type",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

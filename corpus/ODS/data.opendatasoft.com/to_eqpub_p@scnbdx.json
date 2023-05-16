@@ -1,0 +1,453 @@
+{
+    "title": "to_eqpub_p@scnbdx",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/to_eqpub_p@scnbdx"
+        }
+    ],
+    "definitions": {
+        "to_eqpub_p@scnbdx": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/to_eqpub_p@scnbdx_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "to_eqpub_p@scnbdx_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "acronyme": {
+                            "type": "string",
+                            "title": "acronyme",
+                            "description": "Acronyme de l'équipement"
+                        },
+                        "nom": {
+                            "type": "string",
+                            "title": "nom",
+                            "description": "Nom de l'équipement"
+                        },
+                        "cat_dig": {
+                            "type": "string",
+                            "title": "cat_dig",
+                            "description": "Catégorie selon l'importance hiérarchique d'un équipement public : \nListe des valeurs possibles : \n1 : Equipement de portée nationale et internationale\n2 : Equipement de portée régionale, métropolitaine et d'agglomération\n3 : Equipement de portée intercommunale\n4 : Equipement de portée communale\n5 : Equipement de quartier, de proximité\n99 : Equipement « mis en jachère », non opérationnel, ou en travaux\n"
+                        },
+                        "ident": {
+                            "type": "string",
+                            "title": "ident",
+                            "description": "Identifiant"
+                        },
+                        "geom_err": {
+                            "type": "string",
+                            "title": "geom_err",
+                            "description": "Code d'erreur géométrique : \nListe des valeurs possibles : \n9999 : Polygone compose et / ou à sections multiples\n9998 : Linéaire compose et / ou à sections multiples\n9996 : La géométrie contient des informations LRS\n9995 : Nombre de dimensions différent de 2 ou 3\n9994 : Présence d'un arc de cercle\n9000 : Erreur autre\n13343 : Polygone de moins de 4 points\n13349 : Polygone papillon\n13350 : Deux éléments d'un polygone archipel se touchent\n13351 : Deux éléments d'un polygone archipel  se touchent\n13356 : Point double\n13366 : Combinaison invalide d'intérieur / extérieur d'un polygone\n13367 : Orientation invalide d'intérieur / extérieur d'un polygone\n"
+                        },
+                        "statut": {
+                            "type": "string",
+                            "title": "statut",
+                            "description": "Statut : \nListe des valeurs possibles : \nPUBLIC : Public\nPUBLIC_MOABM : Equipement public sous Maitrise d'Ouvrage Bordeaux Métropole\nPRIVE : Privé\nASSOCIATIF : Associatif\nPARA_PUBLIC : Parapublic\nINT_METRO : Equipements publics culturels et sportifs d'intérêt métropolitain\n"
+                        },
+                        "mdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "mdate",
+                            "description": "Date de modification"
+                        },
+                        "theme": {
+                            "type": "string",
+                            "title": "theme",
+                            "description": "Thème : \nListe des valeurs possibles : \nA : A : Enseignement divers et formation\nB : B : Santé et action sociale\nC : C : Sport - Loisir - Socio-éducatif\nD : D : Culture - Patrimoine\nE : E : Administration\nF : F : Services\nG : G : Sécurité\nH : H : Espace vert ou espace urbain public\nJ : J : Déplacements\nK : K : Production et transformation d'énergie - assainissement - environnement\nL : L : Cultuel\nM : M : Métropole\nN : N : Sénior\nO : O : Commune\nP : P : Petite enfance\n"
+                        },
+                        "sstheme": {
+                            "type": "string",
+                            "title": "sstheme",
+                            "description": "Sous thème : \nListe des valeurs possibles : \nA1 : Maternelle\nA2 : Élémentaire\nA3 : Collège\nA4 : Lycée\nA5 : Enseignement supérieur\nA6 : Restaurant universitaire\nA7 : Résidence universitaire\nA11 : Enseignement spécialisé\nA12 : Formation para-médicale\nA13 : Organisme de formation\nA14 : Formation Artistique\nB1 : Hôpital ou clinique\nB2 : Centre de consultation / Centre médico-social / Centre médico-psychologique\nB3 : Association à caractère sociale ou médico-sociale\nB4 : Centre social ou médico-social / Centre familial\nB7 : CCAS et PMI\nB8 : Foyer d'hébergement\nB9 : Centre d'aide par le travail\nB10 : MDSI et PTS\nB12 : Accueil des gens du voyage\nC1 : Terrain de plein air\nC2 : Gymnase et salle de sport\nC3 : Piscine\nC4 : Complexe sportif\nC5 : Centre de loisirs polyvalent liés aux entreprises\nC6 : Golf\nC7 : Accueil et centre de loisirs\nC8 : Locaux associatifs ou centres d'animation\nC9 : Activités nautiques\nC10 : Loisirs et tourisme\nC11 : City stade\nC12 : Centre équestre\nC13 : Stade\nC14 : Tennis\nC15 : Terrain de sports collectifs\nD1 : Bibliothèque, vidéothèque, audiothèque, médiathèque\nD2 : Cinéma / multiplexe\nD3 : Musée / salle d'exposition\nD4 : Salle de spectacle, théâtre\nD5 : Centre culturel\nD6 : Patrimoine historique public\nD7 : Lieux évènementiels\nD8 : Association culturelle\nD9 : Ludothèque\nD10 : Orgues\nD11 : Statues, bassins et fontaines\nE1 : Agriculture\nE2 : Culture et communication\nE3 : Défense et anciens combattants\nE4 : Économie et finances\nE5 : Éducation nationale, recherche et technologie\nE6 : Aménagement territoire et environnement\nE7 : Équipement transport et logement\nE8 : Commerce et industrie\nE9 : Jeunesse et sport\nE10 : Santé et affaires sociales\nE11 : Travail et emploi\nE12 : Justice\nE13 : Région\nE14 : Département\nE18 : Préfecture, Préfecture de Région\nF1 : Office du tourisme, syndicat d'initiative, centre d'information\nF3 : Cimetière\nF4 : La Poste\nF5 : Télécommunications\nF6 : Télédiffusion et radiodiffusion\nF7 : Service aux entreprises, pépinières, hôtels\nG1 : Police et Gendarmerie\nG2 : Centre de secours pompiers\nG3 : Prison ou centre de jour\nG4 : Base, caserne ou terrain militaire\nH1 : Square\nH2 : Jardin\nH3 : Parc\nH4 : Espace urbain\nJ1 : Aéroport\nJ2 : Gare ferroviaire\nJ3 : Gare routière\nJ5 : Parcs relais / pôles échange\nJ6 : Dépôt, atelier, terminus bus ou tramway\nJ7 : Station tramway\nJ8 : Parking\nJ9 : Faisceau ferroviaire\nJ10 : Parking payant\nJ11 : Parking évènementiels, forains\nJ12 : Pontons et embarcadères\nK4 : Production et transformation d'électricité\nK5 : Production et transformation de gaz\nK6 : Production de chauffage\nL1 : Lieux de cultes\nL2 : Autres\nM1 : Sites Mériadeck\nM2 : Pôles territoriaux\nM3 : Services territoriaux\nM4 : Environnement\nM5 : Centre de collecte / Traitement des déchets\nM6 : Autres\nN1 : Établissement d'hébergement pour personnes âgées dépendantes / Maison de retraite médicalisée\nN2 : Résidence pour personnes âgées\nN3 : Club sénior\nN4 : Foyer restaurant\nO1 : Hôtel de ville ou annexe\nO2 : Services municipaux\nO3 : Maison de quartier / Maison municipale\nO4 : Marchés\nO5 : Salle polyvalente\nO6 : Maison des associations\nP1 : Crèche\nP2 : Halte-garderie\nP3 : Micro-crèche\nP4 : Maison d'assistantes maternelles\nP5 : Relais d'assistantes maternelles / Maison de la petite enfance / Service d'accueil familial\n"
+                        },
+                        "cdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "cdate",
+                            "description": "Date de création"
+                        },
+                        "gid": {
+                            "type": "integer",
+                            "title": "gid",
+                            "description": "Clé primaire"
+                        },
+                        "insee": {
+                            "type": "string",
+                            "title": "insee",
+                            "description": "Code INSEE de la commune : \nListe des valeurs possibles : \n33003 : Ambarès-et-Lagrave\n33004 : Ambès\n33013 : Artigues-Près-Bordeaux\n33032 : Bassens\n33039 : Bègles\n33056 : Blanquefort\n33063 : Bordeaux\n33065 : Bouliac\n33069 : Le Bouscat\n33075 : Bruges\n33096 : Carbon-Blanc\n33119 : Cenon\n33162 : Eysines\n33167 : Floirac\n33192 : Gradignan\n33200 : Le Haillan\n33249 : Lormont\n33273 : Martignas-sur-Jalle\n33281 : Mérignac\n33312 : Parempuyre\n33318 : Pessac\n33376 : Saint-Aubin-de-Médoc\n33434 : Saint-Louis-de-Montferrand\n33449 : Saint-Médard-en-Jalles\n33487 : Saint-Vincent-de-Paul\n33519 : Le Taillan Médoc\n33522 : Talence\n33550 : Villenave-d'Ornon\n33238 : Léognan\n33322 : Le Pian-Médoc\n33397 : Sainte-Eulalie\n33422 : Saint-Jean-d'Illac\n"
+                        },
+                        "geom_o": {
+                            "type": "string",
+                            "title": "geom_o",
+                            "description": "Orientation du point"
+                        },
+                        "adrpost": {
+                            "type": "string",
+                            "title": "adrpost",
+                            "description": "Adresse postale de l'équipement"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

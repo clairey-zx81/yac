@@ -1,0 +1,492 @@
+{
+    "title": "ist-daten-sbb@sbb",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/ist-daten-sbb@sbb"
+        }
+    ],
+    "definitions": {
+        "ist-daten-sbb@sbb": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ist-daten-sbb@sbb_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "ist-daten-sbb@sbb_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "betriebstag": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Day of operation",
+                            "description": "Date to which the values belong"
+                        },
+                        "fahrt_bezeichner": {
+                            "type": "string",
+                            "title": "Journey identifier",
+                            "description": "Corresponds to JourneyID"
+                        },
+                        "betreiber_id": {
+                            "type": "string",
+                            "title": "Operator ID",
+                            "description": "Business organisation number (Switzerland) or “Transport company code” (foreign). The country code comes in front."
+                        },
+                        "betreiber_abk": {
+                            "type": "string",
+                            "title": "Operator abbreviation",
+                            "description": "Abbreviation of the business organisation responsible for operating the journey"
+                        },
+                        "betreiber_name": {
+                            "type": "string",
+                            "title": "Operator name",
+                            "description": "Business organisation responsible for operating the journey"
+                        },
+                        "produkt_id": {
+                            "type": "string",
+                            "title": "Product ID",
+                            "description": "Product types are used within the interface to classify quality features for journeys. In public transport in Switzerland, the means of transport category (VM-Gattung) is transferred as a Product_ID (e.g. ship, bus, train etc.)."
+                        },
+                        "linien_id": {
+                            "type": "integer",
+                            "title": "Linie",
+                            "description": "Bezeichnung der Linie"
+                        },
+                        "linien_text": {
+                            "type": "string",
+                            "title": "Line Text",
+                            "description": "Line_Text is customer-related and is shown, if necessary, on the relevant displays."
+                        },
+                        "umlauf_id": {
+                            "type": "string",
+                            "title": "Rotation ID",
+                            "description": "If the transport company transfers rotations, the rotation ID is shown here."
+                        },
+                        "verkehrsmittel_text": {
+                            "type": "string",
+                            "title": "Transport ID",
+                            "description": "Type of service offer AG= ATZ=motorrail services EN=EuroNight EC=EuroCity IC=InterCity ICE=Intercity-Express ICN=InterCity tilting train IR=InterRegio RE=RegioExpress R=Regio S=S-Bahn TGV=Train à Grand Vitesse"
+                        },
+                        "zusatzfahrt_tf": {
+                            "type": "string",
+                            "title": "Additional run TF",
+                            "description": "true/false (if null=false). Is set to true if it is an additional journey."
+                        },
+                        "faellt_aus_tf": {
+                            "type": "string",
+                            "title": "Cancelled TF",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "bpuic": {
+                            "type": "integer",
+                            "title": "OPUIC",
+                            "description": "Identification of the stop according to UIC specification"
+                        },
+                        "haltestellen_name": {
+                            "type": "string",
+                            "title": "Stop name",
+                            "description": "Official name of the stop"
+                        },
+                        "ankunftszeit": {
+                            "type": "string",
+                            "title": "Arrival time",
+                            "description": "Target arrival time at the stop, rounded up to minutes."
+                        },
+                        "an_prognose": {
+                            "type": "string",
+                            "title": "Arrival forecast",
+                            "description": "Arrival forecast without any rounding. NB: A transport company has possibly already carried out rounding itself, which is why the seconds are not possibly available."
+                        },
+                        "an_prognose_status": {
+                            "type": "string",
+                            "title": "Arrival forecast status",
+                            "description": "Type of confirmation for the actual arrival time. Forecast: value based on projections Estimated: value derived from train control system confirmation"
+                        },
+                        "abfahrtszeit": {
+                            "type": "string",
+                            "title": "Departure time",
+                            "description": "Scheduled departure time"
+                        },
+                        "ab_prognose": {
+                            "type": "string",
+                            "title": "Departure forecast",
+                            "description": "Departure forecast without any rounding. N.B.: A transport company has possibly already carried out rounding itself, which is why the seconds are not available."
+                        },
+                        "ab_prognose_status": {
+                            "type": "string",
+                            "title": "Departure forecast status",
+                            "description": "Type of confirmation for the actual departure time. Forecast: value based on projections Estimated: value derived from train control system confirmation"
+                        },
+                        "durchfahrt_tf": {
+                            "type": "string",
+                            "title": "Non-stopping pass TF",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "ankunftsverspatung": {
+                            "type": "string",
+                            "title": "Arrival delay",
+                            "description": "Did the train arrive more than 3 mins late"
+                        },
+                        "abfahrtsverspatung": {
+                            "type": "string",
+                            "title": "Departure delay",
+                            "description": "Did the train depart more than 3 mins late"
+                        },
+                        "geopos": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geopos",
+                            "description": "Geoposition of the data set"
+                        },
+                        "lod": {
+                            "type": "string",
+                            "title": "lod",
+                            "description": "Linked Open Data representation of the stop"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,173 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "allOf": [
+    {
+      "$ref": "http://json-schema.org/draft-04/schema#"
+    }
+  ],
+  "definitions": {
+    "link": {
+      "additionalProperties": false,
+      "properties": {
+        "backref": {
+          "$ref": "#/field"
+        },
+        "label": {
+          "$ref": "#/field"
+        },
+        "multiplicity": {
+          "enum": [
+            "one_to_one",
+            "one_to_many",
+            "many_to_one",
+            "many_to_many"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/field"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "target_type": {
+          "$ref": "#/field"
+        }
+      },
+      "required": [
+        "name",
+        "target_type",
+        "backref",
+        "label",
+        "multiplicity",
+        "required"
+      ],
+      "type": "object"
+    },
+    "link_subgroup": {
+      "properties": {
+        "exclusive": {
+          "type": "boolean"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "subgroup": {
+          "items": {
+            "$ref": "#/definitions/link"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "exclusive",
+        "required",
+        "subgroup"
+      ]
+    },
+    "validator_def": {
+      "properties": {
+        "link_to_type": {
+          "type": "string"
+        },
+        "multiplicity": {
+          "enum": [
+            "one_to_one",
+            "one_to_many",
+            "many_to_one",
+            "many_to_many"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "property",
+        "function"
+      ],
+      "title": "Define a validator to be used on a property",
+      "type": "object"
+    }
+  },
+  "field": {
+    "pattern": "^[_a-zA-Z0-9]*$",
+    "type": "string"
+  },
+  "id": "metaschema",
+  "properties": {
+    "category": {
+      "$ref": "#/field",
+      "enum": [
+        "administrative",
+        "analysis",
+        "biospecimen",
+        "clinical",
+        "data",
+        "data_bundle",
+        "data_file",
+        "index_file",
+        "metadata_file",
+        "notation",
+        "qc_bundle",
+        "TBD"
+      ]
+    },
+    "links": {
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/link"
+          },
+          {
+            "$ref": "#/definitions/link_subgroup"
+          }
+        ]
+      },
+      "title": "Define a link to other GDC entities",
+      "type": "array"
+    },
+    "properties": {
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[_a-zA-Z0-9]*$": {
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "submittable": {
+      "type": "boolean"
+    },
+    "system_properties": {
+      "type": "array"
+    },
+    "unique_keys": {
+      "items": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "type": "array"
+    },
+    "validators": {
+      "items": {
+        "$ref": "#/definitions/validator_def"
+      },
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "category",
+    "program",
+    "project",
+    "uniqueKeys",
+    "links",
+    "validators",
+    "systemProperties",
+    "id"
+  ],
+  "title": "GDC JSON schema extension"
+}

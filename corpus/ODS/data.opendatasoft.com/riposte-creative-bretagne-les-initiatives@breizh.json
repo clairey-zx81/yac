@@ -1,0 +1,478 @@
+{
+    "title": "riposte-creative-bretagne-les-initiatives@breizh",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/riposte-creative-bretagne-les-initiatives@breizh"
+        }
+    ],
+    "definitions": {
+        "riposte-creative-bretagne-les-initiatives@breizh": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/riposte-creative-bretagne-les-initiatives@breizh_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "riposte-creative-bretagne-les-initiatives@breizh_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "datetime_create": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "datetime_create",
+                            "description": ""
+                        },
+                        "datetime_latest": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "datetime_latest",
+                            "description": ""
+                        },
+                        "intitule_de_l_initiative": {
+                            "type": "string",
+                            "title": "Intitulé de l'initiative",
+                            "description": ""
+                        },
+                        "description_de_cette_initiative": {
+                            "type": "string",
+                            "title": "Description de cette initiative",
+                            "description": ""
+                        },
+                        "image_de_presentation_facultatif": {
+                            "type": "string",
+                            "title": "Image de présentation (facultatif)",
+                            "description": ""
+                        },
+                        "nom_de_l_acteur": {
+                            "type": "string",
+                            "title": "Nom de l'acteur",
+                            "description": ""
+                        },
+                        "auteur_de_la_fiche": {
+                            "type": "string",
+                            "title": "Auteur de la fiche",
+                            "description": ""
+                        },
+                        "type_d_acteurs_qui_propose_cette_initiative": {
+                            "type": "string",
+                            "title": "Type d'acteurs qui propose cette initiative *",
+                            "description": ""
+                        },
+                        "precisez_autre_acteur": {
+                            "type": "string",
+                            "title": "Précisez autre acteur",
+                            "description": ""
+                        },
+                        "echelle_d_action": {
+                            "type": "string",
+                            "title": "Echelle d'action *",
+                            "description": ""
+                        },
+                        "precisez_autre_echelle": {
+                            "type": "string",
+                            "title": "Précisez autre échelle",
+                            "description": ""
+                        },
+                        "code_postal": {
+                            "type": "integer",
+                            "title": "Code postal *",
+                            "description": ""
+                        },
+                        "ville": {
+                            "type": "string",
+                            "title": "Ville",
+                            "description": ""
+                        },
+                        "bf_latitude": {
+                            "type": "number",
+                            "title": "bf_latitude *",
+                            "description": ""
+                        },
+                        "bf_longitude": {
+                            "type": "number",
+                            "title": "bf_longitude *",
+                            "description": ""
+                        },
+                        "comment_contacter_cette_initiative": {
+                            "type": "string",
+                            "title": "Comment contacter cette initiative?",
+                            "description": ""
+                        },
+                        "lien_web_si_existant": {
+                            "type": "string",
+                            "title": "Lien Web si existant",
+                            "description": ""
+                        },
+                        "mot_clef": {
+                            "type": "string",
+                            "title": "Mot Clef *",
+                            "description": ""
+                        },
+                        "precisez_autre_mot_clef": {
+                            "type": "string",
+                            "title": "Précisez autre mot clef",
+                            "description": ""
+                        },
+                        "partenaires_associes": {
+                            "type": "string",
+                            "title": "Partenaires associés",
+                            "description": ""
+                        },
+                        "en_complement": {
+                            "type": "string",
+                            "title": "En complément :",
+                            "description": ""
+                        },
+                        "geo": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

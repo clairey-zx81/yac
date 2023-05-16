@@ -1,0 +1,680 @@
+{
+    "title": "embedded-capacity-register@ukpowernetworks",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/embedded-capacity-register@ukpowernetworks"
+        }
+    ],
+    "definitions": {
+        "embedded-capacity-register@ukpowernetworks": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/embedded-capacity-register@ukpowernetworks_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "embedded-capacity-register@ukpowernetworks_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "export_mpan_msid": {
+                            "type": "string",
+                            "title": "Export MPAN / MSID",
+                            "description": "The core meter point administration number, a 13-digit reference used in MPAS to identify the relevant Metering Point.\nFor generation and storage sites, the \"Export\" MPAN (or MSID for CVA registered sites) should be included."
+                        },
+                        "import_mpan_msid": {
+                            "type": "string",
+                            "title": "Import MPAN / MSID",
+                            "description": "The core meter point administration number, a 13-digit reference used in MPAS to identify the relevant Metering Point.\nFor sites subject to a DSR contract and for storage sites, the Import MPAN (or MSID for CVA registered sites) should be included. "
+                        },
+                        "customer_name": {
+                            "type": "string",
+                            "title": "Customer Name",
+                            "description": "Name of party that is connected or contracted to connect."
+                        },
+                        "customer_site": {
+                            "type": "string",
+                            "title": "Customer Site",
+                            "description": "Name of customer site/project name."
+                        },
+                        "address_line_1": {
+                            "type": "string",
+                            "title": "Address Line 1",
+                            "description": "Site location."
+                        },
+                        "address_line_2": {
+                            "type": "string",
+                            "title": "Address Line 2",
+                            "description": "Site location."
+                        },
+                        "town_city": {
+                            "type": "string",
+                            "title": "Town/ City",
+                            "description": "Site location."
+                        },
+                        "county": {
+                            "type": "string",
+                            "title": "County",
+                            "description": "Site location."
+                        },
+                        "postcode": {
+                            "type": "string",
+                            "title": "Postcode",
+                            "description": "Site location."
+                        },
+                        "country": {
+                            "type": "string",
+                            "title": "Country",
+                            "description": "GB country customer site is connected within."
+                        },
+                        "location_x_coordinate_eastings_where_data_is_held": {
+                            "type": "string",
+                            "title": "Location (X-coordinate):_Eastings (where data is held)",
+                            "description": "X coordinates for development site in British National Grid. The co-ordinates should refer to the location of the metering point at the customer site."
+                        },
+                        "location_y_coordinate_northings_where_data_is_held": {
+                            "type": "string",
+                            "title": "Location (y-coordinate):_Northings (where data is held)",
+                            "description": "Y coordinates for development site in British National Grid.  The co-ordinates should refer to the location of the metering point at the customer site."
+                        },
+                        "grid_supply_point": {
+                            "type": "string",
+                            "title": "Grid Supply Point",
+                            "description": "This is the point of delivery from the transmission system to a distribution system that is linked with the Customer Site. "
+                        },
+                        "bulk_supply_point": {
+                            "type": "string",
+                            "title": "Bulk Supply Point",
+                            "description": "This is the supply point on the DNO system (representing an EHV/EHV transformation level) linked with the Customer Site. "
+                        },
+                        "primary": {
+                            "type": "string",
+                            "title": "Primary",
+                            "description": "This is the relevant primary substation on the DNO system  linked with the Customer Site. "
+                        },
+                        "point_of_connection_poc_voltage_kv": {
+                            "type": "string",
+                            "title": "Point of Connection (POC)_Voltage (kV)",
+                            "description": "This is the voltage at the Point of Connection to the distribution network."
+                        },
+                        "licence_area": {
+                            "type": "string",
+                            "title": "Licence Area",
+                            "description": "This is the DNO Licence Area in which the Customer Site is/will be connected."
+                        },
+                        "energy_source_1": {
+                            "type": "string",
+                            "title": "Energy Source 1",
+                            "description": " Resource type used by technology in the production of electricity"
+                        },
+                        "energy_conversion_technology_1": {
+                            "type": "string",
+                            "title": "Energy Conversion Technology 1",
+                            "description": "Technologies that export electricity onto a distribution network:"
+                        },
+                        "chp_cogeneration_yes_no": {
+                            "type": "string",
+                            "title": "CHP Cogeneration (Yes/No)",
+                            "description": "The simultaneous generation of usable heat and power (usually electricity) in a single process, thereby leading to reductions in the amount of wasted heat. "
+                        },
+                        "storage_capacity_1_mwh": {
+                            "type": "number",
+                            "title": "Storage Capacity 1 (MWh)",
+                            "description": "This is the energy capacity of the storage facility (MWh). "
+                        },
+                        "storage_duration_1_hours": {
+                            "type": "string",
+                            "title": "Storage Duration 1 (Hours)",
+                            "description": "Divide the storage capacity (MWh) by the Registered Capacity (MW) and round it down to the nearest 0.5 (half-hour). If the value is less than 0.5 before rounding, it could be rounded to 0.5 hours so that it is not zero. "
+                        },
+                        "energy_source_energy_conversion_technology_1_registered_capacity_mw": {
+                            "type": "number",
+                            "title": "Energy Source & Energy Conversion Technology 1 - Registered Capacity (MW)",
+                            "description": "This is the Registered Capacity of the \"Energy Source 1\" expressed in MW."
+                        },
+                        "energy_source_2": {
+                            "type": "string",
+                            "title": "Energy Source 2",
+                            "description": " Where there is more than one plant type at a site - the resource types additional to the \"Energy Source 1\"."
+                        },
+                        "energy_conversion_technology_2": {
+                            "type": "string",
+                            "title": "Energy Conversion Technology 2",
+                            "description": "Additional technologies to Energy Conversion Technology 1, that export electricity onto the distribution network."
+                        },
+                        "chp_cogeneration_2_yes_no": {
+                            "type": "string",
+                            "title": "CHP Cogeneration 2 (Yes/No)",
+                            "description": "The simultaneous generation of usable heat and power (usually electricity) in a single process, thereby leading to reductions in the amount of wasted heat. "
+                        },
+                        "storage_capacity_2_mwh": {
+                            "type": "number",
+                            "title": "Storage Capacity 2 (MWh)",
+                            "description": "This is the energy capacity of the storage facility (MWh). "
+                        },
+                        "storage_duration_2_hours": {
+                            "type": "string",
+                            "title": "Storage Duration 2 (Hours)",
+                            "description": "Divide the storage capacity (MWh) by the Registered Capacity (MW) and round it down to the nearest 0.5 (half-hour). If the value is less than 0.5 before rounding, it could be rounded to 0.5 hours so that it is not zero. "
+                        },
+                        "energy_source_energy_conversion_technology_2_registered_capacity_mw": {
+                            "type": "number",
+                            "title": "Energy Source & Energy Conversion Technology 2 - Registered Capacity (MW)",
+                            "description": "This is the Registered Capacity of the \"Energy Source 2\" expressed in MW."
+                        },
+                        "energy_source_3": {
+                            "type": "string",
+                            "title": "Energy Source 3",
+                            "description": " Where there is more than one plant type at a site - the resource types additional to the \"Energy Source 1\"."
+                        },
+                        "energy_conversion_technology_3": {
+                            "type": "string",
+                            "title": "Energy Conversion Technology 3",
+                            "description": "Additional technologies to Energy Conversion Technology 1, that export electricity onto the distribution network."
+                        },
+                        "chp_cogeneration_3_yes_no": {
+                            "type": "string",
+                            "title": "CHP Cogeneration 3 (Yes/No)",
+                            "description": "The simultaneous generation of usable heat and power (usually electricity) in a single process, thereby leading to reductions in the amount of wasted heat. "
+                        },
+                        "storage_capacity_3_mwh": {
+                            "type": "number",
+                            "title": "Storage Capacity 3 (MWh)",
+                            "description": "This is the energy capacity of the storage facility (MWh). "
+                        },
+                        "storage_duration_3_hours": {
+                            "type": "string",
+                            "title": "Storage Duration 3 (Hours)",
+                            "description": "Divide the storage capacity (MWh) by the Registered Capacity (MW) and round it down to the nearest 0.5 (half-hour). If the value is less than 0.5 before rounding, it could be rounded to 0.5 hours so that it is not zero. "
+                        },
+                        "energy_source_energy_conversion_technology_3_registered_capacity_mw": {
+                            "type": "string",
+                            "title": "Energy Source & Energy Conversion Technology 3 - Registered Capacity (MW)",
+                            "description": "This is the Registered Capacity of the \"Energy Source 3\" expressed in MW."
+                        },
+                        "flexible_connection_yes_no": {
+                            "type": "string",
+                            "title": "Flexible Connection (Yes/No)",
+                            "description": "Is the connection contingent on a flexible connection arrangement during normal operating arrangements such as Active Network Management (ANM)?\n"
+                        },
+                        "connection_status": {
+                            "type": "string",
+                            "title": "Connection Status",
+                            "description": "\"Connected\" or \"Accepted to Connect\""
+                        },
+                        "already_connected_registered_capacity_mw": {
+                            "type": "number",
+                            "title": "Already connected Registered Capacity (MW)",
+                            "description": "This is the total Registered Capacity of generation already connected at the site expressed in MW."
+                        },
+                        "already_connected_maximum_export_capacity_mw": {
+                            "type": "number",
+                            "title": "Already Connected - Maximum Export Capacity (MW)",
+                            "description": "This is the total MW export capacity permitted as per the connection agreement."
+                        },
+                        "already_connected_maximum_export_capacity_mva": {
+                            "type": "number",
+                            "title": "Already Connected - Maximum Export Capacity (MVA)",
+                            "description": "This is the total MVA export capacity permitted as per the connection agreement."
+                        },
+                        "already_connected_maximum_import_capacity_mw": {
+                            "type": "number",
+                            "title": "Already Connected - Maximum Import Capacity (MW)",
+                            "description": "This is the total MW import capacity permitted as per the connection agreement."
+                        },
+                        "already_connected_maximum_import_capacity_mva": {
+                            "type": "number",
+                            "title": "Already Connected - Maximum Import Capacity (MVA)",
+                            "description": "This is the total MVA export capacity permitted as per the connection agreement."
+                        },
+                        "date_connected": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date Connected",
+                            "description": "Date Project connected to network and energised."
+                        },
+                        "accepted_to_connect_registered_capacity_mw": {
+                            "type": "number",
+                            "title": "Accepted to Connect Registered Capacity (MW)",
+                            "description": "This is the Registered Capacity of generation that is not already connected, but has been Accepted to Connect, expressed in MW."
+                        },
+                        "accepted_to_connect_change_to_maximum_export_capacity_mw": {
+                            "type": "number",
+                            "title": "Accepted to Connect - Change to Maximum Export Capacity (MW)",
+                            "description": "This is the new/additional MW export capacity (i.e. not yet connected) that has been accepted to connect as per the connection agreement."
+                        },
+                        "accepted_to_connect_change_to_maximum_export_capacity_mva": {
+                            "type": "number",
+                            "title": "Accepted to Connect - Change to Maximum Export Capacity (MVA)",
+                            "description": "This is the new/additional MVA export capacity (i.e. not yet connected) that has been accepted to connect as per the connection agreement."
+                        },
+                        "accepted_to_connect_change_to_maximum_import_capacity_mw": {
+                            "type": "number",
+                            "title": "Accepted to Connect - Change to Maximum Import Capacity (MW)",
+                            "description": "This is the new/additional MW import capacity (i.e. not yet connected) that has been accepted to connect as per the connection agreement."
+                        },
+                        "accepted_to_connect_change_to_maximum_import_capacity_mva": {
+                            "type": "number",
+                            "title": "Accepted to Connect - Change to Maximum Import Capacity (MVA)",
+                            "description": "This is the new/additional MVA import capacity (i.e. not yet connected) that has been accepted to connect as per the connection agreement."
+                        },
+                        "date_accepted": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date Accepted",
+                            "description": "Date customer contracted with GBSO/DNO/IDNO."
+                        },
+                        "target_energisation_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Target Energisation Date",
+                            "description": "Estimated date of energisation. This date is likely to change to reflect the latest date notified by customers."
+                        },
+                        "distribution_service_provider_y_n": {
+                            "type": "string",
+                            "title": "Distribution Service Provider (Y/N)",
+                            "description": "Does the resource provide services to a DNO?"
+                        },
+                        "transmission_service_provider_y_n": {
+                            "type": "string",
+                            "title": "Transmission Service Provider (Y/N)",
+                            "description": "Does the resource provide services to the ESO or a TO?"
+                        },
+                        "reference": {
+                            "type": "string",
+                            "title": "Reference",
+                            "description": "A unique reference to link to the Providing Services tab."
+                        },
+                        "in_a_connection_queue_y_n": {
+                            "type": "string",
+                            "title": "In a Connection Queue (Y/N)",
+                            "description": "This field indicates whether the the \"Accepted to Connect\" resource is part of a connection queue."
+                        },
+                        "distribution_reinforcement_reference": {
+                            "type": "string",
+                            "title": "Distribution Reinforcement Reference",
+                            "description": "Unique reference to relevant distribution reinforcement required for connection.\n\n"
+                        },
+                        "transmission_reinforcement_reference": {
+                            "type": "string",
+                            "title": "Transmission Reinforcement Reference",
+                            "description": "Unique reference to relevant transmission reinforcement required for connection."
+                        },
+                        "last_updated": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Last Updated",
+                            "description": "Date on which item was last updated in the register."
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "title": "Longitude",
+                            "description": "Transformation of the X Co-ordinates of the metering point at the customer site."
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "title": "Latitude",
+                            "description": "Transformation of the Y Co-ordinates of the metering point at the customer site."
+                        },
+                        "spatialcoordinates_customer": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "SpatialCoordinates_Customer",
+                            "description": "Latitude and Longitude, geopoint location of the metering point at the customer site."
+                        },
+                        "sitefunctionallocation": {
+                            "type": "string",
+                            "title": "SiteFunctionalLocation",
+                            "description": "This is the Site alias in both the Network Control and Asset Management System. It includes the site number."
+                        },
+                        "primary_resource_type_group": {
+                            "type": "string",
+                            "title": "Primary Resource Type_Group",
+                            "description": "Resource type used by technology in the production of electricity -grouped"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

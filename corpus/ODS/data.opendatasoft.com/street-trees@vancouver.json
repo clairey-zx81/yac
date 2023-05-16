@@ -1,0 +1,472 @@
+{
+    "title": "street-trees@vancouver",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/street-trees@vancouver"
+        }
+    ],
+    "definitions": {
+        "street-trees@vancouver": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/street-trees@vancouver_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "street-trees@vancouver_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "tree_id": {
+                            "type": "string",
+                            "title": "TREE_ID",
+                            "description": "Numerical ID"
+                        },
+                        "civic_number": {
+                            "type": "string",
+                            "title": "CIVIC_NUMBER",
+                            "description": "Street address of the site at which the tree is associated with"
+                        },
+                        "std_street": {
+                            "type": "string",
+                            "title": "STD_STREET",
+                            "description": "Street name of the site at which the tree is associated with"
+                        },
+                        "genus_name": {
+                            "type": "string",
+                            "title": "GENUS_NAME",
+                            "description": "Genus name"
+                        },
+                        "species_name": {
+                            "type": "string",
+                            "title": "SPECIES_NAME",
+                            "description": "Species name"
+                        },
+                        "cultivar_name": {
+                            "type": "string",
+                            "title": "CULTIVAR_NAME",
+                            "description": "Cultivar name"
+                        },
+                        "common_name": {
+                            "type": "string",
+                            "title": "COMMON_NAME",
+                            "description": "Common name"
+                        },
+                        "assigned": {
+                            "type": "string",
+                            "title": "ASSIGNED",
+                            "description": "Indicates whether the address is made up to associate the tree with a nearby  lot (Y=Yes or N=No)"
+                        },
+                        "root_barrier": {
+                            "type": "string",
+                            "title": "ROOT_BARRIER",
+                            "description": "Root barrier installed (Y = Yes, N = No)"
+                        },
+                        "plant_area": {
+                            "type": "string",
+                            "title": "PLANT_AREA",
+                            "description": "B = behind sidewalk, G = in tree grate, N = no sidewalk, C = cutout, a number  indicates boulevard width in feet"
+                        },
+                        "on_street_block": {
+                            "type": "string",
+                            "title": "ON_STREET_BLOCK",
+                            "description": "The street block at which the tree is physically located on"
+                        },
+                        "on_street": {
+                            "type": "string",
+                            "title": "ON_STREET",
+                            "description": "The name of the street at which the tree is physically located on"
+                        },
+                        "neighbourhood_name": {
+                            "type": "string",
+                            "title": "NEIGHBOURHOOD_NAME",
+                            "description": "City's defined local area in which the tree is located.  For more information, see theLocal Area Boundary Datapage."
+                        },
+                        "street_side_name": {
+                            "type": "string",
+                            "title": "STREET_SIDE_NAME",
+                            "description": "The street side which the tree is physically located on (Even, Odd or Median  (Med))"
+                        },
+                        "height_range_id": {
+                            "type": "integer",
+                            "title": "HEIGHT_RANGE_ID",
+                            "description": "0-10 for every 10 feet (e.g., 0 = 0-10 ft, 1 = 10-20 ft, 2 = 20-30 ft, and 10 = 100+ ft)"
+                        },
+                        "diameter": {
+                            "type": "number",
+                            "title": "DIAMETER",
+                            "description": "DBH in inches (DBH stands for diameter of tree at breast height)"
+                        },
+                        "curb": {
+                            "type": "string",
+                            "title": "CURB",
+                            "description": "Curb presence (Y = Yes, N = No)"
+                        },
+                        "date_planted": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "DATE_PLANTED",
+                            "description": "The date of planting in YYYYMMDD format.  Data for this field may not be available for all trees."
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geom",
+                            "description": "Spatial representation of feature"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,637 @@
+{
+    "title": "sites_compostage_collectif@grandchambery",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/sites_compostage_collectif@grandchambery"
+        }
+    ],
+    "definitions": {
+        "sites_compostage_collectif@grandchambery": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/sites_compostage_collectif@grandchambery_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "sites_compostage_collectif@grandchambery_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "nom": {
+                            "type": "string",
+                            "title": "Nom",
+                            "description": ""
+                        },
+                        "date_demarrage": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date démarrage",
+                            "description": ""
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "Type",
+                            "description": ""
+                        },
+                        "territoire": {
+                            "type": "string",
+                            "title": "Territoire",
+                            "description": ""
+                        },
+                        "sous_territoire": {
+                            "type": "string",
+                            "title": "Sous-territoire",
+                            "description": ""
+                        },
+                        "latitude": {
+                            "type": "string",
+                            "title": "Latitude",
+                            "description": ""
+                        },
+                        "longitude": {
+                            "type": "string",
+                            "title": "Longitude",
+                            "description": ""
+                        },
+                        "adresse": {
+                            "type": "string",
+                            "title": "Adresse",
+                            "description": ""
+                        },
+                        "cp": {
+                            "type": "string",
+                            "title": "CP",
+                            "description": ""
+                        },
+                        "code_insee": {
+                            "type": "integer",
+                            "title": "CODE_INSEE",
+                            "description": ""
+                        },
+                        "ville": {
+                            "type": "string",
+                            "title": "Ville",
+                            "description": ""
+                        },
+                        "complement_d_adresse": {
+                            "type": "string",
+                            "title": "Complément d'adresse",
+                            "description": ""
+                        },
+                        "fonctionnement": {
+                            "type": "string",
+                            "title": "Fonctionnement",
+                            "description": ""
+                        },
+                        "ouvert_au_public": {
+                            "type": "string",
+                            "title": "Ouvert au public",
+                            "description": ""
+                        },
+                        "conditions_d_acces": {
+                            "type": "string",
+                            "title": "Conditions d'accès",
+                            "description": ""
+                        },
+                        "panneaux_affichages_consignes": {
+                            "type": "string",
+                            "title": "Panneaux affichages consignes",
+                            "description": ""
+                        },
+                        "syndicat_de_copropriete_nom": {
+                            "type": "string",
+                            "title": "Syndicat de copropriété (nom)",
+                            "description": ""
+                        },
+                        "societe_entretien_espace_vert": {
+                            "type": "string",
+                            "title": "Société entretien espace vert",
+                            "description": ""
+                        },
+                        "bailleur_social": {
+                            "type": "string",
+                            "title": "Bailleur social",
+                            "description": ""
+                        },
+                        "type_de_struct_ou_mat_seche": {
+                            "type": "string",
+                            "title": "Type de struct. ou mat. sèche",
+                            "description": ""
+                        },
+                        "type_de_biodechets": {
+                            "type": "string",
+                            "title": "Type de biodéchets",
+                            "description": ""
+                        },
+                        "type_de_materiel": {
+                            "type": "string",
+                            "title": "Type de matériel",
+                            "description": ""
+                        },
+                        "autre_materiel": {
+                            "type": "string",
+                            "title": "Autre matériel",
+                            "description": ""
+                        },
+                        "cout_materiel_eur": {
+                            "type": "number",
+                            "title": "Coût matériel (€)",
+                            "description": ""
+                        },
+                        "nb_bioseaux": {
+                            "type": "number",
+                            "title": "Nb bioseaux",
+                            "description": ""
+                        },
+                        "andain": {
+                            "type": "string",
+                            "title": "Andain",
+                            "description": ""
+                        },
+                        "autonomie": {
+                            "type": "string",
+                            "title": "Autonomie (%)",
+                            "description": ""
+                        },
+                        "contrib_pot": {
+                            "type": "number",
+                            "title": "Contrib. pot.",
+                            "description": ""
+                        },
+                        "contrib_part": {
+                            "type": "number",
+                            "title": "Contrib. part.",
+                            "description": ""
+                        },
+                        "bac_d_apport_l": {
+                            "type": "number",
+                            "title": "Bac d'apport (L)",
+                            "description": ""
+                        },
+                        "bac_d_apport_nb": {
+                            "type": "number",
+                            "title": "Bac d'apport (nb)",
+                            "description": ""
+                        },
+                        "bac_d_apport_ref": {
+                            "type": "string",
+                            "title": "Bac d'apport (réf)",
+                            "description": ""
+                        },
+                        "bac_de_matur_l": {
+                            "type": "number",
+                            "title": "Bac de matur. (L)",
+                            "description": ""
+                        },
+                        "bac_de_matur_nb": {
+                            "type": "number",
+                            "title": "Bac de matur. (nb)",
+                            "description": ""
+                        },
+                        "bac_de_matur_ref": {
+                            "type": "string",
+                            "title": "Bac de matur. (réf)",
+                            "description": ""
+                        },
+                        "bac_structurant_l": {
+                            "type": "number",
+                            "title": "Bac structurant (L)",
+                            "description": ""
+                        },
+                        "bac_structurant_nb": {
+                            "type": "number",
+                            "title": "Bac structurant (nb)",
+                            "description": ""
+                        },
+                        "bac_structurant_ref": {
+                            "type": "string",
+                            "title": "Bac structurant (réf)",
+                            "description": ""
+                        },
+                        "bacs_au_total_nb": {
+                            "type": "number",
+                            "title": "Bacs au total (nb)",
+                            "description": ""
+                        },
+                        "quantite_2009_t": {
+                            "type": "number",
+                            "title": "Quantité 2009 (t)",
+                            "description": ""
+                        },
+                        "quantite_2010_t": {
+                            "type": "number",
+                            "title": "Quantité 2010 (t)",
+                            "description": ""
+                        },
+                        "quantite_2011_t": {
+                            "type": "number",
+                            "title": "Quantité 2011 (t)",
+                            "description": ""
+                        },
+                        "quantite_2012_t": {
+                            "type": "number",
+                            "title": "Quantité 2012 (t)",
+                            "description": ""
+                        },
+                        "quantite_2013_t": {
+                            "type": "number",
+                            "title": "Quantité 2013 (t)",
+                            "description": ""
+                        },
+                        "quantite_2014_t": {
+                            "type": "number",
+                            "title": "Quantité 2014 (t)",
+                            "description": ""
+                        },
+                        "quantite_2015_t": {
+                            "type": "number",
+                            "title": "Quantité 2015 (t)",
+                            "description": ""
+                        },
+                        "quantite_2016_t": {
+                            "type": "number",
+                            "title": "Quantité 2016 (t)",
+                            "description": ""
+                        },
+                        "quantite_2017_t": {
+                            "type": "number",
+                            "title": "Quantité 2017 (t)",
+                            "description": ""
+                        },
+                        "quantite_2018_t": {
+                            "type": "number",
+                            "title": "Quantité 2018 (t)",
+                            "description": ""
+                        },
+                        "quantite_2019_t": {
+                            "type": "number",
+                            "title": "Quantité 2019 (t)",
+                            "description": ""
+                        },
+                        "quantite_2020_t": {
+                            "type": "number",
+                            "title": "Quantité 2020 (t)",
+                            "description": ""
+                        },
+                        "quantite_2021_t": {
+                            "type": "number",
+                            "title": "Quantité 2021 (t)",
+                            "description": ""
+                        },
+                        "quantite_2022_t": {
+                            "type": "number",
+                            "title": "Quantité 2022 (t)",
+                            "description": ""
+                        },
+                        "geolocalisation": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geolocalisation",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

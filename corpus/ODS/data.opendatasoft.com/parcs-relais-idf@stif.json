@@ -1,0 +1,516 @@
+{
+    "title": "parcs-relais-idf@stif",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/parcs-relais-idf@stif"
+        }
+    ],
+    "definitions": {
+        "parcs-relais-idf@stif": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/parcs-relais-idf@stif_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "parcs-relais-idf@stif_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": "point  géographique du Parc Relais"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": "Shape du Parc Relais"
+                        },
+                        "id_pr": {
+                            "type": "integer",
+                            "title": "ID_PR",
+                            "description": "Identifiant du Parc Relais"
+                        },
+                        "nom_pr": {
+                            "type": "string",
+                            "title": "NOM_PR",
+                            "description": "Nom du Parc Relais"
+                        },
+                        "id_gares_g": {
+                            "type": "integer",
+                            "title": "ID_GARES_G",
+                            "description": "Identifiant de la gare à proximité"
+                        },
+                        "nom_gare": {
+                            "type": "string",
+                            "title": "NOM_GARE",
+                            "description": "Nom de la gare à proximité"
+                        },
+                        "id_ref_lda": {
+                            "type": "integer",
+                            "title": "ID_REF_LDA",
+                            "description": "Identifiant du lieu d'arrêt issu du référentiel des arrêts"
+                        },
+                        "nom_lda": {
+                            "type": "string",
+                            "title": "NOM_LDA",
+                            "description": "Identifiant du lieu d'arrêt issu du référentiel des arrêts"
+                        },
+                        "etat_pr": {
+                            "type": "string",
+                            "title": "ETAT_PR",
+                            "description": "Etat du Parc-Relais (en service)"
+                        },
+                        "config_pr": {
+                            "type": "string",
+                            "title": "CONFIG_PR",
+                            "description": "Configuration du Parc-Relais"
+                        },
+                        "mes_date": {
+                            "type": "string",
+                            "title": "MES_DATE",
+                            "description": "Date de mise en service"
+                        },
+                        "exploit_pr": {
+                            "type": "string",
+                            "title": "EXPLOIT_PR",
+                            "description": "Nom de l'exploitant"
+                        },
+                        "pl_pr": {
+                            "type": "integer",
+                            "title": "PL_PR",
+                            "description": "Nombre de places totales dans le Parc Relais"
+                        },
+                        "pl_lda": {
+                            "type": "integer",
+                            "title": "PL_LDA",
+                            "description": "Nombre de places totales dans l'ensemble de lu Lieu d'Arrêt"
+                        },
+                        "pl_vp": {
+                            "type": "integer",
+                            "title": "PL_VP",
+                            "description": "Nombre de places pour Voiture Particulière dans le Parc Relais"
+                        },
+                        "pl_pmr": {
+                            "type": "integer",
+                            "title": "PL_PMR",
+                            "description": "Nombre de places pour Personne à Mobilité Réduite dans le Parc Relais"
+                        },
+                        "pl_cov": {
+                            "type": "integer",
+                            "title": "PL_COV",
+                            "description": "Nombre de places dédiée Covoiturage dans le Parc Relais"
+                        },
+                        "pl_ap": {
+                            "type": "integer",
+                            "title": "PL_AP",
+                            "description": "Nombre de places dédiée Autopartage dans le Parc Relais"
+                        },
+                        "pl_elec": {
+                            "type": "integer",
+                            "title": "PL_ELEC",
+                            "description": "Nombre de places dédiée véhicule électrique dans le Parc Relais"
+                        },
+                        "pl_elec_pm": {
+                            "type": "integer",
+                            "title": "PL_ELEC_PMR",
+                            "description": "Nombre de places dédiée Véhicule électrique PMR dans le Parc Relais"
+                        },
+                        "pl_2rm": {
+                            "type": "integer",
+                            "title": "PL_2RM",
+                            "description": "Nombre de places dédiée Deux Roues Motrices dans le Parc Relais"
+                        },
+                        "pl_velo": {
+                            "type": "integer",
+                            "title": "PL_VELO",
+                            "description": "Nombre de places dédiée Vélo dans le Parc Relais"
+                        },
+                        "label_pr": {
+                            "type": "string",
+                            "title": "LABEL_PR",
+                            "description": "Indique si le Parc Relais est labellisé"
+                        },
+                        "tarif_type": {
+                            "type": "string",
+                            "title": "TARIF_TYPE",
+                            "description": "Type de tarification"
+                        },
+                        "insee_com": {
+                            "type": "string",
+                            "title": "INSEE_COM",
+                            "description": "Code INSEE de la commune"
+                        },
+                        "nom_com": {
+                            "type": "string",
+                            "title": "NOM_COM",
+                            "description": "Nom de la commune"
+                        },
+                        "dpt": {
+                            "type": "string",
+                            "title": "DPT",
+                            "description": "Numéro du département"
+                        },
+                        "x_l93": {
+                            "type": "number",
+                            "title": "X_L93",
+                            "description": "Coordonnées X en RGF93"
+                        },
+                        "y_l93": {
+                            "type": "number",
+                            "title": "Y_L93",
+                            "description": "Coordonnées Y en RGF93"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

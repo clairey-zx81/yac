@@ -1,0 +1,458 @@
+{
+    "title": "fv_tronc_l@scnbdx",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/fv_tronc_l@scnbdx"
+        }
+    ],
+    "definitions": {
+        "fv_tronc_l@scnbdx": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/fv_tronc_l@scnbdx_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "fv_tronc_l@scnbdx_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "gid": {
+                            "type": "integer",
+                            "title": "gid",
+                            "description": "Clé primaire"
+                        },
+                        "geom_err": {
+                            "type": "string",
+                            "title": "geom_err",
+                            "description": "Code d'erreur géométrique : \nListe des valeurs possibles : \n9999 : Polygone compose et / ou à sections multiples\n9998 : Linéaire compose et / ou à sections multiples\n9996 : La géométrie contient des informations LRS\n9995 : Nombre de dimensions différent de 2 ou 3\n9994 : Présence d'un arc de cercle\n9000 : Erreur autre\n13343 : Polygone de moins de 4 points\n13349 : Polygone papillon\n13350 : Deux éléments d'un polygone archipel se touchent\n13351 : Deux éléments d'un polygone archipel  se touchent\n13356 : Point double\n13366 : Combinaison invalide d'intérieur / extérieur d'un polygone\n13367 : Orientation invalide d'intérieur / extérieur d'un polygone\n"
+                        },
+                        "ident": {
+                            "type": "string",
+                            "title": "ident",
+                            "description": "Identifiant"
+                        },
+                        "domanial": {
+                            "type": "integer",
+                            "title": "domanial",
+                            "description": "Domanialité du tronçon : \nListe des valeurs possibles : \n0 : Non renseignée\n1 : Autoroute\n2 : Route nationale\n3 : Route départementale\n4 : Voie métropolitaine\n5 : Voie privée\n6 : Chemin rural\n7 : Autre\n"
+                        },
+                        "groupe": {
+                            "type": "integer",
+                            "title": "groupe",
+                            "description": "Numéro groupe : \nListe des valeurs possibles : \n1 : Utilisé pour longueur totale de la voie\n2 : Non utilisé pour longueur totale de la voie\n3 : Usages très particuliers\n94 : Ligne D du tramway\n95 : Voie d'accès aux ateliers du tramway\n97 : Ligne A du tramway\n98 : Ligne B du tramway\n99 : Ligne C du tramway\n"
+                        },
+                        "cat_dig": {
+                            "type": "integer",
+                            "title": "cat_dig",
+                            "description": "Catégorie de voie selon l'importance des tronçons de route pour le trafic routier : \nListe des valeurs possibles : \n1 : Voie Principale\n2 : Voie d'agglomération\n3 : Voie urbaine structurante\n4 : Voie urbaine de distribution\n5 : Voie urbaine de desserte\n6 : Voie TCSP\n7 : Voie cyclable\n8 : Bretelles Entrée Sortie\n9 : Voie piétonne\n10 : Voie figurative\n"
+                        },
+                        "cat_rhv": {
+                            "type": "integer",
+                            "title": "cat_rhv",
+                            "description": "Catégorie selon l'importance des tronçons sur le Réseau Hiérarchisé : \nListe des valeurs possibles : \n1 : Axe structurant d'agglomération (Catégorie 1) au 22/12/2017\n2 : Liaison intercommunale (Catégorie 2) au 22/12/2017\n3 : Voie de liaison inter-quartiers (Catégorie 3) au 19/11/2004\n4 : Voie de desserte locale (Catégorie 4) au 19/11/2004\n33 : Voie déclassée des catégories 1 et 2 (Catégorie 33) au 22/12/2017\n61 : Axe structurant d¿agglomération nouvellement créé (Catégorie 61) depuis le 22/12/2017\n62 : Liaison intercommunale nouvellement créée (Catégorie 62) depuis le 22/12/2017\n63 : Voie de liaison inter-quartiers nouvellement créée (Catégorie 63) depuis le 19/11/2004\n64 : Voie de desserte locale nouvellement créée (Catégorie 64) depuis le 19/11/2004\n98 : Tronçon du Tramway (Catégorie 98)\n99 : Non renseigné\n"
+                        },
+                        "passage": {
+                            "type": "string",
+                            "title": "passage",
+                            "description": "Niveau de passage du tronçon : \nListe des valeurs possibles : \nINFERIEUR : Inférieur\nSUPERIEUR : Supérieur\n"
+                        },
+                        "nom_voie": {
+                            "type": "string",
+                            "title": "nom_voie",
+                            "description": "Nom de la voie"
+                        },
+                        "voiegrandtrafic": {
+                            "type": "string",
+                            "title": "voiegrandtrafic",
+                            "description": "Voie à grand trafic"
+                        },
+                        "rg_fv_graph_nd": {
+                            "type": "string",
+                            "title": "rg_fv_graph_nd",
+                            "description": "Noeud de départ du tronçon dans la relation de graphe FV_GRAPH"
+                        },
+                        "rg_fv_graph_na": {
+                            "type": "string",
+                            "title": "rg_fv_graph_na",
+                            "description": "Noeud d'arrivée du tronçon dans la relation de graphe FV_GRAPH"
+                        },
+                        "rg_fv_graph_dbl": {
+                            "type": "string",
+                            "title": "rg_fv_graph_dbl",
+                            "description": "Tronçon a double sens dans le graphe FV_GRAPH"
+                        },
+                        "cdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "cdate",
+                            "description": "Date de création"
+                        },
+                        "mdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "mdate",
+                            "description": "Date de modification"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

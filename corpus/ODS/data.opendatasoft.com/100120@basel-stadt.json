@@ -1,0 +1,542 @@
+{
+    "title": "100120@basel-stadt",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/100120@basel-stadt"
+        }
+    ],
+    "definitions": {
+        "100120@basel-stadt": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/100120@basel-stadt_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "100120@basel-stadt_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": "geographische Koordinaten"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": "geographische Form"
+                        },
+                        "accidentuid": {
+                            "type": "string",
+                            "title": "Eindeutiger Identifikator des Unfalls",
+                            "description": "Eindeutiger Identifikator des Unfalls aus der MISTRA-Applikation Verkehrsunfälle."
+                        },
+                        "accidenttype_de": {
+                            "type": "string",
+                            "title": "Beschreibung zum Unfalltyp",
+                            "description": "Deutsche Beschreibung zum Unfalltyp: Der Unfalltyp bezeichnet den Verkehrsvorgang bzw. die Konfliktsituation, welche massgebend für die Entstehung des Unfalls ist."
+                        },
+                        "accidenttype_fr": {
+                            "type": "string",
+                            "title": "Beschreibung zum Unfalltyp (fr)",
+                            "description": "Französische Beschreibung zum Unfalltyp: Der Unfalltyp bezeichnet den Verkehrsvorgang bzw. die Konfliktsituation, welche massgebend für die Entstehung des Unfalls ist."
+                        },
+                        "accidenttype_en": {
+                            "type": "string",
+                            "title": "Beschreibung zum Unfalltyp (en)",
+                            "description": "Englische Beschreibung zum Unfalltyp: Der Unfalltyp bezeichnet den Verkehrsvorgang bzw. die Konfliktsituation, welche massgebend für die Entstehung des Unfalls ist."
+                        },
+                        "accidentseveritycategory_de": {
+                            "type": "string",
+                            "title": "Beschreibung der Unfallschwerekategorie",
+                            "description": "Deutsche Beschreibung der Unfallschwerekategorie."
+                        },
+                        "accidentseveritycategory_fr": {
+                            "type": "string",
+                            "title": "Beschreibung der Unfallschwerekategorie (fr)",
+                            "description": "Französische Beschreibung der Unfallschwerekategorie."
+                        },
+                        "accidentseveritycategory_en": {
+                            "type": "string",
+                            "title": "Beschreibung der Unfallschwerekategorie (en)",
+                            "description": "Englische Beschreibung der Unfallschwerekategorie."
+                        },
+                        "accidentinvolvingpedestrian": {
+                            "type": "string",
+                            "title": "Unfall mit Fussgängerbeteiligung",
+                            "description": "Strassenverkehrsunfall mit Personenschaden und Beteiligung mindestens eines Fussgängers."
+                        },
+                        "accidentinvolvingbicycle": {
+                            "type": "string",
+                            "title": "Unfall mit Fahrradbeteiligung",
+                            "description": "Strassenverkehrsunfall mit Personenschaden und Beteiligung mindestens eines Fahrrads (inkl. E-Bike)."
+                        },
+                        "accidentinvolvingmotorcycle": {
+                            "type": "string",
+                            "title": "Unfall mit Motorradbeteiligung",
+                            "description": "Strassenverkehrsunfall mit Personenschaden und Beteiligung mindestens eines Motorrads."
+                        },
+                        "roadtype_de": {
+                            "type": "string",
+                            "title": "Beschreibung der Strassenart",
+                            "description": "Deutsche Beschreibung der Art der Strasse, auf der sich der Unfall ereignet hat."
+                        },
+                        "roadtype_fr": {
+                            "type": "string",
+                            "title": "Beschreibung der Strassenart (fr)",
+                            "description": "Französische Beschreibung der Art der Strasse, auf der sich der Unfall ereignet hat."
+                        },
+                        "roadtype_en": {
+                            "type": "string",
+                            "title": "Beschreibung der Strassenart (en)",
+                            "description": "Englische Beschreibung der Art der Strasse, auf der sich der Unfall ereignet hat."
+                        },
+                        "accidentlocation_chlv95_e": {
+                            "type": "string",
+                            "title": "Unfallort Ost-Koordinaten",
+                            "description": "Ost-Landeskoordinaten des Kollisionspunkts."
+                        },
+                        "accidentlocation_chlv95_n": {
+                            "type": "string",
+                            "title": "Unfallort Nord-Koordinaten",
+                            "description": "Nord-Landeskoordinaten des Kollisionspunkts."
+                        },
+                        "cantoncode": {
+                            "type": "string",
+                            "title": "Kanton",
+                            "description": "Abkürzung des Kantons in dem sich der Unfallort befindet."
+                        },
+                        "municipalitycode": {
+                            "type": "string",
+                            "title": "Gemeindenummer",
+                            "description": "BFS-Nummer der Gemeinde in dem sich der Unfallort befindet."
+                        },
+                        "accidentyear": {
+                            "type": "string",
+                            "title": "Unfalljahr",
+                            "description": "Unfalljahr in dem sich der Unfall ereignet hat."
+                        },
+                        "accidentmonth": {
+                            "type": "string",
+                            "title": "Unfallmonat",
+                            "description": "Unfallmonat in dem sich der Unfall ereignet hat."
+                        },
+                        "accidentmonth_de": {
+                            "type": "string",
+                            "title": "Unfallmonat",
+                            "description": "Unfallmonat auf Deutsch, in dem sich der Unfall ereignet hat."
+                        },
+                        "accidentmonth_fr": {
+                            "type": "string",
+                            "title": "Unfallmonat (fr)",
+                            "description": "Unfallmonat auf Französisch in dem sich der Unfall ereignet hat."
+                        },
+                        "accidentmonth_en": {
+                            "type": "string",
+                            "title": "Unfallmonat (en)",
+                            "description": "Unfallmonat auf Englisch, in dem sich der Unfall ereignet hat."
+                        },
+                        "accidentweekday_de": {
+                            "type": "string",
+                            "title": "Wochentag",
+                            "description": "Wochentag auf Deutsch an dem sich der Unfall ereignet hat."
+                        },
+                        "accidentweekday_fr": {
+                            "type": "string",
+                            "title": "Wochentag (fr)",
+                            "description": "Wochentag auf Französisch an dem sich der Unfall ereignet hat."
+                        },
+                        "accidentweekday_en": {
+                            "type": "string",
+                            "title": "Wochentag (en)",
+                            "description": "Wochentag auf Englisch an dem sich der Unfall ereignet hat."
+                        },
+                        "accidenthour_text": {
+                            "type": "string",
+                            "title": "Unfallstunde",
+                            "description": "Beschreibung der Unfallstunde, in der sich der Unfall ereignet hat."
+                        },
+                        "accident_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Unfalldatum",
+                            "description": "Unfalldatum in der sich der Unfall ereignet hat."
+                        },
+                        "accidenttype": {
+                            "type": "string",
+                            "title": "Unfalltyp",
+                            "description": "Der Unfalltyp bezeichnet den Verkehrsvorgang bzw. die Konfliktsituation, welche massgebend für die Entstehung des Unfalls ist."
+                        },
+                        "accidentseveritycategory": {
+                            "type": "string",
+                            "title": "Unfallschwerekategorie",
+                            "description": "Einteilung in Unfälle nach der Schwere des Schadens. Werte [as1 - as4]."
+                        },
+                        "roadtype": {
+                            "type": "string",
+                            "title": "Strassenart",
+                            "description": "Art der Strasse auf der sich der Unfall ereignet hat."
+                        },
+                        "accidentweekday": {
+                            "type": "string",
+                            "title": "Code des Wochentags",
+                            "description": "Code des Wochentags an dem sich der Unfall ereignet hat. Werte [aw401 - aw407]."
+                        },
+                        "accidenthour": {
+                            "type": "string",
+                            "title": "Unfallstunde",
+                            "description": "Code der Unfallstunde in der sich der Unfall ereignet hat. Werte [00-23]."
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

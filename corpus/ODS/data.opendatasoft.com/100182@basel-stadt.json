@@ -1,0 +1,531 @@
+{
+    "title": "100182@basel-stadt",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/100182@basel-stadt"
+        }
+    ],
+    "definitions": {
+        "100182@basel-stadt": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/100182@basel-stadt_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "100182@basel-stadt_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "art": {
+                            "type": "string",
+                            "title": "Art der Bohrung",
+                            "description": "Art der Bohrung"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "grundwasserdaten": {
+                            "type": "string",
+                            "title": "Grundwasserdaten (0/1)",
+                            "description": "Grundwasserdaten vorhanden (0 = Nein, 1 = Ja)"
+                        },
+                        "flurabstand": {
+                            "type": "number",
+                            "title": "Flurabstand",
+                            "description": "Differenz Höhe Gelände und Grundwasserspiegel"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "id_bohrung": {
+                            "type": "integer",
+                            "title": "ID-Bohrung",
+                            "description": "Eindeutiger Identifikator"
+                        },
+                        "geothermal": {
+                            "type": "integer",
+                            "title": "Erdwärmesonde vorhanden",
+                            "description": "Erdwärmesonde vorhanden"
+                        },
+                        "catnum45": {
+                            "type": "string",
+                            "title": "Vollständige Laufnummer",
+                            "description": "Vollständige Laufnummer"
+                        },
+                        "xkoord": {
+                            "type": "integer",
+                            "title": "X-Koordinate",
+                            "description": "X-Koordinate der Bohrung"
+                        },
+                        "ykoord": {
+                            "type": "integer",
+                            "title": "Y-Koordinate",
+                            "description": "Y-Koordinate der Bohrung"
+                        },
+                        "schraeg": {
+                            "type": "string",
+                            "title": "Schrägbohrung (0/1)",
+                            "description": "0 = Nein, 1 = Ja"
+                        },
+                        "erstellung": {
+                            "type": "integer",
+                            "title": "Bohrjahr",
+                            "description": "Erstellungsjahr der Bohrung"
+                        },
+                        "strasse": {
+                            "type": "string",
+                            "title": "Strasse",
+                            "description": "Strasse"
+                        },
+                        "hausnummer": {
+                            "type": "string",
+                            "title": "Hausummer",
+                            "description": "Hausummer"
+                        },
+                        "hoehestart": {
+                            "type": "number",
+                            "title": "Bohransatz-Kote",
+                            "description": "Kote Ansatz der Bohrung m.ü.M"
+                        },
+                        "hoehefels": {
+                            "type": "number",
+                            "title": "Oberkante Fels-Kote",
+                            "description": "Kote Felsoberfläche der Bohrung m.ü.M"
+                        },
+                        "artfels": {
+                            "type": "string",
+                            "title": "Oberkante Fels-Stratigraphie",
+                            "description": "Beschreibung Felsoberfläche (z.B. Cyrenenmergel)"
+                        },
+                        "hoehesole": {
+                            "type": "number",
+                            "title": "Sohle-Kote",
+                            "description": "Kote Sohle der Bohrung m.ü.M."
+                        },
+                        "jahrbuch": {
+                            "type": "integer",
+                            "title": "Im hydrografischen Jahrbuch",
+                            "description": "Bohrung im hydrografischen Jahrbuch vorhanden, 0 = Nein, 1 = Ja"
+                        },
+                        "zuststelle": {
+                            "type": "string",
+                            "title": "Zustand der Bohrung",
+                            "description": "messbar, verschlammt, etc. (Zustand einer Messstelle)"
+                        },
+                        "hoehegelae": {
+                            "type": "number",
+                            "title": "Höhe des Geländes",
+                            "description": "Höhe des Geländes"
+                        },
+                        "bohgeplant": {
+                            "type": "integer",
+                            "title": "Geplant (0/1)",
+                            "description": "Geplante Bohrung (wird für online Visualisierung \"geplante Bohrung\" verwendet), 0 = Nein, 1 = Ja"
+                        },
+                        "rohrdurchm": {
+                            "type": "number",
+                            "title": "Rohrdurchmesser",
+                            "description": "Durchmesser des eingebauten Rohrs in mm"
+                        },
+                        "rohrhoehet": {
+                            "type": "number",
+                            "title": "Höhe Rohrabschnitt oben",
+                            "description": "Höhe des Rohrabschnitts gemesen oben in m ü. M."
+                        },
+                        "rohrhoeheb": {
+                            "type": "number",
+                            "title": "Höhe Rohrabschnitt unten",
+                            "description": "Höhe des Rohrabschnitts gemesen unten in m ü. M."
+                        },
+                        "heohegwl": {
+                            "type": "number",
+                            "title": "Grundwasserspiegel",
+                            "description": "Höhe des Grundwasserstandes in m ü. M"
+                        },
+                        "datumforma": {
+                            "type": "string",
+                            "title": "Format des Datums",
+                            "description": "Format des Datums (dd.mm.yyyy)"
+                        },
+                        "datumgwl": {
+                            "type": "string",
+                            "title": "Datum des Grundwasserstandes",
+                            "description": "Datum des Grundwasserstandes (z.B. 04.11.1965)"
+                        },
+                        "dokbohrpro": {
+                            "type": "string",
+                            "title": "Bohrprofil-Dokument",
+                            "description": "Bohrprofil-Dokument zur Bohrung"
+                        },
+                        "doksituat": {
+                            "type": "string",
+                            "title": "Situationsplan-Dokument",
+                            "description": "Situationsplan-Dokument zur Bohrung"
+                        },
+                        "bildbohrun": {
+                            "type": "string",
+                            "title": "Bild zur Bohrung",
+                            "description": "Bild zur Bohrung"
+                        },
+                        "gwlmesssta": {
+                            "type": "string",
+                            "title": "Art der Grundwassermessstelle",
+                            "description": "Art der Grundwassermessstelle"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

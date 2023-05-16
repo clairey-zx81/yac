@@ -1,0 +1,597 @@
+{
+    "title": "demande-de-valeurs-foncieres-geolocalisee@datacorsica",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/demande-de-valeurs-foncieres-geolocalisee@datacorsica"
+        }
+    ],
+    "definitions": {
+        "demande-de-valeurs-foncieres-geolocalisee@datacorsica": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/demande-de-valeurs-foncieres-geolocalisee@datacorsica_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "demande-de-valeurs-foncieres-geolocalisee@datacorsica_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id_mutation": {
+                            "type": "string",
+                            "title": "Identifiant de mutation (Etalab)",
+                            "description": ""
+                        },
+                        "date_mutation": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de la mutation",
+                            "description": ""
+                        },
+                        "numero_disposition": {
+                            "type": "string",
+                            "title": "Numéro de disposition",
+                            "description": ""
+                        },
+                        "nature_mutation": {
+                            "type": "string",
+                            "title": "Nature de la mutation",
+                            "description": ""
+                        },
+                        "valeur_fonciere": {
+                            "type": "number",
+                            "title": "Valeur foncière",
+                            "description": ""
+                        },
+                        "adresse_numero": {
+                            "type": "integer",
+                            "title": "Numéro de voie",
+                            "description": ""
+                        },
+                        "adresse_suffixe": {
+                            "type": "string",
+                            "title": "Suffixe du numéro (bis/ter)",
+                            "description": ""
+                        },
+                        "adresse_nom_voie": {
+                            "type": "string",
+                            "title": "Nom de la voie",
+                            "description": ""
+                        },
+                        "adresse_code_voie": {
+                            "type": "string",
+                            "title": "Code Fantoir/Rivoli de la voie",
+                            "description": ""
+                        },
+                        "code_postal": {
+                            "type": "string",
+                            "title": "Code postal",
+                            "description": ""
+                        },
+                        "com_code": {
+                            "type": "string",
+                            "title": "Code INSEE de la commune",
+                            "description": ""
+                        },
+                        "com_name": {
+                            "type": "string",
+                            "title": "Nom de la commune",
+                            "description": ""
+                        },
+                        "dep_code": {
+                            "type": "string",
+                            "title": "Code INSEE du département",
+                            "description": ""
+                        },
+                        "ancien_code_commune": {
+                            "type": "string",
+                            "title": "Ancien code de la commune",
+                            "description": ""
+                        },
+                        "ancien_nom_commune": {
+                            "type": "string",
+                            "title": "Ancien nom de la commune",
+                            "description": ""
+                        },
+                        "id_parcelle": {
+                            "type": "string",
+                            "title": "Identifiant de la parcelle cadastrale",
+                            "description": ""
+                        },
+                        "ancien_id_parcelle": {
+                            "type": "string",
+                            "title": "Ancien identifiant de la parcelle cadastrale",
+                            "description": ""
+                        },
+                        "numero_volume": {
+                            "type": "string",
+                            "title": "Numéro du volume",
+                            "description": ""
+                        },
+                        "lot1_numero": {
+                            "type": "string",
+                            "title": "Numéro du lot 1",
+                            "description": ""
+                        },
+                        "lot1_surface_carrez": {
+                            "type": "number",
+                            "title": "Surface Carrez du lot 1",
+                            "description": ""
+                        },
+                        "lot2_numero": {
+                            "type": "string",
+                            "title": "Numéro du lot 2",
+                            "description": ""
+                        },
+                        "lot2_surface_carrez": {
+                            "type": "number",
+                            "title": "Surface Carrez du lot 2",
+                            "description": ""
+                        },
+                        "lot3_numero": {
+                            "type": "string",
+                            "title": "Numéro du lot 3",
+                            "description": ""
+                        },
+                        "lot3_surface_carrez": {
+                            "type": "number",
+                            "title": "Surface Carrez du lot 3",
+                            "description": ""
+                        },
+                        "lot4_numero": {
+                            "type": "string",
+                            "title": "Numéro du lot 4",
+                            "description": ""
+                        },
+                        "lot4_surface_carrez": {
+                            "type": "number",
+                            "title": "Surface Carrez du lot 4",
+                            "description": ""
+                        },
+                        "lot5_numero": {
+                            "type": "string",
+                            "title": "Numéro du lot 5",
+                            "description": ""
+                        },
+                        "lot5_surface_carrez": {
+                            "type": "number",
+                            "title": "Surface Carrez du lot 5",
+                            "description": ""
+                        },
+                        "nombre_lots": {
+                            "type": "integer",
+                            "title": "Nombre de lots",
+                            "description": ""
+                        },
+                        "code_type_local": {
+                            "type": "string",
+                            "title": "Code du type de local",
+                            "description": ""
+                        },
+                        "type_local": {
+                            "type": "string",
+                            "title": "Type de local",
+                            "description": ""
+                        },
+                        "surface_reelle_bati": {
+                            "type": "number",
+                            "title": "Surface réelle du bâti",
+                            "description": ""
+                        },
+                        "nombre_pieces_principales": {
+                            "type": "integer",
+                            "title": "Nombre de pièces principales",
+                            "description": ""
+                        },
+                        "code_nature_culture": {
+                            "type": "string",
+                            "title": "Code de la nature de culture",
+                            "description": ""
+                        },
+                        "nature_culture": {
+                            "type": "string",
+                            "title": "Nature de culture",
+                            "description": ""
+                        },
+                        "code_nature_culture_speciale": {
+                            "type": "string",
+                            "title": "Code de la nature de culture spéciale",
+                            "description": ""
+                        },
+                        "nature_culture_speciale": {
+                            "type": "string",
+                            "title": "Nature de culture spéciale",
+                            "description": ""
+                        },
+                        "surface_terrain": {
+                            "type": "number",
+                            "title": "Surface du terrain",
+                            "description": ""
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "title": "Longitude",
+                            "description": ""
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "title": "Latitude",
+                            "description": ""
+                        },
+                        "epci_code": {
+                            "type": "string",
+                            "title": "Code Officiel EPCI",
+                            "description": ""
+                        },
+                        "epci_name": {
+                            "type": "string",
+                            "title": "Nom Officiel EPCI",
+                            "description": ""
+                        },
+                        "dep_name": {
+                            "type": "string",
+                            "title": "Nom du département",
+                            "description": ""
+                        },
+                        "reg_code": {
+                            "type": "string",
+                            "title": "Code INSEE de la région",
+                            "description": ""
+                        },
+                        "reg_name": {
+                            "type": "string",
+                            "title": "Nom de la région",
+                            "description": ""
+                        },
+                        "geo_point": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Géolocalisation",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

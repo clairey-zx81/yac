@@ -1,0 +1,673 @@
+{
+    "title": "point-dapport-volontaire-mamp@ampmetropole",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/point-dapport-volontaire-mamp@ampmetropole"
+        }
+    ],
+    "definitions": {
+        "point-dapport-volontaire-mamp@ampmetropole": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/point-dapport-volontaire-mamp@ampmetropole_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "point-dapport-volontaire-mamp@ampmetropole_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "flux": {
+                            "type": "integer",
+                            "title": "flux",
+                            "description": ""
+                        },
+                        "flux_lib": {
+                            "type": "string",
+                            "title": "flux_lib",
+                            "description": ""
+                        },
+                        "nom": {
+                            "type": "string",
+                            "title": "nom du PAV",
+                            "description": ""
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "commune",
+                            "description": ""
+                        },
+                        "codeinsee": {
+                            "type": "string",
+                            "title": "Code Commune INSEE",
+                            "description": ""
+                        },
+                        "adresse": {
+                            "type": "string",
+                            "title": "adresse",
+                            "description": ""
+                        },
+                        "date_creation": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "date de création",
+                            "description": ""
+                        },
+                        "date_modification": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "date de modification",
+                            "description": ""
+                        },
+                        "etat": {
+                            "type": "string",
+                            "title": "état",
+                            "description": ""
+                        },
+                        "num_column": {
+                            "type": "string",
+                            "title": "nombre de colonne",
+                            "description": ""
+                        },
+                        "marque": {
+                            "type": "string",
+                            "title": "marque",
+                            "description": ""
+                        },
+                        "intervention": {
+                            "type": "string",
+                            "title": "Statut de la dernière intervention",
+                            "description": ""
+                        },
+                        "volume": {
+                            "type": "number",
+                            "title": "Volume",
+                            "description": ""
+                        },
+                        "operateur": {
+                            "type": "string",
+                            "title": "Opérateur",
+                            "description": ""
+                        },
+                        "type": {
+                            "type": "integer",
+                            "title": "type",
+                            "description": ""
+                        },
+                        "type_lib": {
+                            "type": "string",
+                            "title": "type_lib",
+                            "description": ""
+                        },
+                        "desserte": {
+                            "type": "integer",
+                            "title": "desserte",
+                            "description": ""
+                        },
+                        "amenagement": {
+                            "type": "integer",
+                            "title": "amenagement",
+                            "description": ""
+                        },
+                        "suffisant_usagers": {
+                            "type": "string",
+                            "title": "Emplacement suffisant pour les usagers",
+                            "description": ""
+                        },
+                        "bac_om": {
+                            "type": "integer",
+                            "title": "Présence d'un bac OM à côté",
+                            "description": ""
+                        },
+                        "suffisant_collecte": {
+                            "type": "string",
+                            "title": "Espace suffisant pour la collecte",
+                            "description": ""
+                        },
+                        "bac_jrm": {
+                            "type": "integer",
+                            "title": "Présence d'un bac JRM à côté",
+                            "description": ""
+                        },
+                        "bac_emr": {
+                            "type": "integer",
+                            "title": "Présence d'un bac EMR à côté",
+                            "description": ""
+                        },
+                        "id_col": {
+                            "type": "string",
+                            "title": "Identifiant collone",
+                            "description": ""
+                        },
+                        "source": {
+                            "type": "string",
+                            "title": "Source de la donnée",
+                            "description": ""
+                        },
+                        "type_textile": {
+                            "type": "string",
+                            "title": "Type du point d'apport textile",
+                            "description": ""
+                        },
+                        "comp_adr": {
+                            "type": "string",
+                            "title": "Complément adresse",
+                            "description": ""
+                        },
+                        "propre": {
+                            "type": "integer",
+                            "title": "Propre ?",
+                            "description": ""
+                        },
+                        "date_eval_proprete": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Date évaluation de la propreté",
+                            "description": ""
+                        },
+                        "tonnage_annuel": {
+                            "type": "string",
+                            "title": "Tonnage annuel",
+                            "description": ""
+                        },
+                        "nb_incendie": {
+                            "type": "integer",
+                            "title": "Nombre d'incendies",
+                            "description": ""
+                        },
+                        "matiere": {
+                            "type": "integer",
+                            "title": "Matière du conteneur",
+                            "description": ""
+                        },
+                        "date_etat": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Date de relevé d'état",
+                            "description": ""
+                        },
+                        "date_feu": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Date du dernier feu",
+                            "description": ""
+                        },
+                        "date_repar": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Date de réparation",
+                            "description": ""
+                        },
+                        "mode_collecte": {
+                            "type": "string",
+                            "title": "Mode de collecte",
+                            "description": ""
+                        },
+                        "fournisseur": {
+                            "type": "string",
+                            "title": "Fournisseur",
+                            "description": ""
+                        },
+                        "domanialite": {
+                            "type": "integer",
+                            "title": "domanialite",
+                            "description": ""
+                        },
+                        "nb_carton": {
+                            "type": "string",
+                            "title": "nb_carton",
+                            "description": ""
+                        },
+                        "volume_carton": {
+                            "type": "string",
+                            "title": "volume de cartons",
+                            "description": ""
+                        },
+                        "nb_debordement": {
+                            "type": "string",
+                            "title": "nombre de débordement",
+                            "description": ""
+                        },
+                        "code_insee": {
+                            "type": "string",
+                            "title": "Code INSEE",
+                            "description": ""
+                        },
+                        "id_pav": {
+                            "type": "string",
+                            "title": "identitifiant PAV",
+                            "description": ""
+                        },
+                        "site": {
+                            "type": "string",
+                            "title": "Site",
+                            "description": ""
+                        },
+                        "created_user": {
+                            "type": "string",
+                            "title": "created_user",
+                            "description": ""
+                        },
+                        "created_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "created_date",
+                            "description": ""
+                        },
+                        "last_edited_user": {
+                            "type": "string",
+                            "title": "last_edited_user",
+                            "description": ""
+                        },
+                        "last_edited_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "last_edited_date",
+                            "description": ""
+                        },
+                        "lavage_1": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "lavage_1",
+                            "description": ""
+                        },
+                        "lavage_2": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "lavage_2",
+                            "description": ""
+                        },
+                        "lavage_3": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "lavage_3",
+                            "description": ""
+                        },
+                        "codecomm": {
+                            "type": "string",
+                            "title": "Code Commune DGFIP",
+                            "description": ""
+                        },
+                        "nom_donnee": {
+                            "type": "string",
+                            "title": "Nom de la Donnée",
+                            "description": ""
+                        },
+                        "datemaj": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Date de mise à jour de la donnée",
+                            "description": ""
+                        },
+                        "objectid": {
+                            "type": "integer",
+                            "title": "objectid",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        },
+                        "ct": {
+                            "type": "string",
+                            "title": "CT",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

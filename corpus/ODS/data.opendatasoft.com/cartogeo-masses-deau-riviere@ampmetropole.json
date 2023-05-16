@@ -1,0 +1,547 @@
+{
+    "title": "cartogeo-masses-deau-riviere@ampmetropole",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/cartogeo-masses-deau-riviere@ampmetropole"
+        }
+    ],
+    "definitions": {
+        "cartogeo-masses-deau-riviere@ampmetropole": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/cartogeo-masses-deau-riviere@ampmetropole_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "cartogeo-masses-deau-riviere@ampmetropole_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geometry": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geometry",
+                            "description": ""
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name",
+                            "description": ""
+                        },
+                        "description": {
+                            "type": "string",
+                            "title": "description",
+                            "description": ""
+                        },
+                        "cd_eu_mdo": {
+                            "type": "string",
+                            "title": "cd_eu_mdo",
+                            "description": ""
+                        },
+                        "lib_mdo": {
+                            "type": "string",
+                            "title": "lib_mdo",
+                            "description": ""
+                        },
+                        "cd_ssbv": {
+                            "type": "string",
+                            "title": "cd_ssbv",
+                            "description": ""
+                        },
+                        "lib_ssbv": {
+                            "type": "string",
+                            "title": "lib_ssbv",
+                            "description": ""
+                        },
+                        "cd_eu_sub": {
+                            "type": "string",
+                            "title": "cd_eu_sub",
+                            "description": ""
+                        },
+                        "nature_mdo": {
+                            "type": "string",
+                            "title": "nature_mdo",
+                            "description": ""
+                        },
+                        "code_her1": {
+                            "type": "string",
+                            "title": "code_her1",
+                            "description": ""
+                        },
+                        "lib_her1": {
+                            "type": "string",
+                            "title": "lib_her1",
+                            "description": ""
+                        },
+                        "ctx_pisc": {
+                            "type": "string",
+                            "title": "ctx_pisc",
+                            "description": ""
+                        },
+                        "type_mnemo": {
+                            "type": "string",
+                            "title": "type_mnemo",
+                            "description": ""
+                        },
+                        "lib_type_m": {
+                            "type": "string",
+                            "title": "lib_type_m",
+                            "description": ""
+                        },
+                        "taille_fct": {
+                            "type": "string",
+                            "title": "taille_fct",
+                            "description": ""
+                        },
+                        "date_crea": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "date_crea",
+                            "description": ""
+                        },
+                        "etat_eco": {
+                            "type": "string",
+                            "title": "etat_eco",
+                            "description": ""
+                        },
+                        "conf_et_ec": {
+                            "type": "string",
+                            "title": "conf_et_ec",
+                            "description": ""
+                        },
+                        "det_et_eco": {
+                            "type": "string",
+                            "title": "det_et_eco",
+                            "description": ""
+                        },
+                        "st_et_eco": {
+                            "type": "string",
+                            "title": "st_et_eco",
+                            "description": ""
+                        },
+                        "etat_chim": {
+                            "type": "string",
+                            "title": "etat_chim",
+                            "description": ""
+                        },
+                        "conf_et_ch": {
+                            "type": "string",
+                            "title": "conf_et_ch",
+                            "description": ""
+                        },
+                        "st_et_chim": {
+                            "type": "string",
+                            "title": "st_et_chim",
+                            "description": ""
+                        },
+                        "et_ch_ssub": {
+                            "type": "string",
+                            "title": "et_ch_ssub",
+                            "description": ""
+                        },
+                        "categorie": {
+                            "type": "string",
+                            "title": "categorie",
+                            "description": ""
+                        },
+                        "obj_etat": {
+                            "type": "string",
+                            "title": "obj_etat",
+                            "description": ""
+                        },
+                        "statut": {
+                            "type": "string",
+                            "title": "statut",
+                            "description": ""
+                        },
+                        "ech_et_eco": {
+                            "type": "string",
+                            "title": "ech_et_eco",
+                            "description": ""
+                        },
+                        "p_et_eco": {
+                            "type": "string",
+                            "title": "p_et_eco",
+                            "description": ""
+                        },
+                        "mot_et_eco": {
+                            "type": "string",
+                            "title": "mot_et_eco",
+                            "description": ""
+                        },
+                        "e_et_ch_su": {
+                            "type": "string",
+                            "title": "e_et_ch_su",
+                            "description": ""
+                        },
+                        "e_et_ch_au": {
+                            "type": "string",
+                            "title": "e_et_ch_au",
+                            "description": ""
+                        },
+                        "p_et_chim": {
+                            "type": "string",
+                            "title": "p_et_chim",
+                            "description": ""
+                        },
+                        "mot_et_ch": {
+                            "type": "string",
+                            "title": "mot_et_ch",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

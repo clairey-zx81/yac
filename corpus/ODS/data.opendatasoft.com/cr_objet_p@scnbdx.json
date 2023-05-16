@@ -1,0 +1,448 @@
+{
+    "title": "cr_objet_p@scnbdx",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/cr_objet_p@scnbdx"
+        }
+    ],
+    "definitions": {
+        "cr_objet_p@scnbdx": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/cr_objet_p@scnbdx_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "cr_objet_p@scnbdx_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "gid": {
+                            "type": "integer",
+                            "title": "gid",
+                            "description": "Clé primaire"
+                        },
+                        "geom_o": {
+                            "type": "string",
+                            "title": "geom_o",
+                            "description": "Orientation de l'objet"
+                        },
+                        "geom_err": {
+                            "type": "string",
+                            "title": "geom_err",
+                            "description": "Code d'anomalie géométrique : \nListe des valeurs possibles : \n9999 : Polygone compose et / ou à sections multiples\n9998 : Linéaire compose et / ou à sections multiples\n9996 : La géométrie contient des informations LRS\n9995 : Nombre de dimensions différent de 2 ou 3\n9994 : Présence d'un arc de cercle\n9000 : Erreur autre\n13343 : Polygone de moins de 4 points\n13349 : Polygone papillon\n13350 : Deux éléments d'un polygone archipel se touchent\n13351 : Deux éléments d'un polygone archipel  se touchent\n13356 : Point double\n13366 : Combinaison invalide d'intérieur / extérieur d'un polygone\n13367 : Orientation invalide d'intérieur / extérieur d'un polygone\n"
+                        },
+                        "ident": {
+                            "type": "string",
+                            "title": "ident",
+                            "description": ""
+                        },
+                        "theme": {
+                            "type": "string",
+                            "title": "theme",
+                            "description": " : \nListe des valeurs possibles : \nINFRA : Infrastructure de transport\nRESEAU : Affleurants de réseaux\nHAB : Habillage\nMOB : Mobilier urbain\nNATURE : Espaces verts, topographie et hydrographie\nSIGN : Signalisation\nDELIM : Délimitation des espaces\n"
+                        },
+                        "sstheme": {
+                            "type": "string",
+                            "title": "sstheme",
+                            "description": " : \nListe des valeurs possibles : \nAEP : Adduction en eau potable\nSEUIL : Seuil\nSLT : Signalisation lumineuse (tricolore)\nSENS : sens\nOUVRA : Ouvrage d?art\nTRANS : Transport en commun\nEAP : Espaces à usages publics\nBATI : Bâtiment\nASSA : Assainissement\nROU : Routier\nCLOT : Clôture d'un espace\nPUB : Publicité\nECL : Éclairage public\nV : Verticale\nGAZ : Gaz\nINOLIA : Fibre optique d'INOLIA\nVIDEO : Contrôle d?accès et vidéo\nGEN : Générique\nELEC : Électricité\nCOM : Télécommunication\nSANI : Sanitaire\nINCE : Lutte incendie\nMAR : Maritime\nTOPO : Topographie\nHYDRO : Hydrographie\nVERT : Espaces verts\nURB : Mobilier urbain\nFER : Ferroviaire\nDECH : Déchets\nPROT : Protection\nCHAU : Chauffage et climatisation\n"
+                        },
+                        "classe": {
+                            "type": "string",
+                            "title": "classe",
+                            "description": " : \nListe des valeurs possibles : \nSUP_ELEC : support de ligne d'électricité\nBALI : balise de délimitation des espaces de circulation\nLIB : mobilier de station de véhicule en libre-service\nTALUS : talus\nLAMP : candélabre / lampadaire\nSUP_ECL : support de ligne d'éclairage public\nSUR : surplomb de bâtiment\nBORD : bordure / bordurette\nPIL : pilier / colonne\nPOT : poteau\nMAT : mat de panneau\nBAC : bac à plante\nHORO : horodateur\nBLOC : bloc anti-intrusion\nAVA : avaloir\nESCA : escalier\nFOSSE : fossé\nCONT : conteneur de tri collectif fixé au sol ou enterré\nRAIL : rail de voie ferrée\nCATE : caténaire\nPROE : proéminence de bâtiment\nAPS : alimentation par le sol du tramway\nSOL : changement de nature du revêtement du sol\nPAR : parcelle des espaces à usages publics\nARM : armoire\nBOU : bouche\nDEPRES : dépression\nTOILE : toilettes publiques\nBAND : bande sonore d'alerte sur chaussée\nCORB : corbeille publique / cendrier\nSUP_PUB : support publicitaire\nARB : arbre isolé et d'alignement\nREG : tampon / regard\nAXE : axe de la chaussée\nSANI : sanisette\nBANC : banc / chaise / tabouret\nTRANS : transformateur / poste électrique\nAUBETTE : aubette\nSUP_COM : support de ligne de télécommunication\nPUITS : puits\nLIM : limite\nPOT_ROU : poteau de panneau de signalisation routière\nQUAI : quai\nPLA : plaque / chambre\nREF : plaque réfléchissante\nPOUB : bac à poubelle\nBAL : boîte aux lettres\nSUP_INFO : support d?information\nSENS : sens\nRAL : ralentisseur\nPOT_JAL : poteau de panneau de jalonnement\nFAUNE : abri faune\nPORT : portique de parking limitant la hauteur des véhicules\nCOF : boîte / coffret / compteur\nPRISE : prise de terre\nCANI : caniveau\nARC : arceau\nVAN : branchement / vanne / bouche à clé\nGLIS : glissière / barrière de sécurité\nBORN : borne\nPONT : pont / passerelle / franchissement\nBOUCLE : boucle\nPAS : passage à niveau de voie ferrée\nPOT_TRI : poteau de feu tricolore\nSEUIL : seuil\nMUR : mur\nHAIE : haie végétale\nFLASH : alarme vitesse, triflash et radar fixe\nGRIL : grille de caniveau\nACCOT : stabilisé sans bordure ou non stabilisé\nPOT_PAN : poteau de panneau\nSTATU : statue / monument\nPOT_FER : poteau de panneau de signalisation ferroviaire\nCLOT : clôture\nPOTE : potelet\nESP : limite d'espaces verts\nFAC : façade de bâtiment\nTITRE : distributeur automatique de titre de transport\nREP : repère de réseau\nPOT_FEU : poteau de feu\nEAU : bord de cours d?eau et de plan d?eau\nDRAP : mât de drapeau\nAMOR : amorce apparente de séparation de propriétés privées\nTRAM : lisse en aluminium matérialisant l'emprise de gestion du tramway\nCAM : caméra\nAUTRE : ouvrage d'art hors pont  / passerelle / franchissement\nFONT : fontaine et robinet\nLUMI : luminaire\n"
+                        },
+                        "ssclasse": {
+                            "type": "string",
+                            "title": "ssclasse",
+                            "description": " : \nListe des valeurs possibles : \nAPP_N : non apparente des espaces à usages publics\nMAR : fluvio-maritime\nVILLE : de nom de ville\nTAB : partie tablier\nSOUP : de soupirail\nKILO : kilométrique\nPYL : de type pylone haute tension et très haute tension\nSOL_OVA : au sol de section ovale\nPUB_PORT : publicitaire de portique\nLEG : léger\nREC : de section rectangulaire\nSUS : suspendu à un câble\nPARK : de parking couvert ou non\nBAR_N : sans barrière\nMAT_O : apparente matérialisée des espaces à usages publics\nSOL_CIR : au sol de section circulaire\nVOI : de voirie pour la découpe en parcelles des espaces à usages publics\nUNI : unique\nPORT : de portique\nEAU : au fil d'eau\nFIL_EAU : au fil d'eau, seul ou avec regard, grille et/ou pré-bouche(s)\nFIXE : fixé au sol comme un coussin berlinois\nBT_MT_CIR : basse / moyenne tension de section circulaire\nENRO : d'enrochement\nLAVA : de lavage\nPROT : de protection\nADMIN : administrative pour la découpe en parcelles des espaces à usages publics\nPEN : de section pentagonale\nMUR : de plus de 1 mètre\nSOL_SIGN : au sol pour la signalisation\nPIET : pour passage piéton\nCHAU : de chaussée, d?arrêt de bus et de stationnement\nESCA : de montée d'escalier et de rampe d'accès\nMAC : partie maçonnée\nPAL : partie palier\nPIED : au pied\nTRI : de section triangulaire\nENCA : encastrée\nREN_N : sans renfort / jambe de force\nPILE : partie pile et culée\nPRE_G : partie pré-bouche à gauche\nPALI : palissade\nBUS_ARRET : d'arrêt de bus\nBUS_ECRAN : bus avec écran d'information\nTROT : de trottoir et d'îlot directionnel partie basse au fil d'eau\nVOL : partie volée\nSTAT : de stationnement pour vélo / moto\nT : triple\nREN_O : avec renfort / jambe de force\nOVA : de section ovale\nINCE : d'incendie\nTREI : treillage\nBAS : partie basse\nS : simple\nSOUT_EP : de soutènement partie épaisseur non levée\nPORTE : hors parking, cave, soupirail et vitrine\nPARA : parapet\nREGARD : partie tampon / regard\nVARIA : à message variable\nBAR_O : avec barrière\nFRAN : franchissable\nHAUT : partie haute\nGRILLE : partie grille\nBAHU_O_EP : bahut avec clôture partie épaisseur non levée\nAUTRE : hors conifère et feuillu\nLOC_PORT : local de portique\nD : double\nPLAT : construit avec rampant et plateau surélevé comme un trapéze\nARRO : d?arrosage\nHAUT_BET : en béton partie haute\nTITRE : de validation des titres\nHT_THT : haute / très haute tension \nSOL_REC : au sol de section rectangulaire\nDOS : construit bombé comme un dos-d'âne\nENRO_EP : d'enrochement partie épaisseur non levée\nRUE : de nom de rue\nBT_MT_CAR : basse / moyenne tension de section carrée\nPUB : publicitaire\nMUR_EP : de plus de 1 mètre partie épaisseur non levée\nSOUT : de soutènement\nPAD : paddock\nSOC_O : avec socle\nBAHU_O : bahut avec clôture\nRETRA : rétractable\nSOL_CAR : au sol de section carrée\nNEZ : au nez\nITI : d?itinéraire\nCOURB : en courbe\nOGE : de délimitation des propriétés\nPARA_EP : parapet partie épaisseur non levée\nBAHU_N : bahut sans clôture\nISOLE : non encastrée et hors partie maçonnée\nCONS : sur une contruction\nDUR : en dur\nMAT_N : apparente non matérialisée des espaces à usages publics\nCIR : de section circulaire\nRAIL : de rail\nBAS_BET : en béton partie basse\nITI_PORT : d?itinéraire de portique\nPOT : sur poteau\nCAR : de section carrée\nAXE : sur poteaux\nMAT : de haut mât\nVITRI : de vitrine\nBORN_RETRA : à borne rétractable\nQ : quadruple\nSOC_N : sans socle\nBUS : bus\nLOC : local\n"
+                        },
+                        "dx": {
+                            "type": "string",
+                            "title": "dx",
+                            "description": ""
+                        },
+                        "dy": {
+                            "type": "string",
+                            "title": "dy",
+                            "description": ""
+                        },
+                        "alt": {
+                            "type": "string",
+                            "title": "alt",
+                            "description": ""
+                        },
+                        "cdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "cdate",
+                            "description": "Date de création"
+                        },
+                        "mdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "mdate",
+                            "description": "Date de modification"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

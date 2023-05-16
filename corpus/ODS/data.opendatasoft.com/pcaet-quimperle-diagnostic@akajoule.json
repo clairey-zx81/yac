@@ -1,0 +1,552 @@
+{
+    "title": "pcaet-quimperle-diagnostic@akajoule",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/pcaet-quimperle-diagnostic@akajoule"
+        }
+    ],
+    "definitions": {
+        "pcaet-quimperle-diagnostic@akajoule": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/pcaet-quimperle-diagnostic@akajoule_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "pcaet-quimperle-diagnostic@akajoule_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "libelle_col": {
+                            "type": "string",
+                            "title": "libelle_col",
+                            "description": "Nom de la collectivité (EPCI ou Commune)"
+                        },
+                        "insee_col": {
+                            "type": "string",
+                            "title": "insee_col",
+                            "description": "Code INSEE de la collectivité (EPCI ou Commune)"
+                        },
+                        "niveau_col": {
+                            "type": "string",
+                            "title": "niveau_col",
+                            "description": "Échelon de la collectivité : communes, epci, départemen, etc."
+                        },
+                        "annee": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "annee",
+                            "description": "Secteur d'activité pour lequel les données sont indiquées : agriculture, tertiaire, etc."
+                        },
+                        "secteur": {
+                            "type": "string",
+                            "title": "secteur",
+                            "description": "Secteur d'activité"
+                        },
+                        "vecteur": {
+                            "type": "string",
+                            "title": "vecteur",
+                            "description": "Type de vecteur énergétique pour la consommation et la production d'énergie (Charbon, produits pétroliers…). \nPour les émissions de GES, correspond au type d'émissions de GES : émissions énergétiques ou émissions non-énergétiques.\nPour les émissions de polluants : type de polluants"
+                        },
+                        "conso_tep": {
+                            "type": "number",
+                            "title": "conso_tep",
+                            "description": "Consommation d'énergie primaire en tonne équivalent pétrole (tep), selon le type de vecteur énergétique. En 2010, il s'agit d'une consommation réelle. Les autres correspondent à des estimations."
+                        },
+                        "conso_mwh": {
+                            "type": "number",
+                            "title": "conso_mwh",
+                            "description": "Consommation d'énergie primaire en mégawattheures (MWh), selon le type de vecteur énergétique. En 2010, il s'agit d'une consommation réelle. Les autres correspondent à des estimations."
+                        },
+                        "ges_teqco2": {
+                            "type": "number",
+                            "title": "ges_teqco2",
+                            "description": "Émissions de Gaz à effet de serre par secteur, en tonne équivalent CO2. "
+                        },
+                        "conso_gwh": {
+                            "type": "number",
+                            "title": "conso_gwh",
+                            "description": "Consommation d'énergie final en GWh"
+                        },
+                        "prod_gwh": {
+                            "type": "number",
+                            "title": "prod_gwh",
+                            "description": "Production d'énergie\n"
+                        },
+                        "emmisions_polluants": {
+                            "type": "number",
+                            "title": "emmisions_polluants",
+                            "description": "Emissions de polluants en kilogrammes émis"
+                        },
+                        "surface_ha": {
+                            "type": "number",
+                            "title": "surface_ha",
+                            "description": "Surface d'occupation des sols en ha"
+                        },
+                        "conso_par_habitants_mwh": {
+                            "type": "number",
+                            "title": "conso_par_habitants_mwh",
+                            "description": "Consommation d'énergie finale par habitant en MWh ( moyenne)"
+                        },
+                        "pilotes": {
+                            "type": "string",
+                            "title": "pilotes",
+                            "description": ""
+                        },
+                        "objectif": {
+                            "type": "string",
+                            "title": "objectif",
+                            "description": ""
+                        },
+                        "nb_actions": {
+                            "type": "integer",
+                            "title": "nb_actions",
+                            "description": ""
+                        },
+                        "priorite": {
+                            "type": "string",
+                            "title": "priorite",
+                            "description": ""
+                        },
+                        "num_priorite": {
+                            "type": "string",
+                            "title": "num_priorite",
+                            "description": ""
+                        },
+                        "chantier": {
+                            "type": "string",
+                            "title": "chantier",
+                            "description": ""
+                        },
+                        "num_chantier": {
+                            "type": "string",
+                            "title": "num_chantier",
+                            "description": ""
+                        },
+                        "chantier_majeur": {
+                            "type": "string",
+                            "title": "chantier_majeur",
+                            "description": ""
+                        },
+                        "couleur": {
+                            "type": "string",
+                            "title": "couleur",
+                            "description": ""
+                        },
+                        "action_1": {
+                            "type": "string",
+                            "title": "action_1",
+                            "description": ""
+                        },
+                        "action_2": {
+                            "type": "string",
+                            "title": "action_2",
+                            "description": ""
+                        },
+                        "action_3": {
+                            "type": "string",
+                            "title": "action_3",
+                            "description": ""
+                        },
+                        "action_4": {
+                            "type": "string",
+                            "title": "action_4",
+                            "description": ""
+                        },
+                        "action_5": {
+                            "type": "string",
+                            "title": "action_5",
+                            "description": ""
+                        },
+                        "action_6": {
+                            "type": "string",
+                            "title": "action_6",
+                            "description": ""
+                        },
+                        "action_7": {
+                            "type": "string",
+                            "title": "action_7",
+                            "description": ""
+                        },
+                        "action_8": {
+                            "type": "string",
+                            "title": "action_8",
+                            "description": ""
+                        },
+                        "action_9": {
+                            "type": "string",
+                            "title": "action_9",
+                            "description": ""
+                        },
+                        "action_10": {
+                            "type": "string",
+                            "title": "action_10",
+                            "description": ""
+                        },
+                        "cout": {
+                            "type": "integer",
+                            "title": "cout",
+                            "description": ""
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geom",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

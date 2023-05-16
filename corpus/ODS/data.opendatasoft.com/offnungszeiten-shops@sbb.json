@@ -1,0 +1,556 @@
+{
+    "title": "offnungszeiten-shops@sbb",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/offnungszeiten-shops@sbb"
+        }
+    ],
+    "definitions": {
+        "offnungszeiten-shops@sbb": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/offnungszeiten-shops@sbb_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "offnungszeiten-shops@sbb_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geopos",
+                            "description": "Geoposition of the data set"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo shape",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "service_id": {
+                            "type": "integer",
+                            "title": "service_id",
+                            "description": "Identification of the service"
+                        },
+                        "url_identifier": {
+                            "type": "string",
+                            "title": "url_identifier",
+                            "description": "URL to link to SBB.CH"
+                        },
+                        "station_name": {
+                            "type": "string",
+                            "title": "Stop name",
+                            "description": "Official name of the stop"
+                        },
+                        "station_uic": {
+                            "type": "integer",
+                            "title": "OPUIC",
+                            "description": "Identification of the stop according to UIC specification"
+                        },
+                        "businee_name": {
+                            "type": "string",
+                            "title": "Name",
+                            "description": "Description of the service"
+                        },
+                        "additional_name": {
+                            "type": "string",
+                            "title": "additional_name",
+                            "description": "Additional designation for the service"
+                        },
+                        "name_affix": {
+                            "type": "string",
+                            "title": "Content-Type: text/plain; charset=utf-8\n",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "floor": {
+                            "type": "string",
+                            "title": "Level",
+                            "description": "Level in the station"
+                        },
+                        "openhours": {
+                            "type": "string",
+                            "title": "openhours",
+                            "description": "Opening hours of the service"
+                        },
+                        "category": {
+                            "type": "string",
+                            "title": "category",
+                            "description": "Category of the service"
+                        },
+                        "subcategories": {
+                            "type": "string",
+                            "title": "Subcategories",
+                            "description": "Subcategory of the service"
+                        },
+                        "mail": {
+                            "type": "string",
+                            "title": "E-mail",
+                            "description": "E-mail access to the service"
+                        },
+                        "telephone": {
+                            "type": "string",
+                            "title": "Telephone",
+                            "description": "Telephone number of the service"
+                        },
+                        "website": {
+                            "type": "string",
+                            "title": "Website",
+                            "description": "Service website"
+                        },
+                        "logo": {
+                            "type": "string",
+                            "title": "Logo",
+                            "description": "Logo of the service"
+                        },
+                        "tags": {
+                            "type": "string",
+                            "title": "Tags",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "payments": {
+                            "type": "string",
+                            "title": "Zahlungsmöglichkeiten",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "validity_to": {
+                            "type": "string",
+                            "title": "validity_to",
+                            "description": "Validity to of the data set"
+                        },
+                        "validity_from": {
+                            "type": "string",
+                            "title": "validity_from",
+                            "description": "Validity from of the data set"
+                        },
+                        "sort": {
+                            "type": "string",
+                            "title": "Sort",
+                            "description": "Sorting level"
+                        },
+                        "description": {
+                            "type": "string",
+                            "title": "Description",
+                            "description": "Marketing description of the shop"
+                        },
+                        "openhours_planned": {
+                            "type": "string",
+                            "title": "openhours_planned",
+                            "description": "Planned opening hours"
+                        },
+                        "holidays": {
+                            "type": "string",
+                            "title": "Public holidays",
+                            "description": "Opening hours on public holidays"
+                        },
+                        "icon_url": {
+                            "type": "string",
+                            "title": "icon_url",
+                            "description": "Image of the icon"
+                        },
+                        "icon_svg_url": {
+                            "type": "string",
+                            "title": "icon_svg_url",
+                            "description": "Vector graphic of the icon"
+                        },
+                        "icon_svg": {
+                            "type": "string",
+                            "title": "Icon SVG",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "logo_svg_url": {
+                            "type": "string",
+                            "title": "Content-Type: text/plain; charset=utf-8\n",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "logo_svg": {
+                            "type": "string",
+                            "title": "Content-Type: text/plain; charset=utf-8\n",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "logo_url": {
+                            "type": "string",
+                            "title": "Content-Type: text/plain; charset=utf-8\n",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "category_key": {
+                            "type": "string",
+                            "title": "category_key",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "url_alias": {
+                            "type": "string",
+                            "title": "Content-Type: text/plain; charset=utf-8\n",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "day_from": {
+                            "type": "string",
+                            "title": "Content-Type: text/plain; charset=utf-8\n",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "day_to": {
+                            "type": "string",
+                            "title": "Content-Type: text/plain; charset=utf-8\n",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "time_from": {
+                            "type": "string",
+                            "title": "Zeit ab",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "time_to": {
+                            "type": "string",
+                            "title": "Zeit zu",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

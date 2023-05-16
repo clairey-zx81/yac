@@ -1,0 +1,642 @@
+{
+    "title": "parco-circolante-veicoli@bologna",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/parco-circolante-veicoli@bologna"
+        }
+    ],
+    "definitions": {
+        "parco-circolante-veicoli@bologna": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/parco-circolante-veicoli@bologna_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "parco-circolante-veicoli@bologna_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "anno": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Anno",
+                            "description": "Anno immatricolazione"
+                        },
+                        "cap": {
+                            "type": "string",
+                            "title": "CAP",
+                            "description": "CAP"
+                        },
+                        "totale_veicoli": {
+                            "type": "integer",
+                            "title": "totale_veicoli",
+                            "description": "Veicoli immatricolati"
+                        },
+                        "benzina": {
+                            "type": "integer",
+                            "title": "BENZINA",
+                            "description": "Alimentazione veicolo"
+                        },
+                        "benzina_e_gas_liquido": {
+                            "type": "integer",
+                            "title": "BENZINA E GAS LIQUIDO",
+                            "description": "Alimentazione veicolo"
+                        },
+                        "benzina_e_metano": {
+                            "type": "integer",
+                            "title": "BENZINA E METANO",
+                            "description": "Alimentazione veicolo"
+                        },
+                        "elettricita": {
+                            "type": "integer",
+                            "title": "ELETTRICITA",
+                            "description": "Alimentazione veicolo"
+                        },
+                        "gasolio": {
+                            "type": "integer",
+                            "title": "GASOLIO",
+                            "description": "Alimentazione veicolo"
+                        },
+                        "ibrido_benzina": {
+                            "type": "integer",
+                            "title": "IBRIDO BENZINA",
+                            "description": "Alimentazione veicolo"
+                        },
+                        "ibrido_gasolio": {
+                            "type": "integer",
+                            "title": "IBRIDO GASOLIO",
+                            "description": "Alimentazione veicolo"
+                        },
+                        "metano": {
+                            "type": "integer",
+                            "title": "METANO",
+                            "description": ""
+                        },
+                        "altre": {
+                            "type": "integer",
+                            "title": "ALTRE ALIMENTAZIONI",
+                            "description": "Alimentazione veicolo"
+                        },
+                        "non_definito": {
+                            "type": "integer",
+                            "title": "ALIMENTAZIONE NON DEFINITO",
+                            "description": "Alimentazione veicolo"
+                        },
+                        "18_25_anni": {
+                            "type": "integer",
+                            "title": "18 - 25 ANNI",
+                            "description": "Fascia età proprietario"
+                        },
+                        "26_35_anni": {
+                            "type": "integer",
+                            "title": "26 - 35 ANNI",
+                            "description": "Fascia età proprietario"
+                        },
+                        "36_50_anni": {
+                            "type": "integer",
+                            "title": "36 - 50 ANNI",
+                            "description": "Fascia età proprietario"
+                        },
+                        "51_60_anni": {
+                            "type": "integer",
+                            "title": "51 - 60 ANNI",
+                            "description": "Fascia età proprietario"
+                        },
+                        "61_70_anni": {
+                            "type": "integer",
+                            "title": "61 - 70 ANNI",
+                            "description": "Fascia età proprietario"
+                        },
+                        "fino_a_17_anni": {
+                            "type": "integer",
+                            "title": "0 - 17 ANNI",
+                            "description": "Fascia età proprietario"
+                        },
+                        "non_contemplato": {
+                            "type": "integer",
+                            "title": "ETÀ NON CONTEMPLATO",
+                            "description": "Fascia età proprietario"
+                        },
+                        "non_definito0": {
+                            "type": "integer",
+                            "title": "ETÀ NON DEFINITO",
+                            "description": "Fascia età proprietario"
+                        },
+                        "oltre_70_anni": {
+                            "type": "integer",
+                            "title": "OLTRE 70 ANNI",
+                            "description": "Fascia età proprietario"
+                        },
+                        "euro_0": {
+                            "type": "integer",
+                            "title": "EURO 0",
+                            "description": "Classe Euro Veicolo"
+                        },
+                        "euro_1": {
+                            "type": "integer",
+                            "title": "EURO 1",
+                            "description": "Classe Euro Veicolo"
+                        },
+                        "euro_2": {
+                            "type": "integer",
+                            "title": "EURO 2",
+                            "description": "Classe Euro Veicolo"
+                        },
+                        "euro_3": {
+                            "type": "integer",
+                            "title": "EURO 3",
+                            "description": "Classe Euro Veicolo"
+                        },
+                        "euro_4": {
+                            "type": "integer",
+                            "title": "EURO 4",
+                            "description": "Classe Euro Veicolo"
+                        },
+                        "euro_5": {
+                            "type": "integer",
+                            "title": "EURO 5",
+                            "description": "Classe Euro Veicolo"
+                        },
+                        "euro_6": {
+                            "type": "integer",
+                            "title": "EURO 6",
+                            "description": "Classe Euro Veicolo"
+                        },
+                        "nc": {
+                            "type": "integer",
+                            "title": "EURO NON CONTEMPLATO",
+                            "description": "Classe Euro Veicolo"
+                        },
+                        "nd": {
+                            "type": "integer",
+                            "title": "EURO NON DEFINITO",
+                            "description": "Classe Euro Veicolo"
+                        },
+                        "f": {
+                            "type": "integer",
+                            "title": "SESSO FEMMINILE",
+                            "description": "Genere Proprietario"
+                        },
+                        "m": {
+                            "type": "integer",
+                            "title": "SESSO MASCHILE",
+                            "description": "Genere Proprietario"
+                        },
+                        "nd0": {
+                            "type": "integer",
+                            "title": "SESSO ND",
+                            "description": "Genere Proprietario"
+                        },
+                        "pa": {
+                            "type": "integer",
+                            "title": "SOCIETÀ PA",
+                            "description": ""
+                        },
+                        "sapa": {
+                            "type": "integer",
+                            "title": "SOCIETÀ SAPA",
+                            "description": ""
+                        },
+                        "sas": {
+                            "type": "integer",
+                            "title": "SOCIETÀ SAS",
+                            "description": ""
+                        },
+                        "snc": {
+                            "type": "integer",
+                            "title": "SOCIETÀ SNC",
+                            "description": ""
+                        },
+                        "soc": {
+                            "type": "integer",
+                            "title": "SOCIETÀ SOC",
+                            "description": ""
+                        },
+                        "spa": {
+                            "type": "integer",
+                            "title": "SOCIETÀ SPA",
+                            "description": ""
+                        },
+                        "srl": {
+                            "type": "integer",
+                            "title": "SOCIETÀ SRL",
+                            "description": ""
+                        },
+                        "surl": {
+                            "type": "integer",
+                            "title": "SOCIETÀ SURL",
+                            "description": ""
+                        },
+                        "srls": {
+                            "type": "integer",
+                            "title": "SRLS",
+                            "description": ""
+                        },
+                        "0_1_anni": {
+                            "type": "integer",
+                            "title": "ANZIANITÀ VEICOLO 0 - 1 ANNI",
+                            "description": "Anzianità parco veicoli"
+                        },
+                        "2_3_anni": {
+                            "type": "integer",
+                            "title": "ANZIANITÀ VEICOLO 2 – 3 ANNI",
+                            "description": "Anzianità parco veicoli"
+                        },
+                        "4_5_anni": {
+                            "type": "integer",
+                            "title": "ANZIANITÀ VEICOLO 4 – 5 ANNI",
+                            "description": "Anzianità parco veicoli"
+                        },
+                        "6_7_anni": {
+                            "type": "integer",
+                            "title": "ANZIANITÀ VEICOLO 6 – 7 ANNI",
+                            "description": "Anzianità parco veicoli"
+                        },
+                        "8_9_anni": {
+                            "type": "integer",
+                            "title": "ANZIANITÀ VEICOLO 8 – 9 ANNI",
+                            "description": "Anzianità parco veicoli"
+                        },
+                        "10_12_anni": {
+                            "type": "string",
+                            "title": "ANZIANITÀ VEICOLO 10 - 12 ANNI",
+                            "description": "Anzianità parco veicoli"
+                        },
+                        "13_15_anni": {
+                            "type": "integer",
+                            "title": "ANZIANITÀ VEICOLO 13 - 15 ANNI",
+                            "description": "Anzianità parco veicoli"
+                        },
+                        "oltre_15_anni": {
+                            "type": "integer",
+                            "title": "ANZIANITÀ VEICOLO OLTRE 15 ANNI",
+                            "description": "Anzianità parco veicoli"
+                        },
+                        "non_definito1": {
+                            "type": "integer",
+                            "title": "ANZIANITÀ VEICOLO NON DEFINITO",
+                            "description": "Anzianità parco veicoli"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

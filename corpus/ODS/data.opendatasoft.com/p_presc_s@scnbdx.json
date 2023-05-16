@@ -1,0 +1,455 @@
+{
+    "title": "p_presc_s@scnbdx",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/p_presc_s@scnbdx"
+        }
+    ],
+    "definitions": {
+        "p_presc_s@scnbdx": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/p_presc_s@scnbdx_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "p_presc_s@scnbdx_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "insee": {
+                            "type": "string",
+                            "title": "insee",
+                            "description": "Code Insee : \nListe des valeurs possibles : \n33003 : Ambarès-et-Lagrave\n33004 : Ambès\n33013 : Artigues-Près-Bordeaux\n33032 : Bassens\n33039 : Bègles\n33056 : Blanquefort\n33063 : Bordeaux\n33065 : Bouliac\n33069 : Le Bouscat\n33075 : Bruges\n33096 : Carbon-Blanc\n33119 : Cenon\n33162 : Eysines\n33167 : Floirac\n33192 : Gradignan\n33200 : Le Haillan\n33249 : Lormont\n33273 : Martignas-sur-Jalle\n33281 : Mérignac\n33312 : Parempuyre\n33318 : Pessac\n33376 : Saint-Aubin-de-Médoc\n33434 : Saint-Louis-de-Montferrand\n33449 : Saint-Médard-en-Jalles\n33487 : Saint-Vincent-de-Paul\n33519 : Le Taillan-Médoc\n33522 : Talence\n33550 : Villenave-d'Ornon\n"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "gid": {
+                            "type": "integer",
+                            "title": "gid",
+                            "description": "Clé primaire"
+                        },
+                        "ident": {
+                            "type": "string",
+                            "title": "ident",
+                            "description": "Identifiant"
+                        },
+                        "libelle": {
+                            "type": "string",
+                            "title": "libelle",
+                            "description": "Nom de la prescription"
+                        },
+                        "txt": {
+                            "type": "string",
+                            "title": "txt",
+                            "description": "Texte étiquette"
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "type",
+                            "description": ""
+                        },
+                        "sstype": {
+                            "type": "string",
+                            "title": "sstype",
+                            "description": "Sous-type de la prescription : \nListe des valeurs possibles : \n02-51 : CS Protections contre les nuisances\n02-52 : IC Protections contre les nuisances\n02-53 : CS Fonctionnement des services publics\n02-54 : CS Préservation des ressources naturelles\n02-55 : CS Risques d'affaissements ou d'éboulements\n02-56 : IC Risques d'affaissements ou d'éboulements\n02-57 : CS Risques d'inondations par les ruisseaux\n02-58 : IC Risques d'inondations par les ruisseaux\n02-59 : SEVESO\n05-01 : Espaces verts\n05-51 : Déplacement, transport, stationnement, espace public\n05-52 : Eau et assainissement\n05-53 : Déchets\n05-54 : Bâtiments communaux et communautaires\n05-55 : Enseignement et petite enfance\n05-56 : Sports, loisirs, culture, santé, social\n05-57 : Divers\n05-58 : Voirie Primaire\n05-59 : Voirie Secondaire\n05-60 : Voirie tertiaire\n07-05 : Immeuble remarquable\n07-51 : C1 Trame verte\n07-52 : C2 Trame bleue\n07-53 : C3 Continuités paysagères\n07-54 : P2 Grands parcs, domaines et espaces publics\n07-55 : P3 Espaces verts intérieurs\n07-56 : E1 Ensembles bâtis et paysagers\n07-57 : E2 Parcs et bâtisses\n07-59 : Masse végétale remarquable\n07-60 : Espace libre remarquable\n07-61 : Séquence urbaine\n07-62 : Mur et portail\n07-63 : Emprise non constructible\n07-64 : Figure Urbaine\n07-65 : Plantation à réaliser\n11-01 : Marge de recul\n11-02 : Alignement de façades\n11-51 : Emprise entrée de ville (L,11,1,4), dispositions spécifiques\n11-52 : Zones humides\n11-53 : Emprise constructible\n11-54 : Zone d'implantation UP\n11-55 : Emprise batie maximale\n11-56 : Emprise en pleine terre minimale\n19-51 : CS Secteur de mise en valeur des ressources naturelles du sol et du sous-sol\n21-51 : Voirie\n21-52 : Intérêt général\n21-53 : Espace vert\n25-03 : Cours d'eau et zones humides\n51-51 : Filet de hauteur de façade d'une construction\n51-52 : Périmètre d'application de la hauteur de façade\n51-53 : Hauteur de façade\n51-54 : Hauteur totale de la construction\n57-01 : Accession sociale\n57-02 : Location sociale\n57-03 : Particulier\n57-04 : Non concerné\n59-01 : Constructibilité par nouvelle bande d'accès autorisée\n59-02 : Constructibilité par nouvelle bande d'accès interdite\n"
+                        },
+                        "nomfic": {
+                            "type": "string",
+                            "title": "nomfic",
+                            "description": "Nom du fichier"
+                        },
+                        "urlfic": {
+                            "type": "string",
+                            "title": "urlfic",
+                            "description": "URL ou URI du fichier"
+                        },
+                        "datappro": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "datappro",
+                            "description": "Date d'approbation"
+                        },
+                        "datvalid": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "datvalid",
+                            "description": "Date de validation"
+                        },
+                        "cdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "cdate",
+                            "description": "Date de création"
+                        },
+                        "mdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "mdate",
+                            "description": "Date de modification"
+                        },
+                        "geom_err": {
+                            "type": "string",
+                            "title": "geom_err",
+                            "description": "Code d'anomalie géométrique : \nListe des valeurs possibles : \n9999 : Polygone compose et / ou à sections multiples\n9998 : Linéaire compose et / ou à sections multiples\n9996 : La géométrie contient des informations LRS\n9995 : Nombre de dimensions différent de 2 ou 3\n9994 : Présence d'un arc de cercle\n9000 : Erreur autre\n13343 : Polygone de moins de 4 points\n13349 : Polygone papillon\n13350 : Deux éléments d'un polygone archipel se touchent\n13351 : Deux éléments d'un polygone archipel  se touchent\n13356 : Point double\n13366 : Combinaison invalide d'intérieur / extérieur d'un polygone\n13367 : Orientation invalide d'intérieur / extérieur d'un polygone\n"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

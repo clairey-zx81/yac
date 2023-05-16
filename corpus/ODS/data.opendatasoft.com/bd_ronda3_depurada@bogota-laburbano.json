@@ -1,0 +1,831 @@
+{
+    "title": "bd_ronda3_depurada@bogota-laburbano",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/bd_ronda3_depurada@bogota-laburbano"
+        }
+    ],
+    "definitions": {
+        "bd_ronda3_depurada@bogota-laburbano": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/bd_ronda3_depurada@bogota-laburbano_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "bd_ronda3_depurada@bogota-laburbano_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id_settlement": {
+                            "type": "string",
+                            "title": "ID_settlement",
+                            "description": ""
+                        },
+                        "asentamiento": {
+                            "type": "string",
+                            "title": "Asentamiento",
+                            "description": ""
+                        },
+                        "posible_nombre": {
+                            "type": "string",
+                            "title": "Posible_nombre",
+                            "description": ""
+                        },
+                        "coordenadas": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Coordenadas",
+                            "description": ""
+                        },
+                        "departamento": {
+                            "type": "string",
+                            "title": "Departamento",
+                            "description": ""
+                        },
+                        "municipio": {
+                            "type": "string",
+                            "title": "Municipio",
+                            "description": ""
+                        },
+                        "estimacion_poblacion_1": {
+                            "type": "string",
+                            "title": "Estimacion_Poblacion_1",
+                            "description": ""
+                        },
+                        "estimacion_poblacion_2": {
+                            "type": "number",
+                            "title": "Estimacion_Poblacion_2",
+                            "description": ""
+                        },
+                        "agencia_u_organizacion_internacional": {
+                            "type": "string",
+                            "title": "Agencia u organización internacional",
+                            "description": ""
+                        },
+                        "tipo_asistencia": {
+                            "type": "string",
+                            "title": "Tipo_asistencia",
+                            "description": ""
+                        },
+                        "ninos_men5a": {
+                            "type": "string",
+                            "title": "niños_men5A",
+                            "description": ""
+                        },
+                        "nna_5_17a": {
+                            "type": "string",
+                            "title": "NNA_5-17A",
+                            "description": ""
+                        },
+                        "muj_gest": {
+                            "type": "string",
+                            "title": "Muj_gest",
+                            "description": ""
+                        },
+                        "tiempo_de_conformacion": {
+                            "type": "string",
+                            "title": "Tiempo de Conformacion",
+                            "description": ""
+                        },
+                        "urbana_rural": {
+                            "type": "string",
+                            "title": "Urbana/Rural",
+                            "description": ""
+                        },
+                        "campanas_covid_19_en_centrosalud": {
+                            "type": "string",
+                            "title": "Campañas Covid-19 en CentroSalud",
+                            "description": ""
+                        },
+                        "precauciones_covid_19": {
+                            "type": "string",
+                            "title": "Precauciones Covid-19",
+                            "description": ""
+                        },
+                        "presencia_de_gente_adulta_mayor": {
+                            "type": "string",
+                            "title": "Presencia de gente adulta mayor",
+                            "description": ""
+                        },
+                        "centro_de_salud_internacional_o_nacional": {
+                            "type": "string",
+                            "title": "Centro de salud internacional o nacional",
+                            "description": ""
+                        },
+                        "cercania_de_un_centro_de_salud": {
+                            "type": "string",
+                            "title": "Cercania de un centro de salud",
+                            "description": ""
+                        },
+                        "centros_medicos": {
+                            "type": "string",
+                            "title": "Centros medicos",
+                            "description": ""
+                        },
+                        "clinica_de_salud": {
+                            "type": "number",
+                            "title": "Clínica de salud",
+                            "description": ""
+                        },
+                        "puesto_ambulatorio_de_atencion_medica": {
+                            "type": "number",
+                            "title": "Puesto ambulatorio de atención médica",
+                            "description": ""
+                        },
+                        "tienda_de_comida": {
+                            "type": "number",
+                            "title": "Tienda de comida",
+                            "description": ""
+                        },
+                        "tamano_de_tienda_de_comida": {
+                            "type": "string",
+                            "title": "Tamaño de tienda de comida",
+                            "description": ""
+                        },
+                        "proteinas": {
+                            "type": "number",
+                            "title": "Proteinas",
+                            "description": ""
+                        },
+                        "frut_veg_leg": {
+                            "type": "number",
+                            "title": "Frut_Veg_Leg",
+                            "description": ""
+                        },
+                        "granos": {
+                            "type": "number",
+                            "title": "Granos",
+                            "description": ""
+                        },
+                        "bebidas": {
+                            "type": "number",
+                            "title": "Bebidas",
+                            "description": ""
+                        },
+                        "comp_coci": {
+                            "type": "number",
+                            "title": "Comp_Coci",
+                            "description": ""
+                        },
+                        "alimentos_perecederos_solamente": {
+                            "type": "number",
+                            "title": "Alimentos perecederos solamente",
+                            "description": ""
+                        },
+                        "alimentos_perecederos_procesados_jugos_y_lacteos_en_tetrapack_leche_ultrapasteurizados_gaseosas_refr": {
+                            "type": "number",
+                            "title": "Alimentos perecederos, procesados (Jugos y lácteos en tetrapack, leche ultrapasteurizados, gaseosas, refrescos, galletas, etc.) y no perecederos.",
+                            "description": ""
+                        },
+                        "otros": {
+                            "type": "number",
+                            "title": "Otros",
+                            "description": ""
+                        },
+                        "solamente_alimentos_no_perecederos": {
+                            "type": "number",
+                            "title": "Solamente alimentos no perecederos",
+                            "description": ""
+                        },
+                        "solamente_procesados_jugos_y_lacteos_en_tetrapak_ultra_pasteurizados_gaseosas_refrescos_galletas_etc": {
+                            "type": "number",
+                            "title": "Solamente procesados (Jugos y lácteos en Tetrapak ultra pasteurizados, gaseosas, refrescos, galletas, etc.).",
+                            "description": ""
+                        },
+                        "mas_elementos_de_aseo_que_de_alimentos": {
+                            "type": "number",
+                            "title": "Más elementos de aseo que de alimentos",
+                            "description": ""
+                        },
+                        "calidad_alimentos_ofertados": {
+                            "type": "string",
+                            "title": "Calidad_alimentos_ofertados",
+                            "description": ""
+                        },
+                        "comedor_cocina_comunitaria": {
+                            "type": "string",
+                            "title": "Comedor_cocina_comunitaria",
+                            "description": ""
+                        },
+                        "capacidad_cocinas_comunitarias": {
+                            "type": "string",
+                            "title": "Capacidad_cocinas_comunitarias",
+                            "description": ""
+                        },
+                        "cult_jardin": {
+                            "type": "number",
+                            "title": "Cult_jardin",
+                            "description": ""
+                        },
+                        "n_cult": {
+                            "type": "string",
+                            "title": "N_cult",
+                            "description": ""
+                        },
+                        "hort_hoja": {
+                            "type": "number",
+                            "title": "Hort_hoja",
+                            "description": ""
+                        },
+                        "fruto_comest": {
+                            "type": "number",
+                            "title": "fruto_comest",
+                            "description": ""
+                        },
+                        "raiz_tuber_legu": {
+                            "type": "number",
+                            "title": "Raiz_tuber_legu",
+                            "description": ""
+                        },
+                        "maiz_cere": {
+                            "type": "number",
+                            "title": "Maiz_cere",
+                            "description": ""
+                        },
+                        "aveshuevcarne": {
+                            "type": "number",
+                            "title": "AvesHuevCarne",
+                            "description": ""
+                        },
+                        "frutal_disp": {
+                            "type": "number",
+                            "title": "Frutal_disp",
+                            "description": ""
+                        },
+                        "otros_cult": {
+                            "type": "number",
+                            "title": "Otros_Cult",
+                            "description": ""
+                        },
+                        "compostaje": {
+                            "type": "number",
+                            "title": "Compostaje",
+                            "description": ""
+                        },
+                        "acueducto": {
+                            "type": "number",
+                            "title": "Acueducto",
+                            "description": ""
+                        },
+                        "agua_estan": {
+                            "type": "number",
+                            "title": "Agua_estan",
+                            "description": ""
+                        },
+                        "barri_agua": {
+                            "type": "number",
+                            "title": "Barri_agua",
+                            "description": ""
+                        },
+                        "bote_bas": {
+                            "type": "number",
+                            "title": "Bote_bas",
+                            "description": ""
+                        },
+                        "nac_agua": {
+                            "type": "number",
+                            "title": "Nac_agua",
+                            "description": ""
+                        },
+                        "bomb_pozo": {
+                            "type": "number",
+                            "title": "Bomb_pozo",
+                            "description": ""
+                        },
+                        "agua_superf": {
+                            "type": "number",
+                            "title": "Agua_superf",
+                            "description": ""
+                        },
+                        "fuente_agua": {
+                            "type": "number",
+                            "title": "Fuente_agua",
+                            "description": ""
+                        },
+                        "recol_lluvia": {
+                            "type": "number",
+                            "title": "Recol_lluvia",
+                            "description": ""
+                        },
+                        "tub_agua": {
+                            "type": "number",
+                            "title": "Tub_agua",
+                            "description": ""
+                        },
+                        "vend_agua": {
+                            "type": "number",
+                            "title": "Vend_agua",
+                            "description": ""
+                        },
+                        "instalpub_sanit": {
+                            "type": "number",
+                            "title": "InstalPub_sanit",
+                            "description": ""
+                        },
+                        "fosa_sep": {
+                            "type": "number",
+                            "title": "Fosa_sep",
+                            "description": ""
+                        },
+                        "exc_agua_corr": {
+                            "type": "number",
+                            "title": "Exc_agua_corr",
+                            "description": ""
+                        },
+                        "letrina": {
+                            "type": "number",
+                            "title": "Letrina",
+                            "description": ""
+                        },
+                        "plastico": {
+                            "type": "number",
+                            "title": "Plastico",
+                            "description": ""
+                        },
+                        "metal": {
+                            "type": "number",
+                            "title": "Metal",
+                            "description": ""
+                        },
+                        "madera": {
+                            "type": "number",
+                            "title": "Madera",
+                            "description": ""
+                        },
+                        "ladrillo": {
+                            "type": "number",
+                            "title": "Ladrillo",
+                            "description": ""
+                        },
+                        "barro": {
+                            "type": "number",
+                            "title": "Barro",
+                            "description": ""
+                        },
+                        "paja": {
+                            "type": "number",
+                            "title": "Paja",
+                            "description": ""
+                        },
+                        "baldosa": {
+                            "type": "number",
+                            "title": "Baldosa",
+                            "description": ""
+                        },
+                        "concreto": {
+                            "type": "number",
+                            "title": "Concreto",
+                            "description": ""
+                        },
+                        "madera0": {
+                            "type": "number",
+                            "title": "Madera",
+                            "description": ""
+                        },
+                        "tierra": {
+                            "type": "number",
+                            "title": "Tierra",
+                            "description": ""
+                        },
+                        "alumbr": {
+                            "type": "number",
+                            "title": "Alumbr",
+                            "description": ""
+                        },
+                        "anden": {
+                            "type": "string",
+                            "title": "anden",
+                            "description": ""
+                        },
+                        "senal_trans": {
+                            "type": "number",
+                            "title": "Senal_trans",
+                            "description": ""
+                        },
+                        "centr_edu": {
+                            "type": "number",
+                            "title": "Centr_edu",
+                            "description": ""
+                        },
+                        "primaria": {
+                            "type": "number",
+                            "title": "Primaria",
+                            "description": ""
+                        },
+                        "preescolar": {
+                            "type": "number",
+                            "title": "Preescolar",
+                            "description": ""
+                        },
+                        "bachillerato": {
+                            "type": "number",
+                            "title": "Bachillerato",
+                            "description": ""
+                        },
+                        "otro_instituto": {
+                            "type": "number",
+                            "title": "Otro instituto",
+                            "description": ""
+                        },
+                        "elem_comun": {
+                            "type": "number",
+                            "title": "Elem_comun",
+                            "description": ""
+                        },
+                        "cal_celular": {
+                            "type": "string",
+                            "title": "Cal_celular",
+                            "description": ""
+                        },
+                        "calle_pavim": {
+                            "type": "number",
+                            "title": "Calle_pavim",
+                            "description": ""
+                        },
+                        "cond_viv": {
+                            "type": "string",
+                            "title": "Cond_viv",
+                            "description": ""
+                        },
+                        "aumento_constr": {
+                            "type": "string",
+                            "title": "Aumento_constr",
+                            "description": ""
+                        },
+                        "n_constr_nuevas": {
+                            "type": "string",
+                            "title": "N_constr_nuevas",
+                            "description": ""
+                        },
+                        "foto_asentamiento_1": {
+                            "type": "string",
+                            "title": "Foto asentamiento 1",
+                            "description": ""
+                        },
+                        "foto_asentamiento_2": {
+                            "type": "string",
+                            "title": "Foto asentamiento 2",
+                            "description": ""
+                        },
+                        "foto_asentamiento_3": {
+                            "type": "string",
+                            "title": "Foto asentamiento 3",
+                            "description": ""
+                        },
+                        "foto_wash": {
+                            "type": "string",
+                            "title": "Foto WASH",
+                            "description": ""
+                        },
+                        "foto_san": {
+                            "type": "string",
+                            "title": "Foto SAN",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

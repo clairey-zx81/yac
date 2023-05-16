@@ -1,0 +1,491 @@
+{
+    "title": "bikeways@vancouver",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/bikeways@vancouver"
+        }
+    ],
+    "definitions": {
+        "bikeways@vancouver": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/bikeways@vancouver_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "bikeways@vancouver_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "object_id": {
+                            "type": "string",
+                            "title": "Object ID",
+                            "description": "Unique identifier for each bikeway segment"
+                        },
+                        "bike_route_name": {
+                            "type": "string",
+                            "title": "Bike Route Name",
+                            "description": "Bike route name as it appears on wayfinding signs. This is typically the name of the street on which the route is located; but may be different for routes that span multiple streets."
+                        },
+                        "street_name": {
+                            "type": "string",
+                            "title": "Street Name",
+                            "description": "Name of the street where the bikeway segment is located"
+                        },
+                        "bikeway_type": {
+                            "type": "string",
+                            "title": "Bikeway Type",
+                            "description": "Type of bikeway facility.\n\nProtected Bike Lanes: People cycling are protected from motor vehicles by physical barriers such as planters, curbs, or bollards; also includes off-street paths.\n\nLocal Street: People cycling share the roadway with motor vehicles on a relatively quiet neighbourhood street\n\nPainted Lanes: People cycling have a dedicated painted lane, typically between the curb or parking lane and a driving lane\n\nShared Lanes: People cycling share a lane with vehicles on a busy street; these lanes fill network gaps but are not comfortable for most.\n\nNote: Segments with different bikeway types in each direction are indicated with one type here; see W/N and E/S Bound Types for directional types."
+                        },
+                        "subtype": {
+                            "type": "string",
+                            "title": "Subtype",
+                            "description": "Subtype of Bikeway Type\n\nNB: No Buffer – Protected bike lanes and painted lanes where there is no buffer between the bike lane and general traffic lane or parked vehicles\n\nOSB: Off Street Bike Path - Off street paths physically separated from pedestrian paths, or where cyclists are separated from pedestrians with a painted line\n\nOSS: Off Street (Shared with pedestrians) - Off street paths shared by cyclists and pedestrians\n\nPBP: Paint Buffer Parking - Painted buffer between bike lane and parked vehicles\n\nPBPT: Paint Buffer Parking and Traffic - Painted buffer between bike lane and parked vehicles, and between bike lane and vehicle traffic\n\nPBT: Paint Buffer Traffic - Painted buffer between bike lane and vehicle traffic\n\nR: Raised On Street - Protect Bike Lanes located on the street, but raised to sidewalk level\n\nSL: Street Level On Street -Protected bike lanes located on the street"
+                        },
+                        "status": {
+                            "type": "string",
+                            "title": "Status",
+                            "description": "Status of the specified bikeway segment. \nA: Active - existing bikeways included in our bike network\nL: Legacy – Bikeways formerly included in our network, but that does not meet the minimum standard of a bike facility."
+                        },
+                        "street_segment_type": {
+                            "type": "string",
+                            "title": "Street Segment Type",
+                            "description": "Street segment types. \nArterial: Highest capacity roads identified to be significant for access to regional activity centres and critical for the movement of goods and people through the City. Arterial routes support heavy volumes of truck, transit and vehicle traffic\nCollector: Roads intended to connect neighbourhoods with the arterial road network.\nLane: Neighbourhood roads intended as the primary access point to residential and commercial properties for local services such as waste collection and parking access.\nOff-Street: Routes not located on the street, includes protected bike lanes and off-street paths. Not generally intended for vehicle traffic.\nResidential: Neighbourhood roads intended for the movement of people and services within local neighbourhoods.\nSec Arterial: High capacity roads critical for the movement of goods and people through the City. Routes support moderate truck, transit and vehicle traffic."
+                        },
+                        "overall_direction": {
+                            "type": "string",
+                            "title": "Overall Direction",
+                            "description": "The overall direction of the bikeway (individual segments may not run the same direction). EW means East-West; NS means North-South"
+                        },
+                        "bikeway_direction": {
+                            "type": "string",
+                            "title": "Bikeway Direction",
+                            "description": "Direction of bike travel on the route:\n2W: Two Way - Bikes may travel in two directions, either on the road or in painted or protected lanes on either side of the roadway.\nOW: One Way - Bikes may travel in one direction.\nCFlow: Counterflow - A road that is one way for vehicles, but bikes may travel in both directions, \nBD: Bidirectional - A two-way path or lane located on one side of the street."
+                        },
+                        "vehicle_direction": {
+                            "type": "string",
+                            "title": "Vehicle Direction",
+                            "description": "Direction of vehicle travel on the route:\n2W: Two Way – Vehicles may travel in two directions.\nOW: One Way – Vehicles may travel in one direction.\nOff-street: Vehicles are not permitted on route."
+                        },
+                        "speed_limit": {
+                            "type": "integer",
+                            "title": "Speed Limit",
+                            "description": "Speed limit for vehicles in kilometers per hour. Zero or null for off-street routes."
+                        },
+                        "surface_type": {
+                            "type": "string",
+                            "title": "Surface Type",
+                            "description": "Paved or unpaved"
+                        },
+                        "aaa_network": {
+                            "type": "string",
+                            "title": "AAA Network",
+                            "description": "Whether the segments meet the criteria for All Ages and Abilities cycling, and is connected to the city's AAA Network"
+                        },
+                        "aaa_segment": {
+                            "type": "string",
+                            "title": "AAA Segment",
+                            "description": "Whether the segments meet the criteria for All Ages and Abilities cycling. Not all AAA Segments are part of the AAA Network."
+                        },
+                        "w_n_bound_type": {
+                            "type": "string",
+                            "title": "W/N Bound Type",
+                            "description": "Type of bikeway facility in the West- or Northbound direction, one of:\n\nProtected Bike Lanes: People cycling are protected from motor vehicles by physical barriers such as planters, curbs, or bollards; also includes off-street paths.\n\nLocal Street: People cycling share the roadway with motor vehicles on a relatively quiet neighbourhood street\n\nPainted Lanes: People cycling have a dedicated painted lane, typically between the curb or parking lane and a driving lane\n\nShared Lanes: People cycling share a lane with vehicles on a busy street; these lanes fill network gaps but are not comfortable for most."
+                        },
+                        "e_s_bound_type": {
+                            "type": "string",
+                            "title": "E/S Bound Type",
+                            "description": "Type of bikeway facility in the East- or Southbound direction, one of:\n\nProtected Bike Lanes: People cycling are protected from motor vehicles by physical barriers such as planters, curbs, or bollards; also includes off-street paths.\n\nLocal Street: People cycling share the roadway with motor vehicles on a relatively quiet neighbourhood street\n\nPainted Lanes: People cycling have a dedicated painted lane, typically between the curb or parking lane and a driving lane\n\nShared Lanes: People cycling share a lane with vehicles on a busy street; these lanes fill network gaps but are not comfortable for most."
+                        },
+                        "snow_removal": {
+                            "type": "string",
+                            "title": "Snow Removal",
+                            "description": "Whether the bikeway is on part of a snow removal route."
+                        },
+                        "segment_length": {
+                            "type": "string",
+                            "title": "Segment Length",
+                            "description": "Approximate length of centerline of segment measured in meters."
+                        },
+                        "year_of_construction": {
+                            "type": "string",
+                            "title": "Year of Construction",
+                            "description": "Year of construction. The year when the segment became an active bikeway of any type. Note: This field may be zero or blank if the information is not available"
+                        },
+                        "construction_note": {
+                            "type": "string",
+                            "title": "Construction Note",
+                            "description": "Notes on construction and upgrades"
+                        },
+                        "upgrade_year": {
+                            "type": "string",
+                            "title": "Upgrade Year",
+                            "description": "Year when segment was upgraded, if applicable."
+                        },
+                        "notes": {
+                            "type": "string",
+                            "title": "Notes",
+                            "description": "General notes not included in the other attributes."
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geom",
+                            "description": "Spatial representation of specified bikeway segment"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

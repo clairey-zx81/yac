@@ -1,0 +1,565 @@
+{
+    "title": "alternative-fuel-stations@codeforcharlotte",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/alternative-fuel-stations@codeforcharlotte"
+        }
+    ],
+    "definitions": {
+        "alternative-fuel-stations@codeforcharlotte": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/alternative-fuel-stations@codeforcharlotte_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "alternative-fuel-stations@codeforcharlotte_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "fuel_type_code": {
+                            "type": "string",
+                            "title": "Fuel Type Code",
+                            "description": ""
+                        },
+                        "station_name": {
+                            "type": "string",
+                            "title": "Station Name",
+                            "description": ""
+                        },
+                        "street_address": {
+                            "type": "string",
+                            "title": "Street Address",
+                            "description": ""
+                        },
+                        "intersection_directions": {
+                            "type": "string",
+                            "title": "Intersection Directions",
+                            "description": ""
+                        },
+                        "city": {
+                            "type": "string",
+                            "title": "City",
+                            "description": ""
+                        },
+                        "state": {
+                            "type": "string",
+                            "title": "State",
+                            "description": ""
+                        },
+                        "zip": {
+                            "type": "string",
+                            "title": "ZIP",
+                            "description": ""
+                        },
+                        "plus4": {
+                            "type": "string",
+                            "title": "Plus4",
+                            "description": ""
+                        },
+                        "station_phone": {
+                            "type": "string",
+                            "title": "Station Phone",
+                            "description": ""
+                        },
+                        "status_code": {
+                            "type": "string",
+                            "title": "Status Code",
+                            "description": ""
+                        },
+                        "expected_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Expected Date",
+                            "description": ""
+                        },
+                        "groups_with_access_code": {
+                            "type": "string",
+                            "title": "Groups With Access Code",
+                            "description": ""
+                        },
+                        "access_days_time": {
+                            "type": "string",
+                            "title": "Access Days Time",
+                            "description": ""
+                        },
+                        "cards_accepted": {
+                            "type": "string",
+                            "title": "Cards Accepted",
+                            "description": ""
+                        },
+                        "bd_blends": {
+                            "type": "string",
+                            "title": "BD Blends",
+                            "description": ""
+                        },
+                        "ng_fill_type_code": {
+                            "type": "string",
+                            "title": "NG Fill Type Code",
+                            "description": ""
+                        },
+                        "ng_psi": {
+                            "type": "string",
+                            "title": "NG PSI",
+                            "description": ""
+                        },
+                        "ev_level1_evse_num": {
+                            "type": "integer",
+                            "title": "EV Level1 EVSE Num",
+                            "description": ""
+                        },
+                        "ev_level2_evse_num": {
+                            "type": "integer",
+                            "title": "EV Level2 EVSE Num",
+                            "description": ""
+                        },
+                        "ev_dc_fast_count": {
+                            "type": "integer",
+                            "title": "EV DC Fast Count",
+                            "description": ""
+                        },
+                        "ev_other_info": {
+                            "type": "string",
+                            "title": "EV Other Info",
+                            "description": ""
+                        },
+                        "ev_network": {
+                            "type": "string",
+                            "title": "EV Network",
+                            "description": ""
+                        },
+                        "ev_network_web": {
+                            "type": "string",
+                            "title": "EV Network Web",
+                            "description": ""
+                        },
+                        "geocode_status": {
+                            "type": "string",
+                            "title": "Geocode Status",
+                            "description": ""
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "title": "Latitude",
+                            "description": ""
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "title": "Longitude",
+                            "description": ""
+                        },
+                        "date_last_confirmed": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date Last Confirmed",
+                            "description": ""
+                        },
+                        "id": {
+                            "type": "integer",
+                            "title": "ID",
+                            "description": ""
+                        },
+                        "updated_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Updated At",
+                            "description": ""
+                        },
+                        "owner_type_code": {
+                            "type": "string",
+                            "title": "Owner Type Code",
+                            "description": ""
+                        },
+                        "federal_agency_id": {
+                            "type": "string",
+                            "title": "Federal Agency ID",
+                            "description": ""
+                        },
+                        "federal_agency_name": {
+                            "type": "string",
+                            "title": "Federal Agency Name",
+                            "description": ""
+                        },
+                        "open_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Open Date",
+                            "description": ""
+                        },
+                        "hydrogen_status_link": {
+                            "type": "string",
+                            "title": "Hydrogen Status Link",
+                            "description": ""
+                        },
+                        "ng_vehicle_class": {
+                            "type": "string",
+                            "title": "NG Vehicle Class",
+                            "description": ""
+                        },
+                        "lpg_primary": {
+                            "type": "string",
+                            "title": "LPG Primary",
+                            "description": ""
+                        },
+                        "e85_blender_pump": {
+                            "type": "string",
+                            "title": "E85 Blender Pump",
+                            "description": ""
+                        },
+                        "ev_connector_types": {
+                            "type": "string",
+                            "title": "EV Connector Types",
+                            "description": ""
+                        },
+                        "location": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Location",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

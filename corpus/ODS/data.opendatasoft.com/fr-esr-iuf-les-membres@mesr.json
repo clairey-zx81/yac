@@ -1,0 +1,556 @@
+{
+    "title": "fr-esr-iuf-les-membres@mesr",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/fr-esr-iuf-les-membres@mesr"
+        }
+    ],
+    "definitions": {
+        "fr-esr-iuf-les-membres@mesr": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/fr-esr-iuf-les-membres@mesr_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "fr-esr-iuf-les-membres@mesr_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "annee": {
+                            "type": "string",
+                            "title": "Année",
+                            "description": "Année de nomination à l'IUF"
+                        },
+                        "nom": {
+                            "type": "string",
+                            "title": "Nom",
+                            "description": "Nom de l'enseignant-chercheur nommé à l'IUF"
+                        },
+                        "prenom": {
+                            "type": "string",
+                            "title": "Prénom",
+                            "description": "Prénom de l'enseignant-chercheur nommé à l'IUF"
+                        },
+                        "type_nomination": {
+                            "type": "string",
+                            "title": "Type de nomination",
+                            "description": "Type de nomination prenant en considération la catégorie et l'antériorité de nomination à l'IUF"
+                        },
+                        "section_cnu": {
+                            "type": "string",
+                            "title": "Section CNU",
+                            "description": "Section disciplinaire (du Conseil National des Universités) de l'enseignant-chercheur nommé à l'IUF"
+                        },
+                        "lib_uai": {
+                            "type": "string",
+                            "title": "Etablissement d'appartenance d'origine",
+                            "description": "Etablissement d'enseignement supérieur d'appartenance de l'enseignant-chercheur lors de sa nomination à l'IUF"
+                        },
+                        "structure_recherche": {
+                            "type": "string",
+                            "title": "Structure de recherche",
+                            "description": "Structure de recherche de rattachement de l'enseignant-chercheur au moment de la nomination"
+                        },
+                        "sigle_structure": {
+                            "type": "string",
+                            "title": "Sigle de la structure de recherche",
+                            "description": "Sigle de la structure de recherche de rattachement de l'enseignant-chercheur au moment de la nomination"
+                        },
+                        "fiche_scanr": {
+                            "type": "string",
+                            "title": "Lien vers la fiche ScanR",
+                            "description": "Lien vers la fiche ScanR de la structure de recherche de l'enseignant-chercheur"
+                        },
+                        "groupe_de_corps": {
+                            "type": "string",
+                            "title": "Corps",
+                            "description": "Regroupement de corps de l'enseignant-chercheur nommé à l'IUF"
+                        },
+                        "lien_notice_idref": {
+                            "type": "string",
+                            "title": "Lien vers la notice IDREF",
+                            "description": "Lien vers la notice d'autorité sur le site IdRef de l'ABES : l’Agence Bibliographique de l’Enseignement Supérieur"
+                        },
+                        "categorie_nomination": {
+                            "type": "string",
+                            "title": "Catégorie de nomination",
+                            "description": "Catégorie de nomination à l'IUF : Junior ou Senior"
+                        },
+                        "membres": {
+                            "type": "string",
+                            "title": "Statut",
+                            "description": "Position actuelle du membre nommé à l'IUF"
+                        },
+                        "secteur_cnu": {
+                            "type": "string",
+                            "title": "Secteur CNU",
+                            "description": "Secteur disciplinaire (du Conseil National des Universités) de l'enseignant-chercheur nommé à l'IUF"
+                        },
+                        "groupe_cnu": {
+                            "type": "string",
+                            "title": "Groupe CNU",
+                            "description": "Groupe disciplinaire (du Conseil National des Universités) de l'enseignant-chercheur nommé à l'IUF"
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "Commune",
+                            "description": "Commune de l'établissement d'appartenance"
+                        },
+                        "dep": {
+                            "type": "string",
+                            "title": "Département",
+                            "description": "Département de l'établissement d'appartenance"
+                        },
+                        "acad": {
+                            "type": "string",
+                            "title": "Académie",
+                            "description": "Académie de l'établissement d'appartenance"
+                        },
+                        "region": {
+                            "type": "string",
+                            "title": "Région",
+                            "description": "Région de l'établissement d'appartenance"
+                        },
+                        "numero_national_de_structure_de_recherche": {
+                            "type": "string",
+                            "title": "Numéro national de structure de recherche",
+                            "description": "Identifiant national de la structure de recherche"
+                        },
+                        "idref": {
+                            "type": "string",
+                            "title": "Identifiant IdRef",
+                            "description": "Identifiant IdRef de l'ABES : l’Agence Bibliographique de l’Enseignement Supérieur"
+                        },
+                        "code_uai": {
+                            "type": "string",
+                            "title": "Code UAI de l'établissement d'origine",
+                            "description": "Code UAI (provenant de la BCE : base centrale des établissements) de l'établissement d'appartenance d'origine"
+                        },
+                        "code_sexe": {
+                            "type": "string",
+                            "title": "code sexe",
+                            "description": ""
+                        },
+                        "sexe": {
+                            "type": "string",
+                            "title": "Sexe",
+                            "description": "Sexe de l'enseignant-chercheur nommé à l'IUF"
+                        },
+                        "code_section_cnu": {
+                            "type": "string",
+                            "title": "Code de la section CNU",
+                            "description": "Code de la section disciplinaire (du Conseil National des Universités) de l'enseignant-chercheur nommé à l'IUF"
+                        },
+                        "code_groupe_cnu": {
+                            "type": "string",
+                            "title": "Code du groupe CNU",
+                            "description": "Code du groupe disciplinaire (du Conseil National des Universités) de l'enseignant-chercheur nommé à l'IUF"
+                        },
+                        "code_secteur_cnu": {
+                            "type": "string",
+                            "title": "Code du secteur CNU",
+                            "description": "Code du secteur disciplinaire (du Conseil National des Universités) de l'enseignant-chercheur nommé à l'IUF"
+                        },
+                        "code_region": {
+                            "type": "string",
+                            "title": "Code de la région",
+                            "description": "Code région de l'établissement d'appartenance"
+                        },
+                        "code_commune": {
+                            "type": "string",
+                            "title": "Code de la commune",
+                            "description": "Code de la commune de l'établissement d'appartenance"
+                        },
+                        "code_dep": {
+                            "type": "string",
+                            "title": "Code du département",
+                            "description": "Code du département de l'établissement d'appartenance"
+                        },
+                        "code_acad": {
+                            "type": "string",
+                            "title": "Code de l'académie",
+                            "description": "Code de l'académie de l'établissement d'appartenance"
+                        },
+                        "code_categorie_nomination": {
+                            "type": "number",
+                            "title": "Code de la catégorie de nomination",
+                            "description": "Code de la catégorie de nomination à l'IUF : Junior(1) ou Senior(2)"
+                        },
+                        "code_nb_nomination": {
+                            "type": "string",
+                            "title": "Code du type de nomination",
+                            "description": "Code du type de nomination prenant en considération la catégorie et l'antériorité de nomination à l'IUF"
+                        },
+                        "arborescence_disciplinaire": {
+                            "type": "string",
+                            "title": "Arborescence disciplinaire",
+                            "description": "Arborescence disciplinaire de la section CNU de l'enseignant-chercheur nommé membre"
+                        },
+                        "arborescence_geographique": {
+                            "type": "string",
+                            "title": "Arborescence géographique",
+                            "description": "Arborescence géographique de l'établissement d'appartenance de l'enseignant-chercheur nommé membre"
+                        },
+                        "geolocalisation": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Géolocalisation",
+                            "description": "Géolocalisation de l'établissement d'appartenance"
+                        },
+                        "code_paysage": {
+                            "type": "string",
+                            "title": "Code paysage de l'établissement",
+                            "description": "Code paysage de l'établissement d'appartenance"
+                        },
+                        "filiere": {
+                            "type": "string",
+                            "title": "Filière",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

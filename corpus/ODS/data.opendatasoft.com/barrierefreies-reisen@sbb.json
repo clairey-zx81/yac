@@ -1,0 +1,676 @@
+{
+    "title": "barrierefreies-reisen@sbb",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/barrierefreies-reisen@sbb"
+        }
+    ],
+    "definitions": {
+        "barrierefreies-reisen@sbb": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/barrierefreies-reisen@sbb_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "barrierefreies-reisen@sbb_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "didok": {
+                            "type": "string",
+                            "title": "didok",
+                            "description": ""
+                        },
+                        "stationsbezeichnung": {
+                            "type": "string",
+                            "title": "stationsbezeichnung",
+                            "description": ""
+                        },
+                        "visibility": {
+                            "type": "string",
+                            "title": "visibility",
+                            "description": ""
+                        },
+                        "bearbeitet_am": {
+                            "type": "string",
+                            "title": "Bearbeitet am",
+                            "description": ""
+                        },
+                        "stuetzpunktbahnhof": {
+                            "type": "string",
+                            "title": "stuetzpunktbahnhof",
+                            "description": ""
+                        },
+                        "mobilift": {
+                            "type": "string",
+                            "title": "mobilift",
+                            "description": ""
+                        },
+                        "faltrampe": {
+                            "type": "string",
+                            "title": "faltrampe",
+                            "description": ""
+                        },
+                        "barrierefreier_bahnhof": {
+                            "type": "string",
+                            "title": "barrierefreier_bahnhof",
+                            "description": ""
+                        },
+                        "sektor_de": {
+                            "type": "string",
+                            "title": "sektor_de",
+                            "description": ""
+                        },
+                        "sektor_fr": {
+                            "type": "string",
+                            "title": "sektor_fr",
+                            "description": ""
+                        },
+                        "sektor_it": {
+                            "type": "string",
+                            "title": "sektor_it",
+                            "description": ""
+                        },
+                        "sektor_en": {
+                            "type": "string",
+                            "title": "sektor_en",
+                            "description": ""
+                        },
+                        "treffpunkt_de": {
+                            "type": "string",
+                            "title": "treffpunkt_de",
+                            "description": ""
+                        },
+                        "treffpunkt_fr": {
+                            "type": "string",
+                            "title": "treffpunkt_fr",
+                            "description": ""
+                        },
+                        "treffpunkt_it": {
+                            "type": "string",
+                            "title": "treffpunkt_it",
+                            "description": ""
+                        },
+                        "treffpunkt_en": {
+                            "type": "string",
+                            "title": "treffpunkt_en",
+                            "description": ""
+                        },
+                        "voranmeldefrist_de": {
+                            "type": "string",
+                            "title": "voranmeldefrist_de",
+                            "description": ""
+                        },
+                        "voranmeldefrist_fr": {
+                            "type": "string",
+                            "title": "voranmeldefrist_fr",
+                            "description": ""
+                        },
+                        "voranmeldefrist_it": {
+                            "type": "string",
+                            "title": "voranmeldefrist_it",
+                            "description": ""
+                        },
+                        "voranmeldefrist_en": {
+                            "type": "string",
+                            "title": "voranmeldefrist_en",
+                            "description": ""
+                        },
+                        "bedienungszeiten_de": {
+                            "type": "string",
+                            "title": "bedienungszeiten_de",
+                            "description": ""
+                        },
+                        "bedienungszeiten_fr": {
+                            "type": "string",
+                            "title": "bedienungszeiten_fr",
+                            "description": ""
+                        },
+                        "bedienungszeiten_it": {
+                            "type": "string",
+                            "title": "bedienungszeiten_it",
+                            "description": ""
+                        },
+                        "bedienungszeiten_en": {
+                            "type": "string",
+                            "title": "bedienungszeiten_en",
+                            "description": ""
+                        },
+                        "treppenfrei": {
+                            "type": "string",
+                            "title": "treppenfrei",
+                            "description": ""
+                        },
+                        "rampe": {
+                            "type": "string",
+                            "title": "rampe",
+                            "description": ""
+                        },
+                        "ausnahme_zu_rampe_und_treppe_de": {
+                            "type": "string",
+                            "title": "ausnahme_zu_rampe_und_treppe_de",
+                            "description": ""
+                        },
+                        "ausnahme_zu_rampe_und_treppe_fr": {
+                            "type": "string",
+                            "title": "ausnahme_zu_rampe_und_treppe_fr",
+                            "description": ""
+                        },
+                        "ausnahme_zu_rampe_und_treppe_it": {
+                            "type": "string",
+                            "title": "ausnahme_zu_rampe_und_treppe_it",
+                            "description": ""
+                        },
+                        "ausnahme_zu_rampe_und_treppe_en": {
+                            "type": "string",
+                            "title": "ausnahme_zu_rampe_und_treppe_en",
+                            "description": ""
+                        },
+                        "lift_zu_perron": {
+                            "type": "string",
+                            "title": "lift_zu_perron",
+                            "description": ""
+                        },
+                        "standort_zu_lift_de": {
+                            "type": "string",
+                            "title": "standort_zu_lift_de",
+                            "description": ""
+                        },
+                        "standort_zu_lift_fr": {
+                            "type": "string",
+                            "title": "standort_zu_lift_fr",
+                            "description": ""
+                        },
+                        "standort_zu_lift_it": {
+                            "type": "string",
+                            "title": "standort_zu_lift_it",
+                            "description": ""
+                        },
+                        "standort_zu_lift_en": {
+                            "type": "string",
+                            "title": "standort_zu_lift_en",
+                            "description": ""
+                        },
+                        "perronhoehe_p55": {
+                            "type": "string",
+                            "title": "perronhoehe_P55",
+                            "description": ""
+                        },
+                        "ausnahme_zu_p55_de": {
+                            "type": "string",
+                            "title": "ausnahme_zu_P55_de",
+                            "description": ""
+                        },
+                        "ausnahme_zu_p55_fr": {
+                            "type": "string",
+                            "title": "ausnahme_zu_P55_fr",
+                            "description": ""
+                        },
+                        "ausnahme_zu_p55_it": {
+                            "type": "string",
+                            "title": "ausnahme_zu_P55_it",
+                            "description": ""
+                        },
+                        "ausnahme_zu_p55_en": {
+                            "type": "string",
+                            "title": "ausnahme_zu_P55_en",
+                            "description": ""
+                        },
+                        "taktile_sicherheitslinien": {
+                            "type": "string",
+                            "title": "taktile_sicherheitslinien",
+                            "description": ""
+                        },
+                        "induktionsverstaerker": {
+                            "type": "string",
+                            "title": "induktionsverstaerker",
+                            "description": ""
+                        },
+                        "sbb_rollstuhl": {
+                            "type": "string",
+                            "title": "sbb_rollstuhl",
+                            "description": ""
+                        },
+                        "rollstuhl_billet": {
+                            "type": "string",
+                            "title": "rollstuhl_billet",
+                            "description": ""
+                        },
+                        "rollstuhl_wc": {
+                            "type": "string",
+                            "title": "rollstuhl_wc",
+                            "description": ""
+                        },
+                        "eurokey_wc": {
+                            "type": "string",
+                            "title": "eurokey_wc",
+                            "description": ""
+                        },
+                        "dritte_dienstleitung": {
+                            "type": "string",
+                            "title": "dritte_dienstleitung",
+                            "description": ""
+                        },
+                        "beschreibung_zur_dritte_dienstleistung_de": {
+                            "type": "string",
+                            "title": "beschreibung_zur_dritte_dienstleistung_de",
+                            "description": ""
+                        },
+                        "beschreibung_zur_dritte_dienstleistung_fr": {
+                            "type": "string",
+                            "title": "beschreibung_zur_dritte_dienstleistung_fr",
+                            "description": ""
+                        },
+                        "beschreibung_zur_dritte_dienstleistung_it": {
+                            "type": "string",
+                            "title": "beschreibung_zur_dritte_dienstleistung_it",
+                            "description": ""
+                        },
+                        "beschreibung_zur_dritte_dienstleistung_en": {
+                            "type": "string",
+                            "title": "beschreibung_zur_dritte_dienstleistung_en",
+                            "description": ""
+                        },
+                        "zusaetzliche_informationen_de": {
+                            "type": "string",
+                            "title": "zusaetzliche_informationen_de",
+                            "description": ""
+                        },
+                        "zusaetzliche_informationen_fr": {
+                            "type": "string",
+                            "title": "zusaetzliche_informationen_fr",
+                            "description": ""
+                        },
+                        "zusaetzliche_informationen_it": {
+                            "type": "string",
+                            "title": "zusaetzliche_informationen_it",
+                            "description": ""
+                        },
+                        "zusaetzliche_informationen_en": {
+                            "type": "string",
+                            "title": "zusaetzliche_informationen_en",
+                            "description": ""
+                        },
+                        "aktuell_de": {
+                            "type": "string",
+                            "title": "aktuell_de",
+                            "description": ""
+                        },
+                        "aktuell_fr": {
+                            "type": "string",
+                            "title": "aktuell_fr",
+                            "description": ""
+                        },
+                        "aktuell_it": {
+                            "type": "string",
+                            "title": "aktuell_it",
+                            "description": ""
+                        },
+                        "aktuell_en": {
+                            "type": "string",
+                            "title": "aktuell_en",
+                            "description": ""
+                        },
+                        "prognose": {
+                            "type": "string",
+                            "title": "prognose",
+                            "description": ""
+                        },
+                        "status_bahnhof": {
+                            "type": "string",
+                            "title": "status_bahnhof",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

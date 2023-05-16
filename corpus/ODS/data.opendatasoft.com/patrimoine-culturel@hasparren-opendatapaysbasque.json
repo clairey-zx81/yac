@@ -1,0 +1,606 @@
+{
+    "title": "patrimoine-culturel@hasparren-opendatapaysbasque",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/patrimoine-culturel@hasparren-opendatapaysbasque"
+        }
+    ],
+    "definitions": {
+        "patrimoine-culturel@hasparren-opendatapaysbasque": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/patrimoine-culturel@hasparren-opendatapaysbasque_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "patrimoine-culturel@hasparren-opendatapaysbasque_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "source": {
+                            "type": "string",
+                            "title": "Source",
+                            "description": "Source d'obtention des données"
+                        },
+                        "nom": {
+                            "type": "string",
+                            "title": "Nom",
+                            "description": "Nom de l'équipement"
+                        },
+                        "adresse": {
+                            "type": "string",
+                            "title": "Adresse",
+                            "description": "Adresse de l'équipement"
+                        },
+                        "complement_adresse": {
+                            "type": "string",
+                            "title": "Complement Adresse",
+                            "description": "Complément d'adresse de l'équipement"
+                        },
+                        "code_postal": {
+                            "type": "string",
+                            "title": "Code Postal",
+                            "description": "Code postal de l'équipement"
+                        },
+                        "libelle_geographique": {
+                            "type": "string",
+                            "title": "libelle_geographique",
+                            "description": "Nom de la commune"
+                        },
+                        "code_insee": {
+                            "type": "string",
+                            "title": "code_insee",
+                            "description": "Code Insee de la commune d'implantation de l'équipement sans distinction des arrondissements\n"
+                        },
+                        "code_insee_arrondt": {
+                            "type": "string",
+                            "title": "Code Insee Arrondt",
+                            "description": "Code Insee de la commune d'implantation de l'équipement, avec distinction des arrondissements"
+                        },
+                        "identifiant_origine": {
+                            "type": "string",
+                            "title": "Identifiant origine",
+                            "description": "Identifiant de l'équipement dans la base de données d'origine"
+                        },
+                        "type_equipement_ou_lieu": {
+                            "type": "string",
+                            "title": "Type équipement ou lieu",
+                            "description": "Catégorie d'équipement ou de lieu"
+                        },
+                        "label_et_appellation": {
+                            "type": "string",
+                            "title": "Label et appellation",
+                            "description": "Label ou appellation de l'équipement"
+                        },
+                        "region": {
+                            "type": "string",
+                            "title": "Région",
+                            "description": "Libellé de la région dans laquelle se trouve l'équipement"
+                        },
+                        "domaine": {
+                            "type": "string",
+                            "title": "Domaine",
+                            "description": "Domaine principal de l'équipement"
+                        },
+                        "sous_domaines": {
+                            "type": "string",
+                            "title": "Sous-domaine",
+                            "description": "Sous-domaine(s) éventuel(s) de l'équipement"
+                        },
+                        "archeologie_detail": {
+                            "type": "string",
+                            "title": "Archéologie détail",
+                            "description": "Information supplémentaire pour certains lieux archéologiques"
+                        },
+                        "adresse_postale": {
+                            "type": "string",
+                            "title": "Adresse postale",
+                            "description": "Adresse postale de l'équipement"
+                        },
+                        "departement": {
+                            "type": "string",
+                            "title": "Département",
+                            "description": "Libellé du département dans lequel se trouve l'équipement"
+                        },
+                        "precision_equipement": {
+                            "type": "string",
+                            "title": "Précision équipement",
+                            "description": ""
+                        },
+                        "n_departement": {
+                            "type": "string",
+                            "title": "N_Département",
+                            "description": "Code du département dans lequel se trouve l'équipement"
+                        },
+                        "n_region": {
+                            "type": "string",
+                            "title": "N_Région",
+                            "description": "Code de la région dans laquelle se trouve l'équipement"
+                        },
+                        "annee_label": {
+                            "type": "string",
+                            "title": "Année_Label",
+                            "description": "Année d'obtention du label pour les librairies labellisées"
+                        },
+                        "fonction_1": {
+                            "type": "string",
+                            "title": "Fonction_1",
+                            "description": "Fonction principale"
+                        },
+                        "fonction_2": {
+                            "type": "string",
+                            "title": "Fonction_2",
+                            "description": "Fonction éventuelle"
+                        },
+                        "fonction_3": {
+                            "type": "string",
+                            "title": "Fonction_3",
+                            "description": "Fonction éventuelle"
+                        },
+                        "fonction_4": {
+                            "type": "string",
+                            "title": "Fonction_4",
+                            "description": "Fonction éventuelle"
+                        },
+                        "multiplexe": {
+                            "type": "string",
+                            "title": "Multiplexe",
+                            "description": "Indique si le cinéma est multiplexe ou non"
+                        },
+                        "type_de_cinema": {
+                            "type": "string",
+                            "title": "Type_de_cinema",
+                            "description": "Type de structure pour le cinéma : fixe ou itinérant"
+                        },
+                        "nombre_fauteuils_de_cinema": {
+                            "type": "string",
+                            "title": "Nombre_fauteuils_de_cinema",
+                            "description": "Nombre de fauteuils dans le cinéma"
+                        },
+                        "nombre_ecrans": {
+                            "type": "string",
+                            "title": "Nombre_ecrans",
+                            "description": "Nombre d'écrans dans le cinéma"
+                        },
+                        "nombre_de_salles_de_theatre": {
+                            "type": "string",
+                            "title": "Nombre_de_salles_de_theatre",
+                            "description": "Nombre de salles dans le théâtre"
+                        },
+                        "organisme_siege_du_theatre": {
+                            "type": "string",
+                            "title": "Organisme_Siège_du_theatre",
+                            "description": "Précision de l'organisme siège pour les théâtres concernés"
+                        },
+                        "jauge_du_theatre": {
+                            "type": "string",
+                            "title": "Jauge_du_theatre",
+                            "description": "Nombre de fauteuils dans le théâtre"
+                        },
+                        "code_du_reseau_de_bibliotheques": {
+                            "type": "string",
+                            "title": "Code_du_reseau_de_Bibliothèques",
+                            "description": "Identifiant du réseau auquel appartient une bibliothèque, lorsque c'est le cas"
+                        },
+                        "nom_du_reseau_de_bibliotheques": {
+                            "type": "string",
+                            "title": "Nom_du_reseau_de_Bibliothèques",
+                            "description": "Nom du réseau auquel appartient une bibliothèque, lorsque c'est le cas\n"
+                        },
+                        "nom_de_l_illustre": {
+                            "type": "string",
+                            "title": "Nom_de_l'Illustre",
+                            "description": "Nom de la maison de l'illustre"
+                        },
+                        "surface_bibliotheque": {
+                            "type": "string",
+                            "title": "Surface_Bibliothèque",
+                            "description": "Surface en mètres carrés de la bibliothèque"
+                        },
+                        "coordonnees_gps_lat_lon": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Coordonnees GPS [lat,lon]",
+                            "description": ""
+                        },
+                        "rang": {
+                            "type": "string",
+                            "title": "Rang",
+                            "description": ""
+                        },
+                        "ident": {
+                            "type": "string",
+                            "title": "Ident",
+                            "description": ""
+                        },
+                        "identifiant_deps_a_partir_de_2022": {
+                            "type": "string",
+                            "title": "Identifiant_deps_à_partir_de_2022",
+                            "description": ""
+                        },
+                        "libelle_epci": {
+                            "type": "string",
+                            "title": "Libelle_EPCI",
+                            "description": ""
+                        },
+                        "code_insee_epci": {
+                            "type": "string",
+                            "title": "Code_Insee_EPCI",
+                            "description": ""
+                        },
+                        "demographie_entree": {
+                            "type": "string",
+                            "title": "Démographie_entrée",
+                            "description": ""
+                        },
+                        "demographie_sortie": {
+                            "type": "string",
+                            "title": "Démographie_sortie",
+                            "description": ""
+                        },
+                        "demographie_detail": {
+                            "type": "string",
+                            "title": "Démographie_détail",
+                            "description": ""
+                        },
+                        "equipement_multi_domaine": {
+                            "type": "string",
+                            "title": "Equipement multi-domaine",
+                            "description": ""
+                        },
+                        "identifiant_deps_old": {
+                            "type": "string",
+                            "title": "Identifiant_deps_old",
+                            "description": ""
+                        },
+                        "precision_protection_sites_et_monuments": {
+                            "type": "string",
+                            "title": "Précision protection sites et monuments",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

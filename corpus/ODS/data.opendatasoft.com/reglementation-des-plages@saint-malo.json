@@ -1,0 +1,501 @@
+{
+    "title": "reglementation-des-plages@saint-malo",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/reglementation-des-plages@saint-malo"
+        }
+    ],
+    "definitions": {
+        "reglementation-des-plages@saint-malo": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/reglementation-des-plages@saint-malo_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "reglementation-des-plages@saint-malo_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "numero": {
+                            "type": "integer",
+                            "title": "NUMERO",
+                            "description": "Numéro d'ordre de la plage, du sud au nord de la commune"
+                        },
+                        "plage": {
+                            "type": "string",
+                            "title": "PLAGE",
+                            "description": "Nom complet de la plage"
+                        },
+                        "nom_court": {
+                            "type": "string",
+                            "title": "NOM_COURT",
+                            "description": ""
+                        },
+                        "vehicules": {
+                            "type": "string",
+                            "title": "VEHICULES",
+                            "description": "Réglementation associée à la présence et à la circulation d'engins automobiles"
+                        },
+                        "animaux": {
+                            "type": "string",
+                            "title": "ANIMAUX",
+                            "description": "Réglementation associée à la présence d'animaux sur les plages"
+                        },
+                        "alcool": {
+                            "type": "string",
+                            "title": "ALCOOL",
+                            "description": "Réglementation associée à la consommation d'alcool sur les plages"
+                        },
+                        "baignade": {
+                            "type": "string",
+                            "title": "BAIGNADE",
+                            "description": "Réglementation associée à la baignade"
+                        },
+                        "surveill": {
+                            "type": "string",
+                            "title": "SURVEILLANCE",
+                            "description": "Indique si la plage est surveillée en période estivale, par des maitres nageurs sauveteurs et/ou des CRS. Une plage surveillée comporte un poste de secours "
+                        },
+                        "bacterio": {
+                            "type": "string",
+                            "title": "BACTERIOLOGIE",
+                            "description": "Indique la présence d'un point de prélèvement pour le classement de la qualité des eaux de baignade, sous la responsabilité de l'Agence Régionale de Santé"
+                        },
+                        "peche": {
+                            "type": "string",
+                            "title": "PECHE",
+                            "description": "Classement de salubrité pour la pêche à pied de coquillages vivants"
+                        },
+                        "toilettes": {
+                            "type": "string",
+                            "title": "TOILETTES",
+                            "description": "Indique la présence de toilettes publiques à proximité de la plage"
+                        },
+                        "carenage": {
+                            "type": "string",
+                            "title": "CARENAGE",
+                            "description": "Réglementation associée au carénage des bateaux"
+                        },
+                        "chenal_nom": {
+                            "type": "string",
+                            "title": "CHENAL_NOM",
+                            "description": "Nom et numéro des chenaux saisonniers, mis en place pour l'été. Dans ces chenaux, la baignade, la plongée sous-marine et les activités nautiques autres que celles prévues dans le chenal considéré, sont interdites."
+                        },
+                        "largeur": {
+                            "type": "integer",
+                            "title": "CHENAL_LARGEUR",
+                            "description": "Largeur en mètres du chenal"
+                        },
+                        "engins": {
+                            "type": "string",
+                            "title": "CHENAL_ENGINS",
+                            "description": "Engins autorisés dans le chenal"
+                        },
+                        "voile": {
+                            "type": "string",
+                            "title": "VOILE",
+                            "description": "Réglementation associée aux dériveurs et catamarans légers"
+                        },
+                        "kayak": {
+                            "type": "string",
+                            "title": "KAYAK",
+                            "description": "Réglementation associée aux kayaks, canoës et avirons de mer"
+                        },
+                        "planche": {
+                            "type": "string",
+                            "title": "PLANCHE",
+                            "description": "Réglementation associée à la pratique de la planche à voile"
+                        },
+                        "kite": {
+                            "type": "string",
+                            "title": "KITE",
+                            "description": "Réglementation associée au kite surf, ou planche nautique aérotractée"
+                        },
+                        "char": {
+                            "type": "string",
+                            "title": "CHAR",
+                            "description": "Réglementation associée aux engins de type char à voile, speed sail ou char à cerf-volant"
+                        },
+                        "surf": {
+                            "type": "string",
+                            "title": "SURF",
+                            "description": "Réglementation associée à la pratique du surf"
+                        },
+                        "paddle": {
+                            "type": "string",
+                            "title": "PADDLE",
+                            "description": "Réglementation associée au Stand Up Paddle (abrégé en SUP) "
+                        },
+                        "vnm": {
+                            "type": "string",
+                            "title": "VNM",
+                            "description": "Réglementation associée aux véhicules nautiques à moteur tels que scooter, moto des mers, jetski "
+                        },
+                        "details": {
+                            "type": "string",
+                            "title": "DETAILS",
+                            "description": "Détails supplémentaires sur la réglementation associée à la plage"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

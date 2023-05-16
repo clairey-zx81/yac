@@ -1,0 +1,532 @@
+{
+    "title": "all-sensors-real-time-status@melbournetestbed",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/all-sensors-real-time-status@melbournetestbed"
+        }
+    ],
+    "definitions": {
+        "all-sensors-real-time-status@melbournetestbed": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/all-sensors-real-time-status@melbournetestbed_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "all-sensors-real-time-status@melbournetestbed_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "type_measure": {
+                            "type": "string",
+                            "title": "Type Measure",
+                            "description": ""
+                        },
+                        "sensor_name": {
+                            "type": "string",
+                            "title": "Sensor Name",
+                            "description": ""
+                        },
+                        "time": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "time",
+                            "description": ""
+                        },
+                        "dev_id": {
+                            "type": "string",
+                            "title": "dev_id",
+                            "description": ""
+                        },
+                        "battery": {
+                            "type": "number",
+                            "title": "battery",
+                            "description": ""
+                        },
+                        "temperature": {
+                            "type": "number",
+                            "title": "temperature",
+                            "description": ""
+                        },
+                        "humidity": {
+                            "type": "number",
+                            "title": "humidity",
+                            "description": ""
+                        },
+                        "solarpanel": {
+                            "type": "number",
+                            "title": "solarPanel",
+                            "description": ""
+                        },
+                        "command": {
+                            "type": "integer",
+                            "title": "command",
+                            "description": ""
+                        },
+                        "solar": {
+                            "type": "integer",
+                            "title": "solar",
+                            "description": ""
+                        },
+                        "precipitation": {
+                            "type": "integer",
+                            "title": "precipitation",
+                            "description": ""
+                        },
+                        "strikes": {
+                            "type": "integer",
+                            "title": "strikes",
+                            "description": ""
+                        },
+                        "windspeed": {
+                            "type": "number",
+                            "title": "windSpeed",
+                            "description": ""
+                        },
+                        "winddirection": {
+                            "type": "number",
+                            "title": "windDirection",
+                            "description": ""
+                        },
+                        "gustspeed": {
+                            "type": "number",
+                            "title": "gustSpeed",
+                            "description": ""
+                        },
+                        "airtemp": {
+                            "type": "number",
+                            "title": "airTemp",
+                            "description": ""
+                        },
+                        "vapourpressure": {
+                            "type": "number",
+                            "title": "vapourPressure",
+                            "description": ""
+                        },
+                        "atmosphericpressure": {
+                            "type": "number",
+                            "title": "atmosphericPressure",
+                            "description": ""
+                        },
+                        "relativehumidity": {
+                            "type": "integer",
+                            "title": "relativeHumidity",
+                            "description": ""
+                        },
+                        "motion": {
+                            "type": "integer",
+                            "title": "motion",
+                            "description": ""
+                        },
+                        "intrip": {
+                            "type": "integer",
+                            "title": "inTrip",
+                            "description": ""
+                        },
+                        "averagespl": {
+                            "type": "integer",
+                            "title": "averageSpl",
+                            "description": ""
+                        },
+                        "carbonmonoxide": {
+                            "type": "integer",
+                            "title": "carbonMonoxide",
+                            "description": ""
+                        },
+                        "nitrogendioxide": {
+                            "type": "integer",
+                            "title": "nitrogenDioxide",
+                            "description": ""
+                        },
+                        "ozone": {
+                            "type": "integer",
+                            "title": "ozone",
+                            "description": ""
+                        },
+                        "particulateserr": {
+                            "type": "integer",
+                            "title": "particulatesErr",
+                            "description": ""
+                        },
+                        "particulatesvsn": {
+                            "type": "integer",
+                            "title": "particulatesVsn",
+                            "description": ""
+                        },
+                        "peakspl": {
+                            "type": "integer",
+                            "title": "peakSpl",
+                            "description": ""
+                        },
+                        "pm1": {
+                            "type": "integer",
+                            "title": "pm1",
+                            "description": ""
+                        },
+                        "pm10": {
+                            "type": "integer",
+                            "title": "pm10",
+                            "description": ""
+                        },
+                        "pm25": {
+                            "type": "integer",
+                            "title": "pm25",
+                            "description": ""
+                        },
+                        "lat_long": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Lat Long",
+                            "description": ""
+                        },
+                        "location_picture_hyperlink": {
+                            "type": "string",
+                            "title": "Location Picture Hyperlink",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

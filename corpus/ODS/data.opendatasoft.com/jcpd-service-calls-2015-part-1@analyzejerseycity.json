@@ -1,0 +1,484 @@
+{
+    "title": "jcpd-service-calls-2015-part-1@analyzejerseycity",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/jcpd-service-calls-2015-part-1@analyzejerseycity"
+        }
+    ],
+    "definitions": {
+        "jcpd-service-calls-2015-part-1@analyzejerseycity": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/jcpd-service-calls-2015-part-1@analyzejerseycity_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "jcpd-service-calls-2015-part-1@analyzejerseycity_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "event_number": {
+                            "type": "string",
+                            "title": "Event Number",
+                            "description": ""
+                        },
+                        "time_received": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Time Received",
+                            "description": ""
+                        },
+                        "time_dispatched": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Time Dispatched",
+                            "description": ""
+                        },
+                        "time_arrived": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Time Arrived",
+                            "description": ""
+                        },
+                        "callcode": {
+                            "type": "string",
+                            "title": "CALLCODE",
+                            "description": ""
+                        },
+                        "call_code_description": {
+                            "type": "string",
+                            "title": "Call Code Description",
+                            "description": ""
+                        },
+                        "call_type": {
+                            "type": "string",
+                            "title": "Call Type",
+                            "description": ""
+                        },
+                        "is_primary": {
+                            "type": "string",
+                            "title": "Is Primary",
+                            "description": ""
+                        },
+                        "address": {
+                            "type": "string",
+                            "title": "Address",
+                            "description": ""
+                        },
+                        "city": {
+                            "type": "string",
+                            "title": "City",
+                            "description": ""
+                        },
+                        "geo_count": {
+                            "type": "string",
+                            "title": "GEO COUNT",
+                            "description": ""
+                        },
+                        "geo_error": {
+                            "type": "string",
+                            "title": "GEO ERROR",
+                            "description": ""
+                        },
+                        "call_category": {
+                            "type": "string",
+                            "title": "Call Category",
+                            "description": ""
+                        },
+                        "description": {
+                            "type": "string",
+                            "title": "Description",
+                            "description": ""
+                        },
+                        "category": {
+                            "type": "string",
+                            "title": "Category Code",
+                            "description": ""
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Coordinates",
+                            "description": ""
+                        },
+                        "priority": {
+                            "type": "string",
+                            "title": "Priority",
+                            "description": ""
+                        },
+                        "time_elapsed": {
+                            "type": "string",
+                            "title": "Time Elapsed",
+                            "description": ""
+                        },
+                        "injury": {
+                            "type": "string",
+                            "title": "Injury",
+                            "description": ""
+                        },
+                        "district": {
+                            "type": "string",
+                            "title": "District",
+                            "description": ""
+                        },
+                        "shift": {
+                            "type": "string",
+                            "title": "SHIFT",
+                            "description": ""
+                        },
+                        "unit_id": {
+                            "type": "string",
+                            "title": "UNIT ID",
+                            "description": ""
+                        },
+                        "geo_error0": {
+                            "type": "string",
+                            "title": "GEO ERROR",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,522 @@
+{
+    "title": "points-verts-de-ladeps@spi-digitalwallonia",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/points-verts-de-ladeps@spi-digitalwallonia"
+        }
+    ],
+    "definitions": {
+        "points-verts-de-ladeps@spi-digitalwallonia": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/points-verts-de-ladeps@spi-digitalwallonia_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "points-verts-de-ladeps@spi-digitalwallonia_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "title": "id",
+                            "description": "Identifiant numérique unique de la marche."
+                        },
+                        "activite": {
+                            "type": "string",
+                            "title": "activite",
+                            "description": "Activité principale - 2 valeurs possibles : Marche ou Orientation"
+                        },
+                        "ndeg_pv": {
+                            "type": "string",
+                            "title": "ndeg_pv",
+                            "description": "Code de la Marche ADEPS, commençant par la première lettre de la province, et suivi d'un numéro sur 3 chiffres. Ce code est généralement le même d'une année à l'autre pour les marches ADEPS ayant lieu à la même période chaque année."
+                        },
+                        "groupement": {
+                            "type": "string",
+                            "title": "groupement",
+                            "description": "Nom du groupement organisateur de la marche"
+                        },
+                        "entite": {
+                            "type": "string",
+                            "title": "entite",
+                            "description": "Entité où se déroulera la marche"
+                        },
+                        "latitude": {
+                            "type": "string",
+                            "title": "latitude",
+                            "description": "Coordonnée GPS"
+                        },
+                        "longitude": {
+                            "type": "string",
+                            "title": "longitude",
+                            "description": "Coordonnée GPS"
+                        },
+                        "ign": {
+                            "type": "string",
+                            "title": "ign",
+                            "description": "Numéro de la carte IGN de la région où se déroulera la marche"
+                        },
+                        "localite": {
+                            "type": "string",
+                            "title": "localite",
+                            "description": "Localité ou commune où se déroulera la marche"
+                        },
+                        "gare": {
+                            "type": "string",
+                            "title": "gare",
+                            "description": "Gare SNCB ou arrêt TEC/STIB le plus proche du lieu de rendez-vous (si la marche est accessible en transports en commun)"
+                        },
+                        "infos_rendez_vous": {
+                            "type": "string",
+                            "title": "infos_rendez_vous",
+                            "description": "Informations complémentaires sur le lieu de rendez-vous"
+                        },
+                        "province": {
+                            "type": "string",
+                            "title": "province",
+                            "description": "Le nom de la province où se déroulera la marche"
+                        },
+                        "nom": {
+                            "type": "string",
+                            "title": "nom",
+                            "description": "Nom du responsable de la marche"
+                        },
+                        "prenom": {
+                            "type": "string",
+                            "title": "prenom",
+                            "description": "Prénom du responsable de la marche"
+                        },
+                        "gsm": {
+                            "type": "string",
+                            "title": "gsm",
+                            "description": "Numéro de GSM du responsable de la marche"
+                        },
+                        "statut": {
+                            "type": "string",
+                            "title": "statut",
+                            "description": "3 valeurs possibles :\n- OK (Pas de changement depuis l'impression du calendrier \"papier\" des marches ADEPS)\n- Modifié (une ou plusieurs modifications ont eu lieu sur cette marche depuis l'impression de la version \"papier\")\n- Annulé (Marche annulée)"
+                        },
+                        "lieu_de_rendez_vous": {
+                            "type": "string",
+                            "title": "lieu_de_rendez_vous",
+                            "description": "Adresse du lieu \"secrétariat\" d'accueil le jour la marche"
+                        },
+                        "date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "date",
+                            "description": "Date de la marche"
+                        },
+                        "15km": {
+                            "type": "string",
+                            "title": "15km",
+                            "description": "Parcours supplémentaire de marche de 15km (Oui/Non)"
+                        },
+                        "pmr": {
+                            "type": "string",
+                            "title": "PMR",
+                            "description": "Parcours de 5 Km accessible aux personnes à mobilité réduite accompagnées et aux landaus (oui/non)"
+                        },
+                        "poussettes": {
+                            "type": "string",
+                            "title": "Poussettes",
+                            "description": "Parcours de 5 km accessible aux landaus (oui/non)"
+                        },
+                        "orientation": {
+                            "type": "string",
+                            "title": "Orientation",
+                            "description": "Parcours supplémentaire d'orientation de +/- 8km Cartes I.G.N (oui/non)"
+                        },
+                        "balade_guidee": {
+                            "type": "string",
+                            "title": "Balade guidée",
+                            "description": "Balade guidée Nature (oui/non)"
+                        },
+                        "10km": {
+                            "type": "string",
+                            "title": "10km",
+                            "description": "Parcours supplémentaire de marche de +/- 10km (oui/non)"
+                        },
+                        "velo": {
+                            "type": "string",
+                            "title": "Vélo",
+                            "description": "Parcours supplémentaire de vélo de +/- 20km (oui/non)"
+                        },
+                        "vtt": {
+                            "type": "string",
+                            "title": "VTT",
+                            "description": "Parcours supplémentaire de vélo tout-terrain de +/- 20km (oui/non)"
+                        },
+                        "ravitaillement": {
+                            "type": "string",
+                            "title": "Ravitaillement",
+                            "description": "Présence d'un point de ravitaillement dans le parcours (oui/non)"
+                        },
+                        "bewapp": {
+                            "type": "string",
+                            "title": "BeWaPP",
+                            "description": "Point Vert participant à l'action \"Wallonie Plus Propre\" (oui/non)"
+                        },
+                        "adep_sante": {
+                            "type": "string",
+                            "title": "Adep'santé",
+                            "description": "Point Vert participant à l'action \"Adep'Santé\" (oui/non)"
+                        },
+                        "geopoint": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geopoint",
+                            "description": "Coordonnées GPS du lieu de rendez-vous"
+                        },
+                        "traces_gpx": {
+                            "type": "string",
+                            "title": "traces_gpx",
+                            "description": "Tableau JSON des tracés GPX de la marche"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,489 @@
+{
+    "title": "ares-referentiel-des-implantations@ares-digitalwallonia",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/ares-referentiel-des-implantations@ares-digitalwallonia"
+        }
+    ],
+    "definitions": {
+        "ares-referentiel-des-implantations@ares-digitalwallonia": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ares-referentiel-des-implantations@ares-digitalwallonia_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "ares-referentiel-des-implantations@ares-digitalwallonia_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "active": {
+                            "type": "string",
+                            "title": "Active",
+                            "description": "Indique si l'implantation est active pour l'année académique en cours"
+                        },
+                        "type_d_etablissement": {
+                            "type": "string",
+                            "title": "Type d'établissement",
+                            "description": "Type d’établissement"
+                        },
+                        "ndegfase_etablissement": {
+                            "type": "string",
+                            "title": "N°FASE établissement",
+                            "description": "Identifiant unique de l'établissement d'enseignement supérieur dans le référentiel des établissements d'enseignement (FASE) de la FWB "
+                        },
+                        "nom_court_etablissement": {
+                            "type": "string",
+                            "title": "Nom court établissement",
+                            "description": "Nom court de l'établissement"
+                        },
+                        "nom_usuel_etablissement": {
+                            "type": "string",
+                            "title": "Nom usuel établissement",
+                            "description": "Nom usuel de l'établissement"
+                        },
+                        "ndegfase_implantation": {
+                            "type": "string",
+                            "title": "N°FASE implantation",
+                            "description": "Identifiant unique de l'implantation d'enseignement supérieur dans le référentiel des établissements d'enseignement (FASE) de la FWB "
+                        },
+                        "nom_usuel_implantation": {
+                            "type": "string",
+                            "title": "Nom usuel implantation",
+                            "description": "Nom usuel de l'implantation"
+                        },
+                        "nom_long_implantation": {
+                            "type": "string",
+                            "title": "Nom long implantation",
+                            "description": "Nom long de l'implantation"
+                        },
+                        "arrondissement_administratif_implantation": {
+                            "type": "string",
+                            "title": "Arrondissement administratif implantation",
+                            "description": "Arrondissement administratif de l'implantation (à partir du 01/01/2019)"
+                        },
+                        "adresse_implantation": {
+                            "type": "string",
+                            "title": "Adresse implantation",
+                            "description": "Adresse de l'implantation"
+                        },
+                        "complement_adresse_implantation": {
+                            "type": "string",
+                            "title": "Complément adresse implantation",
+                            "description": "Complément adresse de l'implantation"
+                        },
+                        "code_postal_implantation": {
+                            "type": "string",
+                            "title": "Code postal implantation",
+                            "description": "Code postal de l'implantation"
+                        },
+                        "localite_implantation": {
+                            "type": "string",
+                            "title": "Localité implantation",
+                            "description": "Localité de l'implantation"
+                        },
+                        "commune_implantation": {
+                            "type": "string",
+                            "title": "Commune implantation",
+                            "description": "Commune de l'implantation"
+                        },
+                        "bassin_implantation": {
+                            "type": "string",
+                            "title": "Bassin implantation",
+                            "description": "Bassin de l'implantation"
+                        },
+                        "arrondissement_judiciaire_implantation": {
+                            "type": "string",
+                            "title": "Arrondissement judiciaire implantation",
+                            "description": "Arrondissement judiciaire de l'implantation"
+                        },
+                        "province_implantation": {
+                            "type": "string",
+                            "title": "Province implantation",
+                            "description": "Province de l'implantation"
+                        },
+                        "region_implantation": {
+                            "type": "string",
+                            "title": "Région implantation",
+                            "description": "Région de l'implantation"
+                        },
+                        "latitude_implantation": {
+                            "type": "number",
+                            "title": "Latitude implantation",
+                            "description": "Latitude de l'implantation"
+                        },
+                        "longitude_implantation": {
+                            "type": "string",
+                            "title": "Longitude implantation",
+                            "description": "Longitude de l'implantation"
+                        },
+                        "geo_impl": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_impl",
+                            "description": "Coordonnées géographiques de l'implantation (utilisé pour la carte en ligne)"
+                        },
+                        "date_d_ouverture_implant": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date d'ouverture [implant.]",
+                            "description": ""
+                        },
+                        "date_de_fermeture_implant": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de fermeture [implant.]",
+                            "description": ""
+                        },
+                        "date_de_fin_de_validite_lien_etabl_impl": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de fin de validité [lien établ.-impl.]",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

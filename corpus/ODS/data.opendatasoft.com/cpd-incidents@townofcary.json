@@ -1,0 +1,539 @@
+{
+    "title": "cpd-incidents@townofcary",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/cpd-incidents@townofcary"
+        }
+    ],
+    "definitions": {
+        "cpd-incidents@townofcary": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/cpd-incidents@townofcary_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "cpd-incidents@townofcary_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "crime_category": {
+                            "type": "string",
+                            "title": "Crime Category",
+                            "description": "Categories for different crime types as defined by NIBRS."
+                        },
+                        "crime_type": {
+                            "type": "string",
+                            "title": "Crime Type",
+                            "description": "Description of UCR with respect to crime category."
+                        },
+                        "ucr": {
+                            "type": "string",
+                            "title": "UCR",
+                            "description": "Standard codes for Uniform Crime Reporting"
+                        },
+                        "map_reference": {
+                            "type": "string",
+                            "title": "Map Reference",
+                            "description": ""
+                        },
+                        "incident_number": {
+                            "type": "string",
+                            "title": "Incident Number",
+                            "description": "Identification number which corresponds to the incident."
+                        },
+                        "date_from": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Begin Date Of Occurrence",
+                            "description": "Date when the incident first occurred."
+                        },
+                        "from_time": {
+                            "type": "string",
+                            "title": "Begin Time Of Occurrence",
+                            "description": "Beginning time when the incident first occurred."
+                        },
+                        "date_to": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "End Date Of Occurrence",
+                            "description": "Date which marks the end of the occurrence."
+                        },
+                        "to_time": {
+                            "type": "string",
+                            "title": "End Time Of Occurrence",
+                            "description": "Time marking the end of the occurrence."
+                        },
+                        "crimeday": {
+                            "type": "string",
+                            "title": "Crime Day",
+                            "description": "Day of the week the incident occurred."
+                        },
+                        "geocode": {
+                            "type": "string",
+                            "title": "Geo Code",
+                            "description": "Name of the street in which the incident was reported."
+                        },
+                        "location_category": {
+                            "type": "string",
+                            "title": "Location Category",
+                            "description": "Description of the type of location where incident was reported."
+                        },
+                        "district": {
+                            "type": "string",
+                            "title": "District",
+                            "description": "The district of the assigned area of patrol in which the incident occurred.  Several beats make up a single district."
+                        },
+                        "beat_number": {
+                            "type": "string",
+                            "title": "Beat Number",
+                            "description": "The assigned area of patrol in which the incident occurred."
+                        },
+                        "location": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Location",
+                            "description": "Geographical coordinates of the location which corresponds to the incident."
+                        },
+                        "id": {
+                            "type": "string",
+                            "title": "ID",
+                            "description": "Unique Record ID"
+                        },
+                        "lat": {
+                            "type": "number",
+                            "title": "Lat",
+                            "description": "Latitude which corresponds to location."
+                        },
+                        "lon": {
+                            "type": "number",
+                            "title": "Lon",
+                            "description": "Longitude which corresponds to location."
+                        },
+                        "chrgcnt": {
+                            "type": "string",
+                            "title": "Charge Count",
+                            "description": "Number of charges stemming from the incident."
+                        },
+                        "neighborhd_id": {
+                            "type": "string",
+                            "title": "Neighborhood ID",
+                            "description": "ID field which corresponds to the apartment complex."
+                        },
+                        "apartment_complex": {
+                            "type": "string",
+                            "title": "Apartment Complex",
+                            "description": "Apartment complex in which the incident occurred."
+                        },
+                        "residential_subdivision": {
+                            "type": "string",
+                            "title": "Residential Subdivision",
+                            "description": "Name of residential area in which the incident occurred."
+                        },
+                        "subdivisn_id": {
+                            "type": "string",
+                            "title": "Subdivision ID",
+                            "description": "ID field which corresponds to the residential subdivision."
+                        },
+                        "activity_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Phx Activity Date",
+                            "description": "Last date a Project Phoenix Community changed their active status."
+                        },
+                        "phxrecordstatus": {
+                            "type": "string",
+                            "title": "Phx Record Status",
+                            "description": "For Project Phoenix participants, indicates if incident occurred when apartment was active in the program."
+                        },
+                        "phxcommunity": {
+                            "type": "string",
+                            "title": "Phx Community",
+                            "description": "Indicates if the corresponding apartment complex is currently a Project Phoenix participant."
+                        },
+                        "phxstatus": {
+                            "type": "string",
+                            "title": "Phx Status",
+                            "description": "For Project Phoenix participants, indicates if corresponding apartment complex is currently active."
+                        },
+                        "record": {
+                            "type": "integer",
+                            "title": "Record",
+                            "description": "Unique Record in same order as initial data set."
+                        },
+                        "offensecategory": {
+                            "type": "string",
+                            "title": "Offense Category",
+                            "description": ""
+                        },
+                        "violentproperty": {
+                            "type": "string",
+                            "title": "Violent Property",
+                            "description": ""
+                        },
+                        "timeframe": {
+                            "type": "string",
+                            "title": "timeframe",
+                            "description": ""
+                        },
+                        "domestic": {
+                            "type": "string",
+                            "title": "domestic",
+                            "description": ""
+                        },
+                        "total_incidents": {
+                            "type": "integer",
+                            "title": "Total Incidents",
+                            "description": "Number of incidents associated with ID."
+                        },
+                        "year": {
+                            "type": "string",
+                            "title": "Year",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

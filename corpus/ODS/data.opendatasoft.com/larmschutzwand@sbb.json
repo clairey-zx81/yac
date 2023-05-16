@@ -1,0 +1,511 @@
+{
+    "title": "larmschutzwand@sbb",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/larmschutzwand@sbb"
+        }
+    ],
+    "definitions": {
+        "larmschutzwand@sbb": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/larmschutzwand@sbb_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "larmschutzwand@sbb_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "linie": {
+                            "type": "integer",
+                            "title": "LINIE",
+                            "description": ""
+                        },
+                        "km": {
+                            "type": "number",
+                            "title": "KM",
+                            "description": ""
+                        },
+                        "bezeichnung": {
+                            "type": "string",
+                            "title": "BEZEICHNUNG",
+                            "description": ""
+                        },
+                        "lage": {
+                            "type": "string",
+                            "title": "LAGE",
+                            "description": ""
+                        },
+                        "bauwerk_name": {
+                            "type": "string",
+                            "title": "BAUWERK_NAME",
+                            "description": ""
+                        },
+                        "objektname": {
+                            "type": "string",
+                            "title": "OBJEKTNAME",
+                            "description": "Name der Lärmschutzwand"
+                        },
+                        "nahere_bezeichnung": {
+                            "type": "string",
+                            "title": "NaHERE BEZEICHNUNG",
+                            "description": ""
+                        },
+                        "b_jahr": {
+                            "type": "string",
+                            "title": "B-JAHR",
+                            "description": "Baujahr der Lärmschutzwand"
+                        },
+                        "besonderheit": {
+                            "type": "string",
+                            "title": "BESONDERHEIT",
+                            "description": "Besondere Merkmale der Lärrmschutzwand"
+                        },
+                        "h_ab_sok": {
+                            "type": "number",
+                            "title": "H AB SOK",
+                            "description": "Höhe der Lärmschutzwand in Metern ab Sockeloberkante SOK"
+                        },
+                        "lange": {
+                            "type": "number",
+                            "title": "LaNGE",
+                            "description": "Länge der Lärmschutzwand in Metern"
+                        },
+                        "material": {
+                            "type": "string",
+                            "title": "MATERIAL",
+                            "description": "Information zum Konstruktionsmaterial der Lärmschutzwand"
+                        },
+                        "bem_material": {
+                            "type": "string",
+                            "title": "BEM MATERIAL",
+                            "description": "Zusatzinformation zum Material der Mauer\n"
+                        },
+                        "auf_bahnkorper": {
+                            "type": "string",
+                            "title": "AUF BAHNKoRPER",
+                            "description": ""
+                        },
+                        "distanz_zu_gl": {
+                            "type": "number",
+                            "title": "DISTANZ ZU GL",
+                            "description": ""
+                        },
+                        "h_ab_ok_terr": {
+                            "type": "number",
+                            "title": "H AB OK TERR",
+                            "description": "Höhe der Lärmschutzwand in Metern ab Boden"
+                        },
+                        "ausgleichsbrett": {
+                            "type": "string",
+                            "title": "AUSGLEICHSBRETT",
+                            "description": "Information zum Teil zwischen Fundament und Lärmschutzwand"
+                        },
+                        "bem_ausgl_brett": {
+                            "type": "string",
+                            "title": "BEM AUSGL BRETT",
+                            "description": "Zusatzinformation zum Ausgleichsbrett (Höhe)"
+                        },
+                        "absorption": {
+                            "type": "string",
+                            "title": "ABSORPTION",
+                            "description": "Information zur Art der Lärmdämpfung"
+                        },
+                        "prod_typ": {
+                            "type": "string",
+                            "title": "PROD TYP",
+                            "description": "Information zum Konstruktionsmaterial der Lärmschutzwand"
+                        },
+                        "produkt": {
+                            "type": "string",
+                            "title": "PRODUKT",
+                            "description": ""
+                        },
+                        "befestigung_wpf": {
+                            "type": "string",
+                            "title": "BEFESTIGUNG WPF",
+                            "description": ""
+                        },
+                        "fundament": {
+                            "type": "string",
+                            "title": "FUNDAMENT",
+                            "description": "Information zum Fundament der Lärmschutzwand."
+                        },
+                        "fund_typ": {
+                            "type": "string",
+                            "title": "FUND TYP",
+                            "description": "Information zum Fundament der Lärmschutzwand."
+                        },
+                        "geopos2": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geopos2",
+                            "description": ""
+                        },
+                        "geopos": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geopos",
+                            "description": ""
+                        },
+                        "geoshape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geoshape",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

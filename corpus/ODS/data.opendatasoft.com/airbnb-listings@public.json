@@ -1,0 +1,816 @@
+{
+    "title": "airbnb-listings@public",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/airbnb-listings@public"
+        }
+    ],
+    "definitions": {
+        "airbnb-listings@public": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/airbnb-listings@public_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "airbnb-listings@public_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "title": "ID",
+                            "description": ""
+                        },
+                        "listing_url": {
+                            "type": "string",
+                            "title": "Listing Url",
+                            "description": ""
+                        },
+                        "scrape_id": {
+                            "type": "string",
+                            "title": "Scrape ID",
+                            "description": ""
+                        },
+                        "last_scraped": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Last Scraped",
+                            "description": ""
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "Name",
+                            "description": ""
+                        },
+                        "summary": {
+                            "type": "string",
+                            "title": "Summary",
+                            "description": ""
+                        },
+                        "space": {
+                            "type": "string",
+                            "title": "Space",
+                            "description": ""
+                        },
+                        "description": {
+                            "type": "string",
+                            "title": "Description",
+                            "description": ""
+                        },
+                        "experiences_offered": {
+                            "type": "string",
+                            "title": "Experiences Offered",
+                            "description": ""
+                        },
+                        "neighborhood_overview": {
+                            "type": "string",
+                            "title": "Neighborhood Overview",
+                            "description": ""
+                        },
+                        "notes": {
+                            "type": "string",
+                            "title": "Notes",
+                            "description": ""
+                        },
+                        "transit": {
+                            "type": "string",
+                            "title": "Transit",
+                            "description": ""
+                        },
+                        "access": {
+                            "type": "string",
+                            "title": "Access",
+                            "description": ""
+                        },
+                        "interaction": {
+                            "type": "string",
+                            "title": "Interaction",
+                            "description": ""
+                        },
+                        "house_rules": {
+                            "type": "string",
+                            "title": "House Rules",
+                            "description": ""
+                        },
+                        "thumbnail_url": {
+                            "type": "string",
+                            "title": "Thumbnail Url",
+                            "description": ""
+                        },
+                        "medium_url": {
+                            "type": "string",
+                            "title": "Medium Url",
+                            "description": ""
+                        },
+                        "picture_url": {
+                            "type": "string",
+                            "title": "Picture Url",
+                            "description": ""
+                        },
+                        "xl_picture_url": {
+                            "type": "string",
+                            "title": "XL Picture Url",
+                            "description": ""
+                        },
+                        "host_id": {
+                            "type": "string",
+                            "title": "Host ID",
+                            "description": ""
+                        },
+                        "host_url": {
+                            "type": "string",
+                            "title": "Host URL",
+                            "description": ""
+                        },
+                        "host_name": {
+                            "type": "string",
+                            "title": "Host Name",
+                            "description": ""
+                        },
+                        "host_since": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Host Since",
+                            "description": ""
+                        },
+                        "host_location": {
+                            "type": "string",
+                            "title": "Host Location",
+                            "description": ""
+                        },
+                        "host_about": {
+                            "type": "string",
+                            "title": "Host About",
+                            "description": ""
+                        },
+                        "host_response_time": {
+                            "type": "string",
+                            "title": "Host Response Time",
+                            "description": ""
+                        },
+                        "host_response_rate": {
+                            "type": "integer",
+                            "title": "Host Response Rate",
+                            "description": ""
+                        },
+                        "host_acceptance_rate": {
+                            "type": "string",
+                            "title": "Host Acceptance Rate",
+                            "description": ""
+                        },
+                        "host_thumbnail_url": {
+                            "type": "string",
+                            "title": "Host Thumbnail Url",
+                            "description": ""
+                        },
+                        "host_picture_url": {
+                            "type": "string",
+                            "title": "Host Picture Url",
+                            "description": ""
+                        },
+                        "host_neighbourhood": {
+                            "type": "string",
+                            "title": "Host Neighbourhood",
+                            "description": ""
+                        },
+                        "host_listings_count": {
+                            "type": "integer",
+                            "title": "Host Listings Count",
+                            "description": ""
+                        },
+                        "host_total_listings_count": {
+                            "type": "integer",
+                            "title": "Host Total Listings Count",
+                            "description": ""
+                        },
+                        "host_verifications": {
+                            "type": "string",
+                            "title": "Host Verifications",
+                            "description": ""
+                        },
+                        "street": {
+                            "type": "string",
+                            "title": "Street",
+                            "description": ""
+                        },
+                        "neighbourhood": {
+                            "type": "string",
+                            "title": "Neighbourhood",
+                            "description": ""
+                        },
+                        "neighbourhood_cleansed": {
+                            "type": "string",
+                            "title": "Neighbourhood Cleansed",
+                            "description": ""
+                        },
+                        "neighbourhood_group_cleansed": {
+                            "type": "string",
+                            "title": "Neighbourhood Group Cleansed",
+                            "description": ""
+                        },
+                        "city": {
+                            "type": "string",
+                            "title": "City",
+                            "description": ""
+                        },
+                        "state": {
+                            "type": "string",
+                            "title": "State",
+                            "description": ""
+                        },
+                        "zipcode": {
+                            "type": "string",
+                            "title": "Zipcode",
+                            "description": ""
+                        },
+                        "market": {
+                            "type": "string",
+                            "title": "Market",
+                            "description": ""
+                        },
+                        "smart_location": {
+                            "type": "string",
+                            "title": "Smart Location",
+                            "description": ""
+                        },
+                        "country_code": {
+                            "type": "string",
+                            "title": "Country Code",
+                            "description": ""
+                        },
+                        "country": {
+                            "type": "string",
+                            "title": "Country",
+                            "description": ""
+                        },
+                        "latitude": {
+                            "type": "string",
+                            "title": "Latitude",
+                            "description": ""
+                        },
+                        "longitude": {
+                            "type": "string",
+                            "title": "Longitude",
+                            "description": ""
+                        },
+                        "property_type": {
+                            "type": "string",
+                            "title": "Property Type",
+                            "description": ""
+                        },
+                        "room_type": {
+                            "type": "string",
+                            "title": "Room Type",
+                            "description": ""
+                        },
+                        "accommodates": {
+                            "type": "integer",
+                            "title": "Accommodates",
+                            "description": ""
+                        },
+                        "bathrooms": {
+                            "type": "number",
+                            "title": "Bathrooms",
+                            "description": ""
+                        },
+                        "bedrooms": {
+                            "type": "integer",
+                            "title": "Bedrooms",
+                            "description": ""
+                        },
+                        "beds": {
+                            "type": "integer",
+                            "title": "Beds",
+                            "description": ""
+                        },
+                        "bed_type": {
+                            "type": "string",
+                            "title": "Bed Type",
+                            "description": ""
+                        },
+                        "amenities": {
+                            "type": "string",
+                            "title": "Amenities",
+                            "description": ""
+                        },
+                        "square_feet": {
+                            "type": "integer",
+                            "title": "Square Feet",
+                            "description": ""
+                        },
+                        "price": {
+                            "type": "integer",
+                            "title": "Price",
+                            "description": ""
+                        },
+                        "weekly_price": {
+                            "type": "integer",
+                            "title": "Weekly Price",
+                            "description": ""
+                        },
+                        "monthly_price": {
+                            "type": "integer",
+                            "title": "Monthly Price",
+                            "description": ""
+                        },
+                        "security_deposit": {
+                            "type": "integer",
+                            "title": "Security Deposit",
+                            "description": ""
+                        },
+                        "cleaning_fee": {
+                            "type": "integer",
+                            "title": "Cleaning Fee",
+                            "description": ""
+                        },
+                        "guests_included": {
+                            "type": "integer",
+                            "title": "Guests Included",
+                            "description": ""
+                        },
+                        "extra_people": {
+                            "type": "integer",
+                            "title": "Extra People",
+                            "description": ""
+                        },
+                        "minimum_nights": {
+                            "type": "integer",
+                            "title": "Minimum Nights",
+                            "description": ""
+                        },
+                        "maximum_nights": {
+                            "type": "integer",
+                            "title": "Maximum Nights",
+                            "description": ""
+                        },
+                        "calendar_updated": {
+                            "type": "string",
+                            "title": "Calendar Updated",
+                            "description": ""
+                        },
+                        "has_availability": {
+                            "type": "string",
+                            "title": "Has Availability",
+                            "description": ""
+                        },
+                        "availability_30": {
+                            "type": "integer",
+                            "title": "Availability 30",
+                            "description": ""
+                        },
+                        "availability_60": {
+                            "type": "integer",
+                            "title": "Availability 60",
+                            "description": ""
+                        },
+                        "availability_90": {
+                            "type": "integer",
+                            "title": "Availability 90",
+                            "description": ""
+                        },
+                        "availability_365": {
+                            "type": "integer",
+                            "title": "Availability 365",
+                            "description": ""
+                        },
+                        "calendar_last_scraped": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Calendar last Scraped",
+                            "description": ""
+                        },
+                        "number_of_reviews": {
+                            "type": "integer",
+                            "title": "Number of Reviews",
+                            "description": ""
+                        },
+                        "first_review": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "First Review",
+                            "description": ""
+                        },
+                        "last_review": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Last Review",
+                            "description": ""
+                        },
+                        "review_scores_rating": {
+                            "type": "integer",
+                            "title": "Review Scores Rating",
+                            "description": ""
+                        },
+                        "review_scores_accuracy": {
+                            "type": "integer",
+                            "title": "Review Scores Accuracy",
+                            "description": ""
+                        },
+                        "review_scores_cleanliness": {
+                            "type": "integer",
+                            "title": "Review Scores Cleanliness",
+                            "description": ""
+                        },
+                        "review_scores_checkin": {
+                            "type": "integer",
+                            "title": "Review Scores Checkin",
+                            "description": ""
+                        },
+                        "review_scores_communication": {
+                            "type": "integer",
+                            "title": "Review Scores Communication",
+                            "description": ""
+                        },
+                        "review_scores_location": {
+                            "type": "integer",
+                            "title": "Review Scores Location",
+                            "description": ""
+                        },
+                        "review_scores_value": {
+                            "type": "integer",
+                            "title": "Review Scores Value",
+                            "description": ""
+                        },
+                        "license": {
+                            "type": "string",
+                            "title": "License",
+                            "description": ""
+                        },
+                        "jurisdiction_names": {
+                            "type": "string",
+                            "title": "Jurisdiction Names",
+                            "description": ""
+                        },
+                        "cancellation_policy": {
+                            "type": "string",
+                            "title": "Cancellation Policy",
+                            "description": ""
+                        },
+                        "calculated_host_listings_count": {
+                            "type": "integer",
+                            "title": "Calculated host listings count",
+                            "description": ""
+                        },
+                        "reviews_per_month": {
+                            "type": "number",
+                            "title": "Reviews per Month",
+                            "description": ""
+                        },
+                        "geolocation": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geolocation",
+                            "description": ""
+                        },
+                        "features": {
+                            "type": "string",
+                            "title": "Features",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

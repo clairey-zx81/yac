@@ -1,0 +1,627 @@
+{
+    "title": "decoset-geolocalisation-des-equipements@haute-garonne",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/decoset-geolocalisation-des-equipements@haute-garonne"
+        }
+    ],
+    "definitions": {
+        "decoset-geolocalisation-des-equipements@haute-garonne": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/decoset-geolocalisation-des-equipements@haute-garonne_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "decoset-geolocalisation-des-equipements@haute-garonne_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "commune": {
+                            "type": "string",
+                            "title": "commune",
+                            "description": "Commune"
+                        },
+                        "nom_equipement": {
+                            "type": "string",
+                            "title": "nom_equipement",
+                            "description": "Nom de l'équipement"
+                        },
+                        "id_equipement": {
+                            "type": "string",
+                            "title": "id_equipement",
+                            "description": "Identifiant de l'équipement"
+                        },
+                        "code_service_public": {
+                            "type": "string",
+                            "title": "code_service_public",
+                            "description": "Code du service associé à l'équipement"
+                        },
+                        "libelle_service_public": {
+                            "type": "string",
+                            "title": "libelle_service_public",
+                            "description": "Libellé du service associé à l'équipement"
+                        },
+                        "id": {
+                            "type": "string",
+                            "title": "id",
+                            "description": ""
+                        },
+                        "nom_voie": {
+                            "type": "string",
+                            "title": "nom_voie",
+                            "description": "Voie de d'adresse de l'équipement"
+                        },
+                        "id_fantoir": {
+                            "type": "integer",
+                            "title": "id_fantoir",
+                            "description": ""
+                        },
+                        "numero": {
+                            "type": "integer",
+                            "title": "numero",
+                            "description": ""
+                        },
+                        "rep": {
+                            "type": "string",
+                            "title": "rep",
+                            "description": ""
+                        },
+                        "code_insee": {
+                            "type": "integer",
+                            "title": "code_insee",
+                            "description": ""
+                        },
+                        "code_post": {
+                            "type": "integer",
+                            "title": "code_post",
+                            "description": ""
+                        },
+                        "alias": {
+                            "type": "string",
+                            "title": "alias",
+                            "description": ""
+                        },
+                        "nom_ld": {
+                            "type": "string",
+                            "title": "nom_ld",
+                            "description": ""
+                        },
+                        "nom_afnor": {
+                            "type": "string",
+                            "title": "nom_afnor",
+                            "description": ""
+                        },
+                        "libelle_acheminement": {
+                            "type": "string",
+                            "title": "libelle_acheminement",
+                            "description": ""
+                        },
+                        "x": {
+                            "type": "number",
+                            "title": "x",
+                            "description": ""
+                        },
+                        "y": {
+                            "type": "number",
+                            "title": "y",
+                            "description": ""
+                        },
+                        "lon": {
+                            "type": "number",
+                            "title": "lon",
+                            "description": ""
+                        },
+                        "lat": {
+                            "type": "number",
+                            "title": "lat",
+                            "description": ""
+                        },
+                        "nom_commune": {
+                            "type": "string",
+                            "title": "nom_commune",
+                            "description": ""
+                        },
+                        "siret_source": {
+                            "type": "integer",
+                            "title": "siret_source",
+                            "description": ""
+                        },
+                        "date_maj": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "date_maj",
+                            "description": ""
+                        },
+                        "ouverture_lundi_m": {
+                            "type": "string",
+                            "title": "ouverture_lundi_m",
+                            "description": "Horaire ouverture Lundi matin"
+                        },
+                        "fermeture_lundi_m": {
+                            "type": "string",
+                            "title": "fermeture_lundi_m",
+                            "description": "Horaire fermeture Lundi matin"
+                        },
+                        "ouverture_lundi_am": {
+                            "type": "string",
+                            "title": "ouverture_lundi_am",
+                            "description": "Horaire ouverture Lundi après-midi"
+                        },
+                        "fermeture_lundi_am": {
+                            "type": "string",
+                            "title": "fermeture_lundi_am",
+                            "description": "Horaire fermeture Lundi après-midi"
+                        },
+                        "ouverture_mardi_m": {
+                            "type": "string",
+                            "title": "ouverture_mardi_m",
+                            "description": "Horaire ouverture Mardi matin"
+                        },
+                        "fermeture_mardi_m": {
+                            "type": "string",
+                            "title": "fermeture_mardi_m",
+                            "description": "Horaire fermeture Mardi matin"
+                        },
+                        "ouverture_mardi_am": {
+                            "type": "string",
+                            "title": "ouverture_mardi_am",
+                            "description": "Horaire ouverture Mardi après-midi"
+                        },
+                        "fermeture_mardi_am": {
+                            "type": "string",
+                            "title": "fermeture_mardi_am",
+                            "description": "Horaire fermeture Mardi après-midi"
+                        },
+                        "ouverture_mercredi_m": {
+                            "type": "string",
+                            "title": "ouverture_mercredi_m",
+                            "description": "Horaire ouverture Mercredi matin"
+                        },
+                        "fermeture_mercredi_m": {
+                            "type": "string",
+                            "title": "fermeture_mercredi_m",
+                            "description": "Horaire fermeture Mercredi matin"
+                        },
+                        "ouverture_mercredi_am": {
+                            "type": "string",
+                            "title": "ouverture_mercredi_am",
+                            "description": "Horaire ouverture Mercredi après-midi"
+                        },
+                        "fermeture_mercredi_am": {
+                            "type": "string",
+                            "title": "fermeture_mercredi_am",
+                            "description": "Horaire fermeture Mercredi après-midi"
+                        },
+                        "ouverture_jeudi_m": {
+                            "type": "string",
+                            "title": "ouverture_jeudi_m",
+                            "description": "Horaire ouverture Jeudi matin"
+                        },
+                        "fermeture_jeudi_m": {
+                            "type": "string",
+                            "title": "fermeture_jeudi_m",
+                            "description": "Horaire fermeture Jeudi matin"
+                        },
+                        "ouverture_jeudi_am": {
+                            "type": "string",
+                            "title": "ouverture_jeudi_am",
+                            "description": "Horaire ouverture Jeudi après-midi"
+                        },
+                        "fermeture_jeudi_am": {
+                            "type": "string",
+                            "title": "fermeture_jeudi_am",
+                            "description": "Horaire fermeture Jeudi après-midi"
+                        },
+                        "ouverture_vendredi_m": {
+                            "type": "string",
+                            "title": "ouverture_vendredi_m",
+                            "description": "Horaire ouverture Vendredi matin"
+                        },
+                        "fermeture_vendredi_m": {
+                            "type": "string",
+                            "title": "fermeture_vendredi_m",
+                            "description": "Horaire fermeture Vendredi matin"
+                        },
+                        "ouverture_vendredi_am": {
+                            "type": "string",
+                            "title": "ouverture_vendredi_am",
+                            "description": "Horaire ouverture Vendredi après-midi"
+                        },
+                        "fermeture_vendredi_am": {
+                            "type": "string",
+                            "title": "fermeture_vendredi_am",
+                            "description": "Horaire fermeture Vendredi après-midi"
+                        },
+                        "ouverture_samedi_m": {
+                            "type": "string",
+                            "title": "ouverture_samedi_m",
+                            "description": "Horaire ouverture samedi matin"
+                        },
+                        "fermeture_samedi_m": {
+                            "type": "string",
+                            "title": "fermeture_samedi_m",
+                            "description": "Horaire fermeture Samedi matin"
+                        },
+                        "ouverture_samedi_am": {
+                            "type": "string",
+                            "title": "ouverture_samedi_am",
+                            "description": "Horaire ouverture Samedi après-midi"
+                        },
+                        "fermeture_samedi_am": {
+                            "type": "string",
+                            "title": "fermeture_samedi_am",
+                            "description": "Horaire fermeture Samedi après-midi"
+                        },
+                        "ouverture_dimanche_m": {
+                            "type": "string",
+                            "title": "ouverture_dimanche_m",
+                            "description": "Horaire ouverture Dimanche matin"
+                        },
+                        "fermeture_dimanche_m": {
+                            "type": "string",
+                            "title": "fermeture_dimanche_m",
+                            "description": "Horaire fermeture Dimanche matin"
+                        },
+                        "ouverture_dimanche_am": {
+                            "type": "string",
+                            "title": "ouverture_dimanche_am",
+                            "description": "Horaire ouverture Dimanche après-midi"
+                        },
+                        "fermeture_dimanche_am": {
+                            "type": "string",
+                            "title": "fermeture_dimanche_am",
+                            "description": "Horaire fermeture Dimanche après-midi"
+                        },
+                        "geoloc": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geoloc",
+                            "description": "Géolocalisation"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,661 @@
+{
+    "title": "indic_fragi@orleansmetropole",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/indic_fragi@orleansmetropole"
+        }
+    ],
+    "definitions": {
+        "indic_fragi@orleansmetropole": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/indic_fragi@orleansmetropole_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "indic_fragi@orleansmetropole_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "cantville": {
+                            "type": "integer",
+                            "title": "cantville",
+                            "description": ""
+                        },
+                        "depcom": {
+                            "type": "integer",
+                            "title": "depcom",
+                            "description": ""
+                        },
+                        "libcom": {
+                            "type": "string",
+                            "title": "LIBCOM",
+                            "description": ""
+                        },
+                        "iris": {
+                            "type": "integer",
+                            "title": "iris",
+                            "description": ""
+                        },
+                        "lib_iris": {
+                            "type": "string",
+                            "title": "LIB_IRIS",
+                            "description": ""
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geom",
+                            "description": ""
+                        },
+                        "centroid": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "centroid",
+                            "description": ""
+                        },
+                        "popleg": {
+                            "type": "integer",
+                            "title": "POPLEG",
+                            "description": ""
+                        },
+                        "nb15_29": {
+                            "type": "integer",
+                            "title": "NB15_29",
+                            "description": ""
+                        },
+                        "nb65": {
+                            "type": "integer",
+                            "title": "NB65+",
+                            "description": ""
+                        },
+                        "nbmonofam": {
+                            "type": "number",
+                            "title": "NBMONOFAM",
+                            "description": ""
+                        },
+                        "nbmen1p": {
+                            "type": "integer",
+                            "title": "NBMEN1P",
+                            "description": ""
+                        },
+                        "nbchom15_64": {
+                            "type": "integer",
+                            "title": "NBCHOM15_64",
+                            "description": ""
+                        },
+                        "nb15nscondipl": {
+                            "type": "integer",
+                            "title": "NB15NSCONDIPL",
+                            "description": ""
+                        },
+                        "nbimmi": {
+                            "type": "integer",
+                            "title": "NBIMMI",
+                            "description": ""
+                        },
+                        "nbmentot": {
+                            "type": "integer",
+                            "title": "NBMENTOT",
+                            "description": ""
+                        },
+                        "partnbmonofam": {
+                            "type": "number",
+                            "title": "PartNBMONOFAM",
+                            "description": ""
+                        },
+                        "partnb15_29": {
+                            "type": "number",
+                            "title": "PartNB15_29",
+                            "description": ""
+                        },
+                        "partnb65": {
+                            "type": "number",
+                            "title": "PartNB65+",
+                            "description": ""
+                        },
+                        "partnbimmi": {
+                            "type": "number",
+                            "title": "PartNBIMMI",
+                            "description": ""
+                        },
+                        "partnbmen1p": {
+                            "type": "number",
+                            "title": "PartNBMEN1P",
+                            "description": ""
+                        },
+                        "partnbchom15_64": {
+                            "type": "number",
+                            "title": "PartNBCHOM15_64",
+                            "description": ""
+                        },
+                        "partnb15nscondipl": {
+                            "type": "number",
+                            "title": "PartNB15NSCONDIPL",
+                            "description": ""
+                        },
+                        "percou": {
+                            "type": "number",
+                            "title": "PERCOU",
+                            "description": ""
+                        },
+                        "nbequip": {
+                            "type": "number",
+                            "title": "NBequip",
+                            "description": ""
+                        },
+                        "medrev": {
+                            "type": "number",
+                            "title": "Medrev",
+                            "description": ""
+                        },
+                        "tx_pauvre": {
+                            "type": "number",
+                            "title": "Tx_pauvre",
+                            "description": ""
+                        },
+                        "couverture_mobile": {
+                            "type": "number",
+                            "title": "couverture_mobile",
+                            "description": ""
+                        },
+                        "taux_logements_raccordables": {
+                            "type": "number",
+                            "title": "Taux logements raccordables",
+                            "description": ""
+                        },
+                        "couverture_mobilebis": {
+                            "type": "number",
+                            "title": "couverture_mobilebis",
+                            "description": ""
+                        },
+                        "taux_logements_raccordablesbis": {
+                            "type": "number",
+                            "title": "Taux logements raccordablesbis",
+                            "description": ""
+                        },
+                        "nbequipbis": {
+                            "type": "number",
+                            "title": "NBequipbis",
+                            "description": ""
+                        },
+                        "percoubis": {
+                            "type": "number",
+                            "title": "PERCOUbis",
+                            "description": ""
+                        },
+                        "popcom": {
+                            "type": "integer",
+                            "title": "POPCOM",
+                            "description": ""
+                        },
+                        "equip_ind": {
+                            "type": "number",
+                            "title": "equip_ind",
+                            "description": ""
+                        },
+                        "taux_percou": {
+                            "type": "number",
+                            "title": "taux_percou",
+                            "description": ""
+                        },
+                        "non_couv_mobile": {
+                            "type": "number",
+                            "title": "non_couv_mobile",
+                            "description": ""
+                        },
+                        "tx_logement_non_raccordable": {
+                            "type": "number",
+                            "title": "tx_logement_non_raccordable",
+                            "description": ""
+                        },
+                        "pt_partnbmonofam": {
+                            "type": "number",
+                            "title": "pt_PartNBMONOFAM",
+                            "description": ""
+                        },
+                        "pt_partnb15_29": {
+                            "type": "number",
+                            "title": "pt_PartNB15_29",
+                            "description": ""
+                        },
+                        "pt_partnb65": {
+                            "type": "number",
+                            "title": "pt_PartNB65+",
+                            "description": ""
+                        },
+                        "pt_partnbimmi": {
+                            "type": "number",
+                            "title": "pt_PartNBIMMI",
+                            "description": ""
+                        },
+                        "pt_partnbmen1p": {
+                            "type": "number",
+                            "title": "pt_PartNBMEN1P",
+                            "description": ""
+                        },
+                        "pt_partnbchom15_64": {
+                            "type": "number",
+                            "title": "pt_PartNBCHOM15_64",
+                            "description": ""
+                        },
+                        "pt_partnb15nscondipl": {
+                            "type": "number",
+                            "title": "pt_PartNB15NSCONDIPL",
+                            "description": ""
+                        },
+                        "pt_equip_ind": {
+                            "type": "number",
+                            "title": "pt_equip_ind",
+                            "description": ""
+                        },
+                        "pt_tx_pauvre": {
+                            "type": "number",
+                            "title": "pt_Tx_pauvre",
+                            "description": ""
+                        },
+                        "pt_non_couv_mobile": {
+                            "type": "number",
+                            "title": "pt_non_couv_mobile",
+                            "description": ""
+                        },
+                        "pt_tx_logement_non_raccordable": {
+                            "type": "number",
+                            "title": "pt_tx_logement_non_raccordable",
+                            "description": ""
+                        },
+                        "pt_taux_percou": {
+                            "type": "number",
+                            "title": "pt_taux_percou",
+                            "description": ""
+                        },
+                        "pt_medrev": {
+                            "type": "number",
+                            "title": "pt_Medrev",
+                            "description": ""
+                        },
+                        "acces_numerique": {
+                            "type": "number",
+                            "title": "acces_numerique",
+                            "description": ""
+                        },
+                        "acces_info": {
+                            "type": "number",
+                            "title": "acces_info",
+                            "description": ""
+                        },
+                        "competence_administrative": {
+                            "type": "number",
+                            "title": "competence_administrative",
+                            "description": ""
+                        },
+                        "competence_numerique": {
+                            "type": "number",
+                            "title": "competence_numerique",
+                            "description": ""
+                        },
+                        "acces_global": {
+                            "type": "number",
+                            "title": "acces_global",
+                            "description": ""
+                        },
+                        "competence_global": {
+                            "type": "number",
+                            "title": "competence_global",
+                            "description": ""
+                        },
+                        "score_global": {
+                            "type": "number",
+                            "title": "score_global",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

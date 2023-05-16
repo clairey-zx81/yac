@@ -1,0 +1,486 @@
+{
+    "title": "reseau-ep-sqy@datasqy",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/reseau-ep-sqy@datasqy"
+        }
+    ],
+    "definitions": {
+        "reseau-ep-sqy@datasqy": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/reseau-ep-sqy@datasqy_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "reseau-ep-sqy@datasqy_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "numero": {
+                            "type": "string",
+                            "title": "Identifiant",
+                            "description": "Identifiant du tronçon"
+                        },
+                        "adresse": {
+                            "type": "string",
+                            "title": "Adresse",
+                            "description": "Nom de la voie"
+                        },
+                        "codinsee": {
+                            "type": "string",
+                            "title": "Code INSEE",
+                            "description": "Identifiant unique de commune de l'INSEE"
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "Commune",
+                            "description": "Nom de la commune"
+                        },
+                        "charge": {
+                            "type": "number",
+                            "title": "Charge",
+                            "description": "Charge"
+                        },
+                        "typo_gesti": {
+                            "type": "string",
+                            "title": "Type de gestion",
+                            "description": "La gestion est-elle publique ou privée"
+                        },
+                        "datepgva": {
+                            "type": "string",
+                            "title": "Date de PGVA",
+                            "description": "Date de PGVA"
+                        },
+                        "datepose": {
+                            "type": "string",
+                            "title": "Date de pose",
+                            "description": "Date d'installation des tuyaux d'assainissement."
+                        },
+                        "datereha": {
+                            "type": "string",
+                            "title": "Date de réhabilitation",
+                            "description": "La réhabilitation consiste en une réparation du tuyau d'assainissement."
+                        },
+                        "ecounorm": {
+                            "type": "string",
+                            "title": "Écoulement normal",
+                            "description": "Écoulement normal"
+                        },
+                        "hauteur": {
+                            "type": "number",
+                            "title": "Hauteur",
+                            "description": "Le tuyau pouvant avoir plusieurs forme, le diamètre est exprimé en hauteur et largeur. Si les deux paramètres sont identiques, le tuyau est considéré comme cylindrique, à défaut il est dit ovoïde."
+                        },
+                        "largeur": {
+                            "type": "number",
+                            "title": "Largeur",
+                            "description": "Le tuyau pouvant avoir plusieurs forme, le diamètre est exprimé en hauteur et largeur. Si les deux paramètres sont identiques, le tuyau est considéré comme cylindrique, à défaut il est dit ovoïde."
+                        },
+                        "materiau": {
+                            "type": "string",
+                            "title": "Matériau",
+                            "description": "Matériau dans lequel le tuyau est fabriqué."
+                        },
+                        "nature": {
+                            "type": "string",
+                            "title": "Hiérarchisation du réseau",
+                            "description": "La hiérarchisation permet d'identifiant les classe de collecte des eaux sur un territoire donné."
+                        },
+                        "pente": {
+                            "type": "integer",
+                            "title": "Pente",
+                            "description": "Pente du tuyant"
+                        },
+                        "profamon": {
+                            "type": "number",
+                            "title": "Profondeur en amont",
+                            "description": "La profondeur amont est la profondeur du tronçon du côté de l'arrivée de l'eau par rapport à la surface naturelle du terrain"
+                        },
+                        "profaval": {
+                            "type": "number",
+                            "title": "Profondeur en aval",
+                            "description": "La profondeur amont est la profondeur du tronçon du côté de la sortie de l'eau par rapport à la surface naturelle du terrain"
+                        },
+                        "typo_elt_p": {
+                            "type": "string",
+                            "title": "Type de tuyau",
+                            "description": "Il s'agit d'identifier s'il s'agit de collecteur ou du branchement"
+                        },
+                        "zamont": {
+                            "type": "number",
+                            "title": "Altitude en amont",
+                            "description": "L'altitude en amont correspondant à la distance d'enfouissement par rapport au niveau 0 de la mer au niveau où l'eau entre dans le tuyau."
+                        },
+                        "zaval": {
+                            "type": "number",
+                            "title": "Altitude en aval",
+                            "description": "L'altitude en aval correspondant à la distance d'enfouissement par rapport au niveau 0 de la mer au niveau où l'eau sort dans le tuyau."
+                        },
+                        "delegatair": {
+                            "type": "string",
+                            "title": "Délégataire",
+                            "description": "Détenteur du marché public pour le patrimoine de gestion publique"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

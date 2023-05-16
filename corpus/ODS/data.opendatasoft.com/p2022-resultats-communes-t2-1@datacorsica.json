@@ -1,0 +1,496 @@
+{
+    "title": "p2022-resultats-communes-t2-1@datacorsica",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/p2022-resultats-communes-t2-1@datacorsica"
+        }
+    ],
+    "definitions": {
+        "p2022-resultats-communes-t2-1@datacorsica": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/p2022-resultats-communes-t2-1@datacorsica_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "p2022-resultats-communes-t2-1@datacorsica_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "commune": {
+                            "type": "string",
+                            "title": "Commune",
+                            "description": ""
+                        },
+                        "codedepartement": {
+                            "type": "string",
+                            "title": "CodeDepartement",
+                            "description": ""
+                        },
+                        "codeinsee": {
+                            "type": "string",
+                            "title": "﻿\"CodeInsee\"",
+                            "description": ""
+                        },
+                        "inscrits": {
+                            "type": "number",
+                            "title": "Inscrits",
+                            "description": ""
+                        },
+                        "abstentions": {
+                            "type": "number",
+                            "title": "Abstentions",
+                            "description": ""
+                        },
+                        "abstentions_ins": {
+                            "type": "number",
+                            "title": "Abstentions_ins",
+                            "description": ""
+                        },
+                        "votants": {
+                            "type": "number",
+                            "title": "Votants",
+                            "description": ""
+                        },
+                        "votants_ins": {
+                            "type": "number",
+                            "title": "Votants_ins",
+                            "description": ""
+                        },
+                        "blancs": {
+                            "type": "number",
+                            "title": "Blancs",
+                            "description": ""
+                        },
+                        "blancs_ins": {
+                            "type": "number",
+                            "title": "Blancs_ins",
+                            "description": ""
+                        },
+                        "blancs_vot": {
+                            "type": "number",
+                            "title": "Blancs_vot",
+                            "description": ""
+                        },
+                        "nuls": {
+                            "type": "number",
+                            "title": "Nuls",
+                            "description": ""
+                        },
+                        "nuls_ins": {
+                            "type": "number",
+                            "title": "Nuls_ins",
+                            "description": ""
+                        },
+                        "nuls_vot": {
+                            "type": "number",
+                            "title": "Nuls_vot",
+                            "description": ""
+                        },
+                        "exprimes": {
+                            "type": "number",
+                            "title": "Exprimés",
+                            "description": ""
+                        },
+                        "exprimes_ins": {
+                            "type": "number",
+                            "title": "Exprimés_ins",
+                            "description": ""
+                        },
+                        "exprimes_vot": {
+                            "type": "number",
+                            "title": "Exprimés_vot",
+                            "description": ""
+                        },
+                        "macron": {
+                            "type": "number",
+                            "title": "MACRON",
+                            "description": ""
+                        },
+                        "le_pen": {
+                            "type": "number",
+                            "title": "LE PEN",
+                            "description": ""
+                        },
+                        "macron_ins": {
+                            "type": "number",
+                            "title": "MACRON.ins",
+                            "description": ""
+                        },
+                        "le_pen_ins": {
+                            "type": "number",
+                            "title": "LE PEN.ins",
+                            "description": ""
+                        },
+                        "macron_exp": {
+                            "type": "number",
+                            "title": "MACRON.exp",
+                            "description": ""
+                        },
+                        "le_pen_exp": {
+                            "type": "number",
+                            "title": "LE PEN.exp",
+                            "description": ""
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geom",
+                            "description": ""
+                        },
+                        "centroid": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "centroid",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

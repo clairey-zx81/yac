@@ -1,0 +1,541 @@
+{
+    "title": "colleges-publics-et-prives@hauts-de-seine",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/colleges-publics-et-prives@hauts-de-seine"
+        }
+    ],
+    "definitions": {
+        "colleges-publics-et-prives@hauts-de-seine": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/colleges-publics-et-prives@hauts-de-seine_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "colleges-publics-et-prives@hauts-de-seine_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "nom": {
+                            "type": "string",
+                            "title": "NOM",
+                            "description": "Nom du collège"
+                        },
+                        "uai": {
+                            "type": "string",
+                            "title": "UAI",
+                            "description": "Code unique du collège dans le répertoire national des établissements (RNE)"
+                        },
+                        "adresse": {
+                            "type": "string",
+                            "title": "ADRESSE",
+                            "description": "Adresse du collège"
+                        },
+                        "cp": {
+                            "type": "string",
+                            "title": "CP",
+                            "description": "Code postal de la commune du collège"
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "COMMUNE",
+                            "description": "Nom de la commune du collège"
+                        },
+                        "code_insee": {
+                            "type": "string",
+                            "title": "CODE_INSEE",
+                            "description": "Code INSEE de la commune"
+                        },
+                        "tel": {
+                            "type": "string",
+                            "title": "TEL",
+                            "description": "Numéro de téléphone du collège"
+                        },
+                        "statut": {
+                            "type": "string",
+                            "title": "STATUT",
+                            "description": "Statut du collège"
+                        },
+                        "segpa": {
+                            "type": "string",
+                            "title": "SEGPA",
+                            "description": "Indique si le collège intègre une SEGPA"
+                        },
+                        "ulis": {
+                            "type": "string",
+                            "title": "ULIS",
+                            "description": "Indique si le collège intègre une ULIS"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": "Géométrie de l'entité au format GeoJSON"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": "Coordonnées de l'entité (latitude, longitude en degrés décimaux)"
+                        },
+                        "cite_scolaire": {
+                            "type": "string",
+                            "title": "CITE_SCOLAIRE",
+                            "description": ""
+                        },
+                        "chef_etablissement": {
+                            "type": "string",
+                            "title": "CHEF_ETABLISSEMENT",
+                            "description": "Nom du responsable d'établissement"
+                        },
+                        "url": {
+                            "type": "string",
+                            "title": "URL",
+                            "description": "Lien sur le site internet du collège"
+                        },
+                        "numero_segpa": {
+                            "type": "string",
+                            "title": "NUMERO_SEGPA",
+                            "description": "N° de SEGPA"
+                        },
+                        "annee_scolaire": {
+                            "type": "string",
+                            "title": "ANNEE_SCOLAIRE",
+                            "description": "Année scolaire "
+                        },
+                        "effectifs_eleve": {
+                            "type": "number",
+                            "title": "EFFECTIFS_ELEVE",
+                            "description": "Effectif total du collège"
+                        },
+                        "effectif_6eme": {
+                            "type": "number",
+                            "title": "EFFECTIF_6EME",
+                            "description": "élèves de 6ème"
+                        },
+                        "effectif_5eme": {
+                            "type": "number",
+                            "title": "EFFECTIF_5EME",
+                            "description": "élèves de 5ème"
+                        },
+                        "effectif_4eme": {
+                            "type": "number",
+                            "title": "EFFECTIF_4EME",
+                            "description": "élèves de 4ème"
+                        },
+                        "effectif_3eme": {
+                            "type": "number",
+                            "title": "EFFECTIF_3EME",
+                            "description": "élèves de 3ème"
+                        },
+                        "effectif_ulis": {
+                            "type": "number",
+                            "title": "EFFECTIF_ULIS",
+                            "description": "élèves ULIS"
+                        },
+                        "effectif_segpa": {
+                            "type": "number",
+                            "title": "EFFECTIF_SEGPA",
+                            "description": "élèves SEGPA"
+                        },
+                        "annee_n": {
+                            "type": "number",
+                            "title": "ANNEE_N",
+                            "description": "année en cours"
+                        },
+                        "taux_reussite_brevet_n_2": {
+                            "type": "number",
+                            "title": "TAUX_REUSSITE_BREVET_N_2",
+                            "description": "taux de réussite au brevet année n-2"
+                        },
+                        "taux_reussite_brevet_n_1": {
+                            "type": "number",
+                            "title": "TAUX_REUSSITE_BREVET_N_1",
+                            "description": "taux de réussite au brevet année n-1"
+                        },
+                        "taux_reussite_brevet_n": {
+                            "type": "number",
+                            "title": "TAUX_REUSSITE_BREVET_N",
+                            "description": "taux de réussite au brevet année n"
+                        },
+                        "effectifs_presents_n": {
+                            "type": "number",
+                            "title": "EFFECTIFS_PRESENTS_N",
+                            "description": ""
+                        },
+                        "langue_vivante_1": {
+                            "type": "string",
+                            "title": "LANGUE_VIVANTE_1",
+                            "description": "LV1 proposées"
+                        },
+                        "langue_vivante_2": {
+                            "type": "string",
+                            "title": "LANGUE_VIVANTE_2",
+                            "description": "LV2 proposées"
+                        },
+                        "langue_section": {
+                            "type": "string",
+                            "title": "LANGUE_SECTION",
+                            "description": "sections linguistiques"
+                        },
+                        "principales_options": {
+                            "type": "string",
+                            "title": "PRINCIPALES_OPTIONS",
+                            "description": "options proposées"
+                        },
+                        "sections": {
+                            "type": "string",
+                            "title": "SECTIONS",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

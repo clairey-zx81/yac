@@ -1,0 +1,576 @@
+{
+    "title": "rebuts-ibi-2022@valencia",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/rebuts-ibi-2022@valencia"
+        }
+    ],
+    "definitions": {
+        "rebuts-ibi-2022@valencia": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/rebuts-ibi-2022@valencia_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "rebuts-ibi-2022@valencia_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "title": "id",
+                            "description": ""
+                        },
+                        "any": {
+                            "type": "string",
+                            "title": "Any",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        },
+                        "districte": {
+                            "type": "string",
+                            "title": "Districte",
+                            "description": ""
+                        },
+                        "barri": {
+                            "type": "string",
+                            "title": "Barri",
+                            "description": ""
+                        },
+                        "cod_barri": {
+                            "type": "integer",
+                            "title": "Cod. Barri",
+                            "description": ""
+                        },
+                        "num_rebuts_personalitat_fisica": {
+                            "type": "string",
+                            "title": "Núm. Rebuts personalitat física",
+                            "description": ""
+                        },
+                        "num_rebuts_personalitat_juridica": {
+                            "type": "string",
+                            "title": "Núm. Rebuts personalitat jurídica",
+                            "description": ""
+                        },
+                        "num_rebuts_sense_personalitat": {
+                            "type": "integer",
+                            "title": "Núm. Rebuts sense personalitat",
+                            "description": ""
+                        },
+                        "num_reb_magatzem_estacionament": {
+                            "type": "integer",
+                            "title": "Núm. Reb. Magatzem - Estacionament",
+                            "description": ""
+                        },
+                        "num_reb_actv_comercial": {
+                            "type": "integer",
+                            "title": "Núm. Reb. Actv. Comercial",
+                            "description": ""
+                        },
+                        "num_reb_actv_cultural": {
+                            "type": "integer",
+                            "title": "Núm. Reb. Actv. Cultural",
+                            "description": ""
+                        },
+                        "num_reb_actv_esportiu": {
+                            "type": "integer",
+                            "title": "Núm. Reb. Actv. Esportiu",
+                            "description": ""
+                        },
+                        "num_reb_actv_edifici_singular": {
+                            "type": "integer",
+                            "title": "Núm. Reb. Actv. Edifici singular",
+                            "description": ""
+                        },
+                        "num_reb_actv_espectacles": {
+                            "type": "integer",
+                            "title": "Núm. Reb. Actv. Espectacles",
+                            "description": ""
+                        },
+                        "num_reb_actv_industrial": {
+                            "type": "integer",
+                            "title": "Núm. Reb. Actv. Industrial",
+                            "description": ""
+                        },
+                        "num_reb_actv_obres_d_urbanitzacio_i_jardineria_i_sols_sense_edificar": {
+                            "type": "integer",
+                            "title": "Núm. Reb. Actv. Obres d'urbanització i jardineria i sòls sense edificar",
+                            "description": ""
+                        },
+                        "num_reb_actv_oci_i_hostaleria": {
+                            "type": "integer",
+                            "title": "Núm. Reb. Actv. Oci i Hostaleria",
+                            "description": ""
+                        },
+                        "num_reb_actv_oficines": {
+                            "type": "integer",
+                            "title": "Núm. Reb. Actv. Oficines",
+                            "description": ""
+                        },
+                        "num_reb_actv_religios": {
+                            "type": "integer",
+                            "title": "Núm. Reb. Actv. Religiós",
+                            "description": ""
+                        },
+                        "num_reb_actv_residencial": {
+                            "type": "integer",
+                            "title": "Núm. Reb. Actv. Residencial",
+                            "description": ""
+                        },
+                        "num_reb_actv_sanitat_i_beneficiencia": {
+                            "type": "integer",
+                            "title": "Núm. Reb. Actv. Sanitat i Beneficiència",
+                            "description": ""
+                        },
+                        "num_rebuts_totals": {
+                            "type": "string",
+                            "title": "Núm. Rebuts totals",
+                            "description": ""
+                        },
+                        "importe_rebuts_personalitat_fisica": {
+                            "type": "string",
+                            "title": "Importe rebuts personalitat física",
+                            "description": ""
+                        },
+                        "importe_rebuts_personalitat_juridica": {
+                            "type": "string",
+                            "title": "Importe rebuts personalitat jurídica",
+                            "description": ""
+                        },
+                        "importe_rebuts_sense_personalitat": {
+                            "type": "string",
+                            "title": "Importe rebuts sense personalitat",
+                            "description": ""
+                        },
+                        "imp_reb_actv_magatzem_estacionament": {
+                            "type": "number",
+                            "title": "Imp. Reb. Actv. Magatzem - Estacionament",
+                            "description": ""
+                        },
+                        "imp_reb_actv_comercial": {
+                            "type": "number",
+                            "title": "Imp. Reb. Actv. Comercial",
+                            "description": ""
+                        },
+                        "imp_reb_actv_cultural": {
+                            "type": "number",
+                            "title": "Imp. Reb. Actv. Cultural",
+                            "description": ""
+                        },
+                        "imp_reb_actv_esportiu": {
+                            "type": "number",
+                            "title": "Imp. Reb. Actv. Esportiu",
+                            "description": ""
+                        },
+                        "imp_reb_actv_edifici_singular": {
+                            "type": "number",
+                            "title": "Imp. Reb. Actv. Edifici singular",
+                            "description": ""
+                        },
+                        "imp_reb_actv_espectacles": {
+                            "type": "number",
+                            "title": "Imp. Reb. Actv. Espectacles",
+                            "description": ""
+                        },
+                        "imp_reb_actv_industrial": {
+                            "type": "number",
+                            "title": "Imp. Reb. Actv. Industrial",
+                            "description": ""
+                        },
+                        "imp_reb_actv_obres_d_urbanitzacio_i_jardineria_i_sols_sense_edificar": {
+                            "type": "number",
+                            "title": "Imp. Reb. Actv. Obres d'urbanització i jardineria i sòls sense edificar",
+                            "description": ""
+                        },
+                        "imp_reb_actv_oci_i_hostaleria": {
+                            "type": "number",
+                            "title": "Imp. Reb. Actv. Oci i Hostaleria",
+                            "description": ""
+                        },
+                        "imp_reb_actv_oficines": {
+                            "type": "number",
+                            "title": "Imp. Reb. Actv. Oficines",
+                            "description": ""
+                        },
+                        "imp_reb_actv_religios": {
+                            "type": "number",
+                            "title": "Imp. Reb. Actv. Religiós",
+                            "description": ""
+                        },
+                        "imp_reb_actv_residencial": {
+                            "type": "number",
+                            "title": "Imp. Reb. Actv. Residencial",
+                            "description": ""
+                        },
+                        "imp_reb_actv_sanitat_i_beneficiencia": {
+                            "type": "number",
+                            "title": "Imp. Reb. Actv. Sanitat i Beneficiència",
+                            "description": ""
+                        },
+                        "importe_rebuts_totals": {
+                            "type": "string",
+                            "title": "Importe rebuts totals",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

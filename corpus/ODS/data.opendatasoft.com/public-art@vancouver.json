@@ -1,0 +1,471 @@
+{
+    "title": "public-art@vancouver",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/public-art@vancouver"
+        }
+    ],
+    "definitions": {
+        "public-art@vancouver": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/public-art@vancouver_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "public-art@vancouver_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "registryid": {
+                            "type": "integer",
+                            "title": "RegistryID",
+                            "description": "Unique identifier for each public artwork record, not necessarily sequential"
+                        },
+                        "title_of_work": {
+                            "type": "string",
+                            "title": "Title of Work",
+                            "description": "Artwork title provided by artist. \nNote: Many artworks bear the title Untitled. This is a convention in the art world indicating the title is either unknown or the artist who has produced this work has chosen not to name it."
+                        },
+                        "artistprojectstatement": {
+                            "type": "string",
+                            "title": "ArtistProjectStatement",
+                            "description": "The artist's written description of their work intended to provide context and add to the viewer's understanding of the artwork."
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "Type",
+                            "description": "Category of artwork, as follows: \nArtefact: Historical object or part which was not originally an artwork\nBanners: Hanging fabric with designs\nBust: Realistic head\nFigure: Realistic or semi-realistic human form\nFountain: Sculptural and water components\nGateway:Artwork meant to mark or designate an entrance or exit\nInternet: Artwork primarily produced for the Internet, may be interactive\nMemorial: Artwork which commemorates a person, place or event\nMosaic: Surface decoration made of inlaid stone, glass or other material to form a picture or pattern\nMural: Painted or decorated surface of a wall\nNull\nOther: Artwork which falls outside defined types\nPainting: Free hanging painted surface usually canvas or wood\nPole: Free-standing pole structure\nPoster:Two-dimensional artwork such as prints for transit shelters\nRelief: A form of sculpture that is carved or cast; design elements project outward in varying degrees from a background plane\nSculpture: Three-dimensional representation of an object, abstract design, or living thing that is cast, carved, modeled, fabricated, fired, assembled or a combination of these\nSeries: Artwork that has multiple components that are not only in one place but spread over a large area\nSite Work: Artwork which is incorporated into the landscape or the architectural features of a building or complex\nTapestry: Fabric wall-hanging\nTotem: Carved, usually wood, free-standing pole of First Nations imagery and representations.\nVideo: Artwork made up of moving images\nWelcome Figure: Carved, usually wood, free-standing figure of First Nations imagery and representations"
+                        },
+                        "status": {
+                            "type": "string",
+                            "title": "Status",
+                            "description": "Current status of the artwork, as follows:In place - Artwork exists at the location specified and is available for viewing|Removed - Artwork has been removed and is not available for viewing"
+                        },
+                        "sitename": {
+                            "type": "string",
+                            "title": "SiteName",
+                            "description": "The name of the place where the artwork is situated, e.g. building name, park name, etc."
+                        },
+                        "siteaddress": {
+                            "type": "string",
+                            "title": "SiteAddress",
+                            "description": "The location of the artwork described by street number and name, or intersection."
+                        },
+                        "primarymaterial": {
+                            "type": "string",
+                            "title": "PrimaryMaterial",
+                            "description": "Description of the material the artwork is primarily composed of"
+                        },
+                        "url": {
+                            "type": "string",
+                            "title": "URL",
+                            "description": "Web page address for the artwork detail page in the Public Art Registry"
+                        },
+                        "photourl": {
+                            "type": "string",
+                            "title": "PhotoURL",
+                            "description": "Web page address for the artwork photograph in the Public Art Registry"
+                        },
+                        "ownership": {
+                            "type": "string",
+                            "title": "Ownership",
+                            "description": "Acknowledgement of the entity primarily responsible for the artwork."
+                        },
+                        "neighbourhood": {
+                            "type": "string",
+                            "title": "Neighbourhood",
+                            "description": "In 1969, City Council approved twenty-two local areas as a basis for the organization of community services and city departments. In 1970, local areas were used for the establishment of local area planning programs. For more information, see theLocal Area Boundary Datapage."
+                        },
+                        "locationonsite": {
+                            "type": "string",
+                            "title": "LocationOnsite",
+                            "description": "Additional information describing where to find the artwork at the address or location provided."
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geom",
+                            "description": "Spatial representation of feature"
+                        },
+                        "geo_local_area": {
+                            "type": "string",
+                            "title": "Geo Local Area",
+                            "description": "The local area where the feature is found, derived from the feature's coordinates or address in the source system. The City has 22 local areas (also known as local planning areas). For more details, see the Local area boundary data set."
+                        },
+                        "descriptionofwork": {
+                            "type": "string",
+                            "title": "DescriptionOfwork",
+                            "description": "Information in a text field which elaborates significant elements of the artwork, its provenance, the artist, etc."
+                        },
+                        "artists": {
+                            "type": "string",
+                            "title": "Artists",
+                            "description": "Unique identifier of the artists associated with the artwork (see ArtistID)"
+                        },
+                        "photocredits": {
+                            "type": "string",
+                            "title": "PhotoCredits",
+                            "description": "Name of the photographer who provided the artwork photograph Note: If there is information in this field, you must acknowledge the source of photograph when used."
+                        },
+                        "yearofinstallation": {
+                            "type": "string",
+                            "title": "YearOfInstallation",
+                            "description": "Year the artwork was originally installed."
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,921 @@
+{
+    "title": "censo-poblacion-2018-bogota@bogota-laburbano",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/censo-poblacion-2018-bogota@bogota-laburbano"
+        }
+    ],
+    "definitions": {
+        "censo-poblacion-2018-bogota@bogota-laburbano": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/censo-poblacion-2018-bogota@bogota-laburbano_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "censo-poblacion-2018-bogota@bogota-laburbano_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "cod_dane_a": {
+                            "type": "string",
+                            "title": "COD_DANE_A",
+                            "description": "Código de manzana concatenado (departamento, municipio, clase, sector rural, sección rural, zona urbana, sector urbano, sección urbana y manzana)"
+                        },
+                        "dpto_ccdgo": {
+                            "type": "string",
+                            "title": "DPTO_CCDGO",
+                            "description": "Código del departamento"
+                        },
+                        "mpio_ccdgo": {
+                            "type": "string",
+                            "title": "MPIO_CCDGO",
+                            "description": "Código del municipio"
+                        },
+                        "mpio_cdpmp": {
+                            "type": "string",
+                            "title": "MPIO_CDPMP",
+                            "description": ""
+                        },
+                        "clas_ccdgo": {
+                            "type": "string",
+                            "title": "CLAS_CCDGO",
+                            "description": ""
+                        },
+                        "setr_ccdgo": {
+                            "type": "string",
+                            "title": "SETR_CCDGO",
+                            "description": ""
+                        },
+                        "setr_ccnct": {
+                            "type": "string",
+                            "title": "SETR_CCNCT",
+                            "description": ""
+                        },
+                        "secr_ccdgo": {
+                            "type": "string",
+                            "title": "SECR_CCDGO",
+                            "description": ""
+                        },
+                        "secr_ccnct": {
+                            "type": "string",
+                            "title": "SECR_CCNCT",
+                            "description": ""
+                        },
+                        "zu_ccdgo": {
+                            "type": "string",
+                            "title": "ZU_CCDGO",
+                            "description": ""
+                        },
+                        "zu_cdivi": {
+                            "type": "string",
+                            "title": "ZU_CDIVI",
+                            "description": ""
+                        },
+                        "setu_ccdgo": {
+                            "type": "string",
+                            "title": "SETU_CCDGO",
+                            "description": ""
+                        },
+                        "setu_ccnct": {
+                            "type": "string",
+                            "title": "SETU_CCNCT",
+                            "description": ""
+                        },
+                        "secu_ccdgo": {
+                            "type": "string",
+                            "title": "SECU_CCDGO",
+                            "description": ""
+                        },
+                        "secu_ccnct": {
+                            "type": "string",
+                            "title": "SECU_CCNCT",
+                            "description": ""
+                        },
+                        "manz_ccdgo": {
+                            "type": "string",
+                            "title": "MANZ_CCDGO",
+                            "description": ""
+                        },
+                        "ag_ccdgo": {
+                            "type": "string",
+                            "title": "AG_CCDGO",
+                            "description": ""
+                        },
+                        "dato_anm": {
+                            "type": "string",
+                            "title": "DATO_ANM",
+                            "description": ""
+                        },
+                        "version": {
+                            "type": "string",
+                            "title": "VERSION",
+                            "description": ""
+                        },
+                        "area": {
+                            "type": "string",
+                            "title": "AREA",
+                            "description": "Área de la manzana en metros cuadrados  (Sistema de coordenadas planas MAGNA_Colombia_Bogota)"
+                        },
+                        "latitud": {
+                            "type": "string",
+                            "title": "LATITUD",
+                            "description": ""
+                        },
+                        "longitud": {
+                            "type": "string",
+                            "title": "LONGITUD",
+                            "description": ""
+                        },
+                        "densidad": {
+                            "type": "string",
+                            "title": "DENSIDAD",
+                            "description": "Número promedio de habitantes en la manzana que viven sobre una unidad de superficie (m2)"
+                        },
+                        "ctnencuest": {
+                            "type": "string",
+                            "title": "CTNENCUEST",
+                            "description": ""
+                        },
+                        "tp3_1_si": {
+                            "type": "string",
+                            "title": "TP3_1_SI",
+                            "description": ""
+                        },
+                        "tp3_2_no": {
+                            "type": "string",
+                            "title": "TP3_2_NO",
+                            "description": ""
+                        },
+                        "tp3a_ri": {
+                            "type": "string",
+                            "title": "TP3A_RI",
+                            "description": ""
+                        },
+                        "tp3b_tcn": {
+                            "type": "string",
+                            "title": "TP3B_TCN",
+                            "description": ""
+                        },
+                        "tp4_1_si": {
+                            "type": "string",
+                            "title": "TP4_1_SI",
+                            "description": ""
+                        },
+                        "tp4_2_no": {
+                            "type": "string",
+                            "title": "TP4_2_NO",
+                            "description": ""
+                        },
+                        "tp9_1_uso": {
+                            "type": "string",
+                            "title": "TP9_1_USO",
+                            "description": "Conteo de unidades con uso vivienda"
+                        },
+                        "tp9_2_uso": {
+                            "type": "string",
+                            "title": "TP9_2_USO",
+                            "description": "Conteo de unidades con uso mixto"
+                        },
+                        "tp9_3_uso": {
+                            "type": "string",
+                            "title": "TP9_3_USO",
+                            "description": "Conteo de unidades con uso no residencial"
+                        },
+                        "tp9_4_uso": {
+                            "type": "string",
+                            "title": "TP9_4_USO",
+                            "description": "Conteo de unidades con uso LEA"
+                        },
+                        "tp9_2_1_mi": {
+                            "type": "string",
+                            "title": "TP9_2_1_MI",
+                            "description": "Conteo de unidades mixtas con uso no residencial industria"
+                        },
+                        "tp9_2_2_mi": {
+                            "type": "string",
+                            "title": "TP9_2_2_MI",
+                            "description": "Conteo de unidades mixtas con uso no residencial comercio"
+                        },
+                        "tp9_2_3_mi": {
+                            "type": "string",
+                            "title": "TP9_2_3_MI",
+                            "description": "Conteo de unidades mixtas con uso no residencial servicios"
+                        },
+                        "tp9_2_4_mi": {
+                            "type": "string",
+                            "title": "TP9_2_4_MI",
+                            "description": "Conteo de unidades mixtas con uso no residencial agropecuario, agroindustrial, forestal"
+                        },
+                        "tp9_2_9_mi": {
+                            "type": "string",
+                            "title": "TP9_2_9_MI",
+                            "description": "Conteo de unidades mixtas con uso no residencial sin información"
+                        },
+                        "tp9_3_1_no": {
+                            "type": "string",
+                            "title": "TP9_3_1_NO",
+                            "description": "Conteo de unidades no residénciales con uso Industria"
+                        },
+                        "tp9_3_2_no": {
+                            "type": "string",
+                            "title": "TP9_3_2_NO",
+                            "description": "Conteo de unidades no residénciales con uso Comercio"
+                        },
+                        "tp9_3_3_no": {
+                            "type": "string",
+                            "title": "TP9_3_3_NO",
+                            "description": "Conteo de unidades no residénciales con uso Servicios"
+                        },
+                        "tp9_3_4_no": {
+                            "type": "string",
+                            "title": "TP9_3_4_NO",
+                            "description": "Conteo de unidades no residénciales con uso Agropecuario, Agroindustrial, Forestal"
+                        },
+                        "tp9_3_5_no": {
+                            "type": "string",
+                            "title": "TP9_3_5_NO",
+                            "description": "Conteo de unidades no residénciales con uso Institucional"
+                        },
+                        "tp9_3_6_no": {
+                            "type": "string",
+                            "title": "TP9_3_6_NO",
+                            "description": "Conteo de unidades no residénciales con uso Lote (Unidad sin construcción)"
+                        },
+                        "tp9_3_7_no": {
+                            "type": "string",
+                            "title": "TP9_3_7_NO",
+                            "description": "Conteo de unidades no residénciales con uso Parque/Zona Verde"
+                        },
+                        "tp9_3_8_no": {
+                            "type": "string",
+                            "title": "TP9_3_8_NO",
+                            "description": "Conteo de unidades no residénciales con uso Minero-Energético"
+                        },
+                        "tp9_3_9_no": {
+                            "type": "string",
+                            "title": "TP9_3_9_NO",
+                            "description": "Conteo de unidades no residénciales con uso Protección/Conservación ambiental"
+                        },
+                        "tp9_3_10_n": {
+                            "type": "string",
+                            "title": "TP9_3_10_N",
+                            "description": "Conteo de unidades no residénciales con uso En Construcción"
+                        },
+                        "tp9_3_99_n": {
+                            "type": "string",
+                            "title": "TP9_3_99_N",
+                            "description": "Conteo de unidades no residénciales con uso Sin información"
+                        },
+                        "tvivienda": {
+                            "type": "string",
+                            "title": "TVIVIENDA",
+                            "description": "Conteo de viviendas"
+                        },
+                        "tp14_1_tip": {
+                            "type": "string",
+                            "title": "TP14_1_TIP",
+                            "description": ""
+                        },
+                        "tp14_2_tip": {
+                            "type": "string",
+                            "title": "TP14_2_TIP",
+                            "description": ""
+                        },
+                        "tp14_3_tip": {
+                            "type": "string",
+                            "title": "TP14_3_TIP",
+                            "description": ""
+                        },
+                        "tp14_4_tip": {
+                            "type": "string",
+                            "title": "TP14_4_TIP",
+                            "description": ""
+                        },
+                        "tp14_5_tip": {
+                            "type": "string",
+                            "title": "TP14_5_TIP",
+                            "description": ""
+                        },
+                        "tp14_6_tip": {
+                            "type": "string",
+                            "title": "TP14_6_TIP",
+                            "description": ""
+                        },
+                        "tp15_1_ocu": {
+                            "type": "string",
+                            "title": "TP15_1_OCU",
+                            "description": "Conteo de viviendas Ocupada con personas presentes"
+                        },
+                        "tp15_2_ocu": {
+                            "type": "string",
+                            "title": "TP15_2_OCU",
+                            "description": "Conteo de viviendas Ocupada con todas las personas ausentes"
+                        },
+                        "tp15_3_ocu": {
+                            "type": "string",
+                            "title": "TP15_3_OCU",
+                            "description": "Conteo de viviendas Vivienda  temporal (para vacaciones, trabajo etc.)"
+                        },
+                        "tp15_4_ocu": {
+                            "type": "string",
+                            "title": "TP15_4_OCU",
+                            "description": "Conteo de viviendas Desocupada"
+                        },
+                        "tp16_hog": {
+                            "type": "string",
+                            "title": "TP16_HOG",
+                            "description": "Conteo de hogares"
+                        },
+                        "tp19_ee_1": {
+                            "type": "string",
+                            "title": "TP19_EE_1",
+                            "description": ""
+                        },
+                        "tp19_ee_2": {
+                            "type": "string",
+                            "title": "TP19_EE_2",
+                            "description": ""
+                        },
+                        "tp19_ee_e1": {
+                            "type": "string",
+                            "title": "TP19_EE_E1",
+                            "description": "Conteo de viviendas que reportan recibir facturación de energía eléctrica en Estrato 1"
+                        },
+                        "tp19_ee_e2": {
+                            "type": "string",
+                            "title": "TP19_EE_E2",
+                            "description": "Conteo de viviendas que reportan recibir facturación de energía eléctrica en Estrato 2"
+                        },
+                        "tp19_ee_e3": {
+                            "type": "string",
+                            "title": "TP19_EE_E3",
+                            "description": "Conteo de viviendas que reportan recibir facturación de energía eléctrica en Estrato 3"
+                        },
+                        "tp19_ee_e4": {
+                            "type": "string",
+                            "title": "TP19_EE_E4",
+                            "description": "Conteo de viviendas que reportan recibir facturación de energía eléctrica en Estrato 4"
+                        },
+                        "tp19_ee_e5": {
+                            "type": "string",
+                            "title": "TP19_EE_E5",
+                            "description": "Conteo de viviendas que reportan recibir facturación de energía eléctrica en Estrato 5"
+                        },
+                        "tp19_ee_e6": {
+                            "type": "string",
+                            "title": "TP19_EE_E6",
+                            "description": "Conteo de viviendas que reportan recibir facturación de energía eléctrica en Estrato 6"
+                        },
+                        "tp19_ee_e9": {
+                            "type": "string",
+                            "title": "TP19_EE_E9",
+                            "description": "Conteo de viviendas que reportan recibir facturación de energía eléctrica en No sabe o no tiene estrato"
+                        },
+                        "tp19_acu_1": {
+                            "type": "string",
+                            "title": "TP19_ACU_1",
+                            "description": ""
+                        },
+                        "tp19_acu_2": {
+                            "type": "string",
+                            "title": "TP19_ACU_2",
+                            "description": ""
+                        },
+                        "tp19_alc_1": {
+                            "type": "string",
+                            "title": "TP19_ALC_1",
+                            "description": ""
+                        },
+                        "tp19_alc_2": {
+                            "type": "string",
+                            "title": "TP19_ALC_2",
+                            "description": ""
+                        },
+                        "tp19_gas_1": {
+                            "type": "string",
+                            "title": "TP19_GAS_1",
+                            "description": ""
+                        },
+                        "tp19_gas_2": {
+                            "type": "string",
+                            "title": "TP19_GAS_2",
+                            "description": ""
+                        },
+                        "tp19_gas_9": {
+                            "type": "string",
+                            "title": "TP19_GAS_9",
+                            "description": ""
+                        },
+                        "tp19_recb1": {
+                            "type": "string",
+                            "title": "TP19_RECB1",
+                            "description": ""
+                        },
+                        "tp19_recb2": {
+                            "type": "string",
+                            "title": "TP19_RECB2",
+                            "description": ""
+                        },
+                        "tp19_inte1": {
+                            "type": "string",
+                            "title": "TP19_INTE1",
+                            "description": ""
+                        },
+                        "tp19_inte2": {
+                            "type": "string",
+                            "title": "TP19_INTE2",
+                            "description": ""
+                        },
+                        "tp19_inte9": {
+                            "type": "string",
+                            "title": "TP19_INTE9",
+                            "description": ""
+                        },
+                        "tp27_perso": {
+                            "type": "string",
+                            "title": "TP27_PERSO",
+                            "description": "Número de personas"
+                        },
+                        "personas_l": {
+                            "type": "string",
+                            "title": "PERSONAS_L",
+                            "description": "Conteo de personas en LEAS"
+                        },
+                        "personas_s": {
+                            "type": "string",
+                            "title": "PERSONAS_S",
+                            "description": "Conteo de personas en hogares particulares"
+                        },
+                        "tp32_1_sex": {
+                            "type": "string",
+                            "title": "TP32_1_SEX",
+                            "description": "Conteo de hombres"
+                        },
+                        "tp32_2_sex": {
+                            "type": "string",
+                            "title": "TP32_2_SEX",
+                            "description": "Conteo de mujeres"
+                        },
+                        "tp34_1_eda": {
+                            "type": "string",
+                            "title": "TP34_1_EDA",
+                            "description": "Conteo de personas entre 0 - 9 años"
+                        },
+                        "tp34_2_eda": {
+                            "type": "string",
+                            "title": "TP34_2_EDA",
+                            "description": "Conteo de personas entre 10 - 19 años"
+                        },
+                        "tp34_3_eda": {
+                            "type": "string",
+                            "title": "TP34_3_EDA",
+                            "description": "Conteo de personas entre 20 - 29 años"
+                        },
+                        "tp34_4_eda": {
+                            "type": "string",
+                            "title": "TP34_4_EDA",
+                            "description": "Conteo de personas entre 30 - 39 años"
+                        },
+                        "tp34_5_eda": {
+                            "type": "string",
+                            "title": "TP34_5_EDA",
+                            "description": "Conteo de personas entre 40 - 49 años"
+                        },
+                        "tp34_6_eda": {
+                            "type": "string",
+                            "title": "TP34_6_EDA",
+                            "description": "Conteo de personas entre 50 - 59 años"
+                        },
+                        "tp34_7_eda": {
+                            "type": "string",
+                            "title": "TP34_7_EDA",
+                            "description": "Conteo de personas entre 60 - 69 años"
+                        },
+                        "tp34_8_eda": {
+                            "type": "string",
+                            "title": "TP34_8_EDA",
+                            "description": "Conteo de personas entre 70 - 79 años"
+                        },
+                        "tp34_9_eda": {
+                            "type": "string",
+                            "title": "TP34_9_EDA",
+                            "description": "Conteo de personas entre 80  y más años"
+                        },
+                        "tp51primar": {
+                            "type": "string",
+                            "title": "TP51PRIMAR",
+                            "description": "Conteo de personas donde el nivel educativo del último año alcanzado es Preescolar - Pre jardín y Básica primaria"
+                        },
+                        "tp51secund": {
+                            "type": "string",
+                            "title": "TP51SECUND",
+                            "description": "Conteo de personas donde el nivel educativo del último año alcanzado es Básica secundaria 3...6"
+                        },
+                        "tp51superi": {
+                            "type": "string",
+                            "title": "TP51SUPERI",
+                            "description": "Conteo de personas donde el nivel educativo del último año alcanzado es Técnica profesional 1 año  7...9"
+                        },
+                        "tp51postgr": {
+                            "type": "string",
+                            "title": "TP51POSTGR",
+                            "description": "Conteo de personas donde el nivel educativo del último año alcanzado es Especialización 1 año…maestría doctorado"
+                        },
+                        "tp51_13_ed": {
+                            "type": "string",
+                            "title": "TP51_13_ED",
+                            "description": "Conteo de personas donde el nivel educativo del último año alcanzado es Ninguno"
+                        },
+                        "tp51_99_ed": {
+                            "type": "string",
+                            "title": "TP51_99_ED",
+                            "description": "Conteo de personas donde el nivel educativo del último año alcanzado es Sin información"
+                        },
+                        "cd_lc_cm": {
+                            "type": "string",
+                            "title": "CD_LC_CM",
+                            "description": ""
+                        },
+                        "nmb_lc_cm": {
+                            "type": "string",
+                            "title": "NMB_LC_CM",
+                            "description": "Nombre de la localidad o comuna"
+                        },
+                        "tp_lc_cm": {
+                            "type": "string",
+                            "title": "TP_LC_CM",
+                            "description": ""
+                        },
+                        "shape_leng": {
+                            "type": "string",
+                            "title": "Shape_Leng",
+                            "description": ""
+                        },
+                        "shape_area": {
+                            "type": "string",
+                            "title": "Shape_Area",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

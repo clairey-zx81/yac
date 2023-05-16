@@ -1,0 +1,501 @@
+{
+    "title": "georef-belgium-postal-codes@public",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/georef-belgium-postal-codes@public"
+        }
+    ],
+    "definitions": {
+        "georef-belgium-postal-codes@public": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/georef-belgium-postal-codes@public_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "georef-belgium-postal-codes@public_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "postcode": {
+                            "type": "string",
+                            "title": "Post code",
+                            "description": ""
+                        },
+                        "special_code": {
+                            "type": "integer",
+                            "title": "Special code",
+                            "description": "1 = yes, 0 = no"
+                        },
+                        "smun_code": {
+                            "type": "string",
+                            "title": "Submunicipality code",
+                            "description": ""
+                        },
+                        "reg_code": {
+                            "type": "string",
+                            "title": "Région code",
+                            "description": ""
+                        },
+                        "prov_code": {
+                            "type": "string",
+                            "title": "Province code",
+                            "description": ""
+                        },
+                        "arr_code": {
+                            "type": "string",
+                            "title": "Arrondissement code",
+                            "description": ""
+                        },
+                        "mun_code": {
+                            "type": "string",
+                            "title": "Municipality code",
+                            "description": ""
+                        },
+                        "smun_area_code": {
+                            "type": "string",
+                            "title": "ISO 3166-3 Area code",
+                            "description": ""
+                        },
+                        "smun_off_language": {
+                            "type": "string",
+                            "title": "smun_off_language",
+                            "description": ""
+                        },
+                        "smun_name_fr": {
+                            "type": "string",
+                            "title": "Sub-municipality name (French)",
+                            "description": ""
+                        },
+                        "smun_name_nl": {
+                            "type": "string",
+                            "title": "Sub-municipality name (Dutch)",
+                            "description": ""
+                        },
+                        "smun_name_de": {
+                            "type": "string",
+                            "title": "Sub-municipality name (German)",
+                            "description": ""
+                        },
+                        "reg_name_de": {
+                            "type": "string",
+                            "title": "Région name (German)",
+                            "description": ""
+                        },
+                        "reg_name_nl": {
+                            "type": "string",
+                            "title": "Région name (Dutch)",
+                            "description": ""
+                        },
+                        "reg_name_fr": {
+                            "type": "string",
+                            "title": "Région name (French)",
+                            "description": ""
+                        },
+                        "prov_name_de": {
+                            "type": "string",
+                            "title": "Province name (German)",
+                            "description": ""
+                        },
+                        "prov_name_nl": {
+                            "type": "string",
+                            "title": "Province name (Dutch)",
+                            "description": ""
+                        },
+                        "prov_name_fr": {
+                            "type": "string",
+                            "title": "Province name (French)",
+                            "description": ""
+                        },
+                        "arr_name_de": {
+                            "type": "string",
+                            "title": "Arrondissement name (German)",
+                            "description": ""
+                        },
+                        "arr_name_nl": {
+                            "type": "string",
+                            "title": "Arrondissement name (Dutch)",
+                            "description": ""
+                        },
+                        "arr_name_fr": {
+                            "type": "string",
+                            "title": "Arrondissement name (French)",
+                            "description": ""
+                        },
+                        "mun_name_de": {
+                            "type": "string",
+                            "title": "Municipality name (German)",
+                            "description": ""
+                        },
+                        "mun_name_nl": {
+                            "type": "string",
+                            "title": "Municipality name (Dutch)",
+                            "description": ""
+                        },
+                        "mun_name_fr": {
+                            "type": "string",
+                            "title": "Municipality name (French)",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

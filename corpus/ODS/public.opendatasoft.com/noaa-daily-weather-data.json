@@ -1,0 +1,417 @@
+{
+    "title": "noaa-daily-weather-data",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/noaa-daily-weather-data"
+        }
+    ],
+    "definitions": {
+        "noaa-daily-weather-data": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/noaa-daily-weather-data_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "noaa-daily-weather-data_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "ghcn_din": {
+                            "type": "string",
+                            "title": "GHCN_DIN",
+                            "description": "Station identifier (GHCN Daily Identification Number).\nNote that the first two characters denote the FIPS  country code, the third character is a network code that identifies the station numbering system used, and the remaining eight characters contain the actual station ID. \n\nThe network code  has the following five values:\n\n           0 = unspecified (station identified by up to eight \n\t       alphanumeric characters)\n\t   1 = Community Collaborative Rain, Hail,and Snow (CoCoRaHS)\n\t       based identification number.  To ensure consistency with\n\t       with GHCN Daily, all numbers in the original CoCoRaHS IDs\n\t       have been left-filled to make them all four digits long. \n\t       In addition, the characters \"-\" and \"_\" have been removed \n\t       to ensure that the IDs do not exceed 11 characters when \n\t       preceded by \"US1\". For example, the CoCoRaHS ID \n\t       \"AZ-MR-156\" becomes \"US1AZMR0156\" in GHCN-Daily\n           C = U.S. Cooperative Network identification number (last six \n               characters of the GHCN-Daily ID)\n\t   E = Identification number used in the ECA&D non-blended\n\t       dataset\n\t   M = World Meteorological Organization ID (last five\n\t       characters of the GHCN-Daily ID)\n\t   N = Identification number used in data supplied by a \n\t       National Meteorological or Hydrological Center\n\t   R = U.S. Interagency Remote Automatic Weather Station (RAWS)\n\t       identifier\n\t   S = U.S. Natural Resources Conservation Service SNOwpack\n\t       TELemtry (SNOTEL) station identifier\n           W = WBAN identification number (last five characters of the \n               GHCN-Daily ID)"
+                        },
+                        "date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "DATE",
+                            "description": "Date"
+                        },
+                        "prcp": {
+                            "type": "number",
+                            "title": "PRCP",
+                            "description": "Precipitation (tenths of mm)"
+                        },
+                        "snow": {
+                            "type": "number",
+                            "title": "SNOW",
+                            "description": "Snowfall (mm)"
+                        },
+                        "tmax": {
+                            "type": "number",
+                            "title": "TMAX",
+                            "description": "Daily maximum temperature (°C)"
+                        },
+                        "tmin": {
+                            "type": "number",
+                            "title": "TMIN",
+                            "description": "Daily minimum temperature (°C)"
+                        },
+                        "elevation": {
+                            "type": "number",
+                            "title": "ELEVATION",
+                            "description": "Elevation of the station (in meters, missing = -999.9)."
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "NAME",
+                            "description": "Name of the station."
+                        },
+                        "coord": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "COORD",
+                            "description": "Latitude,Longitude of the station (in decimal degrees)."
+                        },
+                        "country_code": {
+                            "type": "string",
+                            "title": "COUNTRY_CODE",
+                            "description": "FIPS country code of the country where the station is located (from FIPS Publication 10-4 at www.cia.gov/cia/publications/factbook/appendix/appendix-d.html)."
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

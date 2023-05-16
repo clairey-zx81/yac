@@ -1,0 +1,721 @@
+{
+    "title": "irfn_complet@eurometrostrasbourg",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/irfn_complet@eurometrostrasbourg"
+        }
+    ],
+    "definitions": {
+        "irfn_complet@eurometrostrasbourg": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/irfn_complet@eurometrostrasbourg_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "irfn_complet@eurometrostrasbourg_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "source": {
+                            "type": "string",
+                            "title": "SOURCE",
+                            "description": "source principale"
+                        },
+                        "annee_ref": {
+                            "type": "string",
+                            "title": "ANNEE_REF",
+                            "description": "année de référence de la source principale"
+                        },
+                        "decoupage": {
+                            "type": "string",
+                            "title": "DECOUPAGE",
+                            "description": "découpage territorial"
+                        },
+                        "id_territoire": {
+                            "type": "string",
+                            "title": "ID_TERRITOIRE",
+                            "description": "identifiant du territoire"
+                        },
+                        "lib_com": {
+                            "type": "string",
+                            "title": "LIB_COM",
+                            "description": "libellé de la commune"
+                        },
+                        "lib_territoire": {
+                            "type": "string",
+                            "title": "LIB_TERRITOIRE",
+                            "description": "libellé du territoire"
+                        },
+                        "zone": {
+                            "type": "string",
+                            "title": "ZONE",
+                            "description": "description de la zone"
+                        },
+                        "commentaires": {
+                            "type": "string",
+                            "title": "COMMENTAIRES",
+                            "description": "commentaires"
+                        },
+                        "id_com": {
+                            "type": "string",
+                            "title": "ID_COM",
+                            "description": "identifiant de la commune"
+                        },
+                        "ind_a_info": {
+                            "type": "string",
+                            "title": "IND_A_INFO",
+                            "description": "indicateur de risque pour l'accès à l'information"
+                        },
+                        "ind_a_equip": {
+                            "type": "string",
+                            "title": "IND_A_EQUIP",
+                            "description": "indicateur de risque pour l'accès à l'équipement"
+                        },
+                        "ind_u_admin": {
+                            "type": "string",
+                            "title": "IND_U_ADMIN",
+                            "description": "indicateur de risque pour l'usage de compétences administratives"
+                        },
+                        "ind_u_num": {
+                            "type": "string",
+                            "title": "IND_U_NUM",
+                            "description": "indicateur de risque pour l'usage de compétences numériques"
+                        },
+                        "ind_global": {
+                            "type": "string",
+                            "title": "IND_GLOBAL",
+                            "description": "indicateur de risque de fragilité globale"
+                        },
+                        "sc_a_info": {
+                            "type": "string",
+                            "title": "SC_A_INFO",
+                            "description": "score du risque pour l'accès à l'information"
+                        },
+                        "sc_a_equip": {
+                            "type": "string",
+                            "title": "SC_A_EQUIP",
+                            "description": "score du risque pour l'accès à l'équipement"
+                        },
+                        "sc_u_admin": {
+                            "type": "string",
+                            "title": "SC_U_ADMIN",
+                            "description": "score du risque pour l'usage de compétences administratives"
+                        },
+                        "sc_u_num": {
+                            "type": "string",
+                            "title": "SC_U_NUM",
+                            "description": "score du risque pour l'usage de compétences numériques"
+                        },
+                        "sc_global": {
+                            "type": "string",
+                            "title": "SC_GLOBAL",
+                            "description": "score du risque de fragilité globale"
+                        },
+                        "p_pop": {
+                            "type": "string",
+                            "title": "P_POP",
+                            "description": "population"
+                        },
+                        "p_pop1529": {
+                            "type": "string",
+                            "title": "P_POP1529",
+                            "description": "population 15-29 ans"
+                        },
+                        "p_pop65p": {
+                            "type": "string",
+                            "title": "P_POP65P",
+                            "description": "population 65 ans et plus"
+                        },
+                        "p_pop1564": {
+                            "type": "string",
+                            "title": "P_POP1564",
+                            "description": "population 15-64 ans"
+                        },
+                        "p_chom1564": {
+                            "type": "string",
+                            "title": "P_CHOM1564",
+                            "description": "nombre de chômeurs 15-64 ans"
+                        },
+                        "c_men": {
+                            "type": "string",
+                            "title": "C_MEN",
+                            "description": "nombre de ménages"
+                        },
+                        "c_menpseul": {
+                            "type": "string",
+                            "title": "C_MENPSEUL",
+                            "description": "nombre de ménages d'une personne"
+                        },
+                        "c_menfammono": {
+                            "type": "string",
+                            "title": "C_MENFAMMONO",
+                            "description": "nombre de ménages en famille monoparentale"
+                        },
+                        "p_nscol15p": {
+                            "type": "string",
+                            "title": "P_NSCOL15P",
+                            "description": "nombre de 15 ans ou plus non scolarisés"
+                        },
+                        "p_nscol15p_diplmin": {
+                            "type": "string",
+                            "title": "P_NSCOL15P_DIPLMIN",
+                            "description": "nombre de 15 ans ou plus non scolarisés et sans diplôme ou diplôme minimal (brevet,..)"
+                        },
+                        "locaux": {
+                            "type": "string",
+                            "title": "LOCAUX",
+                            "description": "nombre de locaux"
+                        },
+                        "ffth": {
+                            "type": "string",
+                            "title": "FFTH",
+                            "description": "nombre de locaux FTTH (fibre optique à domicile)"
+                        },
+                        "surf_m2": {
+                            "type": "string",
+                            "title": "SURF_M2",
+                            "description": "surface (m2)"
+                        },
+                        "surf_couv4g_m2": {
+                            "type": "string",
+                            "title": "SURF_COUV4G_M2",
+                            "description": "surface de couverture 4G (m2)"
+                        },
+                        "p_pop_imm": {
+                            "type": "string",
+                            "title": "P_POP_IMM",
+                            "description": "population immigrée"
+                        },
+                        "c_menfammono_tx": {
+                            "type": "string",
+                            "title": "C_MENFAMMONO_TX",
+                            "description": "part des ménages en famille monoparentale (%)"
+                        },
+                        "c_menpseul_tx": {
+                            "type": "string",
+                            "title": "C_MENPSEUL_TX",
+                            "description": "part des ménages d'une personne (%)"
+                        },
+                        "p_pop1529_tx": {
+                            "type": "string",
+                            "title": "P_POP1529_TX",
+                            "description": "population 15-29 ans (%)"
+                        },
+                        "p_chom1564_tx": {
+                            "type": "string",
+                            "title": "P_CHOM1564_TX",
+                            "description": "part des chômeurs 15-64 ans (%)"
+                        },
+                        "p_pop65p_tx": {
+                            "type": "string",
+                            "title": "P_POP65P_TX",
+                            "description": "population 65 ans et plus (%)"
+                        },
+                        "p_nscol15p_diplmin_tx": {
+                            "type": "string",
+                            "title": "P_NSCOL15P_DIPLMIN_TX",
+                            "description": "part des 15 ans ou plus non scolarisés et sans diplôme ou diplôme minimal (brevet,..) (%)"
+                        },
+                        "disp_med": {
+                            "type": "string",
+                            "title": "DISP_MED",
+                            "description": "revenu disponible annuel médian par unité de consommation (€)"
+                        },
+                        "couv4g_tx": {
+                            "type": "string",
+                            "title": "COUV4G_TX",
+                            "description": "couverture 4G (%)"
+                        },
+                        "ffthloc_tx": {
+                            "type": "string",
+                            "title": "FFTHLOC_TX",
+                            "description": "locaux FFTH  (fibre optique à domicile) (%)"
+                        },
+                        "p_pop_imm_tx": {
+                            "type": "string",
+                            "title": "P_POP_IMM_TX",
+                            "description": "population immigrée (%)"
+                        },
+                        "p_pop_ems": {
+                            "type": "string",
+                            "title": "P_POP_EMS",
+                            "description": "population - EMS"
+                        },
+                        "p_pop1529_ems": {
+                            "type": "string",
+                            "title": "P_POP1529_EMS",
+                            "description": "population 15-29 ans - EMS"
+                        },
+                        "p_pop65p_ems": {
+                            "type": "string",
+                            "title": "P_POP65P_EMS",
+                            "description": "population 65 ans et plus - EMS"
+                        },
+                        "p_pop1564_ems": {
+                            "type": "string",
+                            "title": "P_POP1564_EMS",
+                            "description": "population 15-64 ans - EMS"
+                        },
+                        "p_chom1564_ems": {
+                            "type": "string",
+                            "title": "P_CHOM1564_EMS",
+                            "description": "nombre de chômeurs 15-64 ans - EMS"
+                        },
+                        "c_men_ems": {
+                            "type": "string",
+                            "title": "C_MEN_EMS",
+                            "description": "nombre de ménages - EMS"
+                        },
+                        "c_menpseul_ems": {
+                            "type": "string",
+                            "title": "C_MENPSEUL_EMS",
+                            "description": "nombre de ménages d'une personne - EMS"
+                        },
+                        "c_menfammono_ems": {
+                            "type": "string",
+                            "title": "C_MENFAMMONO_EMS",
+                            "description": "nombre de ménages en famille monoparentale - EMS"
+                        },
+                        "p_nscol15p_ems": {
+                            "type": "string",
+                            "title": "P_NSCOL15P_EMS",
+                            "description": "nombre de 15 ans ou plus non scolarisés - EMS"
+                        },
+                        "p_nscol15p_diplmin_ems": {
+                            "type": "string",
+                            "title": "P_NSCOL15P_DIPLMIN_EMS",
+                            "description": "nombre de 15 ans ou plus non scolarisés et sans diplôme ou diplôme minimal (brevet,..) - EMS"
+                        },
+                        "disp_med_ems": {
+                            "type": "string",
+                            "title": "DISP_MED_EMS",
+                            "description": "revenu disponible annuel médian par unité de consommation (€) - EMS"
+                        },
+                        "surf_m2_ems": {
+                            "type": "string",
+                            "title": "SURF_M2_EMS",
+                            "description": "surface (m2) - EMS"
+                        },
+                        "surfcouv4g_m2_ems": {
+                            "type": "string",
+                            "title": "SURFCOUV4G_M2_EMS",
+                            "description": "surface de couverture 4G (m2) - EMS"
+                        },
+                        "p_pop_imm_ems": {
+                            "type": "string",
+                            "title": "P_POP_IMM_EMS",
+                            "description": "population immigrée - EMS"
+                        },
+                        "c_menfammono_tx_ems": {
+                            "type": "string",
+                            "title": "C_MENFAMMONO_TX_EMS",
+                            "description": "part des ménages en famille monoparentale (%) - EMS"
+                        },
+                        "c_menpseul_tx_ems": {
+                            "type": "string",
+                            "title": "C_MENPSEUL_TX_EMS",
+                            "description": "part des ménages d'une personne (%) - EMS"
+                        },
+                        "p_pop1529_tx_ems": {
+                            "type": "string",
+                            "title": "P_POP1529_TX_EMS",
+                            "description": "population 15-29 ans (%) - EMS"
+                        },
+                        "p_chom1564_tx_ems": {
+                            "type": "string",
+                            "title": "P_CHOM1564_TX_EMS",
+                            "description": "part des chômeurs 15-64 ans (%) - EMS"
+                        },
+                        "p_pop65p_tx_ems": {
+                            "type": "string",
+                            "title": "P_POP65P_TX_EMS",
+                            "description": "population 65 ans et plus (%) - EMS"
+                        },
+                        "p_nscol15p_diplmin_tx_ems": {
+                            "type": "string",
+                            "title": "P_NSCOL15P_DIPLMIN_TX_EMS",
+                            "description": "part des 15 ans ou plus non scolarisés et sans diplôme ou diplôme minimal (brevet,..) (%) - EMS"
+                        },
+                        "couv4g_tx_ems": {
+                            "type": "string",
+                            "title": "COUV4G_TX_EMS",
+                            "description": "couverture 4G (%) - EMS"
+                        },
+                        "ffthloc_tx_ems": {
+                            "type": "string",
+                            "title": "FFTHLOC_TX_EMS",
+                            "description": "locaux FFTH (fibre optique à domicile) (%) - EMS"
+                        },
+                        "p_pop_imm_tx_ems": {
+                            "type": "string",
+                            "title": "P_POP_IMM_TX_EMS",
+                            "description": "population immigrée (%) - EMS"
+                        },
+                        "id_unique": {
+                            "type": "string",
+                            "title": "ID_UNIQUE",
+                            "description": "Identifiant unique"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,542 @@
+{
+    "title": "denominations-emprises-voies-actuelles@parisdata",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/denominations-emprises-voies-actuelles@parisdata"
+        }
+    ],
+    "definitions": {
+        "denominations-emprises-voies-actuelles@parisdata": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/denominations-emprises-voies-actuelles@parisdata_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "denominations-emprises-voies-actuelles@parisdata_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "title": "Identifiant",
+                            "description": "Identifiant séquentiel de la dénomination"
+                        },
+                        "cvoie": {
+                            "type": "string",
+                            "title": "Code voie VdP",
+                            "description": "Code voie Ville de Paris"
+                        },
+                        "cdgi": {
+                            "type": "string",
+                            "title": "Code voie DGFIP",
+                            "description": "Code voie attribué par la DGFIP"
+                        },
+                        "typo": {
+                            "type": "string",
+                            "title": "Dénomination complète",
+                            "description": "Libellé total de la dénomination"
+                        },
+                        "typo_min": {
+                            "type": "string",
+                            "title": "Dénomination complète minuscule",
+                            "description": "Libellé total de la dénomination en minuscule"
+                        },
+                        "date_arret": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de l'arrété",
+                            "description": "Date de la dénomination"
+                        },
+                        "siecle": {
+                            "type": "string",
+                            "title": "Période (Siècle)",
+                            "description": ""
+                        },
+                        "statut": {
+                            "type": "string",
+                            "title": "Statut de la voie",
+                            "description": "Domanialité de la voie à titre indicatif"
+                        },
+                        "typvoie": {
+                            "type": "string",
+                            "title": "Type voie",
+                            "description": "Type de la voie, tel rue, avenue,…"
+                        },
+                        "prevoie": {
+                            "type": "string",
+                            "title": "Préposition voie",
+                            "description": "Préposition entre le type et le nom de la voie"
+                        },
+                        "nomvoie": {
+                            "type": "string",
+                            "title": "Nom voie",
+                            "description": "Nom de la voie"
+                        },
+                        "arrdt": {
+                            "type": "string",
+                            "title": "Arrondissement",
+                            "description": "Arrondissement(s) où est situé l’emprise dénommée"
+                        },
+                        "quartier": {
+                            "type": "string",
+                            "title": "Quartier",
+                            "description": "Libellé du (ou des) quartier(s) administraif(s) actuel(s) supportant la voie"
+                        },
+                        "feuille": {
+                            "type": "string",
+                            "title": "Feuille parcellaire",
+                            "description": "Feuilles parcellaires traversées par le début et la fin de la  voie"
+                        },
+                        "debut": {
+                            "type": "string",
+                            "title": "Début voie",
+                            "description": "Adresse du début de la voie"
+                        },
+                        "fin": {
+                            "type": "string",
+                            "title": "Fin voie",
+                            "description": "Adresse de fin de la voie"
+                        },
+                        "longueur": {
+                            "type": "integer",
+                            "title": "Longueur voie",
+                            "description": "Longueur graphique de la voie"
+                        },
+                        "largeur": {
+                            "type": "number",
+                            "title": "Largeur voie",
+                            "description": "Largeur minimale de la voie"
+                        },
+                        "n_pair": {
+                            "type": "string",
+                            "title": "Numéro pair",
+                            "description": ""
+                        },
+                        "n_impair": {
+                            "type": "string",
+                            "title": "Numéro impaire",
+                            "description": ""
+                        },
+                        "alignement": {
+                            "type": "string",
+                            "title": "Alignement",
+                            "description": "Référence des alignements fixés sur la voie"
+                        },
+                        "servitude": {
+                            "type": "string",
+                            "title": "Servitude",
+                            "description": "Vue de quelques servitudes historiques définies sur la voie"
+                        },
+                        "historique": {
+                            "type": "string",
+                            "title": "Historique",
+                            "description": "Détail sur l'histoire de la voie et ses dénominations"
+                        },
+                        "denomination": {
+                            "type": "string",
+                            "title": "Dénomination",
+                            "description": "Référence des textes réglementaires ayant dénommé la voie"
+                        },
+                        "classement": {
+                            "type": "string",
+                            "title": "Classement",
+                            "description": "Référence des classements pris sur la voie"
+                        },
+                        "observation": {
+                            "type": "string",
+                            "title": "Observation",
+                            "description": "Observations diverses"
+                        },
+                        "numerotage": {
+                            "type": "string",
+                            "title": "Numérotage",
+                            "description": "Référence des premiers arrêtés de numérotages sur la voie"
+                        },
+                        "orig": {
+                            "type": "string",
+                            "title": "Origine du nom",
+                            "description": "Détail sur l'origine du nom de la voie"
+                        },
+                        "declassement": {
+                            "type": "string",
+                            "title": "Déclassement",
+                            "description": "Référence des déclassements prononcés sur la voie"
+                        },
+                        "nivellement": {
+                            "type": "string",
+                            "title": "Nivellement",
+                            "description": "Référence des nivellements fixés sur la voie"
+                        },
+                        "assainissement": {
+                            "type": "string",
+                            "title": "Assainissement",
+                            "description": "Référence des arrêtés d'assainissement fixés sur une voie privée"
+                        },
+                        "ouverture": {
+                            "type": "string",
+                            "title": "Ouverture",
+                            "description": "Référence des textes réglementaires ayant créé la voie"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

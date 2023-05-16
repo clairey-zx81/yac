@@ -1,0 +1,710 @@
+{
+    "title": "uai_vu1_1_1@enseignement-agricole",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/uai_vu1_1_1@enseignement-agricole"
+        }
+    ],
+    "definitions": {
+        "uai_vu1_1_1@enseignement-agricole": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/uai_vu1_1_1@enseignement-agricole_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "uai_vu1_1_1@enseignement-agricole_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "title": "id",
+                            "description": ""
+                        },
+                        "anneesco_cdn": {
+                            "type": "integer",
+                            "title": "anneesco_cdn",
+                            "description": ""
+                        },
+                        "anneesco_libusage": {
+                            "type": "string",
+                            "title": "anneesco_libusage",
+                            "description": ""
+                        },
+                        "uai_id_cdn": {
+                            "type": "integer",
+                            "title": "uai_id_cdn",
+                            "description": ""
+                        },
+                        "typuai_cdn": {
+                            "type": "integer",
+                            "title": "typuai_cdn",
+                            "description": ""
+                        },
+                        "typuai_libusage": {
+                            "type": "string",
+                            "title": "typuai_libusage",
+                            "description": ""
+                        },
+                        "uailib_admin_lb": {
+                            "type": "string",
+                            "title": "uailib_admin_lb",
+                            "description": ""
+                        },
+                        "uailib_usuel_lb": {
+                            "type": "string",
+                            "title": "uailib_usuel_lb",
+                            "description": ""
+                        },
+                        "uailib_officiel_lb": {
+                            "type": "string",
+                            "title": "uailib_officiel_lb",
+                            "description": ""
+                        },
+                        "uailib_com_lb": {
+                            "type": "string",
+                            "title": "uailib_com_lb",
+                            "description": ""
+                        },
+                        "uailib_utilappli_lb": {
+                            "type": "string",
+                            "title": "uailib_utilappli_lb",
+                            "description": ""
+                        },
+                        "default_uailib_usuel": {
+                            "type": "string",
+                            "title": "default_uailib_usuel",
+                            "description": ""
+                        },
+                        "default_uailib_officiel": {
+                            "type": "string",
+                            "title": "default_uailib_officiel",
+                            "description": ""
+                        },
+                        "default_uailib_com": {
+                            "type": "string",
+                            "title": "default_uailib_com",
+                            "description": ""
+                        },
+                        "default_uailib_utilappli": {
+                            "type": "string",
+                            "title": "default_uailib_utilappli",
+                            "description": ""
+                        },
+                        "uai_debut_dt": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "uai_debut_dt",
+                            "description": ""
+                        },
+                        "uai_fin_dt": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "uai_fin_dt",
+                            "description": ""
+                        },
+                        "uai_modif_dt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "uai_modif_dt",
+                            "description": ""
+                        },
+                        "uai_siteweb_lb": {
+                            "type": "string",
+                            "title": "uai_siteweb_lb",
+                            "description": ""
+                        },
+                        "uai_telephone_principal": {
+                            "type": "string",
+                            "title": "uai_telephone_principal",
+                            "description": ""
+                        },
+                        "uai_mail_principal": {
+                            "type": "string",
+                            "title": "uai_mail_principal",
+                            "description": ""
+                        },
+                        "uai_fax_principal": {
+                            "type": "string",
+                            "title": "uai_fax_principal",
+                            "description": ""
+                        },
+                        "minist1_libusage": {
+                            "type": "string",
+                            "title": "minist1_libusage",
+                            "description": ""
+                        },
+                        "minist2_libusage": {
+                            "type": "string",
+                            "title": "minist2_libusage",
+                            "description": ""
+                        },
+                        "sectuai_cdn": {
+                            "type": "integer",
+                            "title": "sectuai_cdn",
+                            "description": ""
+                        },
+                        "sectuai_libusage": {
+                            "type": "string",
+                            "title": "sectuai_libusage",
+                            "description": ""
+                        },
+                        "natuai_cdn": {
+                            "type": "string",
+                            "title": "natuai_cdn",
+                            "description": ""
+                        },
+                        "natuai_libusage": {
+                            "type": "string",
+                            "title": "natuai_libusage",
+                            "description": ""
+                        },
+                        "orgaffil_cdn": {
+                            "type": "string",
+                            "title": "orgaffil_cdn",
+                            "description": ""
+                        },
+                        "orgaffil_libusage": {
+                            "type": "string",
+                            "title": "orgaffil_libusage",
+                            "description": ""
+                        },
+                        "typcontuai_cdn": {
+                            "type": "string",
+                            "title": "typcontuai_cdn",
+                            "description": ""
+                        },
+                        "tycontuai_libusage": {
+                            "type": "string",
+                            "title": "tycontuai_libusage",
+                            "description": ""
+                        },
+                        "uai_dger_rfa": {
+                            "type": "string",
+                            "title": "uai_dger_rfa",
+                            "description": ""
+                        },
+                        "uai_aghora_cdn": {
+                            "type": "string",
+                            "title": "uai_aghora_cdn",
+                            "description": ""
+                        },
+                        "uai_insee_siret": {
+                            "type": "string",
+                            "title": "uai_insee_siret",
+                            "description": ""
+                        },
+                        "enbceuai_numero_uai": {
+                            "type": "string",
+                            "title": "enbceuai_numero_uai",
+                            "description": ""
+                        },
+                        "enbceuai_libusage": {
+                            "type": "string",
+                            "title": "enbceuai_libusage",
+                            "description": ""
+                        },
+                        "indic_pub_eleve": {
+                            "type": "string",
+                            "title": "indic_pub_eleve",
+                            "description": ""
+                        },
+                        "indic_pub_etudiant": {
+                            "type": "string",
+                            "title": "indic_pub_etudiant",
+                            "description": ""
+                        },
+                        "indic_pub_adulte": {
+                            "type": "string",
+                            "title": "indic_pub_adulte",
+                            "description": ""
+                        },
+                        "indic_pub_apprenti": {
+                            "type": "string",
+                            "title": "indic_pub_apprenti",
+                            "description": ""
+                        },
+                        "indic_pub_ensdist": {
+                            "type": "string",
+                            "title": "indic_pub_ensdist",
+                            "description": ""
+                        },
+                        "indic_pub_filles_eleve": {
+                            "type": "string",
+                            "title": "indic_pub_filles_eleve",
+                            "description": ""
+                        },
+                        "indic_pub_filles_etudiant": {
+                            "type": "string",
+                            "title": "indic_pub_filles_etudiant",
+                            "description": ""
+                        },
+                        "indic_pub_filles_adulte": {
+                            "type": "string",
+                            "title": "indic_pub_filles_adulte",
+                            "description": ""
+                        },
+                        "indic_pub_filles_apprenti": {
+                            "type": "string",
+                            "title": "indic_pub_filles_apprenti",
+                            "description": ""
+                        },
+                        "indic_pub_filles_ensdist": {
+                            "type": "string",
+                            "title": "indic_pub_filles_ensdist",
+                            "description": ""
+                        },
+                        "uai_insee_comgeo": {
+                            "type": "string",
+                            "title": "uai_insee_comgeo",
+                            "description": ""
+                        },
+                        "comgeo_libusage": {
+                            "type": "string",
+                            "title": "comgeo_libusage",
+                            "description": ""
+                        },
+                        "uai_insee_dep": {
+                            "type": "string",
+                            "title": "uai_insee_dep",
+                            "description": ""
+                        },
+                        "dep_libusage": {
+                            "type": "string",
+                            "title": "dep_libusage",
+                            "description": ""
+                        },
+                        "acad_rfa": {
+                            "type": "string",
+                            "title": "acad_rfa",
+                            "description": ""
+                        },
+                        "acad_libusage": {
+                            "type": "string",
+                            "title": "acad_libusage",
+                            "description": ""
+                        },
+                        "uai_insee_reg": {
+                            "type": "string",
+                            "title": "uai_insee_reg",
+                            "description": ""
+                        },
+                        "reg_libusage": {
+                            "type": "string",
+                            "title": "reg_libusage",
+                            "description": ""
+                        },
+                        "pointgeo_cdn": {
+                            "type": "string",
+                            "title": "pointgeo_cdn",
+                            "description": ""
+                        },
+                        "uai_niveau": {
+                            "type": "integer",
+                            "title": "uai_niveau",
+                            "description": ""
+                        },
+                        "uai_mere_id_cdn": {
+                            "type": "integer",
+                            "title": "uai_mere_id_cdn",
+                            "description": ""
+                        },
+                        "uai_idniv1_cdn": {
+                            "type": "integer",
+                            "title": "uai_idniv1_cdn",
+                            "description": ""
+                        },
+                        "uai_niv1_libusage": {
+                            "type": "string",
+                            "title": "uai_niv1_libusage",
+                            "description": ""
+                        },
+                        "uai_mere_libusage": {
+                            "type": "string",
+                            "title": "uai_mere_libusage",
+                            "description": ""
+                        },
+                        "uai_grandmere_id_cdn": {
+                            "type": "string",
+                            "title": "uai_grandmere_id_cdn",
+                            "description": ""
+                        },
+                        "uai_grandmere_libusage": {
+                            "type": "string",
+                            "title": "uai_grandmere_libusage",
+                            "description": ""
+                        },
+                        "nb_uai_filles_ouvertes": {
+                            "type": "integer",
+                            "title": "nb_uai_filles_ouvertes",
+                            "description": ""
+                        },
+                        "uai_comment_txt": {
+                            "type": "string",
+                            "title": "uai_comment_txt",
+                            "description": ""
+                        },
+                        "uai_ordtri": {
+                            "type": "integer",
+                            "title": "uai_ordtri",
+                            "description": ""
+                        },
+                        "date_jeu_donnees": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "date_jeu_donnees",
+                            "description": ""
+                        },
+                        "coordonnees_geo": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "coordonnees_geo",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

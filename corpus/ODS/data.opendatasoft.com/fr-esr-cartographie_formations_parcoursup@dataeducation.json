@@ -1,0 +1,491 @@
+{
+    "title": "fr-esr-cartographie_formations_parcoursup@dataeducation",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/fr-esr-cartographie_formations_parcoursup@dataeducation"
+        }
+    ],
+    "definitions": {
+        "fr-esr-cartographie_formations_parcoursup@dataeducation": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/fr-esr-cartographie_formations_parcoursup@dataeducation_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "fr-esr-cartographie_formations_parcoursup@dataeducation_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "annee": {
+                            "type": "string",
+                            "title": "Session",
+                            "description": ""
+                        },
+                        "etab_uai": {
+                            "type": "string",
+                            "title": "Identifiant de l'établissement",
+                            "description": "Code UAI de l'établissement"
+                        },
+                        "etab_nom": {
+                            "type": "string",
+                            "title": "Nom de l'établissement",
+                            "description": ""
+                        },
+                        "tc": {
+                            "type": "string",
+                            "title": "Types d'établissement",
+                            "description": "Secteur de l'établissement"
+                        },
+                        "tf": {
+                            "type": "string",
+                            "title": "Types de formation",
+                            "description": ""
+                        },
+                        "nm": {
+                            "type": "string",
+                            "title": "Nom long de la formation",
+                            "description": ""
+                        },
+                        "fl": {
+                            "type": "string",
+                            "title": "Mentions/Spécialités",
+                            "description": ""
+                        },
+                        "app": {
+                            "type": "string",
+                            "title": "Formations en apprentissage",
+                            "description": ""
+                        },
+                        "int": {
+                            "type": "string",
+                            "title": "Internat",
+                            "description": ""
+                        },
+                        "amg": {
+                            "type": "string",
+                            "title": "Aménagement",
+                            "description": ""
+                        },
+                        "aut": {
+                            "type": "string",
+                            "title": "Informations complémentaires",
+                            "description": ""
+                        },
+                        "region": {
+                            "type": "string",
+                            "title": "Région",
+                            "description": ""
+                        },
+                        "departement": {
+                            "type": "string",
+                            "title": "Département",
+                            "description": ""
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "Commune",
+                            "description": ""
+                        },
+                        "fiche": {
+                            "type": "string",
+                            "title": "Lien vers la fiche formation",
+                            "description": "Lien vers la fiche formation sur le site de Parcoursup"
+                        },
+                        "dataviz": {
+                            "type": "string",
+                            "title": "Lien vers les données statistiques pour l'année antérieure",
+                            "description": "Données statistiques sur les vœux de poursuite d’études et de réorientation pour l'année antérieure"
+                        },
+                        "etab_url": {
+                            "type": "string",
+                            "title": "Site internet de l'établissement",
+                            "description": ""
+                        },
+                        "etab_gps": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Localisation",
+                            "description": "Localisation de la formation"
+                        },
+                        "nmc": {
+                            "type": "string",
+                            "title": "Nom court de la formation",
+                            "description": ""
+                        },
+                        "gta": {
+                            "type": "string",
+                            "title": "Code interne Parcoursup de la formation",
+                            "description": ""
+                        },
+                        "gti": {
+                            "type": "string",
+                            "title": "Code interne Parcoursup pour les portails",
+                            "description": ""
+                        },
+                        "etablissement_id_paysage": {
+                            "type": "string",
+                            "title": "etablissement_id_paysage",
+                            "description": ""
+                        },
+                        "composante_id_paysage": {
+                            "type": "string",
+                            "title": "composante_id_paysage",
+                            "description": ""
+                        },
+                        "rnd": {
+                            "type": "string",
+                            "title": "rnd",
+                            "description": ""
+                        },
+                        "code_formation": {
+                            "type": "string",
+                            "title": "code_formation",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

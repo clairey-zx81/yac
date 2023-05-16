@@ -1,0 +1,721 @@
+{
+    "title": "eclairage-public@parisdata",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/eclairage-public@parisdata"
+        }
+    ],
+    "definitions": {
+        "eclairage-public@parisdata": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/eclairage-public@parisdata_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "eclairage-public@parisdata_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "cod_ouvrag": {
+                            "type": "string",
+                            "title": "Identifiant de l'ouvrage",
+                            "description": ""
+                        },
+                        "foyer": {
+                            "type": "string",
+                            "title": "Identifiant unique de la lampe",
+                            "description": ""
+                        },
+                        "lib_domain": {
+                            "type": "string",
+                            "title": "Libellé du domaine d'ouvrage",
+                            "description": ""
+                        },
+                        "lib_ouvrag": {
+                            "type": "string",
+                            "title": "Catégorie de l'ouvrage",
+                            "description": ""
+                        },
+                        "observatio": {
+                            "type": "string",
+                            "title": "Observation",
+                            "description": ""
+                        },
+                        "posx_ouvra": {
+                            "type": "number",
+                            "title": "Coordonnées cartographiques X de l'ouvrage",
+                            "description": ""
+                        },
+                        "posy_ouvra": {
+                            "type": "number",
+                            "title": "Coordonnées cartographiques Y de l'ouvrage",
+                            "description": ""
+                        },
+                        "lib_regime": {
+                            "type": "string",
+                            "title": "Libellé du régime",
+                            "description": ""
+                        },
+                        "voievent_v": {
+                            "type": "string",
+                            "title": "Identifiant de la voie entière",
+                            "description": ""
+                        },
+                        "faceop_ouv": {
+                            "type": "string",
+                            "title": "Adresse : Face / Opposé",
+                            "description": ""
+                        },
+                        "numvoie_ou": {
+                            "type": "string",
+                            "title": "Adresse : Num dans la voie",
+                            "description": ""
+                        },
+                        "bister_ouv": {
+                            "type": "string",
+                            "title": "Adresse : Bis/Ter",
+                            "description": ""
+                        },
+                        "nature_voi": {
+                            "type": "string",
+                            "title": "Nature de la voie",
+                            "description": ""
+                        },
+                        "lib_voie": {
+                            "type": "string",
+                            "title": "Nom de la voie",
+                            "description": ""
+                        },
+                        "lib_voiedo": {
+                            "type": "string",
+                            "title": "Libellé du domaine de voie",
+                            "description": ""
+                        },
+                        "lib_secteu": {
+                            "type": "string",
+                            "title": "Libellé du secteur",
+                            "description": ""
+                        },
+                        "lib_region": {
+                            "type": "string",
+                            "title": "Libellé de la région technique",
+                            "description": ""
+                        },
+                        "lib_regi_1": {
+                            "type": "string",
+                            "title": "Libellé de l'arrondissement",
+                            "description": ""
+                        },
+                        "cod_suppor": {
+                            "type": "string",
+                            "title": "Identifiant du support",
+                            "description": ""
+                        },
+                        "lib_suppor": {
+                            "type": "string",
+                            "title": "Libellé du support",
+                            "description": ""
+                        },
+                        "hauteur_su": {
+                            "type": "number",
+                            "title": "Hauteur du support (en mètre)",
+                            "description": ""
+                        },
+                        "dureevie_s": {
+                            "type": "number",
+                            "title": "Durée de vie du support",
+                            "description": ""
+                        },
+                        "unitevie_s": {
+                            "type": "string",
+                            "title": "Unité de la durée de vie",
+                            "description": ""
+                        },
+                        "materiau_s": {
+                            "type": "string",
+                            "title": "Matériau du support",
+                            "description": ""
+                        },
+                        "type_suppo": {
+                            "type": "string",
+                            "title": "Type du support",
+                            "description": ""
+                        },
+                        "lib_supp_1": {
+                            "type": "string",
+                            "title": "Libellé du support 1",
+                            "description": ""
+                        },
+                        "lib_fourni": {
+                            "type": "string",
+                            "title": "Identifiant du fournisseur du support",
+                            "description": ""
+                        },
+                        "cod_consol": {
+                            "type": "string",
+                            "title": "Identifiant de la console",
+                            "description": ""
+                        },
+                        "lib_consol": {
+                            "type": "string",
+                            "title": "Libellé technique de la console",
+                            "description": ""
+                        },
+                        "dureevie_c": {
+                            "type": "number",
+                            "title": "Durée de vie de la console",
+                            "description": ""
+                        },
+                        "unitevie_c": {
+                            "type": "string",
+                            "title": "Unité de durée de vie de la console",
+                            "description": ""
+                        },
+                        "lib_cons_1": {
+                            "type": "string",
+                            "title": "Libellé de la console",
+                            "description": ""
+                        },
+                        "lib_four_1": {
+                            "type": "string",
+                            "title": "Fournisseur de la console",
+                            "description": ""
+                        },
+                        "cod_lumina": {
+                            "type": "string",
+                            "title": "Identifiant du luminaire",
+                            "description": ""
+                        },
+                        "lib_lumina": {
+                            "type": "string",
+                            "title": "Libellé du luminaire",
+                            "description": ""
+                        },
+                        "is_ouvert": {
+                            "type": "number",
+                            "title": "Luminaire O/N",
+                            "description": ""
+                        },
+                        "modele_lum": {
+                            "type": "string",
+                            "title": "Modèle de luminaire",
+                            "description": ""
+                        },
+                        "dureevie_l": {
+                            "type": "number",
+                            "title": "Durée de vie du luminaire",
+                            "description": ""
+                        },
+                        "unitevie_l": {
+                            "type": "string",
+                            "title": "Unité de durée de vie du luminaire",
+                            "description": ""
+                        },
+                        "prod_ouvra": {
+                            "type": "string",
+                            "title": "PROD_OUVRA",
+                            "description": ""
+                        },
+                        "materiau_l": {
+                            "type": "string",
+                            "title": "Matériau du luminaire",
+                            "description": ""
+                        },
+                        "classeip_l": {
+                            "type": "string",
+                            "title": "Classe IP du luminaire",
+                            "description": ""
+                        },
+                        "classe_lum": {
+                            "type": "string",
+                            "title": "Classe de luminaire",
+                            "description": ""
+                        },
+                        "lib_lumi_1": {
+                            "type": "string",
+                            "title": "Libellé de la famille de luminaire",
+                            "description": ""
+                        },
+                        "prod_ouv_1": {
+                            "type": "string",
+                            "title": "PROD_OUV_1",
+                            "description": ""
+                        },
+                        "lib_four_2": {
+                            "type": "string",
+                            "title": "Fournisseur du luminaire",
+                            "description": ""
+                        },
+                        "xlumelec": {
+                            "type": "number",
+                            "title": "Présence appareillage électronique",
+                            "description": ""
+                        },
+                        "cod_lampe": {
+                            "type": "string",
+                            "title": "Identifiant de la lampe",
+                            "description": ""
+                        },
+                        "lib_lampe": {
+                            "type": "string",
+                            "title": "Libellé de la lampe",
+                            "description": ""
+                        },
+                        "pw_lampe": {
+                            "type": "number",
+                            "title": "Puissance nominale de la lampe (W)",
+                            "description": ""
+                        },
+                        "pwc_lampe": {
+                            "type": "number",
+                            "title": "Puissance consommée de la lampe avec app ferro (W)",
+                            "description": ""
+                        },
+                        "pwe_lampe": {
+                            "type": "number",
+                            "title": "Puissance consommée de la lampe avec app. électronique (W)",
+                            "description": ""
+                        },
+                        "forme_lamp": {
+                            "type": "string",
+                            "title": "Forme de la lampe",
+                            "description": ""
+                        },
+                        "type_lampe": {
+                            "type": "string",
+                            "title": "Type de lampe",
+                            "description": ""
+                        },
+                        "modele_lam": {
+                            "type": "string",
+                            "title": "Modèle de lampe",
+                            "description": ""
+                        },
+                        "dureevie_1": {
+                            "type": "number",
+                            "title": "Durée de vie de la lampe",
+                            "description": ""
+                        },
+                        "unitevie_1": {
+                            "type": "string",
+                            "title": "Unité de temps pour la durée de vie de la lampe",
+                            "description": ""
+                        },
+                        "flux_lampe": {
+                            "type": "number",
+                            "title": "Flux de la lampe (en Lumen)",
+                            "description": ""
+                        },
+                        "classe_lam": {
+                            "type": "string",
+                            "title": "Classe de la lampe",
+                            "description": ""
+                        },
+                        "volt_lampe": {
+                            "type": "number",
+                            "title": "Voltage (V)",
+                            "description": ""
+                        },
+                        "prod_ouv_2": {
+                            "type": "string",
+                            "title": "PROD_OUV_2",
+                            "description": ""
+                        },
+                        "tempcouleu": {
+                            "type": "number",
+                            "title": "Température de la lampe (en Kelvin)",
+                            "description": ""
+                        },
+                        "lib_lampef": {
+                            "type": "string",
+                            "title": "Libellé de la famille",
+                            "description": ""
+                        },
+                        "lib_four_3": {
+                            "type": "string",
+                            "title": "Fournisseur de la lampe",
+                            "description": ""
+                        },
+                        "gradation": {
+                            "type": "number",
+                            "title": "Gradation en % de la puissance max (formule non linéaire)",
+                            "description": ""
+                        },
+                        "ulor": {
+                            "type": "number",
+                            "title": "Upward Light Output Ratio",
+                            "description": ""
+                        },
+                        "dlor": {
+                            "type": "number",
+                            "title": "Downward Light Output Ratio",
+                            "description": ""
+                        },
+                        "rtot": {
+                            "type": "number",
+                            "title": "Ratio Total",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

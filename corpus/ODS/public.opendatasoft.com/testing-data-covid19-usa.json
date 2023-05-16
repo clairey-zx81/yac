@@ -1,0 +1,635 @@
+{
+    "title": "testing-data-covid19-usa",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/testing-data-covid19-usa"
+        }
+    ],
+    "definitions": {
+        "testing-data-covid19-usa": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/testing-data-covid19-usa_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "testing-data-covid19-usa_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "state_abbr": {
+                            "type": "string",
+                            "title": "State Abbr",
+                            "description": ""
+                        },
+                        "state_code": {
+                            "type": "string",
+                            "title": "FIPS Code",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Location",
+                            "description": ""
+                        },
+                        "date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date",
+                            "description": ""
+                        },
+                        "tot_positive": {
+                            "type": "integer",
+                            "title": "Total Positive",
+                            "description": "Total cumulative positive test results"
+                        },
+                        "probablecases": {
+                            "type": "integer",
+                            "title": "probableCases",
+                            "description": ""
+                        },
+                        "tot_negative": {
+                            "type": "integer",
+                            "title": "Total Negative",
+                            "description": "Total cumulative negative test results"
+                        },
+                        "tot_pending": {
+                            "type": "integer",
+                            "title": "Total Pending",
+                            "description": "Tests that have been submitted to a lab but no results have been reported yet."
+                        },
+                        "totaltestresultssource": {
+                            "type": "string",
+                            "title": "totalTestResultsSource",
+                            "description": ""
+                        },
+                        "totaltestresults": {
+                            "type": "integer",
+                            "title": "Total Test Results",
+                            "description": "Total cumulative number of tests results"
+                        },
+                        "nb_hosp": {
+                            "type": "integer",
+                            "title": "Nb Current Hospitalized",
+                            "description": ""
+                        },
+                        "tot_hosp": {
+                            "type": "integer",
+                            "title": "Total Hospitalized",
+                            "description": "Total cumulative number of people hospitalized"
+                        },
+                        "nb_icu": {
+                            "type": "integer",
+                            "title": "Nb Current in ICU",
+                            "description": ""
+                        },
+                        "tot_icu": {
+                            "type": "integer",
+                            "title": "Total Cumulative in ICU",
+                            "description": ""
+                        },
+                        "nb_ventilator": {
+                            "type": "integer",
+                            "title": "Nb Current on Ventilator",
+                            "description": ""
+                        },
+                        "tot_ventilator": {
+                            "type": "integer",
+                            "title": "Total Cumulative Ventilator",
+                            "description": ""
+                        },
+                        "tot_recovered": {
+                            "type": "integer",
+                            "title": "Total Recovered",
+                            "description": ""
+                        },
+                        "lastupdateet": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "lastUpdateEt",
+                            "description": ""
+                        },
+                        "datemodified": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "dateModified",
+                            "description": ""
+                        },
+                        "checktimeet": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "checkTimeEt",
+                            "description": ""
+                        },
+                        "tot_death": {
+                            "type": "integer",
+                            "title": "Total Death",
+                            "description": "Total cumulative number of people that have died"
+                        },
+                        "hospitalizeddischarged": {
+                            "type": "integer",
+                            "title": "hospitalizedDischarged",
+                            "description": ""
+                        },
+                        "totaltestsviral": {
+                            "type": "integer",
+                            "title": "totalTestsViral",
+                            "description": ""
+                        },
+                        "positivetestsviral": {
+                            "type": "integer",
+                            "title": "positiveTestsViral",
+                            "description": ""
+                        },
+                        "negativetestsviral": {
+                            "type": "integer",
+                            "title": "negativeTestsViral",
+                            "description": ""
+                        },
+                        "positivecasesviral": {
+                            "type": "integer",
+                            "title": "positiveCasesViral",
+                            "description": ""
+                        },
+                        "deathconfirmed": {
+                            "type": "integer",
+                            "title": "deathConfirmed",
+                            "description": ""
+                        },
+                        "deathprobable": {
+                            "type": "string",
+                            "title": "deathProbable",
+                            "description": ""
+                        },
+                        "totaltestencountersviral": {
+                            "type": "integer",
+                            "title": "totalTestEncountersViral",
+                            "description": ""
+                        },
+                        "totaltestspeopleviral": {
+                            "type": "integer",
+                            "title": "totalTestsPeopleViral",
+                            "description": ""
+                        },
+                        "totaltestsantibody": {
+                            "type": "integer",
+                            "title": "totalTestsAntibody",
+                            "description": ""
+                        },
+                        "positivetestsantibody": {
+                            "type": "integer",
+                            "title": "positiveTestsAntibody",
+                            "description": ""
+                        },
+                        "negativetestsantibody": {
+                            "type": "integer",
+                            "title": "negativeTestsAntibody",
+                            "description": ""
+                        },
+                        "totaltestspeopleantibody": {
+                            "type": "integer",
+                            "title": "totalTestsPeopleAntibody",
+                            "description": ""
+                        },
+                        "positivetestspeopleantibody": {
+                            "type": "integer",
+                            "title": "positiveTestsPeopleAntibody",
+                            "description": ""
+                        },
+                        "negativetestspeopleantibody": {
+                            "type": "integer",
+                            "title": "negativeTestsPeopleAntibody",
+                            "description": ""
+                        },
+                        "totaltestspeopleantigen": {
+                            "type": "integer",
+                            "title": "totalTestsPeopleAntigen",
+                            "description": ""
+                        },
+                        "positivetestspeopleantigen": {
+                            "type": "integer",
+                            "title": "positiveTestsPeopleAntigen",
+                            "description": ""
+                        },
+                        "totaltestsantigen": {
+                            "type": "integer",
+                            "title": "totalTestsAntigen",
+                            "description": ""
+                        },
+                        "positivetestsantigen": {
+                            "type": "integer",
+                            "title": "positiveTestsAntigen",
+                            "description": ""
+                        },
+                        "increase_positive": {
+                            "type": "integer",
+                            "title": "Increase Positive",
+                            "description": " Increase from the day before"
+                        },
+                        "increase_negative": {
+                            "type": "integer",
+                            "title": "Increase Negative",
+                            "description": " Increase from the day before"
+                        },
+                        "totaltestresultsincrease": {
+                            "type": "integer",
+                            "title": "Increase Total Tests Results",
+                            "description": "Increase from the day before"
+                        },
+                        "dataqualitygrade": {
+                            "type": "string",
+                            "title": "dataQualityGrade",
+                            "description": ""
+                        },
+                        "increase_death": {
+                            "type": "integer",
+                            "title": "Increase Death",
+                            "description": " Increase from the day before"
+                        },
+                        "increase_hosp": {
+                            "type": "integer",
+                            "title": "Increase Hospital",
+                            "description": " Increase from the day before"
+                        },
+                        "commercialscore": {
+                            "type": "integer",
+                            "title": "commercialScore",
+                            "description": ""
+                        },
+                        "negativeregularscore": {
+                            "type": "integer",
+                            "title": "negativeRegularScore",
+                            "description": ""
+                        },
+                        "negativescore": {
+                            "type": "integer",
+                            "title": "negativeScore",
+                            "description": ""
+                        },
+                        "positivescore": {
+                            "type": "integer",
+                            "title": "positiveScore",
+                            "description": ""
+                        },
+                        "score": {
+                            "type": "integer",
+                            "title": "score",
+                            "description": ""
+                        },
+                        "grade": {
+                            "type": "string",
+                            "title": "grade",
+                            "description": ""
+                        },
+                        "state_name": {
+                            "type": "string",
+                            "title": "State Name",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

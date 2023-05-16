@@ -1,0 +1,636 @@
+{
+    "title": "zspnai2@namur",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/zspnai2@namur"
+        }
+    ],
+    "definitions": {
+        "zspnai2@namur": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/zspnai2@namur_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "zspnai2@namur_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "annee": {
+                            "type": "integer",
+                            "title": "Année",
+                            "description": ""
+                        },
+                        "quart_nom": {
+                            "type": "string",
+                            "title": "Quartier",
+                            "description": ""
+                        },
+                        "categorie_nat": {
+                            "type": "string",
+                            "title": "categorie_nat",
+                            "description": ""
+                        },
+                        "valeur": {
+                            "type": "number",
+                            "title": "valeur",
+                            "description": ""
+                        },
+                        "quart_code": {
+                            "type": "string",
+                            "title": "Quartier Code",
+                            "description": ""
+                        },
+                        "code": {
+                            "type": "string",
+                            "title": "Code",
+                            "description": ""
+                        },
+                        "hftot": {
+                            "type": "integer",
+                            "title": "Total HF",
+                            "description": ""
+                        },
+                        "hfetr": {
+                            "type": "integer",
+                            "title": "Etrangers HF",
+                            "description": ""
+                        },
+                        "hf00belge": {
+                            "type": "integer",
+                            "title": "Belges HF",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "quart_surface": {
+                            "type": "string",
+                            "title": "QUART_SURFACE",
+                            "description": ""
+                        },
+                        "ue": {
+                            "type": "string",
+                            "title": "UE",
+                            "description": ""
+                        },
+                        "hfue": {
+                            "type": "string",
+                            "title": "HFUE",
+                            "description": ""
+                        },
+                        "htot": {
+                            "type": "string",
+                            "title": "HTOT",
+                            "description": ""
+                        },
+                        "ftot": {
+                            "type": "string",
+                            "title": "FTOT",
+                            "description": ""
+                        },
+                        "hfue12": {
+                            "type": "string",
+                            "title": "HFUE12",
+                            "description": ""
+                        },
+                        "hfue15": {
+                            "type": "string",
+                            "title": "HFUE15",
+                            "description": ""
+                        },
+                        "hfue25": {
+                            "type": "string",
+                            "title": "HFUE25",
+                            "description": ""
+                        },
+                        "hfue27": {
+                            "type": "string",
+                            "title": "HFUE27",
+                            "description": ""
+                        },
+                        "hfue28": {
+                            "type": "string",
+                            "title": "HFUE28",
+                            "description": ""
+                        },
+                        "hfue27b": {
+                            "type": "string",
+                            "title": "HFUE27B",
+                            "description": ""
+                        },
+                        "prop_ue12": {
+                            "type": "string",
+                            "title": "PROP_UE12",
+                            "description": ""
+                        },
+                        "prop_ue15": {
+                            "type": "string",
+                            "title": "PROP_UE15",
+                            "description": ""
+                        },
+                        "prop_ue25": {
+                            "type": "string",
+                            "title": "PROP_UE25",
+                            "description": ""
+                        },
+                        "prop_ue27": {
+                            "type": "string",
+                            "title": "PROP_UE27",
+                            "description": ""
+                        },
+                        "prop_ue28": {
+                            "type": "string",
+                            "title": "PROP_UE28",
+                            "description": ""
+                        },
+                        "prop_ue27b": {
+                            "type": "string",
+                            "title": "PROP_UE27B",
+                            "description": ""
+                        },
+                        "prop_ue12etr": {
+                            "type": "string",
+                            "title": "PROP_UE12ETR",
+                            "description": ""
+                        },
+                        "prop_ue15etr": {
+                            "type": "string",
+                            "title": "PROP_UE15ETR",
+                            "description": ""
+                        },
+                        "prop_ue25etr": {
+                            "type": "string",
+                            "title": "PROP_UE25ETR",
+                            "description": ""
+                        },
+                        "prop_ue27etr": {
+                            "type": "string",
+                            "title": "PROP_UE27ETR",
+                            "description": ""
+                        },
+                        "prop_ue28etr": {
+                            "type": "string",
+                            "title": "PROP_UE28ETR",
+                            "description": ""
+                        },
+                        "prop_ue27betr": {
+                            "type": "string",
+                            "title": "PROP_UE27BETR",
+                            "description": ""
+                        },
+                        "hfhorsue": {
+                            "type": "string",
+                            "title": "HFHORSUE",
+                            "description": ""
+                        },
+                        "hfhorsue12": {
+                            "type": "string",
+                            "title": "HFHORSUE12",
+                            "description": ""
+                        },
+                        "hfhorsue15": {
+                            "type": "string",
+                            "title": "HFHORSUE15",
+                            "description": ""
+                        },
+                        "hfhorsue25": {
+                            "type": "string",
+                            "title": "HFHORSUE25",
+                            "description": ""
+                        },
+                        "hfhorsue27": {
+                            "type": "string",
+                            "title": "HFHORSUE27",
+                            "description": ""
+                        },
+                        "hfhorsue28": {
+                            "type": "string",
+                            "title": "HFHORSUE28",
+                            "description": ""
+                        },
+                        "hfhorsue27b": {
+                            "type": "string",
+                            "title": "HFHORSUE27B",
+                            "description": ""
+                        },
+                        "prop_horsue12": {
+                            "type": "string",
+                            "title": "PROP_HORSUE12",
+                            "description": ""
+                        },
+                        "prop_horsue15": {
+                            "type": "string",
+                            "title": "PROP_HORSUE15",
+                            "description": ""
+                        },
+                        "prop_horsue25": {
+                            "type": "string",
+                            "title": "PROP_HORSUE25",
+                            "description": ""
+                        },
+                        "prop_horsue27": {
+                            "type": "string",
+                            "title": "PROP_HORSUE27",
+                            "description": ""
+                        },
+                        "prop_horsue28": {
+                            "type": "string",
+                            "title": "PROP_HORSUE28",
+                            "description": ""
+                        },
+                        "prop_horsue27b": {
+                            "type": "string",
+                            "title": "PROP_HORSUE27B",
+                            "description": ""
+                        },
+                        "prop_horsueetr12": {
+                            "type": "string",
+                            "title": "PROP_HORSUEETR12",
+                            "description": ""
+                        },
+                        "prop_horsueetr15": {
+                            "type": "string",
+                            "title": "PROP_HORSUEETR15",
+                            "description": ""
+                        },
+                        "prop_horsueetr25": {
+                            "type": "string",
+                            "title": "PROP_HORSUEETR25",
+                            "description": ""
+                        },
+                        "prop_horsueetr27": {
+                            "type": "string",
+                            "title": "PROP_HORSUEETR27",
+                            "description": ""
+                        },
+                        "prop_horsueetr28": {
+                            "type": "string",
+                            "title": "PROP_HORSUEETR28",
+                            "description": ""
+                        },
+                        "prop_horsueetr27b": {
+                            "type": "string",
+                            "title": "PROP_HORSUEETR27B",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Configuration for forwarding metrics from Atlas LWC to AWS CloudWatch",
+  "properties": {
+    "checksToSkip": {
+      "description": "The list of validations to skip",
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "email": {
+      "description": "Email address of the service owner",
+      "format": "email",
+      "type": "string"
+    },
+    "expressions": {
+      "description": "List of metric expressions",
+      "items": {
+        "properties": {
+          "account": {
+            "description": "AWS account to send the metric to. Typically $(nf.account)",
+            "pattern": "^([\\d]+|\\$\\([\\w\\-\\.]+\\))$",
+            "type": "string"
+          },
+          "atlasUri": {
+            "description": "Atlas query",
+            "pattern": "^(https?://)?[\\w-]+(\\.[\\w-]+)*(:\\d+)?/api/v(\\d+){1}/graph\\?.+$",
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "dimensions": {
+            "description": "Details about AWS CloudWatch dimension that will be created",
+            "items": {
+              "properties": {
+                "name": {
+                  "description": "Name of the CloudWatch dimension",
+                  "pattern": "^[\\w\\-\\.]+$",
+                  "type": "string"
+                },
+                "value": {
+                  "description": "Atlas tag. Example: $(nf.asg)",
+                  "pattern": "^(?:(?:[\\w\\-\\.]+)|(?:\\$\\([\\w\\-\\.]+\\)))+$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "type": "object"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "metricName": {
+            "description": "Name of the metric that will be created in CloudWatch",
+            "pattern": "^(?:(?:[\\w\\-\\.\\s]+)|(?:\\$\\([\\w\\-\\.]+\\)))+$",
+            "type": "string"
+          },
+          "region": {
+            "description": "AWS region to send the metric to",
+            "pattern": "^([\\w\\-\\.]+|\\$\\([\\w\\-\\.]+\\))$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "metricName",
+          "atlasUri",
+          "account"
+        ],
+        "type": "object"
+      },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "email",
+    "expressions"
+  ],
+  "title": "Cluster Config",
+  "type": "object"
+}

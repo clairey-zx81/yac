@@ -1,0 +1,586 @@
+{
+    "title": "injep-2012-2017@cc-lacqorthez-data64",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/injep-2012-2017@cc-lacqorthez-data64"
+        }
+    ],
+    "definitions": {
+        "injep-2012-2017@cc-lacqorthez-data64": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/injep-2012-2017@cc-lacqorthez-data64_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "injep-2012-2017@cc-lacqorthez-data64_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "code_insee": {
+                            "type": "integer",
+                            "title": "﻿Code insee",
+                            "description": ""
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "Commune",
+                            "description": ""
+                        },
+                        "licencies_sportifs_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_femmes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs - Femmes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_hommes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs - Hommes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_0_a_4_ans_femmes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 0 à 4 ans - Femmes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_5_a_9_ans_femmes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 5 à 9 ans - Femmes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_10_a_14_ans_femmes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 10 à 14 ans - Femmes  (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_15_a_19_ans_femmes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 15 à 19 ans - Femmes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_20_a_29_ans_femmes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 20 à 29 ans - Femmes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_30_a_44_ans_femmes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 30 à 44 ans - Femmes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_45_a_59_ans_femmes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 45 à 59 ans - Femmes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_60_a_74_ans_femmes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 60 à 74 ans - Femmes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_75_ans_et_plus_femmes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 75 ans et plus - Femmes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_0_a_4_ans_hommes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 0 à 4 ans - Hommes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_5_a_9_ans_hommes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 5 à 9 ans - Hommes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_10_a_14_ans_hommes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 10 à 14 ans - Hommes  (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_15_a_19_ans_hommes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 15 à 19 ans - Hommes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_20_a_29_ans_hommes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 20 à 29 ans - Hommes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_30_a_44_ans_hommes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 30 à 44 ans - Hommes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_45_a_59_ans_hommes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 45 à 59 ans - Hommes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_60_a_74_ans_hommes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 60 à 74 ans - Hommes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_75_ans_et_plus_hommes_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 75 ans et plus - Hommes (année réf 2016)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_0_a_4_ans_femmes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 0 à 4 ans - Femmes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_5_a_9_ans_femmes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 5 à 9 ans - Femmes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_10_a_14_ans_femmes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 10 à 14 ans - Femmes  (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_15_a_19_ans_femmes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 15 à 19 ans - Femmes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_20_a_29_ans_femmes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 20 à 29 ans - Femmes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_30_a_44_ans_femmes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 30 à 44 ans - Femmes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_45_a_59_ans_femmes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 45 à 59 ans - Femmes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_60_a_74_ans_femmes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 60 à 74 ans - Femmes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_75_ans_et_plus_femmes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 75 ans et plus - Femmes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_0_a_4_ans_hommes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 0 à 4 ans - Hommes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_5_a_9_ans_hommes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 5 à 9 ans - Hommes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_10_a_14_ans_hommes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 10 à 14 ans - Hommes  (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_15_a_19_ans_hommes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 15 à 19 ans - Hommes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_20_a_29_ans_hommes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 20 à 29 ans - Hommes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_30_a_44_ans_hommes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 30 à 44 ans - Hommes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_45_a_59_ans_hommes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 45 à 59 ans - Hommes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_60_a_74_ans_hommes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 60 à 74 ans - Hommes (année réf 2011)",
+                            "description": ""
+                        },
+                        "licencies_sportifs_de_75_ans_et_plus_hommes_annee_ref_2011": {
+                            "type": "integer",
+                            "title": "Licenciés sportifs de 75 ans et plus - Hommes (année réf 2011)",
+                            "description": ""
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geom",
+                            "description": ""
+                        },
+                        "centroid": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "centroid",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

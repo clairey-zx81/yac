@@ -1,0 +1,499 @@
+{
+  "$schema": "http://json-schema.org/draft-04/hyper-schema",
+  "definitions": {
+    "actions": {
+      "description": "provider actions for this specific add-on",
+      "items": {
+        "type": [
+          "object"
+        ]
+      },
+      "properties": {
+        "action": {
+          "$ref": "#/definitions/add-on-plan-action/definitions/action"
+        },
+        "id": {
+          "$ref": "#/definitions/add-on-plan-action/definitions/id"
+        },
+        "label": {
+          "$ref": "#/definitions/add-on-plan-action/definitions/label"
+        },
+        "requires_owner": {
+          "$ref": "#/definitions/add-on-plan-action/definitions/requires_owner"
+        },
+        "url": {
+          "$ref": "#/definitions/add-on-plan-action/definitions/url"
+        }
+      },
+      "readOnly": true,
+      "type": [
+        "array"
+      ]
+    },
+    "cents": {
+      "description": "price in cents per unit of add-on",
+      "example": 0,
+      "readOnly": true,
+      "type": [
+        "integer"
+      ]
+    },
+    "config": {
+      "additionalProperties": false,
+      "description": "custom add-on provisioning options",
+      "example": {
+        "db-version": "1.2.3"
+      },
+      "patternProperties": {
+        "^\\w+$": {
+          "type": [
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "object"
+      ]
+    },
+    "config_vars": {
+      "description": "config vars exposed to the owning app by this add-on",
+      "example": [
+        "FOO",
+        "BAZ"
+      ],
+      "items": {
+        "type": [
+          "string"
+        ]
+      },
+      "readOnly": true,
+      "type": [
+        "array"
+      ]
+    },
+    "confirm": {
+      "description": "name of billing entity for confirmation",
+      "example": "example",
+      "type": [
+        "string"
+      ]
+    },
+    "created_at": {
+      "description": "when add-on was created",
+      "example": "2012-01-01T12:00:00Z",
+      "format": "date-time",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "id": {
+      "description": "unique identifier of add-on",
+      "example": "01234567-89ab-cdef-0123-456789abcdef",
+      "format": "uuid",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "identity": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/add-on/definitions/id"
+        },
+        {
+          "$ref": "#/definitions/add-on/definitions/name"
+        }
+      ]
+    },
+    "name": {
+      "description": "globally unique name of the add-on",
+      "example": "acme-inc-primary-database",
+      "pattern": "^[a-zA-Z][A-Za-z0-9_-]+$",
+      "type": [
+        "string"
+      ]
+    },
+    "provider_id": {
+      "description": "id of this add-on with its provider",
+      "example": "abcd1234",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "state": {
+      "description": "state in the add-on's lifecycle",
+      "enum": [
+        "provisioning",
+        "provisioned",
+        "deprovisioned"
+      ],
+      "example": "provisioned",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "unit": {
+      "description": "unit of price for add-on",
+      "example": "month",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "updated_at": {
+      "description": "when add-on was updated",
+      "example": "2012-01-01T12:00:00Z",
+      "format": "date-time",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "web_url": {
+      "description": "URL for logging into web interface of add-on (e.g. a dashboard)",
+      "example": "https://postgres.heroku.com/databases/01234567-89ab-cdef-0123-456789abcdef",
+      "format": "uri",
+      "readOnly": true,
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  },
+  "description": "Add-ons represent add-ons that have been provisioned and attached to one or more apps.",
+  "links": [
+    {
+      "description": "List all existing add-ons.",
+      "href": "/addons",
+      "method": "GET",
+      "rel": "instances",
+      "targetSchema": {
+        "items": {
+          "$ref": "#/definitions/add-on"
+        },
+        "type": [
+          "array"
+        ]
+      },
+      "title": "List"
+    },
+    {
+      "description": "Info for an existing add-on.",
+      "href": "/addons/{(%23%2Fdefinitions%2Fadd-on%2Fdefinitions%2Fidentity)}",
+      "method": "GET",
+      "rel": "self",
+      "targetSchema": {
+        "$ref": "#/definitions/add-on"
+      },
+      "title": "Info"
+    },
+    {
+      "description": "Create a new add-on.",
+      "href": "/apps/{(%23%2Fdefinitions%2Fapp%2Fdefinitions%2Fidentity)}/addons",
+      "method": "POST",
+      "rel": "create",
+      "schema": {
+        "properties": {
+          "attachment": {
+            "description": "name for add-on's initial attachment",
+            "example": {
+              "name": "DATABASE_FOLLOWER"
+            },
+            "properties": {
+              "name": {
+                "$ref": "#/definitions/add-on-attachment/definitions/name"
+              }
+            },
+            "type": [
+              "object"
+            ]
+          },
+          "config": {
+            "$ref": "#/definitions/add-on/definitions/config"
+          },
+          "confirm": {
+            "$ref": "#/definitions/add-on/definitions/confirm"
+          },
+          "name": {
+            "$ref": "#/definitions/add-on/definitions/name"
+          },
+          "plan": {
+            "$ref": "#/definitions/plan/definitions/identity"
+          }
+        },
+        "required": [
+          "plan"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "targetSchema": {
+        "$ref": "#/definitions/add-on"
+      },
+      "title": "Create"
+    },
+    {
+      "description": "Delete an existing add-on.",
+      "href": "/apps/{(%23%2Fdefinitions%2Fapp%2Fdefinitions%2Fidentity)}/addons/{(%23%2Fdefinitions%2Fadd-on%2Fdefinitions%2Fidentity)}",
+      "method": "DELETE",
+      "rel": "destroy",
+      "targetSchema": {
+        "$ref": "#/definitions/add-on"
+      },
+      "title": "Delete"
+    },
+    {
+      "description": "Info for an existing add-on.",
+      "href": "/apps/{(%23%2Fdefinitions%2Fapp%2Fdefinitions%2Fidentity)}/addons/{(%23%2Fdefinitions%2Fadd-on%2Fdefinitions%2Fidentity)}",
+      "method": "GET",
+      "rel": "self",
+      "targetSchema": {
+        "$ref": "#/definitions/add-on"
+      },
+      "title": "Info By App"
+    },
+    {
+      "description": "List existing add-ons for an app.",
+      "href": "/apps/{(%23%2Fdefinitions%2Fapp%2Fdefinitions%2Fidentity)}/addons",
+      "method": "GET",
+      "rel": "instances",
+      "targetSchema": {
+        "items": {
+          "$ref": "#/definitions/add-on"
+        },
+        "type": [
+          "array"
+        ]
+      },
+      "title": "List By App"
+    },
+    {
+      "description": "Change add-on plan. Some add-ons may not support changing plans. In that case, an error will be returned.",
+      "href": "/apps/{(%23%2Fdefinitions%2Fapp%2Fdefinitions%2Fidentity)}/addons/{(%23%2Fdefinitions%2Fadd-on%2Fdefinitions%2Fidentity)}",
+      "method": "PATCH",
+      "rel": "update",
+      "schema": {
+        "properties": {
+          "name": {
+            "$ref": "#/definitions/add-on/definitions/name"
+          },
+          "plan": {
+            "$ref": "#/definitions/plan/definitions/identity"
+          }
+        },
+        "required": [
+          "plan"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "title": "Update"
+    },
+    {
+      "description": "List all existing add-ons a user has access to",
+      "href": "/users/{(%23%2Fdefinitions%2Faccount%2Fdefinitions%2Fidentity)}/addons",
+      "method": "GET",
+      "rel": "instances",
+      "targetSchema": {
+        "items": {
+          "$ref": "#/definitions/add-on"
+        },
+        "type": [
+          "array"
+        ]
+      },
+      "title": "List By User"
+    },
+    {
+      "description": "List add-ons used across all Team apps",
+      "href": "/teams/{(%23%2Fdefinitions%2Fteam%2Fdefinitions%2Fidentity)}/addons",
+      "method": "GET",
+      "rel": "instances",
+      "targetSchema": {
+        "items": {
+          "$ref": "#/definitions/add-on"
+        },
+        "type": [
+          "array"
+        ]
+      },
+      "title": "List By Team"
+    },
+    {
+      "description": "Resolve an add-on from a name, optionally passing an app name. If there are matches it returns at least one add-on (exact match) or many.",
+      "href": "/actions/addons/resolve",
+      "method": "POST",
+      "rel": "resolve",
+      "schema": {
+        "properties": {
+          "addon": {
+            "$ref": "#/definitions/add-on/definitions/name"
+          },
+          "addon_service": {
+            "$ref": "#/definitions/add-on-service/definitions/name"
+          },
+          "app": {
+            "$ref": "#/definitions/app/definitions/name"
+          }
+        },
+        "required": [
+          "addon"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "targetSchema": {
+        "items": {
+          "$ref": "#/definitions/add-on"
+        },
+        "type": [
+          "array"
+        ]
+      },
+      "title": "Resolution"
+    }
+  ],
+  "properties": {
+    "actions": {
+      "$ref": "#/definitions/add-on/definitions/actions"
+    },
+    "addon_service": {
+      "description": "identity of add-on service",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/add-on-service/definitions/id"
+        },
+        "name": {
+          "$ref": "#/definitions/add-on-service/definitions/name"
+        }
+      },
+      "strictProperties": true,
+      "type": [
+        "object"
+      ]
+    },
+    "app": {
+      "description": "billing application associated with this add-on",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/app/definitions/id"
+        },
+        "name": {
+          "$ref": "#/definitions/app/definitions/name"
+        }
+      },
+      "strictProperties": true,
+      "type": [
+        "object"
+      ]
+    },
+    "billed_price": {
+      "description": "billed price",
+      "properties": {
+        "cents": {
+          "$ref": "#/definitions/plan/definitions/cents"
+        },
+        "contract": {
+          "$ref": "#/definitions/plan/definitions/contract"
+        },
+        "unit": {
+          "$ref": "#/definitions/plan/definitions/unit"
+        }
+      },
+      "strictProperties": true,
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "billing_entity": {
+      "description": "billing entity associated with this add-on",
+      "properties": {
+        "id": {
+          "description": "unique identifier of the billing entity",
+          "example": "01234567-89ab-cdef-0123-456789abcdef",
+          "format": "uuid",
+          "readOnly": true,
+          "type": [
+            "string"
+          ]
+        },
+        "name": {
+          "description": "name of the billing entity",
+          "example": "example",
+          "readOnly": true,
+          "type": [
+            "string"
+          ]
+        },
+        "type": {
+          "description": "type of Object of the billing entity; new types allowed at any time.",
+          "enum": [
+            "app",
+            "team"
+          ],
+          "example": "app",
+          "readOnly": true,
+          "type": [
+            "string"
+          ]
+        }
+      },
+      "strictProperties": true,
+      "type": [
+        "object"
+      ]
+    },
+    "config_vars": {
+      "$ref": "#/definitions/add-on/definitions/config_vars"
+    },
+    "created_at": {
+      "$ref": "#/definitions/add-on/definitions/created_at"
+    },
+    "id": {
+      "$ref": "#/definitions/add-on/definitions/id"
+    },
+    "name": {
+      "$ref": "#/definitions/add-on/definitions/name"
+    },
+    "plan": {
+      "description": "identity of add-on plan",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/plan/definitions/id"
+        },
+        "name": {
+          "$ref": "#/definitions/plan/definitions/name"
+        }
+      },
+      "strictProperties": true,
+      "type": [
+        "object"
+      ]
+    },
+    "provider_id": {
+      "$ref": "#/definitions/add-on/definitions/provider_id"
+    },
+    "state": {
+      "$ref": "#/definitions/add-on/definitions/state"
+    },
+    "updated_at": {
+      "$ref": "#/definitions/add-on/definitions/updated_at"
+    },
+    "web_url": {
+      "$ref": "#/definitions/add-on/definitions/web_url"
+    }
+  },
+  "stability": "production",
+  "strictProperties": true,
+  "title": "Heroku Platform API - Add-on",
+  "type": [
+    "object"
+  ]
+}

@@ -1,0 +1,517 @@
+{
+    "title": "finess-entite-juridique",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/finess-entite-juridique"
+        }
+    ],
+    "definitions": {
+        "finess-entite-juridique": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/finess-entite-juridique_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "finess-entite-juridique_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "donnee": {
+                            "type": "string",
+                            "title": "Donnée",
+                            "description": ""
+                        },
+                        "numero_finess": {
+                            "type": "string",
+                            "title": "Numéro FINESS",
+                            "description": ""
+                        },
+                        "raison_sociale": {
+                            "type": "string",
+                            "title": "Raison sociale",
+                            "description": ""
+                        },
+                        "raison_sociale_longue": {
+                            "type": "string",
+                            "title": "Raison sociale longue",
+                            "description": ""
+                        },
+                        "complement_de_raison_sociale": {
+                            "type": "string",
+                            "title": "Complément de raison sociale",
+                            "description": ""
+                        },
+                        "numero_de_voie": {
+                            "type": "integer",
+                            "title": "Numéro de voie",
+                            "description": ""
+                        },
+                        "type_de_voie": {
+                            "type": "string",
+                            "title": "Type de voie",
+                            "description": ""
+                        },
+                        "libelle_de_voie": {
+                            "type": "string",
+                            "title": "Libellé de voie",
+                            "description": ""
+                        },
+                        "complement_de_voie": {
+                            "type": "string",
+                            "title": "Complément de voie",
+                            "description": ""
+                        },
+                        "complement_de_distribution": {
+                            "type": "string",
+                            "title": "Complément de distribution",
+                            "description": ""
+                        },
+                        "lieu_dit_bp": {
+                            "type": "string",
+                            "title": "Lieu-dit BP",
+                            "description": ""
+                        },
+                        "commune": {
+                            "type": "integer",
+                            "title": "Commune",
+                            "description": ""
+                        },
+                        "ligne_d_acheminement": {
+                            "type": "string",
+                            "title": "Code Postal - Commune",
+                            "description": ""
+                        },
+                        "departement": {
+                            "type": "string",
+                            "title": "Numéro Département",
+                            "description": ""
+                        },
+                        "libelle_departement": {
+                            "type": "string",
+                            "title": "Département",
+                            "description": ""
+                        },
+                        "telephone": {
+                            "type": "integer",
+                            "title": "Téléphone",
+                            "description": ""
+                        },
+                        "statut_juridique": {
+                            "type": "integer",
+                            "title": "Code Statut juridique",
+                            "description": ""
+                        },
+                        "libelle_statut_juridique": {
+                            "type": "string",
+                            "title": "Statut juridique",
+                            "description": ""
+                        },
+                        "categorie_d_etablissement": {
+                            "type": "integer",
+                            "title": "Catégorie d'établissement",
+                            "description": ""
+                        },
+                        "libelle_categorie_d_etablissement": {
+                            "type": "string",
+                            "title": "Libellé catégorie d'établissement",
+                            "description": ""
+                        },
+                        "numero_de_siren": {
+                            "type": "integer",
+                            "title": "Numéro de SIREN",
+                            "description": ""
+                        },
+                        "code_ape": {
+                            "type": "string",
+                            "title": "Code APE",
+                            "description": ""
+                        },
+                        "date_de_creation": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de création",
+                            "description": ""
+                        },
+                        "code_postal": {
+                            "type": "string",
+                            "title": "Code Postal",
+                            "description": ""
+                        },
+                        "coordonnees": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Coordonnees",
+                            "description": ""
+                        },
+                        "nt_voie": {
+                            "type": "string",
+                            "title": "nt_voie",
+                            "description": ""
+                        },
+                        "ntl_voie": {
+                            "type": "string",
+                            "title": "ntl_voie",
+                            "description": ""
+                        },
+                        "addresse": {
+                            "type": "string",
+                            "title": "Addresse",
+                            "description": ""
+                        },
+                        "intitule_naf": {
+                            "type": "string",
+                            "title": "Activité Principale Exercée",
+                            "description": ""
+                        },
+                        "libelle": {
+                            "type": "string",
+                            "title": "Catégorie juridique",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

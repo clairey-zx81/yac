@@ -1,0 +1,916 @@
+{
+    "title": "etablissementscolairegps-viaapi@grandparissud",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/etablissementscolairegps-viaapi@grandparissud"
+        }
+    ],
+    "definitions": {
+        "etablissementscolairegps-viaapi@grandparissud": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/etablissementscolairegps-viaapi@grandparissud_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "etablissementscolairegps-viaapi@grandparissud_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "position": {
+                            "type": "string",
+                            "title": "position",
+                            "description": ""
+                        },
+                        "code_ministere": {
+                            "type": "string",
+                            "title": "code_ministere",
+                            "description": ""
+                        },
+                        "code_region": {
+                            "type": "string",
+                            "title": "code_region",
+                            "description": ""
+                        },
+                        "libelle_academie": {
+                            "type": "string",
+                            "title": "libelle_academie",
+                            "description": ""
+                        },
+                        "secteur_prive_code_type_contrat": {
+                            "type": "integer",
+                            "title": "secteur_prive_code_type_contrat",
+                            "description": ""
+                        },
+                        "localisation": {
+                            "type": "string",
+                            "title": "localisation",
+                            "description": ""
+                        },
+                        "date_ouverture": {
+                            "type": "string",
+                            "title": "date_ouverture",
+                            "description": ""
+                        },
+                        "code_postal_uai": {
+                            "type": "string",
+                            "title": "code_postal_uai",
+                            "description": ""
+                        },
+                        "libelle_ministere": {
+                            "type": "string",
+                            "title": "libelle_ministere",
+                            "description": ""
+                        },
+                        "libelle_departement": {
+                            "type": "string",
+                            "title": "libelle_departement",
+                            "description": ""
+                        },
+                        "adresse_uai": {
+                            "type": "string",
+                            "title": "adresse_uai",
+                            "description": ""
+                        },
+                        "code_academie": {
+                            "type": "string",
+                            "title": "code_academie",
+                            "description": ""
+                        },
+                        "secteur_prive_libelle_type_contrat": {
+                            "type": "string",
+                            "title": "secteur_prive_libelle_type_contrat",
+                            "description": ""
+                        },
+                        "code_commune": {
+                            "type": "string",
+                            "title": "code_commune",
+                            "description": ""
+                        },
+                        "nature_uai": {
+                            "type": "string",
+                            "title": "nature_uai",
+                            "description": ""
+                        },
+                        "etat_etablissement_libe": {
+                            "type": "string",
+                            "title": "etat_etablissement_libe",
+                            "description": ""
+                        },
+                        "libelle_commune": {
+                            "type": "string",
+                            "title": "libelle_commune",
+                            "description": ""
+                        },
+                        "code_departement": {
+                            "type": "string",
+                            "title": "code_departement",
+                            "description": ""
+                        },
+                        "localite_acheminement_uai": {
+                            "type": "string",
+                            "title": "localite_acheminement_uai",
+                            "description": ""
+                        },
+                        "appariement": {
+                            "type": "string",
+                            "title": "appariement",
+                            "description": ""
+                        },
+                        "etat_etablissement": {
+                            "type": "integer",
+                            "title": "etat_etablissement",
+                            "description": ""
+                        },
+                        "libelle_region": {
+                            "type": "string",
+                            "title": "libelle_region",
+                            "description": ""
+                        },
+                        "numero_uai": {
+                            "type": "string",
+                            "title": "numero_uai",
+                            "description": ""
+                        },
+                        "nature_uai_libe": {
+                            "type": "string",
+                            "title": "nature_uai_libe",
+                            "description": ""
+                        },
+                        "appellation_officielle": {
+                            "type": "string",
+                            "title": "appellation_officielle",
+                            "description": ""
+                        },
+                        "epsg": {
+                            "type": "string",
+                            "title": "epsg",
+                            "description": ""
+                        },
+                        "patronyme_uai": {
+                            "type": "string",
+                            "title": "patronyme_uai",
+                            "description": ""
+                        },
+                        "denomination_principale": {
+                            "type": "string",
+                            "title": "denomination_principale",
+                            "description": ""
+                        },
+                        "secteur_public_prive_libe": {
+                            "type": "string",
+                            "title": "secteur_public_prive_libe",
+                            "description": ""
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "title": "latitude",
+                            "description": ""
+                        },
+                        "coordonnee_y": {
+                            "type": "number",
+                            "title": "coordonnee_y",
+                            "description": ""
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "title": "longitude",
+                            "description": ""
+                        },
+                        "coordonnee_x": {
+                            "type": "number",
+                            "title": "coordonnee_x",
+                            "description": ""
+                        },
+                        "geopoint": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geopoint",
+                            "description": ""
+                        },
+                        "millesime": {
+                            "type": "string",
+                            "title": "Millesime",
+                            "description": ""
+                        },
+                        "code_nature": {
+                            "type": "integer",
+                            "title": "Code_Nature",
+                            "description": ""
+                        },
+                        "typ_etab": {
+                            "type": "string",
+                            "title": "typ_etab",
+                            "description": ""
+                        },
+                        "academie": {
+                            "type": "string",
+                            "title": "Academie",
+                            "description": ""
+                        },
+                        "departement": {
+                            "type": "string",
+                            "title": "Departement",
+                            "description": ""
+                        },
+                        "nbeleve": {
+                            "type": "number",
+                            "title": "NbEleve",
+                            "description": ""
+                        },
+                        "nbenseignant": {
+                            "type": "integer",
+                            "title": "NbEnseignant",
+                            "description": ""
+                        },
+                        "siequipementinf": {
+                            "type": "string",
+                            "title": "SiEquipementInf",
+                            "description": ""
+                        },
+                        "sivoletnumprojetecole": {
+                            "type": "string",
+                            "title": "SiVoletNumProjetEcole",
+                            "description": ""
+                        },
+                        "sientdisponible": {
+                            "type": "string",
+                            "title": "SiEntDisponible",
+                            "description": ""
+                        },
+                        "enseignantreferent": {
+                            "type": "string",
+                            "title": "EnseignantReferent",
+                            "description": ""
+                        },
+                        "maint_perscom": {
+                            "type": "string",
+                            "title": "Maint_PersCom",
+                            "description": ""
+                        },
+                        "maint_perseduchecole": {
+                            "type": "string",
+                            "title": "Maint_PersEducHEcole",
+                            "description": ""
+                        },
+                        "maint_persecole": {
+                            "type": "string",
+                            "title": "Maint_PersEcole",
+                            "description": ""
+                        },
+                        "maint_autrenesaitpas": {
+                            "type": "string",
+                            "title": "Maint_AutreNeSaitPas",
+                            "description": ""
+                        },
+                        "maint_personne": {
+                            "type": "string",
+                            "title": "Maint_personne",
+                            "description": ""
+                        },
+                        "sisitewebaccessible": {
+                            "type": "string",
+                            "title": "SiSiteWebAccessible",
+                            "description": ""
+                        },
+                        "nbressourceeditoriale": {
+                            "type": "string",
+                            "title": "NbressourceEditoriale",
+                            "description": ""
+                        },
+                        "tpresel_mannum": {
+                            "type": "string",
+                            "title": "TpResEl_ManNum",
+                            "description": ""
+                        },
+                        "tpresel_animsciencelogisimu": {
+                            "type": "string",
+                            "title": "TpResEl_AnimScienceLogiSimu",
+                            "description": ""
+                        },
+                        "tpresel_docmulti": {
+                            "type": "string",
+                            "title": "TpResEl_DocMulti",
+                            "description": ""
+                        },
+                        "tpresel_logioutils": {
+                            "type": "string",
+                            "title": "TpResEl_LogiOutils",
+                            "description": ""
+                        },
+                        "tpresel_ouvragesref": {
+                            "type": "string",
+                            "title": "TpResEl_OuvragesRef",
+                            "description": ""
+                        },
+                        "tpresel_ressentrainement": {
+                            "type": "string",
+                            "title": "TpResEl_RessEntrainement",
+                            "description": ""
+                        },
+                        "tpresel_autres": {
+                            "type": "string",
+                            "title": "TpResEl_Autres",
+                            "description": ""
+                        },
+                        "tpresel_aucune": {
+                            "type": "string",
+                            "title": "TpResEl_Aucune",
+                            "description": ""
+                        },
+                        "servdisp_livretcomp": {
+                            "type": "string",
+                            "title": "ServDisp_LivretComp",
+                            "description": ""
+                        },
+                        "servdisp_docresspeda": {
+                            "type": "string",
+                            "title": "ServDisp_DocRessPeda",
+                            "description": ""
+                        },
+                        "servdisp_emploitemps": {
+                            "type": "string",
+                            "title": "ServDisp_EmploiTemps",
+                            "description": ""
+                        },
+                        "servdisp_agendaactuecole": {
+                            "type": "string",
+                            "title": "ServDisp_AgendaActuEcole",
+                            "description": ""
+                        },
+                        "servdisp_autres": {
+                            "type": "string",
+                            "title": "ServDisp_Autres",
+                            "description": ""
+                        },
+                        "servdisp_aucun": {
+                            "type": "string",
+                            "title": "ServDisp_aucun",
+                            "description": ""
+                        },
+                        "nbtotalterminaux": {
+                            "type": "integer",
+                            "title": "NbTotalTerminaux",
+                            "description": ""
+                        },
+                        "nbtablette": {
+                            "type": "integer",
+                            "title": "NbTablette",
+                            "description": ""
+                        },
+                        "nbterminauxmoins5ans": {
+                            "type": "integer",
+                            "title": "NbTerminauxMoins5ans",
+                            "description": ""
+                        },
+                        "nbterminauxmobiles": {
+                            "type": "integer",
+                            "title": "NbTerminauxMobiles",
+                            "description": ""
+                        },
+                        "nbtermmobels": {
+                            "type": "integer",
+                            "title": "NbTermMobEls",
+                            "description": ""
+                        },
+                        "nbtermmobens": {
+                            "type": "integer",
+                            "title": "NbTermMobEns",
+                            "description": ""
+                        },
+                        "nbelevesconcernes": {
+                            "type": "integer",
+                            "title": "NbElevesConcernes",
+                            "description": ""
+                        },
+                        "typemathandi_tablette": {
+                            "type": "string",
+                            "title": "TypeMatHandi_Tablette",
+                            "description": ""
+                        },
+                        "typemathandi_ordiport": {
+                            "type": "string",
+                            "title": "TypeMatHandi_OrdiPort",
+                            "description": ""
+                        },
+                        "typemathandi_logapp": {
+                            "type": "string",
+                            "title": "TypeMatHandi_LogApp",
+                            "description": ""
+                        },
+                        "typemathandi_autre": {
+                            "type": "string",
+                            "title": "TypeMatHandi_Autre",
+                            "description": ""
+                        },
+                        "nbtni": {
+                            "type": "integer",
+                            "title": "NbTNI",
+                            "description": ""
+                        },
+                        "nbvideoproj": {
+                            "type": "integer",
+                            "title": "NbVideoProj",
+                            "description": ""
+                        },
+                        "nbclassesmob": {
+                            "type": "integer",
+                            "title": "NbClassesMob",
+                            "description": ""
+                        },
+                        "nbimprimante3d": {
+                            "type": "integer",
+                            "title": "NbImprimante3D",
+                            "description": ""
+                        },
+                        "matrobotique": {
+                            "type": "string",
+                            "title": "MatRobotique",
+                            "description": ""
+                        },
+                        "tpacc_rtc": {
+                            "type": "string",
+                            "title": "TpAcc_RTC",
+                            "description": ""
+                        },
+                        "tpacc_cablefibreoptique": {
+                            "type": "string",
+                            "title": "TpAcc_CableFibreOptique",
+                            "description": ""
+                        },
+                        "tpacc_adsl": {
+                            "type": "string",
+                            "title": "TpAcc_ADSL",
+                            "description": ""
+                        },
+                        "tpacc_autres": {
+                            "type": "string",
+                            "title": "TpAcc_Autres",
+                            "description": ""
+                        },
+                        "tpacc_nesaitpas": {
+                            "type": "string",
+                            "title": "TpAcc_NeSaitPas",
+                            "description": ""
+                        },
+                        "tpacc_aucun": {
+                            "type": "string",
+                            "title": "TpAcc_aucun",
+                            "description": ""
+                        },
+                        "debitg": {
+                            "type": "string",
+                            "title": "DebitG",
+                            "description": ""
+                        },
+                        "siwifi": {
+                            "type": "string",
+                            "title": "SiWifi",
+                            "description": ""
+                        },
+                        "partclassesinternet": {
+                            "type": "string",
+                            "title": "PartClassesInternet",
+                            "description": ""
+                        },
+                        "salleinternethorsclasses": {
+                            "type": "string",
+                            "title": "SalleInternetHorsClasses",
+                            "description": ""
+                        },
+                        "siprotectionreseau": {
+                            "type": "string",
+                            "title": "SiProtectionReseau",
+                            "description": ""
+                        },
+                        "sifltragesite": {
+                            "type": "string",
+                            "title": "SiFltrageSite",
+                            "description": ""
+                        },
+                        "sicontroleaposteriori": {
+                            "type": "string",
+                            "title": "SiControleAPosteriori",
+                            "description": ""
+                        },
+                        "sichartebonneusage": {
+                            "type": "string",
+                            "title": "SiCharteBonneUsage",
+                            "description": ""
+                        },
+                        "difch_annexeeri": {
+                            "type": "string",
+                            "title": "DifCh_AnnexeeRI",
+                            "description": ""
+                        },
+                        "difch_dossierrentreeenseignants": {
+                            "type": "string",
+                            "title": "DifCh_DossierRentreeEnseignants",
+                            "description": ""
+                        },
+                        "difch_crconseilecole": {
+                            "type": "string",
+                            "title": "DifCh_CRConseilEcole",
+                            "description": ""
+                        },
+                        "difch_diffparents": {
+                            "type": "string",
+                            "title": "DifCh_DiffParents",
+                            "description": ""
+                        },
+                        "difch_autre": {
+                            "type": "string",
+                            "title": "DifCh_Autre",
+                            "description": ""
+                        },
+                        "accesparentcharte": {
+                            "type": "string",
+                            "title": "AccesParentCharte",
+                            "description": ""
+                        },
+                        "sivisioconference": {
+                            "type": "string",
+                            "title": "SiVisioConference",
+                            "description": ""
+                        },
+                        "sientdisponible0": {
+                            "type": "string",
+                            "title": "SiEntDisponible",
+                            "description": ""
+                        },
+                        "quelserveur": {
+                            "type": "string",
+                            "title": "QuelServeur",
+                            "description": ""
+                        },
+                        "nbtablettepc": {
+                            "type": "integer",
+                            "title": "NbTablettePC",
+                            "description": ""
+                        },
+                        "nbterminauxconcernes": {
+                            "type": "integer",
+                            "title": "NbTerminauxConcernes",
+                            "description": ""
+                        },
+                        "nblecteursmp3mp4": {
+                            "type": "integer",
+                            "title": "NbLecteursMp3Mp4",
+                            "description": ""
+                        },
+                        "nbterminauxusageped": {
+                            "type": "string",
+                            "title": "NbterminauxUsagePed",
+                            "description": ""
+                        },
+                        "ensokprimabord": {
+                            "type": "string",
+                            "title": "EnsOkPrimabord",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

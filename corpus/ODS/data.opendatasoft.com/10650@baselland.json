@@ -1,0 +1,531 @@
+{
+    "title": "10650@baselland",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/10650@baselland"
+        }
+    ],
+    "definitions": {
+        "10650@baselland": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/10650@baselland_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "10650@baselland_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "bfs_nummer": {
+                            "type": "number",
+                            "title": "BFS_Nummer",
+                            "description": ""
+                        },
+                        "gemeinde": {
+                            "type": "string",
+                            "title": "Gemeinde",
+                            "description": ""
+                        },
+                        "bezirk_nummer": {
+                            "type": "number",
+                            "title": "Bezirk_Nummer",
+                            "description": ""
+                        },
+                        "bezirk": {
+                            "type": "string",
+                            "title": "Bezirk",
+                            "description": ""
+                        },
+                        "hohe_uber_meer": {
+                            "type": "number",
+                            "title": "Höhe_über_Meer",
+                            "description": ""
+                        },
+                        "flache_ha_2014_15": {
+                            "type": "number",
+                            "title": "Fläche_ha_2014_15",
+                            "description": ""
+                        },
+                        "siedlungsflache_prozent": {
+                            "type": "number",
+                            "title": "Siedlungsfläche_Prozent",
+                            "description": ""
+                        },
+                        "landwirtschaftsflache_prozent": {
+                            "type": "string",
+                            "title": "Landwirtschaftsfläche_Prozent",
+                            "description": ""
+                        },
+                        "bestockte_flache_wald_prozent": {
+                            "type": "number",
+                            "title": "Bestockte_Fläche_Wald_Prozent",
+                            "description": ""
+                        },
+                        "unproduktive_flache_prozent": {
+                            "type": "string",
+                            "title": "Unproduktive_Fläche_Prozent",
+                            "description": ""
+                        },
+                        "haushalte_2021": {
+                            "type": "number",
+                            "title": "Haushalte_2021",
+                            "description": ""
+                        },
+                        "bevolkerung_2021": {
+                            "type": "number",
+                            "title": "Bevölkerung_2021",
+                            "description": ""
+                        },
+                        "0_bis_14jahrige_prozent": {
+                            "type": "number",
+                            "title": "0_bis_14jährige_Prozent",
+                            "description": ""
+                        },
+                        "15_bis_64jahrige_prozent": {
+                            "type": "number",
+                            "title": "15_bis_64jährige_Prozent",
+                            "description": ""
+                        },
+                        "65jahrige_und_alter_prozent": {
+                            "type": "number",
+                            "title": "65jährige_und_älter_Prozent",
+                            "description": ""
+                        },
+                        "auslanderanteil_2021_prozent": {
+                            "type": "number",
+                            "title": "Ausländeranteil_2021_Prozent",
+                            "description": ""
+                        },
+                        "kinder_offentliche_primarstufe_schulort_2021": {
+                            "type": "string",
+                            "title": "Kinder_öffentliche_Primarstufe_Schulort_2021",
+                            "description": ""
+                        },
+                        "arbeitsstatten_2020": {
+                            "type": "number",
+                            "title": "Arbeitsstätten_2020",
+                            "description": ""
+                        },
+                        "beschaftigte_2020": {
+                            "type": "number",
+                            "title": "Beschäftigte_2020",
+                            "description": ""
+                        },
+                        "berschaftigte_sektor_1_prozent": {
+                            "type": "number",
+                            "title": "Berschäftigte_Sektor_1_Prozent",
+                            "description": ""
+                        },
+                        "berschaftigte_sektor_2_prozent": {
+                            "type": "number",
+                            "title": "Berschäftigte_Sektor_2_Prozent",
+                            "description": ""
+                        },
+                        "berschaftigte_sektor_3_prozent": {
+                            "type": "number",
+                            "title": "Berschäftigte_Sektor_3_Prozent",
+                            "description": ""
+                        },
+                        "wohnungsbestand_2021": {
+                            "type": "number",
+                            "title": "Wohnungsbestand_2021",
+                            "description": ""
+                        },
+                        "einfamilienhauser_prozent": {
+                            "type": "number",
+                            "title": "Einfamilienhäuser_Prozent",
+                            "description": ""
+                        },
+                        "fertigerstellte_wohnungen_2021": {
+                            "type": "string",
+                            "title": "Fertigerstellte_Wohnungen_2021",
+                            "description": ""
+                        },
+                        "leerwohnungsziffer_2022_prozent": {
+                            "type": "string",
+                            "title": "Leerwohnungsziffer_2022_Prozent",
+                            "description": ""
+                        },
+                        "bodenpreis_m2_wohnbauland_2019_2021_chf": {
+                            "type": "string",
+                            "title": "Bodenpreis_m2_Wohnbauland_2019_2021_CHF",
+                            "description": ""
+                        },
+                        "steuerertrag_2021_1000_chf": {
+                            "type": "number",
+                            "title": "Steuerertrag_2021_1000_CHF",
+                            "description": ""
+                        },
+                        "steuerfuss_2023": {
+                            "type": "number",
+                            "title": "Steuerfuss_2023",
+                            "description": ""
+                        },
+                        "website": {
+                            "type": "string",
+                            "title": "Website",
+                            "description": ""
+                        },
+                        "geometrie": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geometrie",
+                            "description": ""
+                        },
+                        "geometrisches_zentrum": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geometrisches_Zentrum",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

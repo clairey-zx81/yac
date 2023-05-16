@@ -1,0 +1,819 @@
+{
+    "title": "street-lights@cityofsalinas",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/street-lights@cityofsalinas"
+        }
+    ],
+    "definitions": {
+        "street-lights@cityofsalinas": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/street-lights@cityofsalinas_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "street-lights@cityofsalinas_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "objectid": {
+                            "type": "integer",
+                            "title": "OBJECTID",
+                            "description": "Unique field autogenerated by GIS software."
+                        },
+                        "streetlight_led_all_location": {
+                            "type": "string",
+                            "title": "LOCATION",
+                            "description": ""
+                        },
+                        "streetlight_led_all_no_badge": {
+                            "type": "string",
+                            "title": "NO_BADGE",
+                            "description": ""
+                        },
+                        "streetlight_led_all_number_of": {
+                            "type": "integer",
+                            "title": "NUMBER_OF_",
+                            "description": ""
+                        },
+                        "streetlight_led_all_number_or": {
+                            "type": "string",
+                            "title": "NUMBER_OR",
+                            "description": ""
+                        },
+                        "streetlight_led_all_type_of_de": {
+                            "type": "string",
+                            "title": "Type_of_De",
+                            "description": ""
+                        },
+                        "streetlight_led_all_final_watt": {
+                            "type": "string",
+                            "title": "Final_Watt",
+                            "description": ""
+                        },
+                        "streetlight_led_all_notes_or_c": {
+                            "type": "string",
+                            "title": "Notes_or_C",
+                            "description": ""
+                        },
+                        "streetlight_led_all_led_wattag": {
+                            "type": "string",
+                            "title": "LED_WATTAG",
+                            "description": ""
+                        },
+                        "streetlight_led_all_streetlight": {
+                            "type": "integer",
+                            "title": "STREETLIGHTS_",
+                            "description": ""
+                        },
+                        "streetlight_led_all_streetlig_1": {
+                            "type": "integer",
+                            "title": "STREETLIGHTS_ID",
+                            "description": ""
+                        },
+                        "streetlight_led_all_category": {
+                            "type": "string",
+                            "title": "Category",
+                            "description": ""
+                        },
+                        "streetlight_led_all_badge": {
+                            "type": "string",
+                            "title": "Badge",
+                            "description": ""
+                        },
+                        "streetlight_led_all_lat": {
+                            "type": "number",
+                            "title": "Lat",
+                            "description": ""
+                        },
+                        "streetlight_led_all_long": {
+                            "type": "number",
+                            "title": "Long",
+                            "description": ""
+                        },
+                        "streetlight_led_all_reserved": {
+                            "type": "string",
+                            "title": "Reserved",
+                            "description": ""
+                        },
+                        "streetlight_led_all_giseditnote": {
+                            "type": "string",
+                            "title": "GISEditNote",
+                            "description": ""
+                        },
+                        "streetlight_led_all_poletypeedi": {
+                            "type": "string",
+                            "title": "PoleTypeEdit",
+                            "description": ""
+                        },
+                        "pgemasterp1_office": {
+                            "type": "string",
+                            "title": "OFFICE",
+                            "description": ""
+                        },
+                        "pgemasterp1_personname": {
+                            "type": "string",
+                            "title": "PERSONNAME",
+                            "description": ""
+                        },
+                        "pgemasterp1_acctnum": {
+                            "type": "number",
+                            "title": "ACCTNUM",
+                            "description": ""
+                        },
+                        "pgemasterp1_transactn": {
+                            "type": "string",
+                            "title": "Transactn",
+                            "description": ""
+                        },
+                        "pgemasterp1_badgenum": {
+                            "type": "string",
+                            "title": "BADGENUM",
+                            "description": ""
+                        },
+                        "pgemasterp1_newbadge": {
+                            "type": "string",
+                            "title": "NewBadge",
+                            "description": ""
+                        },
+                        "pgemasterp1_fx_code": {
+                            "type": "integer",
+                            "title": "FX_CODE",
+                            "description": ""
+                        },
+                        "pgemasterp1_status": {
+                            "type": "string",
+                            "title": "STATUS",
+                            "description": ""
+                        },
+                        "pgemasterp1_statusflag": {
+                            "type": "string",
+                            "title": "STATUSFLAG",
+                            "description": ""
+                        },
+                        "pgemasterp1_ret_date": {
+                            "type": "string",
+                            "title": "RET_DATE",
+                            "description": ""
+                        },
+                        "pgemasterp1_rem_date": {
+                            "type": "string",
+                            "title": "REM_DATE",
+                            "description": ""
+                        },
+                        "pgemasterp1_location": {
+                            "type": "string",
+                            "title": "LOCATION",
+                            "description": ""
+                        },
+                        "pgemasterp1_mapnumber": {
+                            "type": "string",
+                            "title": "MAPNUMBER",
+                            "description": ""
+                        },
+                        "pgemasterp1_rate_sched": {
+                            "type": "string",
+                            "title": "RATE_SCHED",
+                            "description": ""
+                        },
+                        "pgemasterp1_lamp_size_in_billin": {
+                            "type": "string",
+                            "title": "LAMP SIZE IN BILLING",
+                            "description": ""
+                        },
+                        "pgemasterp1_lamp_size_in_field": {
+                            "type": "string",
+                            "title": "lamp size IN FIELD",
+                            "description": ""
+                        },
+                        "pgemasterp1_new_lamp_size": {
+                            "type": "string",
+                            "title": "new lamp size",
+                            "description": ""
+                        },
+                        "pgemasterp1_inv_by": {
+                            "type": "string",
+                            "title": "INV_BY",
+                            "description": ""
+                        },
+                        "pgemasterp1_op_sched": {
+                            "type": "string",
+                            "title": "OP_SCHED",
+                            "description": ""
+                        },
+                        "pgemasterp1_service": {
+                            "type": "string",
+                            "title": "SERVICE",
+                            "description": ""
+                        },
+                        "pgemasterp1_fx_man": {
+                            "type": "string",
+                            "title": "FX_MAN",
+                            "description": ""
+                        },
+                        "pgemasterp1_pole_type": {
+                            "type": "string",
+                            "title": "POLE_TYPE_LEGACY",
+                            "description": ""
+                        },
+                        "pgemasterp1_pole_lgth": {
+                            "type": "string",
+                            "title": "POLE_LGTH",
+                            "description": ""
+                        },
+                        "pgemasterp1_suspension": {
+                            "type": "string",
+                            "title": "SUSPENSION",
+                            "description": ""
+                        },
+                        "pgemasterp1_pole_use": {
+                            "type": "string",
+                            "title": "POLE_USE",
+                            "description": ""
+                        },
+                        "pgemasterp1_sp_id": {
+                            "type": "number",
+                            "title": "SP_ID",
+                            "description": ""
+                        },
+                        "pgemasterp1_sa_id": {
+                            "type": "number",
+                            "title": "SA_ID",
+                            "description": ""
+                        },
+                        "pgemasterp1_prem_id": {
+                            "type": "number",
+                            "title": "PREM_ID",
+                            "description": ""
+                        },
+                        "pgemasterp1_tot_code": {
+                            "type": "string",
+                            "title": "TOT_CODE",
+                            "description": ""
+                        },
+                        "pgemasterp1_tot_code_x": {
+                            "type": "number",
+                            "title": "TOT_CODE_X",
+                            "description": ""
+                        },
+                        "pgemasterp1_tot_code_y": {
+                            "type": "number",
+                            "title": "TOT_CODE_Y",
+                            "description": ""
+                        },
+                        "pgemasterp1_tot_terr": {
+                            "type": "string",
+                            "title": "TOT_TERR",
+                            "description": ""
+                        },
+                        "pgemasterp1_inv_by_1": {
+                            "type": "string",
+                            "title": "INV_BY",
+                            "description": ""
+                        },
+                        "pgemasterp1_spitemhist": {
+                            "type": "number",
+                            "title": "SPITEMHIST",
+                            "description": ""
+                        },
+                        "pgemasterp1_uniquespid": {
+                            "type": "number",
+                            "title": "UNIQUESPID",
+                            "description": ""
+                        },
+                        "pgemasterp1_gis_id": {
+                            "type": "string",
+                            "title": "GIS_ID",
+                            "description": ""
+                        },
+                        "pgemasterp1_newbadge_1": {
+                            "type": "string",
+                            "title": "NewBadge",
+                            "description": ""
+                        },
+                        "pgemasterp1_transactn_1": {
+                            "type": "integer",
+                            "title": "Transactn",
+                            "description": ""
+                        },
+                        "pgemasterp1_fmetricom": {
+                            "type": "string",
+                            "title": "FMetricom",
+                            "description": ""
+                        },
+                        "pgemasterp1_frevenue": {
+                            "type": "string",
+                            "title": "FRevenue",
+                            "description": ""
+                        },
+                        "pgemasterp1_far1": {
+                            "type": "string",
+                            "title": "FAR1",
+                            "description": ""
+                        },
+                        "pgemasterp1_far2": {
+                            "type": "string",
+                            "title": "FAR2",
+                            "description": ""
+                        },
+                        "pgemasterp1_far3": {
+                            "type": "string",
+                            "title": "FAR3",
+                            "description": ""
+                        },
+                        "pgemasterp1_farother": {
+                            "type": "string",
+                            "title": "FAROther",
+                            "description": ""
+                        },
+                        "pgemasterp1_maintnote": {
+                            "type": "string",
+                            "title": "MaintNote",
+                            "description": ""
+                        },
+                        "pgemasterp1_fappliance1": {
+                            "type": "string",
+                            "title": "FAppliance1",
+                            "description": ""
+                        },
+                        "pgemasterp1_fappliance2": {
+                            "type": "string",
+                            "title": "FAppliance2",
+                            "description": ""
+                        },
+                        "pgemasterp1_fappliance3": {
+                            "type": "string",
+                            "title": "FAppliance3",
+                            "description": ""
+                        },
+                        "pgemasterp1_fappliance4": {
+                            "type": "string",
+                            "title": "FAppliance4",
+                            "description": ""
+                        },
+                        "pgemasterp1_fappliance5": {
+                            "type": "string",
+                            "title": "FAppliance5",
+                            "description": ""
+                        },
+                        "pgemasterp1_meter": {
+                            "type": "string",
+                            "title": "Meter",
+                            "description": ""
+                        },
+                        "pgemasterp1_paintpole": {
+                            "type": "string",
+                            "title": "PaintPole",
+                            "description": ""
+                        },
+                        "multiheaddup": {
+                            "type": "integer",
+                            "title": "Multihead Pole Duplicate Entry",
+                            "description": ""
+                        },
+                        "polebadgenum": {
+                            "type": "string",
+                            "title": "Badge Number for Permitting",
+                            "description": ""
+                        },
+                        "created_user": {
+                            "type": "string",
+                            "title": "created_user",
+                            "description": ""
+                        },
+                        "created_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "created_date",
+                            "description": ""
+                        },
+                        "last_edited_user": {
+                            "type": "string",
+                            "title": "last_edited_user",
+                            "description": ""
+                        },
+                        "last_edited_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "last_edited_date",
+                            "description": ""
+                        },
+                        "permnotes": {
+                            "type": "string",
+                            "title": "Permitting Notes",
+                            "description": ""
+                        },
+                        "applicationid": {
+                            "type": "string",
+                            "title": "Application ID",
+                            "description": ""
+                        },
+                        "uniqueid": {
+                            "type": "string",
+                            "title": "UniqueID",
+                            "description": ""
+                        },
+                        "activeflag": {
+                            "type": "integer",
+                            "title": "ActiveFlag",
+                            "description": ""
+                        },
+                        "pgemasterp1_inv_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "pgemasterp1_inv_date",
+                            "description": ""
+                        },
+                        "pgemasterp1_cop_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "pgemasterp1_cop_date",
+                            "description": ""
+                        },
+                        "pgemasterp1_ins_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "pgemasterp1_ins_date",
+                            "description": ""
+                        },
+                        "resexp": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "resexp",
+                            "description": ""
+                        },
+                        "pgemasterp1_rec_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "pgemasterp1_rec_date",
+                            "description": ""
+                        },
+                        "streetlight_led_all_date_retro": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "streetlight_led_all_date_retro",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": "GIS Shape type, Latitude and Longitude of the vertices of the event or occurence-autogenerated by the Portal."
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": "GIS Shape type, Latitude and Longitude of the vertices of the event or occurence-autogenerated by the Portal"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

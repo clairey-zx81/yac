@@ -1,0 +1,725 @@
+{
+    "title": "entreprises-tmvl@toursmetropole",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/entreprises-tmvl@toursmetropole"
+        }
+    ],
+    "definitions": {
+        "entreprises-tmvl@toursmetropole": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entreprises-tmvl@toursmetropole_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "entreprises-tmvl@toursmetropole_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "siren": {
+                            "type": "string",
+                            "title": "siren",
+                            "description": ""
+                        },
+                        "nic": {
+                            "type": "string",
+                            "title": "nic",
+                            "description": ""
+                        },
+                        "siret": {
+                            "type": "string",
+                            "title": "siret",
+                            "description": ""
+                        },
+                        "statutdiffusionetablissement": {
+                            "type": "string",
+                            "title": "statutDiffusionEtablissement",
+                            "description": ""
+                        },
+                        "datecreationetablissement": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "dateCreationEtablissement",
+                            "description": "Date de création de l’établissement"
+                        },
+                        "trancheeffectifsetablissement": {
+                            "type": "string",
+                            "title": "trancheEffectifsEtablissement",
+                            "description": ""
+                        },
+                        "anneeeffectifsetablissement": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "anneeEffectifsEtablissement",
+                            "description": "Année de validité de la tranche d’effectif salarié de l’établissement"
+                        },
+                        "activiteprincipaleregistremetiersetablissement": {
+                            "type": "string",
+                            "title": "activitePrincipaleRegistreMetiersEtablissement",
+                            "description": "Activité exercée par l’artisan inscrit au registre des métiers"
+                        },
+                        "datederniertraitementetablissement": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "dateDernierTraitementEtablissement",
+                            "description": "Date du dernier traitement de l’établissement dans le répertoire Sirene\n"
+                        },
+                        "etablissementsiege": {
+                            "type": "string",
+                            "title": "etablissementSiege",
+                            "description": "Qualité de siège ou non de l’établissement"
+                        },
+                        "nombreperiodesetablissement": {
+                            "type": "integer",
+                            "title": "nombrePeriodesEtablissement",
+                            "description": ""
+                        },
+                        "complementadresseetablissement": {
+                            "type": "string",
+                            "title": "complementAdresseEtablissement",
+                            "description": "Complément d’adresse"
+                        },
+                        "numerovoieetablissement": {
+                            "type": "integer",
+                            "title": "numeroVoieEtablissement",
+                            "description": ""
+                        },
+                        "indicerepetitionetablissement": {
+                            "type": "string",
+                            "title": "indiceRepetitionEtablissement",
+                            "description": "Indice de répétition dans la voie pour l’adresse\n"
+                        },
+                        "typevoieetablissement": {
+                            "type": "string",
+                            "title": "typeVoieEtablissement",
+                            "description": ""
+                        },
+                        "libellevoieetablissement": {
+                            "type": "string",
+                            "title": "libelleVoieEtablissement",
+                            "description": ""
+                        },
+                        "codepostaletablissement": {
+                            "type": "string",
+                            "title": "codePostalEtablissement",
+                            "description": "Code postal"
+                        },
+                        "libellecommuneetablissement": {
+                            "type": "string",
+                            "title": "libelleCommuneEtablissement",
+                            "description": ""
+                        },
+                        "libellecommuneetrangeretablissement": {
+                            "type": "string",
+                            "title": "libelleCommuneEtrangerEtablissement",
+                            "description": "Libellé de la commune de l’adresse secondaire"
+                        },
+                        "distributionspecialeetablissement": {
+                            "type": "string",
+                            "title": "distributionSpecialeEtablissement",
+                            "description": "Distribution spéciale de l’adresse de l’établissement"
+                        },
+                        "codecommuneetablissement": {
+                            "type": "string",
+                            "title": "codeCommuneEtablissement",
+                            "description": "Code commune de l’établissement"
+                        },
+                        "codecedexetablissement": {
+                            "type": "string",
+                            "title": "codeCedexEtablissement",
+                            "description": "Code cedex"
+                        },
+                        "libellecedexetablissement": {
+                            "type": "string",
+                            "title": "libelleCedexEtablissement",
+                            "description": "Libellé du code cedex de l’adresse"
+                        },
+                        "codepaysetrangeretablissement": {
+                            "type": "string",
+                            "title": "codePaysEtrangerEtablissement",
+                            "description": "Code pays pour un établissement situé à l’étranger"
+                        },
+                        "libellepaysetrangeretablissement": {
+                            "type": "string",
+                            "title": "libellePaysEtrangerEtablissement",
+                            "description": ""
+                        },
+                        "complementadresse2etablissement": {
+                            "type": "string",
+                            "title": "complementAdresse2Etablissement",
+                            "description": "Complément d’adresse secondaire"
+                        },
+                        "numerovoie2etablissement": {
+                            "type": "string",
+                            "title": "numeroVoie2Etablissement",
+                            "description": ""
+                        },
+                        "indicerepetition2etablissement": {
+                            "type": "string",
+                            "title": "indiceRepetition2Etablissement",
+                            "description": "Indice de répétition dans la voie pour l’adresse secondaire"
+                        },
+                        "typevoie2etablissement": {
+                            "type": "string",
+                            "title": "typeVoie2Etablissement",
+                            "description": ""
+                        },
+                        "libellevoie2etablissement": {
+                            "type": "string",
+                            "title": "libelleVoie2Etablissement",
+                            "description": ""
+                        },
+                        "codepostal2etablissement": {
+                            "type": "string",
+                            "title": "codePostal2Etablissement",
+                            "description": "Code postal de l’adresse secondaire"
+                        },
+                        "libellecommune2etablissement": {
+                            "type": "string",
+                            "title": "libelleCommune2Etablissement",
+                            "description": "Libellé de la commune de l’adresse\n"
+                        },
+                        "libellecommuneetranger2etablissement": {
+                            "type": "string",
+                            "title": "libelleCommuneEtranger2Etablissement",
+                            "description": ""
+                        },
+                        "distributionspeciale2etablissement": {
+                            "type": "string",
+                            "title": "distributionSpeciale2Etablissement",
+                            "description": "Distribution spéciale de l’adresse secondaire de l’établissement"
+                        },
+                        "codecommune2etablissement": {
+                            "type": "string",
+                            "title": "codeCommune2Etablissement",
+                            "description": "Code commune de l’adresse secondaire"
+                        },
+                        "codecedex2etablissement": {
+                            "type": "string",
+                            "title": "codeCedex2Etablissement",
+                            "description": "Code cedex de l’adresse secondaire"
+                        },
+                        "libellecedex2etablissement": {
+                            "type": "string",
+                            "title": "libelleCedex2Etablissement",
+                            "description": "Libellé du code cedex de l’adresse secondaire"
+                        },
+                        "codepaysetranger2etablissement": {
+                            "type": "string",
+                            "title": "codePaysEtranger2Etablissement",
+                            "description": "Code pays de l’adresse secondaire pour un établissement situé à l’étranger"
+                        },
+                        "libellepaysetranger2etablissement": {
+                            "type": "string",
+                            "title": "libellePaysEtranger2Etablissement",
+                            "description": ""
+                        },
+                        "datedebut": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "dateDebut",
+                            "description": "Date de début d'une période d'historique d'un établissement"
+                        },
+                        "etatadministratifetablissement": {
+                            "type": "string",
+                            "title": "etatAdministratifEtablissement",
+                            "description": "État administratif de l’établissement :\nA : Actif\nF : Fermé"
+                        },
+                        "enseigne1etablissement": {
+                            "type": "string",
+                            "title": "enseigne1Etablissement",
+                            "description": "Première ligne d’enseigne de l’établissement"
+                        },
+                        "enseigne2etablissement": {
+                            "type": "string",
+                            "title": "enseigne2Etablissement",
+                            "description": "Deuxième ligne d’enseigne de l’établissement"
+                        },
+                        "enseigne3etablissement": {
+                            "type": "string",
+                            "title": "enseigne3Etablissement",
+                            "description": "Troisième ligne d’enseigne de l’établissement"
+                        },
+                        "denominationusuelleetablissement": {
+                            "type": "string",
+                            "title": "denominationUsuelleEtablissement",
+                            "description": "Dénomination usuelle de l’établissement"
+                        },
+                        "activiteprincipaleetablissement": {
+                            "type": "string",
+                            "title": "activitePrincipaleEtablissement",
+                            "description": "Activité principale de l'établissement pendant la période"
+                        },
+                        "nomenclatureactiviteprincipaleetablissement": {
+                            "type": "string",
+                            "title": "nomenclatureActivitePrincipaleEtablissement",
+                            "description": ""
+                        },
+                        "caractereemployeuretablissement": {
+                            "type": "string",
+                            "title": "caractereEmployeurEtablissement",
+                            "description": "Caractère employeur de l’établissement :\nO : établissement employeur\nN : établissement non employeur\nnull : sans objet\n"
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "title": "longitude",
+                            "description": ""
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "title": "latitude",
+                            "description": ""
+                        },
+                        "geo_score": {
+                            "type": "number",
+                            "title": "geo_score",
+                            "description": ""
+                        },
+                        "geo_type": {
+                            "type": "string",
+                            "title": "geo_type",
+                            "description": ""
+                        },
+                        "geo_adresse": {
+                            "type": "string",
+                            "title": "geo_adresse",
+                            "description": ""
+                        },
+                        "geo_id": {
+                            "type": "string",
+                            "title": "geo_id",
+                            "description": ""
+                        },
+                        "geo_ligne": {
+                            "type": "string",
+                            "title": "geo_ligne",
+                            "description": ""
+                        },
+                        "geo_l4": {
+                            "type": "string",
+                            "title": "geo_l4",
+                            "description": ""
+                        },
+                        "geo_l5": {
+                            "type": "string",
+                            "title": "geo_l5",
+                            "description": ""
+                        },
+                        "x_commune_code": {
+                            "type": "string",
+                            "title": "x_commune_code",
+                            "description": ""
+                        },
+                        "x_commune_name": {
+                            "type": "string",
+                            "title": "x_commune_name",
+                            "description": ""
+                        },
+                        "x_epci_code": {
+                            "type": "string",
+                            "title": "x_epci_code",
+                            "description": ""
+                        },
+                        "x_epci_name": {
+                            "type": "string",
+                            "title": "x_epci_name",
+                            "description": ""
+                        },
+                        "x_arrondissement_code": {
+                            "type": "string",
+                            "title": "x_arrondissement_code",
+                            "description": ""
+                        },
+                        "x_arrondissement_name": {
+                            "type": "string",
+                            "title": "x_arrondissement_name",
+                            "description": ""
+                        },
+                        "x_departement_code": {
+                            "type": "string",
+                            "title": "x_departement_code",
+                            "description": ""
+                        },
+                        "x_departement_name": {
+                            "type": "string",
+                            "title": "x_departement_name",
+                            "description": ""
+                        },
+                        "x_region_code": {
+                            "type": "string",
+                            "title": "x_region_code",
+                            "description": ""
+                        },
+                        "x_region_name": {
+                            "type": "string",
+                            "title": "x_region_name",
+                            "description": ""
+                        },
+                        "section": {
+                            "type": "string",
+                            "title": "Section",
+                            "description": ""
+                        },
+                        "sous_section": {
+                            "type": "string",
+                            "title": "Sous-section",
+                            "description": ""
+                        },
+                        "division": {
+                            "type": "string",
+                            "title": "Division",
+                            "description": ""
+                        },
+                        "geo_point": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

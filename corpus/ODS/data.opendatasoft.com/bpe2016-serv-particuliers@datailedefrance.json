@@ -1,0 +1,581 @@
+{
+    "title": "bpe2016-serv-particuliers@datailedefrance",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/bpe2016-serv-particuliers@datailedefrance"
+        }
+    ],
+    "definitions": {
+        "bpe2016-serv-particuliers@datailedefrance": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/bpe2016-serv-particuliers@datailedefrance_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "bpe2016-serv-particuliers@datailedefrance_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "codgeo": {
+                            "type": "string",
+                            "title": "Code commune",
+                            "description": ""
+                        },
+                        "libgeo": {
+                            "type": "string",
+                            "title": "Libellé commune ou arrondissement",
+                            "description": ""
+                        },
+                        "dep": {
+                            "type": "string",
+                            "title": "Département",
+                            "description": ""
+                        },
+                        "nb_a101": {
+                            "type": "integer",
+                            "title": "NB_A101",
+                            "description": "Police\nCes services de la sécurité publique (hors CRS, police de l'air et des frontières, services régionaux des renseignements généraux, services\nde contrôle de l'immigration, services généraux d'administration de la police) ne comprennent pas les services de police municipale."
+                        },
+                        "nb_a104": {
+                            "type": "integer",
+                            "title": "NB_A104",
+                            "description": "Gendarmerie\nIl s'agit d'unités de gendarmerie recevant du public. Elle comprend les brigades territoriales autonomes et les brigades territoriales de proximité."
+                        },
+                        "nb_a105": {
+                            "type": "integer",
+                            "title": "NB_A105",
+                            "description": "Cour d'appel"
+                        },
+                        "nb_a108": {
+                            "type": "integer",
+                            "title": "NB_A108",
+                            "description": "Conseil des prud'hommes"
+                        },
+                        "nb_a109": {
+                            "type": "integer",
+                            "title": "NB_A109",
+                            "description": "Tribunal de commerce"
+                        },
+                        "nb_a120": {
+                            "type": "integer",
+                            "title": "NB_A120",
+                            "description": "DRFiP (Direction régionale  des finances publiques)"
+                        },
+                        "nb_a121": {
+                            "type": "integer",
+                            "title": "NB_A121",
+                            "description": "DDFiP (Direction départementale des finances publiques)"
+                        },
+                        "nb_a122": {
+                            "type": "integer",
+                            "title": "NB_A122",
+                            "description": "Réseau de proximité pôle emploi\nIl comprend les agences, les relais et les permanences Pôle Emploi antérieurement différenciés."
+                        },
+                        "nb_a124": {
+                            "type": "integer",
+                            "title": "NB_A124",
+                            "description": "Maison de justice et du droit"
+                        },
+                        "nb_a125": {
+                            "type": "integer",
+                            "title": "NB_A125",
+                            "description": "Antenne de justice"
+                        },
+                        "nb_a126": {
+                            "type": "number",
+                            "title": "NB_A126",
+                            "description": "Conseil départemental d’accès au droit"
+                        },
+                        "nb_a203": {
+                            "type": "integer",
+                            "title": "NB_A203",
+                            "description": "Banques, caisses d'épargne\nIl s'agit d'établissements de crédit agréés, y compris banques mutualistes ou coopératives et caisses d'épargne et de prévoyance. Les guichets financiers de La Poste ne sont pas comptabilisés.\nElle contient également des services administratifs ou des Points-contacts que l'on ne peut pas distinguer des guichets."
+                        },
+                        "nb_a205": {
+                            "type": "integer",
+                            "title": "NB_A205",
+                            "description": "Pompes funèbres\nIl s'agit de l'activité principale. Cette catégorie comprend les activités de pompes funèbres quelle que soit la forme juridique (mise en bière, transport, services d'inhumation ou de crémation)."
+                        },
+                        "nb_a206": {
+                            "type": "integer",
+                            "title": "NB_A206",
+                            "description": "Bureau de poste\nLe bureau de poste, en gestion directe par La Poste, offre la totalité des produits et services délivrés à la population tant pour ce qui concerne le courrier et les colis (courrier simple, recommandé, réexpédition, prêt à poster, …) que pour les services financiers (ouverture de comptes, dépôts, retraits, assurances-vie, PEL, actions, …)."
+                        },
+                        "nb_a207": {
+                            "type": "integer",
+                            "title": "NB_A207",
+                            "description": "Relais poste \nLe relais poste est géré principalement par une personne privée dans le cadre de conventions de partenariat signées entre La Poste et des partenaires privés.\nIl offre une grande partie des produits et services de proximité délivrés à la population concernant le courrier et les colis (courrier simple, recommandé, prêt à poster, à l’exception de l’établissement d’une procuration postale…). \nLes services financiers sont limités au retrait d’espèces (maximum 150 euros par semaine) et au paiement de mandat cash."
+                        },
+                        "nb_a208": {
+                            "type": "integer",
+                            "title": "NB_A208",
+                            "description": "Agence postale\nL’agence postale est gérée par une personne publique, représentée par des agents territoriaux dans le cadre de conventions de partenariat signées entre La Poste et les communes ou EPCI concernées."
+                        },
+                        "nb_a301": {
+                            "type": "integer",
+                            "title": "NB_A301",
+                            "description": "Réparation auto et de matériel agricole"
+                        },
+                        "nb_a302": {
+                            "type": "integer",
+                            "title": "NB_A302",
+                            "description": "Contrôle technique auto"
+                        },
+                        "nb_a303": {
+                            "type": "integer",
+                            "title": "NB_A303",
+                            "description": "Location auto-utilitaires légers"
+                        },
+                        "nb_a304": {
+                            "type": "integer",
+                            "title": "NB_A304",
+                            "description": "École de conduite"
+                        },
+                        "nb_a401": {
+                            "type": "integer",
+                            "title": "NB_A401",
+                            "description": "Maçon\nIl s'agit de l'activité principale déclarée. Il y a souvent multi-activité chez les artisans."
+                        },
+                        "nb_a402": {
+                            "type": "integer",
+                            "title": "NB_A402",
+                            "description": "Plâtrier, peintre\nIl s'agit de l'activité principale déclarée. Possibilité d'une seule des activités citées ou de multi-activité."
+                        },
+                        "nb_a403": {
+                            "type": "integer",
+                            "title": "NB_A403",
+                            "description": "Menuisier, charpentier, serrurier\nIl s'agit de l'activité principale déclarée. Possibilité d'une seule des activités citées ou de multi-activité."
+                        },
+                        "nb_a404": {
+                            "type": "integer",
+                            "title": "NB_A404",
+                            "description": "Plombier, couvreur, chauffagiste\nIl s'agit de l'activité principale déclarée. Possibilité d'une seule des activités citées ou de multi-activité."
+                        },
+                        "nb_a405": {
+                            "type": "integer",
+                            "title": "NB_A405",
+                            "description": "Électricien\nIl s'agit de l'activité principale déclarée. Possibilité d'une seule des activités citées ou de multi-activité."
+                        },
+                        "nb_a406": {
+                            "type": "integer",
+                            "title": "NB_A406",
+                            "description": "Entreprise générale du bâtiment"
+                        },
+                        "nb_a501": {
+                            "type": "integer",
+                            "title": "NB_A501",
+                            "description": "Coiffure"
+                        },
+                        "nb_a502": {
+                            "type": "integer",
+                            "title": "NB_A502",
+                            "description": "Vétérinaire"
+                        },
+                        "nb_a503": {
+                            "type": "integer",
+                            "title": "NB_A503",
+                            "description": "Agence de travail temporaire"
+                        },
+                        "nb_a504": {
+                            "type": "integer",
+                            "title": "NB_A504",
+                            "description": "Restaurant\nCette catégorie ne comprend pas les hôtels-restaurants qui sont classés avec les hôtels seuls."
+                        },
+                        "nb_a505": {
+                            "type": "integer",
+                            "title": "NB_A505",
+                            "description": "Agence immobilière"
+                        },
+                        "nb_a506": {
+                            "type": "integer",
+                            "title": "NB_A506",
+                            "description": "Blanchisserie teinturerie"
+                        },
+                        "nb_a507": {
+                            "type": "integer",
+                            "title": "NB_A507",
+                            "description": "Soins de beauté"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "string",
+                            "title": "geo_point_2d",
+                            "description": ""
+                        },
+                        "nb_a128": {
+                            "type": "number",
+                            "title": "NB_A128",
+                            "description": "Implantations France services"
+                        },
+                        "nb_a129": {
+                            "type": "number",
+                            "title": "NB_A129",
+                            "description": "Mairie"
+                        },
+                        "nb_a130": {
+                            "type": "number",
+                            "title": "NB_A130",
+                            "description": "Bureau d'aide juridictionnelle"
+                        },
+                        "nb_a131": {
+                            "type": "number",
+                            "title": "NB_A131",
+                            "description": "Tribunal judiciaire"
+                        },
+                        "nb_a132": {
+                            "type": "number",
+                            "title": "NB_A132",
+                            "description": "Tribunal de proximité"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

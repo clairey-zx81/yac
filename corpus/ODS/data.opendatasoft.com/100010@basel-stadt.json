@@ -1,0 +1,601 @@
+{
+    "title": "100010@basel-stadt",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/100010@basel-stadt"
+        }
+    ],
+    "definitions": {
+        "100010@basel-stadt": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/100010@basel-stadt_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "100010@basel-stadt_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "jahr": {
+                            "type": "string",
+                            "title": "Jahr",
+                            "description": "Jahr"
+                        },
+                        "wov_id": {
+                            "type": "string",
+                            "title": "Wohnviertel-ID",
+                            "description": "ID des Wohnviertels"
+                        },
+                        "wov_name": {
+                            "type": "string",
+                            "title": "Wohnviertel",
+                            "description": "Name des Wohnviertels"
+                        },
+                        "wohnbezirk_id": {
+                            "type": "integer",
+                            "title": "Bezirk-ID",
+                            "description": "ID des Wohnbezirks"
+                        },
+                        "bez_label": {
+                            "type": "string",
+                            "title": "Bezirk Label",
+                            "description": "Label des Bezirks"
+                        },
+                        "bez_name": {
+                            "type": "string",
+                            "title": "Bezirk",
+                            "description": "Name des Wohnbezirks"
+                        },
+                        "total": {
+                            "type": "integer",
+                            "title": "Total Leerstand",
+                            "description": "Gesamtzahl leerstehender Wohnungen nach Bezirk und Zimmerzahl"
+                        },
+                        "zimmerzahl_ganzzahlig": {
+                            "type": "integer",
+                            "title": "Anzahl Zimmer",
+                            "description": "Zimmerzahl der Wohnung: Halbe Zimmer werden nicht ausgewiesen"
+                        },
+                        "wfl_min_30m2": {
+                            "type": "integer",
+                            "title": "Wohnfläche bis 30m2",
+                            "description": "Wohnfläche beträgt bis 30 Quadratmeter"
+                        },
+                        "wfl_31m2_50m2": {
+                            "type": "integer",
+                            "title": "Wohnfläche 31 bis 50m2",
+                            "description": "Wohnfläche beträgt 31 bis 50 Quadratmeter"
+                        },
+                        "wfl_51m2_70m2": {
+                            "type": "integer",
+                            "title": "Wohnfläche 51 bis 70m2",
+                            "description": "Wohnfläche beträgt 51 bis 70 Quadratmeter"
+                        },
+                        "wfl_71m2_90m2": {
+                            "type": "integer",
+                            "title": "Wohnfläche 71 bis 90m2",
+                            "description": "Wohnfläche beträgt 71 bis 90 Quadratmeter"
+                        },
+                        "wfl_91m2_110m2": {
+                            "type": "integer",
+                            "title": "Wohnfläche 91 bis 110m2",
+                            "description": "Wohnfläche beträgt 91 bis 110 Quadratmeter"
+                        },
+                        "wfl_111m2_130m2": {
+                            "type": "integer",
+                            "title": "Wohnfläche 111 bis 130m2",
+                            "description": "Wohnfläche beträgt 111 bis 130 Quadratmeter"
+                        },
+                        "wfl_131m2_max": {
+                            "type": "integer",
+                            "title": "Wohnfläche ab 131m2",
+                            "description": "Wohnfläche beträgt ab 131 Quadratmeter"
+                        },
+                        "wfl_unbekannt": {
+                            "type": "integer",
+                            "title": "Wohnfläche unbekannt",
+                            "description": "Wohnfläche der Wohnung ist unbekannt"
+                        },
+                        "gb_efh": {
+                            "type": "integer",
+                            "title": "Gebäudetyp EFH",
+                            "description": "Gebäudetyp Einfamilienhaus"
+                        },
+                        "gb_mfh": {
+                            "type": "integer",
+                            "title": "Gebäudetyp MFH",
+                            "description": "Gebäudetyp Mehrfamilienhaus"
+                        },
+                        "gb_gemischte_nutzung": {
+                            "type": "integer",
+                            "title": "Gebäudetyp gemischte Nutzung",
+                            "description": "Gebäudetyp gemischte Nutzung: Gewerbe- und Wohnnutzung im gleichen Gebäude"
+                        },
+                        "gb_andere": {
+                            "type": "integer",
+                            "title": "Gebäudetyp andere",
+                            "description": "Anderer Gebäudetyp: Mehrfamilienhaus oder gemischte Nutzung"
+                        },
+                        "pd_min_1920": {
+                            "type": "integer",
+                            "title": "Bauperiode bis 1920",
+                            "description": "Bauperiode des Gebäudes bis 1920"
+                        },
+                        "pd_1921_1950": {
+                            "type": "integer",
+                            "title": "Bauperiode 1921 bis 1950",
+                            "description": "Bauperiode des Gebäudes von 1921 bis 1950"
+                        },
+                        "pd_1951_1980": {
+                            "type": "integer",
+                            "title": "Bauperiode 1951 bis 1980",
+                            "description": "Bauperiode des Gebäudes von 1951 bis 1980"
+                        },
+                        "pd_1981_2010": {
+                            "type": "integer",
+                            "title": "Bauperiode 1981 bis 2010",
+                            "description": "Bauperiode des Gebäudes von 1981 bis 2010"
+                        },
+                        "pd_2011_max": {
+                            "type": "integer",
+                            "title": "Bauperiode ab 2011",
+                            "description": "Bauperiode des Gebäudes ab 2011"
+                        },
+                        "rn_renoviert": {
+                            "type": "integer",
+                            "title": "Renovationsstatus renoviert",
+                            "description": "Wohnung wurde renoviert, umgebaut oder totalsaniert in den letzten 2 Jahren"
+                        },
+                        "rn_nicht_renoviert": {
+                            "type": "integer",
+                            "title": "Renovationsstatus nicht renoviert",
+                            "description": "Wohnung wurde nicht renoviert in den letzten 2 Jahren"
+                        },
+                        "rn_neu_gebaut": {
+                            "type": "integer",
+                            "title": "Renovationsstatus neu gebaut",
+                            "description": "Wohnung wurde neu gebaut in den letzten 2 Jahren"
+                        },
+                        "ang_miete": {
+                            "type": "integer",
+                            "title": "Angebotsart Miete",
+                            "description": "Wohnung wird nur zur Miete angeboten"
+                        },
+                        "ang_kauf": {
+                            "type": "integer",
+                            "title": "Angebotsart Kauf",
+                            "description": "Wohnung wird nur zum Kauf angeboten"
+                        },
+                        "ang_miete_kauf": {
+                            "type": "integer",
+                            "title": "Angebotsart Miete und Kauf",
+                            "description": "Wohnung wird zum Kauf und zur Miete angeboten"
+                        },
+                        "p_min_1000": {
+                            "type": "integer",
+                            "title": "Nettomiete CHF bis 1000",
+                            "description": "Nettomiete CHF bis 1000"
+                        },
+                        "p_1001_1250": {
+                            "type": "integer",
+                            "title": "Nettomiete CHF 1001 bis 1250",
+                            "description": "Nettomiete CHF 1001 bis 1250"
+                        },
+                        "p_1251_1500": {
+                            "type": "integer",
+                            "title": "Nettomiete CHF 1251 bis 1500",
+                            "description": "Nettomiete CHF 1251 bis 1500"
+                        },
+                        "p_1501_1750": {
+                            "type": "integer",
+                            "title": "Nettomiete CHF 1501 bis 1750",
+                            "description": "Nettomiete CHF 1501 bis 1750"
+                        },
+                        "p_1751_2000": {
+                            "type": "integer",
+                            "title": "Nettomiete CHF 1751 bis 2000",
+                            "description": "Nettomiete CHF 1751 bis 2000"
+                        },
+                        "p_2001_2250": {
+                            "type": "integer",
+                            "title": "Nettomiete CHF 2001 bis 2250",
+                            "description": "Nettomiete CHF 2001 bis 2250"
+                        },
+                        "p_2251_2500": {
+                            "type": "integer",
+                            "title": "Nettomiete CHF 2251 bis 2500",
+                            "description": "Nettomiete CHF 2251 bis 2500"
+                        },
+                        "p_2501_2750": {
+                            "type": "integer",
+                            "title": "Nettomiete CHF 2501 bis 2750",
+                            "description": "Nettomiete CHF 2501 bis 2750"
+                        },
+                        "p_2751_3000": {
+                            "type": "integer",
+                            "title": "Nettomiete CHF 2751 bis 3000",
+                            "description": "Nettomiete CHF 2751 bis 3000"
+                        },
+                        "p_3001_3250": {
+                            "type": "integer",
+                            "title": "Nettomiete CHF 3001 bis 3250",
+                            "description": "Nettomiete CHF 3001 bis 3250"
+                        },
+                        "p_3251_3500": {
+                            "type": "integer",
+                            "title": "Nettomiete CHF 3251 bis 3500",
+                            "description": "Nettomiete CHF 3251 bis 3500"
+                        },
+                        "p_unbekannt": {
+                            "type": "integer",
+                            "title": "Nettomiete unbekannt",
+                            "description": "Nettomiete ist unbekannt"
+                        },
+                        "p_3501_max": {
+                            "type": "integer",
+                            "title": "Nettomiete CHF ab 3501",
+                            "description": "Nettomiete CHF ab 3501"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

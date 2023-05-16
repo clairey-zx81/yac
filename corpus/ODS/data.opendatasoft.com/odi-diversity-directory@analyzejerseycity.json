@@ -1,0 +1,516 @@
+{
+    "title": "odi-diversity-directory@analyzejerseycity",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/odi-diversity-directory@analyzejerseycity"
+        }
+    ],
+    "definitions": {
+        "odi-diversity-directory@analyzejerseycity": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/odi-diversity-directory@analyzejerseycity_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "odi-diversity-directory@analyzejerseycity_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "business_name": {
+                            "type": "string",
+                            "title": "Business Name",
+                            "description": ""
+                        },
+                        "supplier_profile": {
+                            "type": "string",
+                            "title": "Supplier Profile",
+                            "description": ""
+                        },
+                        "industry": {
+                            "type": "string",
+                            "title": "Industry",
+                            "description": ""
+                        },
+                        "address": {
+                            "type": "string",
+                            "title": "Address",
+                            "description": ""
+                        },
+                        "city": {
+                            "type": "string",
+                            "title": "City",
+                            "description": ""
+                        },
+                        "state": {
+                            "type": "string",
+                            "title": "State",
+                            "description": ""
+                        },
+                        "email": {
+                            "type": "string",
+                            "title": "Email",
+                            "description": ""
+                        },
+                        "website": {
+                            "type": "string",
+                            "title": "Website",
+                            "description": ""
+                        },
+                        "facebook": {
+                            "type": "string",
+                            "title": "Facebook",
+                            "description": ""
+                        },
+                        "twitter": {
+                            "type": "string",
+                            "title": "Twitter",
+                            "description": ""
+                        },
+                        "yelp": {
+                            "type": "string",
+                            "title": "Yelp",
+                            "description": ""
+                        },
+                        "instagram": {
+                            "type": "string",
+                            "title": "Instagram",
+                            "description": ""
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "title": "Latitude",
+                            "description": ""
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "title": "Longitude",
+                            "description": ""
+                        },
+                        "minority_owned": {
+                            "type": "string",
+                            "title": "Certified Minority-owned Business",
+                            "description": "Certified minority owned business"
+                        },
+                        "veteran_owned": {
+                            "type": "string",
+                            "title": "Certified Veteran-owned Business",
+                            "description": "Certified veteran-owned business"
+                        },
+                        "disabled_veteran_owned": {
+                            "type": "string",
+                            "title": "Certified Service-disabled Veteran-owned Business",
+                            "description": "Certified service-disabled Veteran-owned business"
+                        },
+                        "disability_owned": {
+                            "type": "string",
+                            "title": "Certified Disability-owned Business Certified",
+                            "description": "Certified disability-owned business"
+                        },
+                        "lgbt_owned_business": {
+                            "type": "string",
+                            "title": "Certified LGBT-owned Business",
+                            "description": "Certified LGBT-owned business"
+                        },
+                        "disadvantaged_owned_business": {
+                            "type": "string",
+                            "title": "Certified Economically Disadvantaged Business",
+                            "description": "Certified disadvantaged business enterprise"
+                        },
+                        "small_business": {
+                            "type": "string",
+                            "title": "Certified Small Business",
+                            "description": "Certified small business"
+                        },
+                        "lat_long": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "LAT LONG",
+                            "description": ""
+                        },
+                        "description": {
+                            "type": "string",
+                            "title": "Description",
+                            "description": ""
+                        },
+                        "phone_number": {
+                            "type": "string",
+                            "title": "Phone Number",
+                            "description": ""
+                        },
+                        "column_1": {
+                            "type": "string",
+                            "title": "Column 1",
+                            "description": ""
+                        },
+                        "goods": {
+                            "type": "string",
+                            "title": "Goods",
+                            "description": ""
+                        },
+                        "general_services": {
+                            "type": "string",
+                            "title": "General Services",
+                            "description": ""
+                        },
+                        "construction_services": {
+                            "type": "string",
+                            "title": "Construction Services",
+                            "description": ""
+                        },
+                        "woman_owned": {
+                            "type": "string",
+                            "title": "Woman Owned",
+                            "description": ""
+                        },
+                        "supplier_diversity_classification": {
+                            "type": "string",
+                            "title": "Supplier Diversity (Self-reported & Certified)",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

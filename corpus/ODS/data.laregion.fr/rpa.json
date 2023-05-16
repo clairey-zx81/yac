@@ -1,0 +1,591 @@
+{
+    "title": "rpa",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/rpa"
+        }
+    ],
+    "definitions": {
+        "rpa": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/rpa_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "rpa_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "direction_gestionnaire_de_l_erp": {
+                            "type": "string",
+                            "title": "DIRECTION gestionnaire de l'ERP",
+                            "description": ""
+                        },
+                        "e_i": {
+                            "type": "string",
+                            "title": "E.I.",
+                            "description": ""
+                        },
+                        "equipement_nom_dib": {
+                            "type": "string",
+                            "title": "EQUIPEMENT (Nom DIB)",
+                            "description": ""
+                        },
+                        "nom_de_l_erp_connu_du_public": {
+                            "type": "string",
+                            "title": "NOM DE L'ERP CONNU DU PUBLIC",
+                            "description": ""
+                        },
+                        "numero_rue": {
+                            "type": "string",
+                            "title": "Numéro_Rue",
+                            "description": ""
+                        },
+                        "complement_rue": {
+                            "type": "string",
+                            "title": "Complément_rue",
+                            "description": ""
+                        },
+                        "nom_rue": {
+                            "type": "string",
+                            "title": "Nom_rue",
+                            "description": ""
+                        },
+                        "telephone_accueil_public": {
+                            "type": "string",
+                            "title": "Téléphone Accueil public",
+                            "description": ""
+                        },
+                        "code_postal": {
+                            "type": "string",
+                            "title": "Code Postal",
+                            "description": ""
+                        },
+                        "secteur": {
+                            "type": "string",
+                            "title": "Secteur",
+                            "description": ""
+                        },
+                        "quartier": {
+                            "type": "string",
+                            "title": "Quartier",
+                            "description": ""
+                        },
+                        "dpt": {
+                            "type": "string",
+                            "title": "DPT",
+                            "description": ""
+                        },
+                        "type_equipement": {
+                            "type": "string",
+                            "title": "Type d'équipement",
+                            "description": ""
+                        },
+                        "immeuble": {
+                            "type": "string",
+                            "title": "Immeuble",
+                            "description": ""
+                        },
+                        "type_erp": {
+                            "type": "string",
+                            "title": "TYPE_ERP",
+                            "description": ""
+                        },
+                        "categorie_erp": {
+                            "type": "string",
+                            "title": "Catégorie_ERP",
+                            "description": ""
+                        },
+                        "proprietaire_de_l_erp": {
+                            "type": "string",
+                            "title": "Propriétaire de l'ERP",
+                            "description": ""
+                        },
+                        "exploitant_de_l_erp": {
+                            "type": "string",
+                            "title": "Exploitant de l'ERP",
+                            "description": ""
+                        },
+                        "ndeg_adap_de_l_erp": {
+                            "type": "string",
+                            "title": "N° ADAP de l'ERP",
+                            "description": ""
+                        },
+                        "annee_fin_travaux": {
+                            "type": "string",
+                            "title": "Année FIN travaux",
+                            "description": ""
+                        },
+                        "situation": {
+                            "type": "string",
+                            "title": "Niveau d’accessibilité",
+                            "description": ""
+                        },
+                        "attestation_j_recue": {
+                            "type": "string",
+                            "title": "Attestation J reçue",
+                            "description": ""
+                        },
+                        "derogation_d_recue": {
+                            "type": "string",
+                            "title": "Dérogation D reçue",
+                            "description": ""
+                        },
+                        "notice_n_recue": {
+                            "type": "string",
+                            "title": "Notice N reçue",
+                            "description": ""
+                        },
+                        "carto_place_pmr": {
+                            "type": "string",
+                            "title": "CARTO Place PMR",
+                            "description": ""
+                        },
+                        "carto_elevateur_ascenseur": {
+                            "type": "string",
+                            "title": "CARTO Elévateur/Ascenseur",
+                            "description": ""
+                        },
+                        "carto_balises_sonores": {
+                            "type": "string",
+                            "title": "CARTO Balises sonores",
+                            "description": ""
+                        },
+                        "carto_bim": {
+                            "type": "string",
+                            "title": "CARTO BIM",
+                            "description": ""
+                        },
+                        "rpa_realise": {
+                            "type": "string",
+                            "title": "RPA réalisé",
+                            "description": ""
+                        },
+                        "rpa_remis": {
+                            "type": "string",
+                            "title": "RPA REMIS",
+                            "description": ""
+                        },
+                        "rpa_dematerialise": {
+                            "type": "string",
+                            "title": "RPA dématérialisé ",
+                            "description": ""
+                        },
+                        "kaa_total_remis": {
+                            "type": "string",
+                            "title": "KAA Total REMIS",
+                            "description": ""
+                        },
+                        "kaa_total_echange": {
+                            "type": "string",
+                            "title": "KAA Total échangé",
+                            "description": ""
+                        },
+                        "kaa_total_facture": {
+                            "type": "string",
+                            "title": "KAA Total facturé",
+                            "description": ""
+                        },
+                        "kaa_protections_jetables_total_remis": {
+                            "type": "string",
+                            "title": "KAA protections jetables Total remis",
+                            "description": ""
+                        },
+                        "observations_kaa": {
+                            "type": "string",
+                            "title": "Observations KAA",
+                            "description": ""
+                        },
+                        "picto_kaa_remis": {
+                            "type": "string",
+                            "title": "Picto KAA REMIS",
+                            "description": ""
+                        },
+                        "picto_chiens_remis": {
+                            "type": "string",
+                            "title": "Picto Chiens REMIS",
+                            "description": ""
+                        },
+                        "observations_pictos": {
+                            "type": "string",
+                            "title": "Observations Pictos",
+                            "description": ""
+                        },
+                        "valide": {
+                            "type": "string",
+                            "title": "Validé",
+                            "description": ""
+                        },
+                        "rpa_1": {
+                            "type": "string",
+                            "title": "Registre public d’accessibilité",
+                            "description": ""
+                        },
+                        "rpa_2": {
+                            "type": "string",
+                            "title": "Annexes au RPA",
+                            "description": ""
+                        },
+                        "justificatifs": {
+                            "type": "string",
+                            "title": "JUSTIFICATIFS",
+                            "description": ""
+                        },
+                        "adresse": {
+                            "type": "string",
+                            "title": "adresse",
+                            "description": ""
+                        },
+                        "geopoint": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geopoint",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

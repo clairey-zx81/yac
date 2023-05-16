@@ -1,0 +1,891 @@
+{
+    "title": "60ans_et_plus_revenu@externe-caissedesdepots",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/60ans_et_plus_revenu@externe-caissedesdepots"
+        }
+    ],
+    "definitions": {
+        "60ans_et_plus_revenu@externe-caissedesdepots": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/60ans_et_plus_revenu@externe-caissedesdepots_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "60ans_et_plus_revenu@externe-caissedesdepots_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "dep_name_upper": {
+                            "type": "string",
+                            "title": "Nom Officiel Département Majuscule",
+                            "description": ""
+                        },
+                        "reg_name": {
+                            "type": "string",
+                            "title": "Nom Officiel Région",
+                            "description": ""
+                        },
+                        "reg_code": {
+                            "type": "string",
+                            "title": "Code Officiel Région",
+                            "description": ""
+                        },
+                        "code_dep": {
+                            "type": "string",
+                            "title": "﻿code_dep",
+                            "description": ""
+                        },
+                        "dep_filo_age5q117": {
+                            "type": "integer",
+                            "title": "DEP_FILO_AGE5Q117",
+                            "description": "60-74 ans :1er quartile du revenu disponible par unité de consommation (€)"
+                        },
+                        "dep_filo_age5q217": {
+                            "type": "integer",
+                            "title": "DEP_FILO_AGE5Q217",
+                            "description": "60-74 ans : Médiane du revenu disponible par unité de consommation (€)"
+                        },
+                        "dep_filo_age5q317": {
+                            "type": "integer",
+                            "title": "DEP_FILO_AGE5Q317",
+                            "description": "60-74 ans : 3e quartile du revenu disponible par unité de consommation (€)"
+                        },
+                        "dep_filo_age6q117": {
+                            "type": "integer",
+                            "title": "DEP_FILO_AGE6Q117",
+                            "description": "Plus 75 ans : 1er quartile du revenu disponible par unité de consommation (€)"
+                        },
+                        "dep_filo_age6q217": {
+                            "type": "integer",
+                            "title": "DEP_FILO_AGE6Q217",
+                            "description": "Plus 75 ans : médiane du revenu disponible par unité de consommation (€)"
+                        },
+                        "dep_filo_age6q317": {
+                            "type": "integer",
+                            "title": "DEP_FILO_AGE6Q317",
+                            "description": "Plus 75 ans : 3e quartile du revenu disponible par unité de consommation (€)"
+                        },
+                        "dep_filo_nbmen17": {
+                            "type": "integer",
+                            "title": "DEP_FILO_NBMEN17",
+                            "description": "Ensemble : Nbre de ménages fiscaux"
+                        },
+                        "dep_filo_nbpers17": {
+                            "type": "integer",
+                            "title": "DEP_FILO_NBPERS17",
+                            "description": "Ensemble : Nbre de personnes dans les ménages fiscaux"
+                        },
+                        "dep_filo_nbuc17": {
+                            "type": "number",
+                            "title": "DEP_FILO_NBUC17",
+                            "description": "Ensemble : Nbre d'unités de consommation dans les ménages fiscaux"
+                        },
+                        "dep_filo_q117": {
+                            "type": "integer",
+                            "title": "DEP_FILO_Q117",
+                            "description": "Ensemble : 1er quartile du revenu disponible par unité de consommation (€)"
+                        },
+                        "dep_filo_q217": {
+                            "type": "integer",
+                            "title": "DEP_FILO_Q217",
+                            "description": "Ensemble : Médiane du revenu disponible par unité de consommation (€)"
+                        },
+                        "dep_filo_q317": {
+                            "type": "integer",
+                            "title": "DEP_FILO_Q317",
+                            "description": "Ensemble : 3e quartile du revenu disponible par unité de consommation (€)"
+                        },
+                        "dep_filo_age5tp4017": {
+                            "type": "number",
+                            "title": "DEP_FILO_AGE5TP4017",
+                            "description": "60-74 ans : taux de pauvreté au seuil de 40% (%)"
+                        },
+                        "dep_filo_age5tp5017": {
+                            "type": "number",
+                            "title": "DEP_FILO_AGE5TP5017",
+                            "description": "60-74 ans : taux de pauvreté au seuil de 50% (%)"
+                        },
+                        "dep_filo_age5tp6017": {
+                            "type": "number",
+                            "title": "DEP_FILO_AGE5TP6017",
+                            "description": "60-74 ans : taux de pauvreté au seuil de 60% (%)"
+                        },
+                        "dep_filo_age5tp60q217": {
+                            "type": "integer",
+                            "title": "DEP_FILO_AGE5TP60Q217",
+                            "description": "60-74 ans : médiane sur la sous-population pauvre au seuil de 60% (€)"
+                        },
+                        "dep_filo_age5tp60ip17": {
+                            "type": "number",
+                            "title": "DEP_FILO_AGE5TP60IP17",
+                            "description": "60-74 ans : intensité de la pauvreté au seuil de 60%"
+                        },
+                        "dep_filo_age6tp4017": {
+                            "type": "number",
+                            "title": "DEP_FILO_AGE6TP4017",
+                            "description": "75 et plus : taux de pauvreté au seuil de 40% (%)"
+                        },
+                        "dep_filo_age6tp5017": {
+                            "type": "number",
+                            "title": "DEP_FILO_AGE6TP5017",
+                            "description": "75 et plus : taux de pauvreté au seuil de 50% (%)"
+                        },
+                        "dep_filo_age6tp6017": {
+                            "type": "number",
+                            "title": "DEP_FILO_AGE6TP6017",
+                            "description": "75 et plus : taux de pauvreté au seuil de 60% (%)"
+                        },
+                        "dep_filo_age6tp60q217": {
+                            "type": "integer",
+                            "title": "DEP_FILO_AGE6TP60Q217",
+                            "description": "75 et plus : médiane sur la sous-population pauvre au seuil de 60% (€)"
+                        },
+                        "dep_filo_age6tp60ip17": {
+                            "type": "number",
+                            "title": "DEP_FILO_AGE6TP60IP17",
+                            "description": "75 et plus : intensité de la pauvreté au seuil de 60%"
+                        },
+                        "dep_filo_tp4017": {
+                            "type": "number",
+                            "title": "DEP_FILO_TP4017",
+                            "description": "Ensemble : taux de pauvreté au seuil de 40% (%)"
+                        },
+                        "dep_filo_tp5017": {
+                            "type": "number",
+                            "title": "DEP_FILO_TP5017",
+                            "description": "Ensemble : taux de pauvreté au seuil de 50% (%)"
+                        },
+                        "dep_filo_tp6017": {
+                            "type": "number",
+                            "title": "DEP_FILO_TP6017",
+                            "description": "Ensemble : taux de pauvreté au seuil de 60% (%)"
+                        },
+                        "dep_filo_tp60q217": {
+                            "type": "integer",
+                            "title": "DEP_FILO_TP60Q217",
+                            "description": "Ensemble : médiane sur la sous-population pauvre au seuil de 60% (€)"
+                        },
+                        "dep_filo_tp60ip17": {
+                            "type": "number",
+                            "title": "DEP_FILO_TP60IP17",
+                            "description": "Ensemble : intensité de la pauvreté au seuil de 60%"
+                        },
+                        "omphale_pop_2013": {
+                            "type": "integer",
+                            "title": "omphale_pop_2013",
+                            "description": "Population en 2013"
+                        },
+                        "omphale_pop_2050": {
+                            "type": "integer",
+                            "title": "omphale_pop_2050",
+                            "description": "Population projetée en 2050"
+                        },
+                        "omph_vh_pop_2050": {
+                            "type": "integer",
+                            "title": "omph_VH_pop_2050",
+                            "description": "Espérance de vie haute projetée pour la population en 2050 (=fourchette haute de l’espérance de vie, correspond au b de l’intervalle [a ; b])"
+                        },
+                        "omph_vb_pop_2050": {
+                            "type": "integer",
+                            "title": "omph_VB_pop_2050",
+                            "description": "Espérance de vie basse projetée pour la population en 2050 (=fourchette basse de l’espérance de vie, correspond au a de l’intervalle [a ; b])"
+                        },
+                        "omphale_age_moy_2013": {
+                            "type": "number",
+                            "title": "omphale_Age_moy_2013",
+                            "description": "Âge moyen en 2013"
+                        },
+                        "omphale_age_moy_2050": {
+                            "type": "number",
+                            "title": "omphale_Age_moy_2050",
+                            "description": "Âge moyen simulé en 2050"
+                        },
+                        "omph_vh_age_moy_2050": {
+                            "type": "number",
+                            "title": "omph_VH_Age_moy_2050",
+                            "description": "Espérance de vie haute : Âge moyen en 2050"
+                        },
+                        "omph_vb_age_moy_2050": {
+                            "type": "number",
+                            "title": "omph_VB_Age_moy_2050",
+                            "description": "Espérance de vie basse : Âge moyen en 2050"
+                        },
+                        "apa_dom": {
+                            "type": "integer",
+                            "title": "APA_Dom",
+                            "description": "Nombre de bénéficiaires de l'APA, payés au titre du mois de décembre 2017 à domicile"
+                        },
+                        "apa_est_dom": {
+                            "type": "string",
+                            "title": "APA_est_dom",
+                            "description": "Indicateur d’estimation du nombre de bénéficiaires de l'APA, payés au titre du mois de décembre 2017"
+                        },
+                        "apa_etab": {
+                            "type": "integer",
+                            "title": "APA_Etab",
+                            "description": "Nombre de bénéficiaires de l'APA, payés au titre du mois de décembre 2017 en établissement"
+                        },
+                        "apa_estim_etab": {
+                            "type": "string",
+                            "title": "APA_estim_etab",
+                            "description": "Indicateur d’estimation du nombre de bénéficiaires de l'APA, payés au titre du mois de décembre 2017"
+                        },
+                        "apa_dom_h": {
+                            "type": "integer",
+                            "title": "APA_Dom_h",
+                            "description": "Nombre d’hommes bénéficiaires de l'APA, payés au titre du mois de décembre 2017 à domicile"
+                        },
+                        "apa_dom_f": {
+                            "type": "integer",
+                            "title": "APA_Dom_f",
+                            "description": "Nombre de femmes bénéficiaires de l'APA, payés au titre du mois de décembre 2017 à domicile"
+                        },
+                        "apa_dom_inc_sexe": {
+                            "type": "integer",
+                            "title": "APA_Dom_inc_sexe",
+                            "description": "Nombre de bénéficiaires de l'APA de sexe inconnu, payés au titre du mois de décembre 2017 à domicile"
+                        },
+                        "apa_etab_h_dot_h": {
+                            "type": "integer",
+                            "title": "APA_etab_h_dot_h",
+                            "description": "Nombre d’hommes bénéficiaires de l'APA, payés au titre du mois de décembre 2017 en établissement hors dotation globale"
+                        },
+                        "apa_etab_h_dot_f": {
+                            "type": "integer",
+                            "title": "APA_etab_h_dot_f",
+                            "description": "Nombre de femmes bénéficiaires de l'APA, payés au titre du mois de décembre 2017 en établissement hors dotation globale"
+                        },
+                        "apa_etab_h_dot_inc": {
+                            "type": "integer",
+                            "title": "APA_etab_h_dot_inc",
+                            "description": "Nombre de bénéficiaires de l'APA de sexe inconnu, payés au titre du mois de décembre 2017 en établissement hors dotation globale"
+                        },
+                        "apa_etab_h_dot_tot": {
+                            "type": "integer",
+                            "title": "APA_etab_h_dot_tot",
+                            "description": "Nombre total de bénéficiaires de l'APA, payés au titre du mois de décembre 2017 en établissement hors dotation globale"
+                        },
+                        "apa_dom_inc_age": {
+                            "type": "integer",
+                            "title": "APA_Dom_inc_age",
+                            "description": "Nombre de bénéficiaires de l'APA d’âge inconnu, payés au titre du mois de décembre 2017 à domicile"
+                        },
+                        "apa_et_h_dot_inc_age": {
+                            "type": "integer",
+                            "title": "APA_et_h_dot_inc_age",
+                            "description": "Nombre de bénéficiaires de l'APA d’âge inconnu, payés au titre du mois de décembre 2017 en établissement hors dotation globale"
+                        },
+                        "apa_rem_interv_dom_1": {
+                            "type": "integer",
+                            "title": "APA_rem_interv_dom_1",
+                            "description": "Dépenses couvertes par l’APA après déduction de la participation financière des bénéficiaires : montant des rémunérations d'intervenants à domicile par un service mandataire (en €)"
+                        },
+                        "apa_rem_interv_dom_2": {
+                            "type": "integer",
+                            "title": "APA_rem_interv_dom_2",
+                            "description": "Dépenses couvertes par l’APA après déduction de la participation financière des bénéficiaires : montant des rémunérations d'intervenants à domicile par un service prestataire sous dotation (en €)"
+                        },
+                        "apa_rem_interv_dom_3": {
+                            "type": "integer",
+                            "title": "APA_rem_interv_dom_3",
+                            "description": "Dépenses couvertes par l’APA après déduction de la participation financière des bénéficiaires : montant des rémunérations d'intervenants à domicile par un service prestataire hors dotation (en €)."
+                        },
+                        "apa_rem_interv_dom_4": {
+                            "type": "integer",
+                            "title": "APA_rem_interv_dom_4",
+                            "description": "Dépenses couvertes par l’APA après déduction de la participation financière des bénéficiaires : montant des rémunérations d'intervenants à domicile en emploi direct (en €)."
+                        },
+                        "apa_aides_div": {
+                            "type": "integer",
+                            "title": "APA_aides_div",
+                            "description": "Dépenses couvertes par l’APA après déduction de la participation financière des bénéficiaires : prise en charge d'aides diverses concourant à l'autonomie* (en €)"
+                        },
+                        "apa_frais_accueil": {
+                            "type": "integer",
+                            "title": "APA_frais_accueil",
+                            "description": "Dépenses couvertes par l’APA après déduction de la participation financière des bénéficiaires : règlement des frais d'accueil de jour ou d'hébergement temporaire (en €)"
+                        },
+                        "apa_accueil_familial": {
+                            "type": "integer",
+                            "title": "APA_accueil_familial",
+                            "description": "Dépenses couvertes par l’APA après déduction de la participation financière des bénéficiaires : règlement de l'accueil familial à titre onéreux (en €)"
+                        },
+                        "apa_domicile_gir1": {
+                            "type": "integer",
+                            "title": "APA_Domicile_GIR1",
+                            "description": "Nombre de bénéficiaires de l’ APA par GIR1 à domicile"
+                        },
+                        "apa_domicile_gir2": {
+                            "type": "integer",
+                            "title": "APA_Domicile_GIR2",
+                            "description": "Nombre de bénéficiaires de l’ APA par GIR2 à domicile"
+                        },
+                        "apa_domicile_gir3": {
+                            "type": "integer",
+                            "title": "APA_Domicile_GIR3",
+                            "description": "Nombre de bénéficiaires de l’ APA par GIR3 à domicile"
+                        },
+                        "apa_domicile_gir4": {
+                            "type": "integer",
+                            "title": "APA_Domicile_GIR4",
+                            "description": "Nombre de bénéficiaires de l’ APA par GIR4 à domicile"
+                        },
+                        "apa_domicile_gir56": {
+                            "type": "integer",
+                            "title": "APA_Domicile_GIR56",
+                            "description": "Nombre de bénéficiaires de l’ APA par GIR56 et GIR inconnu à domicile"
+                        },
+                        "apa_estim_dom_gir": {
+                            "type": "string",
+                            "title": "APA_estim_dom_GIR",
+                            "description": "Indicateur d’estimation du total du nombre de bénéficiaires par GIR"
+                        },
+                        "apa_etab_ss_dot_gir1": {
+                            "type": "integer",
+                            "title": "APA_etab_ss_dot_GIR1",
+                            "description": "Nombre de bénéficiaires de l’ APA par GIR1 en établissements sous dotation globale de fonctionnement"
+                        },
+                        "apa_etab_ss_dot_gir2": {
+                            "type": "integer",
+                            "title": "APA_etab_ss_dot_GIR2",
+                            "description": "Nombre de bénéficiaires de l’APA par GIR2 en établissements sous dotation globale de fonctionnement"
+                        },
+                        "apa_etab_ss_dot_gir3": {
+                            "type": "integer",
+                            "title": "APA_etab_ss_dot_GIR3",
+                            "description": "Nombre de bénéficiaires de l’APA par GIR3 en établissements sous dotation globale de fonctionnement"
+                        },
+                        "apa_etab_ss_dot_gir4": {
+                            "type": "integer",
+                            "title": "APA_etab_ss_dot_GIR4",
+                            "description": "Nombre de bénéficiaires de l’APA par GIR4 en établissements sous dotation globale de fonctionnement"
+                        },
+                        "apa_etab_ss_dot_gir56": {
+                            "type": "integer",
+                            "title": "APA_etab_ss_dot_GIR56",
+                            "description": "Nombre de bénéficiaires de l’APA par GIR5 et GIR6 en établissements sous dotation globale de fonctionnement"
+                        },
+                        "apa_etab_ss_dot_inc_gir": {
+                            "type": "integer",
+                            "title": "APA_etab_ss_dot_inc_GIR",
+                            "description": "Nombre de bénéficiaires de l’APA par GIR inconnu en établissements sous dotation globale de fonctionnement"
+                        },
+                        "apa_etab_h_dot_gir1": {
+                            "type": "integer",
+                            "title": "APA_etab_h_dot_GIR1",
+                            "description": "Nombre de bénéficiaires de l’APA par GIR1 en établissements hors dotation globale de fonctionnement"
+                        },
+                        "apa_etab_h_dot_gir2": {
+                            "type": "integer",
+                            "title": "APA_etab_h_dot_GIR2",
+                            "description": "Nombre de bénéficiaires de l’APA par GIR2 en établissements hors dotation globale de fonctionnement"
+                        },
+                        "apa_etab_h_dot_gir3": {
+                            "type": "integer",
+                            "title": "APA_etab_h_dot_GIR3",
+                            "description": "Nombre de bénéficiaires de l’APA par GIR3 en établissements hors dotation globale de fonctionnement"
+                        },
+                        "apa_etab_h_dot_gir4": {
+                            "type": "integer",
+                            "title": "APA_etab_h_dot_GIR4",
+                            "description": "Nombre de bénéficiaires de l’APA par GIR4 en établissements hors dotation globale de fonctionnement"
+                        },
+                        "apa_etab_h_dot_gir56": {
+                            "type": "integer",
+                            "title": "APA_etab_h_dot_GIR56",
+                            "description": "Nombre de bénéficiaires de l’APA par GIR5 et GIR6 en établissements hors dotation globale de fonctionnement"
+                        },
+                        "apa_etab_h_dot_inc_gir": {
+                            "type": "integer",
+                            "title": "APA_etab_h_dot_inc_GIR",
+                            "description": "Nombre de bénéficiaires de l’APA par GIR inconnu en établissements hors dotation globale de fonctionnement"
+                        },
+                        "apa_estim_total_etab_gir": {
+                            "type": "string",
+                            "title": "APA_estim_total_etab_GIR",
+                            "description": "Indicateur d’estimation du total du nombre de bénéficiaires en établissement."
+                        },
+                        "population_60_ans_et_plus": {
+                            "type": "integer",
+                            "title": "POPULATION_60_ANS_ET_PLUS",
+                            "description": "Population de 60 ans et plus"
+                        },
+                        "x60_ans_et_plus_appart_av_asc": {
+                            "type": "integer",
+                            "title": "X60_ANS_ET_PLUS_APPART_AV_ASC",
+                            "description": "Population des 60 ans et plus en appartement avec ascenseur"
+                        },
+                        "x60_ans_et_plus_appart_ss_asc": {
+                            "type": "integer",
+                            "title": "X60_ANS_ET_PLUS_APPART_SS_ASC",
+                            "description": "Population des 60 ans et plus en appartement sans ascenseur"
+                        },
+                        "x60_ans_et_plus_aut_logt": {
+                            "type": "integer",
+                            "title": "X60_ANS_ET_PLUS_AUT_LOGT",
+                            "description": "Population des 60 ans et plus dans une autre forme de logement"
+                        },
+                        "x60_ans_et_plus_emmenagt_2": {
+                            "type": "integer",
+                            "title": "X60_ANS_ET_PLUS_EMMENAGT_2",
+                            "description": "Population des 60 ans et plus vivant dans un ménage ayant emménagé depuis 2 ans ou moins"
+                        },
+                        "x60_ans_et_plus_emmenagt_30": {
+                            "type": "integer",
+                            "title": "X60_ANS_ET_PLUS_EMMENAGT_30",
+                            "description": "Population des 60 ans et plus vivant dans un ménage ayant emménagé depuis 30 ans ou plus"
+                        },
+                        "x60_ans_et_plus_en_maison": {
+                            "type": "integer",
+                            "title": "X60_ANS_ET_PLUS_EN_MAISON",
+                            "description": "Population des 60 ans et plus dans un ménage en maison"
+                        },
+                        "x60_ans_et_plus_isoles": {
+                            "type": "integer",
+                            "title": "X60_ANS_ET_PLUS_ISOLES",
+                            "description": "Population des 60 ans et plus isolées"
+                        },
+                        "x60_ans_et_plus_loc_parc_prive": {
+                            "type": "integer",
+                            "title": "X60_ANS_ET_PLUS_LOC_PARC_PRIVE",
+                            "description": "Population des 60 ans et plus dans un ménage locataire dans un parc privé"
+                        },
+                        "x60_ans_et_plus_loc_parc_social": {
+                            "type": "integer",
+                            "title": "X60_ANS_ET_PLUS_LOC_PARC_SOCIAL",
+                            "description": "Population des 60 ans et plus dans un ménage locataire dans un parc social"
+                        },
+                        "x60_ans_et_plus_logt_1970": {
+                            "type": "integer",
+                            "title": "X60_ANS_ET_PLUS_LOGT_1970",
+                            "description": "Population des 60 ans et plus vivant dans un ménage ayant emménagé en 1970 ou avant"
+                        },
+                        "x60_ans_et_plus_proprietaires": {
+                            "type": "integer",
+                            "title": "X60_ANS_ET_PLUS_PROPRIETAIRES",
+                            "description": "Population des 60 ans et plus dans un ménage propriétaire"
+                        },
+                        "x60_ans_et_plus_sans_voiture": {
+                            "type": "integer",
+                            "title": "X60_ANS_ET_PLUS_SANS_VOITURE",
+                            "description": "Population des 60 ans et plus dans un ménage sans voiture"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "omphale_tr2013_75_ans_et_plus": {
+                            "type": "number",
+                            "title": "omphale_Tr2013_75_ans_et_plus",
+                            "description": ""
+                        },
+                        "omphale_tr2050_75_ans_et_plus": {
+                            "type": "number",
+                            "title": "omphale_Tr2050_75_ans_et_plus",
+                            "description": ""
+                        },
+                        "omph_vh_tr2050_75_ans_et_plus": {
+                            "type": "number",
+                            "title": "omph_VH_Tr2050_75_ans_et_plus",
+                            "description": ""
+                        },
+                        "omph_vb_tr2050_75_ans_et_plus": {
+                            "type": "number",
+                            "title": "omph_VB_Tr2050_75_ans_et_plus",
+                            "description": ""
+                        },
+                        "omphale_tr2013_60_a_74_ans": {
+                            "type": "number",
+                            "title": "omphale_Tr2013_60_a_74_ans",
+                            "description": ""
+                        },
+                        "omphale_tr2050_60_a_74_ans": {
+                            "type": "number",
+                            "title": "omphale_Tr2050_60_a_74_ans",
+                            "description": ""
+                        },
+                        "omph_vh_tr2050_60_a_74_ans": {
+                            "type": "number",
+                            "title": "omph_VH_Tr2050_60_a_74_ans",
+                            "description": ""
+                        },
+                        "omph_vb_tr2050_60_a_74_ans": {
+                            "type": "number",
+                            "title": "omph_VB_Tr2050_60_a_74_ans",
+                            "description": ""
+                        },
+                        "population_totale": {
+                            "type": "integer",
+                            "title": "POPULATION_TOTALE",
+                            "description": ""
+                        },
+                        "part_des_60_ans_et_plus_en_2013": {
+                            "type": "number",
+                            "title": "part des 60 ans et plus en 2013",
+                            "description": ""
+                        },
+                        "part_des_60_ans_et_plus_en_2050_projection": {
+                            "type": "number",
+                            "title": "Part des 60 ans et plus en 2050 (Projection)",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

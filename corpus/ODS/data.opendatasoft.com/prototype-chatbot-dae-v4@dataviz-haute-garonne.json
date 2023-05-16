@@ -1,0 +1,551 @@
+{
+    "title": "prototype-chatbot-dae-v4@dataviz-haute-garonne",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/prototype-chatbot-dae-v4@dataviz-haute-garonne"
+        }
+    ],
+    "definitions": {
+        "prototype-chatbot-dae-v4@dataviz-haute-garonne": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/prototype-chatbot-dae-v4@dataviz-haute-garonne_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "prototype-chatbot-dae-v4@dataviz-haute-garonne_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "point_vente_insee": {
+                            "type": "integer",
+                            "title": "point_vente_insee",
+                            "description": "Code insee commune point de vente"
+                        },
+                        "producteur_id": {
+                            "type": "integer",
+                            "title": "producteur_id",
+                            "description": "Identifiant unique du producteur"
+                        },
+                        "producteur_nom_commercial": {
+                            "type": "string",
+                            "title": "producteur_nom_commercial",
+                            "description": "Nom commercial du producteur"
+                        },
+                        "producteur_vente_exploitation": {
+                            "type": "integer",
+                            "title": "producteur_vente_exploitation",
+                            "description": "Le producteur vend sur son exploitation"
+                        },
+                        "producteur_cueillette": {
+                            "type": "integer",
+                            "title": "producteur_cueillette",
+                            "description": "Cueillette autorisée"
+                        },
+                        "producteur_adresse_complement": {
+                            "type": "string",
+                            "title": "producteur_adresse_complement",
+                            "description": "Complément d'adresse du producteur"
+                        },
+                        "producteur_adresse_numero": {
+                            "type": "integer",
+                            "title": "producteur_adresse_numero",
+                            "description": "Numéro d'adresse du producteur"
+                        },
+                        "producteur_adresse_repetition": {
+                            "type": "string",
+                            "title": "producteur_adresse_repetition",
+                            "description": "Indice de répétition de l'adresse du producteur"
+                        },
+                        "producteur_adresse_type_voie": {
+                            "type": "string",
+                            "title": "producteur_adresse_type_voie",
+                            "description": "Type de voie de l'adresse du producteur"
+                        },
+                        "producteur_adresse_voie": {
+                            "type": "string",
+                            "title": "producteur_adresse_voie",
+                            "description": "voie de l'adresse du producteur"
+                        },
+                        "producteur_adresse_cedex": {
+                            "type": "string",
+                            "title": "producteur_adresse_cedex",
+                            "description": "Code cedex de l'adresse du producteur"
+                        },
+                        "producteur_adresse_cp": {
+                            "type": "integer",
+                            "title": "producteur_adresse_cp",
+                            "description": "Code postal de l'adresse du producteur"
+                        },
+                        "producteur_commune": {
+                            "type": "string",
+                            "title": "producteur_commune",
+                            "description": "Commune de l'adresse du producteur"
+                        },
+                        "producteur_contact_nom": {
+                            "type": "string",
+                            "title": "producteur_contact_nom",
+                            "description": "Nom du contact du producteur"
+                        },
+                        "producteur_contact_prenom": {
+                            "type": "string",
+                            "title": "producteur_contact_prenom",
+                            "description": "Prénom du contact du producteur"
+                        },
+                        "producteur_contact_civilite": {
+                            "type": "integer",
+                            "title": "producteur_contact_civilite",
+                            "description": "Civilité du contact du  producteur"
+                        },
+                        "producteur_contact_media": {
+                            "type": "string",
+                            "title": "producteur_contact_media",
+                            "description": "Média de contact du producteur"
+                        },
+                        "producteur_contact_media_valeur": {
+                            "type": "string",
+                            "title": "producteur_contact_media_valeur",
+                            "description": "Valeur du média de contact du producteur"
+                        },
+                        "point_vente_id": {
+                            "type": "integer",
+                            "title": "point_vente_id",
+                            "description": "Clé du point de vente"
+                        },
+                        "point_vente_nom": {
+                            "type": "string",
+                            "title": "point_vente_nom",
+                            "description": "Nom du point de vente"
+                        },
+                        "point_vente_type": {
+                            "type": "string",
+                            "title": "point_vente_type",
+                            "description": "Type du point de vente"
+                        },
+                        "point_vente_saisonnalite": {
+                            "type": "string",
+                            "title": "point_vente_saisonnalite",
+                            "description": "Jours et heures d'ouvertures du point de vente"
+                        },
+                        "point_vente_adresse": {
+                            "type": "string",
+                            "title": "point_vente_adresse",
+                            "description": "Adresse du point de vente"
+                        },
+                        "point_vente_adresse_complement": {
+                            "type": "string",
+                            "title": "point_vente_adresse_complement",
+                            "description": "Complément d'adresse du point de vente"
+                        },
+                        "point_vente_adresse_complete": {
+                            "type": "string",
+                            "title": "point_vente_adresse_complete",
+                            "description": "Adresse Complète du point de vente"
+                        },
+                        "point_vente_adresse_cp": {
+                            "type": "integer",
+                            "title": "point_vente_adresse_CP",
+                            "description": "Code postal du point de vente"
+                        },
+                        "pdv_commune": {
+                            "type": "string",
+                            "title": "pdv_commune",
+                            "description": "Commune du point de vente"
+                        },
+                        "pdv_latitude": {
+                            "type": "number",
+                            "title": "pdv_latitude",
+                            "description": "Latitude du point de vente"
+                        },
+                        "pdv_longitude": {
+                            "type": "number",
+                            "title": "pdv_longitude",
+                            "description": "Longitude du point de vente"
+                        },
+                        "producteur_pdv_saisonnalite": {
+                            "type": "string",
+                            "title": "producteur_pdv_saisonnalite",
+                            "description": "Jours et horaires de présence du producteur sur le point de vente"
+                        },
+                        "produit_id": {
+                            "type": "integer",
+                            "title": "produit_id",
+                            "description": "Identifiant unique du produit"
+                        },
+                        "produit_nom": {
+                            "type": "string",
+                            "title": "produit_nom",
+                            "description": "Nom du produit"
+                        },
+                        "produit_classe": {
+                            "type": "string",
+                            "title": "produit_classe",
+                            "description": "Classe du produit"
+                        },
+                        "produit_sous_classe": {
+                            "type": "string",
+                            "title": "produit_sous_classe",
+                            "description": "Sous classe du produit"
+                        },
+                        "producteur_produit_label": {
+                            "type": "string",
+                            "title": "producteur_produit_label",
+                            "description": "Labels du producteur pour le produit"
+                        },
+                        "producteur_produit_saisonnalite": {
+                            "type": "string",
+                            "title": "producteur_produit_saisonnalite",
+                            "description": "Période de disponibilité du produit pour le producteur"
+                        },
+                        "pdv_point_geo": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "pdv_point_geo",
+                            "description": "Point géolocalisation du point de vente"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

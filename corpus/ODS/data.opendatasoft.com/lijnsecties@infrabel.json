@@ -1,0 +1,476 @@
+{
+    "title": "lijnsecties@infrabel",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/lijnsecties@infrabel"
+        }
+    ],
+    "definitions": {
+        "lijnsecties@infrabel": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/lijnsecties@infrabel_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "lijnsecties@infrabel_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "ls_id": {
+                            "type": "string",
+                            "title": "Line section id",
+                            "description": ""
+                        },
+                        "label": {
+                            "type": "string",
+                            "title": "Railway line to which the section belongs",
+                            "description": ""
+                        },
+                        "ptcarfrom": {
+                            "type": "string",
+                            "title": "ID of the operational point at the beginning of the section",
+                            "description": "Link to the operational point in the dataset of operational points"
+                        },
+                        "ptcarfromname": {
+                            "type": "string",
+                            "title": "Abbreviation BVT of the operational point at the end of the section",
+                            "description": "Official abbreviation according to the Book of the Train Service. Another dataset contains the list of these operational points"
+                        },
+                        "ptcarto": {
+                            "type": "string",
+                            "title": "ID of the operational point at the end of the section",
+                            "description": "Link to the operational point in the dataset of operational points"
+                        },
+                        "ptcartoname": {
+                            "type": "string",
+                            "title": "Abbreviation BVT of the operational point at the beginning of the section",
+                            "description": "Official abbreviation according to the Book of the Train Service. Another dataset contains the list of these operational points"
+                        },
+                        "mfrom": {
+                            "type": "integer",
+                            "title": "M-coordinate of the beginning of the section",
+                            "description": "It calculates the distance between the kilometre marker closest to the beginning of the section and the operating point at the beginning of the section."
+                        },
+                        "mto": {
+                            "type": "integer",
+                            "title": "M-coordinate of the end of the section",
+                            "description": "Calculates the distance between the kilometre marker closest to the end of the section and the operational point at the end of the section"
+                        },
+                        "ecs_voltfreq": {
+                            "type": "string",
+                            "title": "Installed electrification",
+                            "description": ""
+                        },
+                        "ecs_maxtraincurrent": {
+                            "type": "integer",
+                            "title": "Maximum permitted intensity of the electric power that a riding train is allowed to draw",
+                            "description": ""
+                        },
+                        "ecs_maxstandstillcurrent": {
+                            "type": "integer",
+                            "title": "Maximum current intensity that the train is allowed to draw when stationary",
+                            "description": "Content-Type: text/plain; charset=utf-8\n"
+                        },
+                        "ecs_minwireheight": {
+                            "type": "number",
+                            "title": "Minimum catenary’s height",
+                            "description": ""
+                        },
+                        "nrtracks": {
+                            "type": "integer",
+                            "title": "Number of tracks",
+                            "description": "Number of tracks in this section"
+                        },
+                        "c400": {
+                            "type": "string",
+                            "title": "c400",
+                            "description": "cXXX-code for rail combined transport (UIC 596-6 leaflet)"
+                        },
+                        "c70": {
+                            "type": "string",
+                            "title": "c70",
+                            "description": "cXX-code for rail combined transport (UIC 596-6 leaflet)"
+                        },
+                        "p70": {
+                            "type": "string",
+                            "title": "p70",
+                            "description": "pXX-code for rail combined transport (UIC 596-6 leaflet)"
+                        },
+                        "p400": {
+                            "type": "string",
+                            "title": "p400",
+                            "description": "pXXX-code for rail combined transport (UIC 596-6 leaflet)"
+                        },
+                        "symnamefrom": {
+                            "type": "string",
+                            "title": "Symbolic name of the operational point at the beginning of the section",
+                            "description": "As used in electronic communication. Another dataset contains the list of these operational points"
+                        },
+                        "symnameto": {
+                            "type": "string",
+                            "title": "Symbolic name of the operational point at the end of the section",
+                            "description": "As used in electronic communication. Another dataset contains the list of these operational points"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

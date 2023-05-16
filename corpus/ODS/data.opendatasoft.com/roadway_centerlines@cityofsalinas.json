@@ -1,0 +1,726 @@
+{
+    "title": "roadway_centerlines@cityofsalinas",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/roadway_centerlines@cityofsalinas"
+        }
+    ],
+    "definitions": {
+        "roadway_centerlines@cityofsalinas": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/roadway_centerlines@cityofsalinas_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "roadway_centerlines@cityofsalinas_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "objectid": {
+                            "type": "integer",
+                            "title": "OBJECTID",
+                            "description": ""
+                        },
+                        "discrpagid": {
+                            "type": "string",
+                            "title": "Discrepancy Agency ID",
+                            "description": ""
+                        },
+                        "updatedby": {
+                            "type": "string",
+                            "title": "Updated By",
+                            "description": ""
+                        },
+                        "rcl_nguid": {
+                            "type": "string",
+                            "title": "Road Centerline Global ID",
+                            "description": ""
+                        },
+                        "adnumpre_l": {
+                            "type": "string",
+                            "title": "Left Address Number Prefix",
+                            "description": ""
+                        },
+                        "adnumpre_r": {
+                            "type": "string",
+                            "title": "Right Address Number Prefix",
+                            "description": ""
+                        },
+                        "fromaddr_l": {
+                            "type": "integer",
+                            "title": "Left FROM Address",
+                            "description": ""
+                        },
+                        "toaddr_l": {
+                            "type": "integer",
+                            "title": "Left TO Address",
+                            "description": ""
+                        },
+                        "fromaddr_r": {
+                            "type": "integer",
+                            "title": "Right FROM Address",
+                            "description": ""
+                        },
+                        "toaddr_r": {
+                            "type": "integer",
+                            "title": "Right TO Address",
+                            "description": ""
+                        },
+                        "parity_l": {
+                            "type": "string",
+                            "title": "Parity Left",
+                            "description": ""
+                        },
+                        "parity_r": {
+                            "type": "string",
+                            "title": "Parity Right",
+                            "description": ""
+                        },
+                        "st_premod": {
+                            "type": "string",
+                            "title": "Street Name Pre Modifier",
+                            "description": ""
+                        },
+                        "st_predir": {
+                            "type": "string",
+                            "title": "Street Name Pre Directional",
+                            "description": ""
+                        },
+                        "st_pretyp": {
+                            "type": "string",
+                            "title": "Street Name Pre Type",
+                            "description": ""
+                        },
+                        "st_presep": {
+                            "type": "string",
+                            "title": "Street Name Pre Type Separator",
+                            "description": ""
+                        },
+                        "st_name": {
+                            "type": "string",
+                            "title": "Street Name",
+                            "description": ""
+                        },
+                        "st_postyp": {
+                            "type": "string",
+                            "title": "Street Name Post Type",
+                            "description": ""
+                        },
+                        "st_posdir": {
+                            "type": "string",
+                            "title": "Street Name Post Directional",
+                            "description": ""
+                        },
+                        "st_posmod": {
+                            "type": "string",
+                            "title": "Street Name Post Modifier",
+                            "description": ""
+                        },
+                        "st_fullnm": {
+                            "type": "string",
+                            "title": "Full Street Name",
+                            "description": ""
+                        },
+                        "lst_premod": {
+                            "type": "string",
+                            "title": "Legacy Street Name Pre Modifier",
+                            "description": ""
+                        },
+                        "lst_predir": {
+                            "type": "string",
+                            "title": "Legacy Street Name Pre Directional",
+                            "description": ""
+                        },
+                        "lst_name": {
+                            "type": "string",
+                            "title": "Legacy Street Name",
+                            "description": ""
+                        },
+                        "lst_type": {
+                            "type": "string",
+                            "title": "Legacy Street Name Type",
+                            "description": ""
+                        },
+                        "lst_posdir": {
+                            "type": "string",
+                            "title": "Legacy Street Name Post Directional",
+                            "description": ""
+                        },
+                        "lst_posmod": {
+                            "type": "string",
+                            "title": "Legacy Street Name Post Modifier",
+                            "description": ""
+                        },
+                        "lst_fullnm": {
+                            "type": "string",
+                            "title": "E9-1-1 Full Street Name",
+                            "description": ""
+                        },
+                        "esn_l": {
+                            "type": "string",
+                            "title": "ESN Left",
+                            "description": ""
+                        },
+                        "esn_r": {
+                            "type": "string",
+                            "title": "ESN Right",
+                            "description": ""
+                        },
+                        "msagcomm_l": {
+                            "type": "string",
+                            "title": "MSAG Community Name Left",
+                            "description": ""
+                        },
+                        "msagcomm_r": {
+                            "type": "string",
+                            "title": "MSAG Community Name Right",
+                            "description": ""
+                        },
+                        "country_l": {
+                            "type": "string",
+                            "title": "Country Left",
+                            "description": ""
+                        },
+                        "country_r": {
+                            "type": "string",
+                            "title": "Country Right",
+                            "description": ""
+                        },
+                        "state_l": {
+                            "type": "string",
+                            "title": "State Left",
+                            "description": ""
+                        },
+                        "state_r": {
+                            "type": "string",
+                            "title": "State Right",
+                            "description": ""
+                        },
+                        "county_l": {
+                            "type": "string",
+                            "title": "County Left",
+                            "description": ""
+                        },
+                        "county_r": {
+                            "type": "string",
+                            "title": "County Right",
+                            "description": ""
+                        },
+                        "addcode_l": {
+                            "type": "string",
+                            "title": "Additional Code Left",
+                            "description": ""
+                        },
+                        "addcode_r": {
+                            "type": "string",
+                            "title": "Additional Code Right",
+                            "description": ""
+                        },
+                        "incmuni_l": {
+                            "type": "string",
+                            "title": "Incorporated Municipality Left",
+                            "description": ""
+                        },
+                        "incmuni_r": {
+                            "type": "string",
+                            "title": "Incorporated Municipality Right",
+                            "description": ""
+                        },
+                        "uninccom_l": {
+                            "type": "string",
+                            "title": "Unincorporated Community Left",
+                            "description": ""
+                        },
+                        "uninccom_r": {
+                            "type": "string",
+                            "title": "Unincorporated Community Right",
+                            "description": ""
+                        },
+                        "nbrhdcom_l": {
+                            "type": "string",
+                            "title": "Neighborhood Community Left",
+                            "description": ""
+                        },
+                        "nbrhdcom_r": {
+                            "type": "string",
+                            "title": "Neighborhood Community Right",
+                            "description": ""
+                        },
+                        "postcomm_l": {
+                            "type": "string",
+                            "title": "Postal Community Name Left",
+                            "description": ""
+                        },
+                        "postcomm_r": {
+                            "type": "string",
+                            "title": "Postal Community Name Right",
+                            "description": ""
+                        },
+                        "postcode_l": {
+                            "type": "string",
+                            "title": "Postal Code Left",
+                            "description": ""
+                        },
+                        "postcode_r": {
+                            "type": "string",
+                            "title": "Postal Code Right",
+                            "description": ""
+                        },
+                        "roadclass": {
+                            "type": "string",
+                            "title": "Road Class",
+                            "description": ""
+                        },
+                        "oneway": {
+                            "type": "string",
+                            "title": "One-Way",
+                            "description": ""
+                        },
+                        "speedlimit": {
+                            "type": "integer",
+                            "title": "Speed Limit",
+                            "description": ""
+                        },
+                        "zelev_from": {
+                            "type": "integer",
+                            "title": "Z Elevation From",
+                            "description": ""
+                        },
+                        "zelev_to": {
+                            "type": "integer",
+                            "title": "Z Elevation To",
+                            "description": ""
+                        },
+                        "valid_l": {
+                            "type": "string",
+                            "title": "Validation Left",
+                            "description": ""
+                        },
+                        "valid_r": {
+                            "type": "string",
+                            "title": "Validation Right",
+                            "description": ""
+                        },
+                        "cosid": {
+                            "type": "string",
+                            "title": "Salinas ID",
+                            "description": ""
+                        },
+                        "length_ft": {
+                            "type": "integer",
+                            "title": "length_ft",
+                            "description": ""
+                        },
+                        "addrrange": {
+                            "type": "integer",
+                            "title": "AddrRange",
+                            "description": ""
+                        },
+                        "activeflag": {
+                            "type": "integer",
+                            "title": "ActiveFlag",
+                            "description": ""
+                        },
+                        "created_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "created_date",
+                            "description": ""
+                        },
+                        "last_edited_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "last_edited_date",
+                            "description": ""
+                        },
+                        "expire": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "expire",
+                            "description": ""
+                        },
+                        "effective": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "effective",
+                            "description": ""
+                        },
+                        "dateupdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "dateupdate",
+                            "description": ""
+                        },
+                        "globalid": {
+                            "type": "string",
+                            "title": "globalid",
+                            "description": ""
+                        },
+                        "shape_length": {
+                            "type": "number",
+                            "title": "Shape.STLength()",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

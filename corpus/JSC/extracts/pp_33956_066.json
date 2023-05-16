@@ -1,0 +1,339 @@
+{
+  "$schema": "http://json-schema.org/draft-04/hyper-schema",
+  "definitions": {
+    "app_setup": {
+      "readOnly": true,
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "branch": {
+      "description": "the branch of the repository which the review app is based on",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "config_vars": {
+      "additionalProperties": false,
+      "description": "hash of config vars",
+      "example": {
+        "BAZ": "qux",
+        "FOO": "bar"
+      },
+      "patternProperties": {
+        "^[\\w\\.\\:\\[\\]]+$": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "created_at": {
+      "description": "when test run was created",
+      "format": "date-time",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "creator": {
+      "definitions": {
+        "id": {
+          "description": "unique identifier of a review app owner",
+          "example": "01234567-89ab-cdef-0123-456789abcdef",
+          "format": "uuid",
+          "readOnly": false,
+          "type": [
+            "string"
+          ]
+        }
+      },
+      "description": "The user who created the review app",
+      "readOnly": true,
+      "type": [
+        "object"
+      ]
+    },
+    "error_status": {
+      "description": "error message from creating the review app if any",
+      "readOnly": true,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "fork_repo_id": {
+      "description": "repository id of the fork the branch resides in",
+      "example": "123456",
+      "readOnly": true,
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "id": {
+      "description": "unique identifier of the review app",
+      "format": "uuid",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "identity": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/review-app/definitions/id"
+        }
+      ]
+    },
+    "message": {
+      "description": "message from creating the review app if any",
+      "readOnly": true,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pr_number": {
+      "description": "GitHub Pull Request number if the Review app was created automatically",
+      "example": 24,
+      "readOnly": true,
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "source_blob": {
+      "description": "The download location for the review app's source code",
+      "properties": {
+        "url": {
+          "description": "URL where gzipped tar archive of source code for build was downloaded.",
+          "example": "https://example.com/source.tgz?token=xyz",
+          "readOnly": true,
+          "type": [
+            "string"
+          ]
+        },
+        "version": {
+          "description": "The version number (or SHA) of the code to build.",
+          "example": "v1.2.0",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "strictProperties": true,
+      "type": [
+        "object"
+      ]
+    },
+    "status": {
+      "description": "current state of the review app",
+      "enum": [
+        "pending",
+        "creating",
+        "created",
+        "deleting",
+        "deleted",
+        "errored"
+      ],
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "updated_at": {
+      "description": "when review app was updated",
+      "format": "date-time",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "wait_for_ci": {
+      "description": "wait for ci before building the app",
+      "example": true,
+      "readOnly": true,
+      "type": [
+        "boolean"
+      ]
+    }
+  },
+  "description": "An ephemeral app to review a set of changes",
+  "links": [
+    {
+      "description": "Create a new review app",
+      "href": "/review-apps",
+      "method": "POST",
+      "rel": "create",
+      "schema": {
+        "properties": {
+          "branch": {
+            "$ref": "#/definitions/review-app/definitions/branch"
+          },
+          "environment": {
+            "$ref": "#/definitions/review-app/definitions/config_vars",
+            "description": "A set of key value pairs which will be put into the environment of the spawned review app process."
+          },
+          "fork_repo_id": {
+            "$ref": "#/definitions/review-app/definitions/fork_repo_id"
+          },
+          "pipeline": {
+            "$ref": "#/definitions/pipeline/definitions/id"
+          },
+          "source_blob": {
+            "$ref": "#/definitions/review-app/definitions/source_blob"
+          }
+        },
+        "required": [
+          "branch",
+          "pipeline",
+          "source_blob"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "targetSchema": {
+        "$ref": "#/definitions/review-app"
+      },
+      "title": "Create"
+    },
+    {
+      "description": "Gets an existing review app",
+      "href": "/review-apps/{(%23%2Fdefinitions%2Freview-app%2Fdefinitions%2Fid)}",
+      "method": "GET",
+      "targetSchema": {
+        "$ref": "#/definitions/review-app"
+      },
+      "title": "Get review app"
+    },
+    {
+      "description": "Delete an existing review app",
+      "href": "/review-apps/{(%23%2Fdefinitions%2Freview-app%2Fdefinitions%2Fid)}",
+      "method": "DELETE",
+      "rel": "delete",
+      "targetSchema": {
+        "$ref": "#/definitions/review-app"
+      },
+      "title": "Delete"
+    },
+    {
+      "description": "Get a review app using the associated app_id",
+      "href": "/apps/{(%23%2Fdefinitions%2Fapp%2Fdefinitions%2Fidentity)}/review-app",
+      "method": "GET",
+      "targetSchema": {
+        "$ref": "#/definitions/review-app"
+      },
+      "title": "Get review app by app_id"
+    },
+    {
+      "description": "List review apps for a pipeline",
+      "href": "/pipelines/{(%23%2Fdefinitions%2Fpipeline%2Fdefinitions%2Fid)}/review-apps",
+      "method": "GET",
+      "rel": "instances",
+      "targetSchema": {
+        "items": {
+          "$ref": "#/definitions/review-app"
+        },
+        "type": [
+          "array"
+        ]
+      },
+      "title": "List"
+    }
+  ],
+  "properties": {
+    "app": {
+      "description": "the Heroku app associated to this review app",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/app/definitions/id"
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "app_setup": {
+      "description": "the app setup for this review app",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/app-setup/definitions/id"
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "branch": {
+      "$ref": "#/definitions/review-app/definitions/branch"
+    },
+    "created_at": {
+      "$ref": "#/definitions/review-app/definitions/created_at"
+    },
+    "creator": {
+      "$ref": "#/definitions/review-app/definitions/creator"
+    },
+    "error_status": {
+      "$ref": "#/definitions/review-app/definitions/error_status"
+    },
+    "fork_repo": {
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/review-app/definitions/fork_repo_id"
+        }
+      },
+      "strictProperties": true,
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "id": {
+      "$ref": "#/definitions/review-app/definitions/id"
+    },
+    "message": {
+      "$ref": "#/definitions/review-app/definitions/message"
+    },
+    "pipeline": {
+      "description": "the pipeline which this review app belongs to",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/pipeline/definitions/id"
+        }
+      },
+      "type": [
+        "object"
+      ]
+    },
+    "pr_number": {
+      "$ref": "#/definitions/review-app/definitions/pr_number"
+    },
+    "status": {
+      "$ref": "#/definitions/review-app/definitions/status"
+    },
+    "updated_at": {
+      "$ref": "#/definitions/review-app/definitions/updated_at"
+    },
+    "wait_for_ci": {
+      "$ref": "#/definitions/review-app/definitions/wait_for_ci"
+    }
+  },
+  "stability": "production",
+  "strictProperties": true,
+  "title": "Review App",
+  "type": [
+    "object"
+  ]
+}

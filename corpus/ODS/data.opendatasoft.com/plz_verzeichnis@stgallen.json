@@ -1,0 +1,462 @@
+{
+    "title": "plz_verzeichnis@stgallen",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/plz_verzeichnis@stgallen"
+        }
+    ],
+    "definitions": {
+        "plz_verzeichnis@stgallen": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/plz_verzeichnis@stgallen_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "plz_verzeichnis@stgallen_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "rec_art": {
+                            "type": "string",
+                            "title": "REC_ART",
+                            "description": "Record-Art Bezeichnet die Record-Art."
+                        },
+                        "onrp": {
+                            "type": "integer",
+                            "title": "ONRP",
+                            "description": "Ordnungsnummer Post Die ONRP ist der Primärschlüssel zur Bezeichnung von PLZ/Ort gemäss PLZ-Datenbank der Post und der eindeutige, unveränderliche Schlüsselbegriff einer PLZ. Jede neue PLZ erhält eine neue ONRP. Eine ONRP bleibt unverändert, während sich eine PLZ ändern kann. Wird eine PLZ ausser Betrieb gesetzt, wird die zugeord- nete ONRP nicht mehr verwendet. Wird (in seltenen Fällen) eine PLZ wieder in Betrieb genommen, wird ihr wieder die ursprüngliche ONRP zugeordnet. "
+                        },
+                        "bfsnr": {
+                            "type": "integer",
+                            "title": "BFSNR",
+                            "description": "Fremdschlüssel zur BFSNR (verweist auf NEW_COM)"
+                        },
+                        "plz_typ": {
+                            "type": "integer",
+                            "title": "PLZ_TYP",
+                            "description": "Postleitzahl-Typ Mit dem PLZ-Typ wird überprüft, ob eine PLZ für bestimmte Adressen grundsätzlich plausibel ist. 10 = Domizil- und Fachadressen 20 = Nur Domiziladressen 30 = Nur Fach-PLZ 40 = Firmen-PLZ 80 = Postinterne PLZ (Angabe Zustellpoststelle auf Bundzetteln oder auf Sackanschriften)."
+                        },
+                        "postleitzahl": {
+                            "type": "string",
+                            "title": "POSTLEITZAHL",
+                            "description": "Adressier-Postleitzahl Die Schweiz ist in neun geografische Leitkreise eingeteilt, die von West nach Ost nummeriert sind. Jeder Leitkreis ist wiederum in Leitgebiete unterteilt, diese wiederum in maximal 100 Einheiten. Gültige Werte: 1000–9999 Die Postleitzahlen werden wie folgt aufgebaut: Beispiel: Zollbrück 3 = Leitkreis (Bern) 34 = Leitgebiet (Burgdorf) 343 = Strecke (Burgdorf–Langnau) 3436 = Nummer der Poststelle (Zollbrück)"
+                        },
+                        "plz_zz": {
+                            "type": "string",
+                            "title": "PLZ_ZZ",
+                            "description": "Postleitzahl-Zusatzziffer Die Zusatzziffer dient dazu, gleichlautende 4-stellige PLZ zu unterscheiden. Beispiel: 4436 00 = Oberdorf BL 4436 02 = Liedertswil Adressdateien müssen mit PLZ und Zusatzziffer aufgebaut werden, um eine fehlerfreie Sortierung sicherzustellen. Die Zusatzziffern dürfen jedoch nicht in der Postadresse auf der Sendung erscheinen."
+                        },
+                        "gplz": {
+                            "type": "integer",
+                            "title": "GPLZ",
+                            "description": "Grundpostleitzahl"
+                        },
+                        "ortbez18": {
+                            "type": "string",
+                            "title": "ORTBEZ18",
+                            "description": "Ortsbezeichnung, 18- oder 27-stellig Die Ortszeile in der Postadresse muss die 18- oder die 27-stellige Ortsbezeichnung (offizielle Ortsbezeichnung) enthalten. Die 4-stellige PLZ ist zusammen mit der 18- oder 27-stelligen Ortsbezeichnung eindeutig. Sehr lange Ortsnamen werden auf die verfügbare Feldlänge gekürzt. Beispiel: «Neuhausen am Rheinfall»: 18-stellig: Neuhausen 27-stellig: Neuhausen am Rheinfall "
+                        },
+                        "ortbez27": {
+                            "type": "string",
+                            "title": "ORTBEZ27",
+                            "description": "Ortsbezeichnung, 18- oder 27-stellig Die Ortszeile in der Postadresse muss die 18- oder die 27-stellige Ortsbezeichnung (offizielle Ortsbezeichnung) enthalten. Die 4-stellige PLZ ist zusammen mit der 18- oder 27-stelligen Ortsbezeichnung eindeutig. Sehr lange Ortsnamen werden auf die verfügbare Feldlänge gekürzt. Beispiel: «Neuhausen am Rheinfall»: 18-stellig: Neuhausen 27-stellig: Neuhausen am Rheinfall "
+                        },
+                        "kanton": {
+                            "type": "string",
+                            "title": "KANTON",
+                            "description": "Verwendet werden die offiziellen Abkürzungen \nentsprechend den Autokennzeichen"
+                        },
+                        "sprachcode": {
+                            "type": "integer",
+                            "title": "SPRACHCODE",
+                            "description": "Sprache (Sprachmehrheit) im Gebiet einer PLZ:\n1 = deutsch,\n2 = französisch,\n3 = italienisch\nBei mehrsprachigen Ortschaften wird die Hauptsprache \nangegeben."
+                        },
+                        "sprachcode_abw": {
+                            "type": "string",
+                            "title": "SPRACHCODE_ ABW",
+                            "description": "Weitere Sprache innerhalb einer PLZ. Pro PLZ kann ein \nabweichender Sprachcode angegeben werden."
+                        },
+                        "briefz_durch": {
+                            "type": "integer",
+                            "title": "BRIEFZ_DURCH",
+                            "description": "Verweist auf Betriebsstelle (ONRP), die überwiegend die \nBriefe bei der Adressier-PLZ zustellt. Diese Information \nkann allenfalls für Sackanschriften benützt werden"
+                        },
+                        "gilt_ab_dat": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "GILT_AB_DAT",
+                            "description": "Gibt an, ab wann die PLZ-Daten gültig sind \n(Format JJJJMMTT)."
+                        },
+                        "plz_briefzust": {
+                            "type": "integer",
+                            "title": "PLZ_BRIEFZUST",
+                            "description": "6-stellige PLZ der Betriebsstelle in BRIEFZ_DURCH. \nWird für die Erstellung des Bundzettel-Barcodes \nbenötigt"
+                        },
+                        "plz_coff": {
+                            "type": "string",
+                            "title": "PLZ_COFF",
+                            "description": "Zeigt an, ob eine PLZ (bei PLZ_TYP 10 und PLZ_TYP 20) \nausschliesslich offizielle oder nicht offizielle Adressen \nenthält.\nJ = offiziell\nN = nicht offiziell\nFür alle anderen PLZ_TYPen gilt der Wert NULL"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": "Erfassen des Polygons auf der Kartendarstellung"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geokoordinaten",
+                            "description": "Geokoordinaten für Darstellung des PLZ-Gebietes auf der Karte"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

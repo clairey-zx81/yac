@@ -1,0 +1,446 @@
+{
+    "title": "rurland-bassee-hydrographie-de-surface@arscan",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/rurland-bassee-hydrographie-de-surface@arscan"
+        }
+    ],
+    "definitions": {
+        "rurland-bassee-hydrographie-de-surface@arscan": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/rurland-bassee-hydrographie-de-surface@arscan_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "rurland-bassee-hydrographie-de-surface@arscan_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": "Point géographique"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": "Forme vectorielle"
+                        },
+                        "objectid": {
+                            "type": "number",
+                            "title": "OBJECTID",
+                            "description": "OBJECTID"
+                        },
+                        "id_bdcarth": {
+                            "type": "number",
+                            "title": "ID_BDCARTH",
+                            "description": "Identifiant B D CARTHAGE du nœud hydrographique. Ce champ est égal à l’ancien champ SOMHAE de la BDCARTHAGE V2.4 : le 1er caractère correspond au code de l’Agence à laquelle appartient le noeud"
+                        },
+                        "nature": {
+                            "type": "string",
+                            "title": "NATURE",
+                            "description": "Nature du nœud hydrographique"
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "TYPE",
+                            "description": "Type de structure"
+                        },
+                        "toponyme": {
+                            "type": "string",
+                            "title": "TOPONYME",
+                            "description": "Toponyme du nœud hydrographique"
+                        },
+                        "c_ent_surf": {
+                            "type": "string",
+                            "title": "C_ENT_SURF",
+                            "description": "Code générique de l’entité hydrographique de surface traversée par le tronçon hydrographique élémentaire. Si le tronçon hydrographique ne traverse aucune entité hydrographique de surface, ce champ est vide"
+                        },
+                        "ss_m_ent_s": {
+                            "type": "string",
+                            "title": "SS_M_ENT_S",
+                            "description": "Code du sous-milieu de l’entité hydrographique de surface contenant l’élément surfacique. Peut éventuellement ne porter aucune valeur"
+                        },
+                        "classe_ent": {
+                            "type": "string",
+                            "title": "CLASSE_ENT",
+                            "description": "Classification de l’entité  hydrographique permettant une sélection aux différentes échelles. Ce champ est vide, si l’ élément surfacique n’appartient à aucune entité\nhydrographique de surface."
+                        },
+                        "top_ent_s": {
+                            "type": "string",
+                            "title": "TOP_ENT_S",
+                            "description": "Toponyme de l’entité hydrographique, selon la codification hydrographique, contenant l’ élément surfacique. Ce champ est vide, si l’élément surfacique n’appartient à aucune entité hydrographique de surface"
+                        },
+                        "cand_ent_s": {
+                            "type": "string",
+                            "title": "CAND_ENT_S",
+                            "description": "Proposition pour remplacer le champ « Top_Ent_S » ; ce champ est rempli en attendant que la commission de toponymie de l’IGN lui accorde le statut de toponyme officiel"
+                        },
+                        "c_hyd_cdo": {
+                            "type": "string",
+                            "title": "C_HYD_CDO",
+                            "description": "Code générique du cours d’eau principal traversant l’entité hydrographique de surface. Ce champ est vide, si l’entité n’est pas traversée « principalement » par un cours d’eau."
+                        },
+                        "shape_leng": {
+                            "type": "number",
+                            "title": "Shape_Leng",
+                            "description": "Longueur de la structure"
+                        },
+                        "shape_area": {
+                            "type": "number",
+                            "title": "Shape_Area",
+                            "description": "Superficie de la structure"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

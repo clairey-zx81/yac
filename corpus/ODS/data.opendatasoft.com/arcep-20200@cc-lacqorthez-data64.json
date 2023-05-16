@@ -1,0 +1,536 @@
+{
+    "title": "arcep-20200@cc-lacqorthez-data64",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/arcep-20200@cc-lacqorthez-data64"
+        }
+    ],
+    "definitions": {
+        "arcep-20200@cc-lacqorthez-data64": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/arcep-20200@cc-lacqorthez-data64_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "arcep-20200@cc-lacqorthez-data64_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "code_insee": {
+                            "type": "integer",
+                            "title": "﻿Code insee",
+                            "description": ""
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "Commune",
+                            "description": ""
+                        },
+                        "total_des_locaux_raccordables_a_la_fibre_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Total des locaux raccordables à la fibre  (année réf 2020)",
+                            "description": ""
+                        },
+                        "total_des_locaux_logements_locaux_professionnels_annee_ref_2020": {
+                            "type": "number",
+                            "title": "Total des locaux (logements + locaux professionnels) (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_loues_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux loués (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_vacants_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux vacants (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_1_piece_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux 1 pièce (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_2_pieces_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux 2 pièces (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_3_pieces_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux 3 pièces (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_4_pieces_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux 4 pièces (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_5_pieces_et_plus_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux 5 pièces et plus (année réf 2020)",
+                            "description": ""
+                        },
+                        "ensemble_du_parc_social_hors_conventionne_sem_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Ensemble du parc social - hors conventionné sem (année réf 2020)",
+                            "description": ""
+                        },
+                        "ensemble_du_parc_social_2019_annee_ref_2019": {
+                            "type": "integer",
+                            "title": "Ensemble du parc social 2019 (année réf 2019)",
+                            "description": ""
+                        },
+                        "ensemble_du_parc_social_2018_annee_ref_2018": {
+                            "type": "integer",
+                            "title": "Ensemble du parc social 2018 (année réf 2018)",
+                            "description": ""
+                        },
+                        "ensemble_du_parc_social_2017_annee_ref_2017": {
+                            "type": "integer",
+                            "title": "Ensemble du parc social 2017 (année réf 2017)",
+                            "description": ""
+                        },
+                        "ensemble_du_parc_social_2016_annee_ref_2016": {
+                            "type": "integer",
+                            "title": "Ensemble du parc social 2016 (année réf 2016)",
+                            "description": ""
+                        },
+                        "ensemble_du_parc_social_2015_annee_ref_2015": {
+                            "type": "integer",
+                            "title": "Ensemble du parc social 2015 (année réf 2015)",
+                            "description": ""
+                        },
+                        "ensemble_du_parc_social_2014_annee_ref_2014": {
+                            "type": "integer",
+                            "title": "Ensemble du parc social 2014 (année réf 2014)",
+                            "description": ""
+                        },
+                        "ensemble_du_parc_social_2013_annee_ref_2013": {
+                            "type": "integer",
+                            "title": "Ensemble du parc social 2013 (année réf 2013)",
+                            "description": ""
+                        },
+                        "logement_sociaux_moins_de_5_ans_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux Moins de 5 ans (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_entre_5_et_10_ans_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux Entre 5 et 10 ans (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_dpe_de_cat_a_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux DPE de cat. A (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_dpe_de_cat_b_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux DPE de cat. B (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_dpe_de_cat_c_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux DPE de cat. C (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_dpe_de_cat_d_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux DPE de cat. D (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_dpe_de_cat_e_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux DPE de cat. E (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_dpe_de_cat_f_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux DPE de cat. F (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_dpe_de_cat_g_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux DPE de cat. G (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_dpe_non_renseigne_annee_ref_2020": {
+                            "type": "integer",
+                            "title": "Logement sociaux DPE non renseigné (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_age_moyen_du_parc_annee_de_construction_annee_ref_2020": {
+                            "type": "string",
+                            "title": "Logement sociaux Age moyen du parc (année de construction) (année réf 2020)",
+                            "description": ""
+                        },
+                        "logement_sociaux_loyer_moyen_2020_parc_complet_annee_ref_2020": {
+                            "type": "string",
+                            "title": "Logement sociaux Loyer moyen 2020, parc complet (année réf 2020)",
+                            "description": ""
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geom",
+                            "description": ""
+                        },
+                        "centroid": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "centroid",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

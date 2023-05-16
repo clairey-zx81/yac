@@ -1,0 +1,631 @@
+{
+    "title": "census-tracts-2020@analyzejerseycity",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/census-tracts-2020@analyzejerseycity"
+        }
+    ],
+    "definitions": {
+        "census-tracts-2020@analyzejerseycity": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/census-tracts-2020@analyzejerseycity_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "census-tracts-2020@analyzejerseycity_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "cousubns": {
+                            "type": "string",
+                            "title": "COUSUBNS",
+                            "description": ""
+                        },
+                        "geoid": {
+                            "type": "string",
+                            "title": "GEOID",
+                            "description": ""
+                        },
+                        "namelsad": {
+                            "type": "string",
+                            "title": "NAMELSAD",
+                            "description": ""
+                        },
+                        "classfp": {
+                            "type": "string",
+                            "title": "CLASSFP",
+                            "description": ""
+                        },
+                        "funcstat": {
+                            "type": "string",
+                            "title": "FUNCSTAT",
+                            "description": ""
+                        },
+                        "aland": {
+                            "type": "number",
+                            "title": "ALAND",
+                            "description": ""
+                        },
+                        "awater": {
+                            "type": "number",
+                            "title": "AWATER",
+                            "description": ""
+                        },
+                        "intptlat": {
+                            "type": "string",
+                            "title": "INTPTLAT",
+                            "description": ""
+                        },
+                        "intptlon": {
+                            "type": "string",
+                            "title": "INTPTLON",
+                            "description": ""
+                        },
+                        "fid_county": {
+                            "type": "integer",
+                            "title": "FID_County",
+                            "description": ""
+                        },
+                        "geoid_1": {
+                            "type": "string",
+                            "title": "GEOID_1",
+                            "description": ""
+                        },
+                        "namelsad_1": {
+                            "type": "string",
+                            "title": "Census Tracts",
+                            "description": ""
+                        },
+                        "aland_1": {
+                            "type": "number",
+                            "title": "ALAND_1",
+                            "description": ""
+                        },
+                        "awater_1": {
+                            "type": "number",
+                            "title": "AWATER_1",
+                            "description": ""
+                        },
+                        "intptlat_1": {
+                            "type": "string",
+                            "title": "INTPTLAT_1",
+                            "description": ""
+                        },
+                        "intptlon_1": {
+                            "type": "string",
+                            "title": "INTPTLON_1",
+                            "description": ""
+                        },
+                        "fid_census": {
+                            "type": "integer",
+                            "title": "FID_Census",
+                            "description": ""
+                        },
+                        "shape_leng": {
+                            "type": "number",
+                            "title": "SHAPE_Leng",
+                            "description": ""
+                        },
+                        "shape_area": {
+                            "type": "number",
+                            "title": "SHAPE_Area",
+                            "description": ""
+                        },
+                        "tractnum": {
+                            "type": "string",
+                            "title": "TRACTNUM",
+                            "description": ""
+                        },
+                        "state_code": {
+                            "type": "number",
+                            "title": "State_Code",
+                            "description": ""
+                        },
+                        "county_cod": {
+                            "type": "string",
+                            "title": "County_Cod",
+                            "description": ""
+                        },
+                        "tract_code": {
+                            "type": "number",
+                            "title": "Tract_Code",
+                            "description": ""
+                        },
+                        "total_popu": {
+                            "type": "number",
+                            "title": "Total_Population",
+                            "description": ""
+                        },
+                        "tract_mino": {
+                            "type": "number",
+                            "title": "Tract Minority %",
+                            "description": ""
+                        },
+                        "number_of": {
+                            "type": "number",
+                            "title": "Number of Families",
+                            "description": ""
+                        },
+                        "number_of1": {
+                            "type": "number",
+                            "title": "Number of Households",
+                            "description": ""
+                        },
+                        "non_hisp_w": {
+                            "type": "number",
+                            "title": "Non-Hisp White Populations",
+                            "description": ""
+                        },
+                        "tract_mi_1": {
+                            "type": "number",
+                            "title": "Tract Minority Population",
+                            "description": ""
+                        },
+                        "american_i": {
+                            "type": "number",
+                            "title": "American Indian Population",
+                            "description": ""
+                        },
+                        "asian_hawa": {
+                            "type": "number",
+                            "title": "Asian/Hawaiian/Pacific Islander Population",
+                            "description": ""
+                        },
+                        "black_popu": {
+                            "type": "number",
+                            "title": "Black Population",
+                            "description": ""
+                        },
+                        "hispanic_p": {
+                            "type": "number",
+                            "title": "Hispanic Population",
+                            "description": ""
+                        },
+                        "other_popu": {
+                            "type": "number",
+                            "title": "Other Population/Two or More Races",
+                            "description": ""
+                        },
+                        "tract_inco": {
+                            "type": "string",
+                            "title": "Tract Income Level",
+                            "description": ""
+                        },
+                        "f2015_msa": {
+                            "type": "number",
+                            "title": "2015 MSA/MD Statewide non-MSA/MD Median Family Income",
+                            "description": ""
+                        },
+                        "f2020_msa": {
+                            "type": "number",
+                            "title": "2020 MSA/MD Statewide non-MSA/MD Median Family Income",
+                            "description": ""
+                        },
+                        "f_below_p": {
+                            "type": "number",
+                            "title": "% below Poverty Line",
+                            "description": ""
+                        },
+                        "tract_medi": {
+                            "type": "number",
+                            "title": "Tract Median Family Income %",
+                            "description": ""
+                        },
+                        "f2015_trac": {
+                            "type": "number",
+                            "title": "2015 Tract Median Family Income",
+                            "description": ""
+                        },
+                        "f2020_est": {
+                            "type": "number",
+                            "title": "2020 Est. Tract Median Family Income",
+                            "description": ""
+                        },
+                        "f2015_tr_1": {
+                            "type": "number",
+                            "title": "2015 Tract Median Household Income",
+                            "description": ""
+                        },
+                        "total_hous": {
+                            "type": "number",
+                            "title": "Total_Housing_units",
+                            "description": ""
+                        },
+                        "f1_4_famil": {
+                            "type": "number",
+                            "title": "1 to 4 Family Units",
+                            "description": ""
+                        },
+                        "median_hou": {
+                            "type": "number",
+                            "title": "Median_House_Age (years)",
+                            "description": ""
+                        },
+                        "iniside_pr": {
+                            "type": "string",
+                            "title": "Iniside_Principal_City?",
+                            "description": ""
+                        },
+                        "owner_occu": {
+                            "type": "number",
+                            "title": "Owner_Occupied_Units",
+                            "description": ""
+                        },
+                        "vacant_uni": {
+                            "type": "number",
+                            "title": "Vacant_Units",
+                            "description": ""
+                        },
+                        "owner_oc_1": {
+                            "type": "number",
+                            "title": "Owner_Occupied 1 to 4 Family Units",
+                            "description": ""
+                        },
+                        "renter_occ": {
+                            "type": "number",
+                            "title": "Renter_Occupied_Units",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

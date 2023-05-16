@@ -1,0 +1,448 @@
+{
+    "title": "resultat-fran-radon-matningar@opendataumea",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/resultat-fran-radon-matningar@opendataumea"
+        }
+    ],
+    "definitions": {
+        "resultat-fran-radon-matningar@opendataumea": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resultat-fran-radon-matningar@opendataumea_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "resultat-fran-radon-matningar@opendataumea_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "streetname": {
+                            "type": "string",
+                            "title": "Street name",
+                            "description": "The street name where the measurement was done"
+                        },
+                        "streetnumber": {
+                            "type": "string",
+                            "title": "Street number",
+                            "description": "The street number where the measurement was done"
+                        },
+                        "postnr": {
+                            "type": "string",
+                            "title": "Zip-code",
+                            "description": "The zip.code for the area where the measurement was done"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "City",
+                            "description": "The city where the measurement was done"
+                        },
+                        "startdate": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Start date",
+                            "description": "The start date for the measurement"
+                        },
+                        "enddate": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Stop date",
+                            "description": "The stop date for the measurement"
+                        },
+                        "antal_matdagar": {
+                            "type": "integer",
+                            "title": "Number of measurement days",
+                            "description": "Number of days that measurement was in progress"
+                        },
+                        "value": {
+                            "type": "integer",
+                            "title": "Value",
+                            "description": "The measured value. Indicated in Bq / m3"
+                        },
+                        "yearlyaverage": {
+                            "type": "integer",
+                            "title": "Mean value",
+                            "description": "The average value is calculated for long-term measurements in a particular apartment at the same measurement occasion. The value -1 means that the average is missing"
+                        },
+                        "floor": {
+                            "type": "integer",
+                            "title": "Floor map",
+                            "description": "The floor plan on which the measurement was performed (Note that this data is of low quality due to conversion between different computer systems)"
+                        },
+                        "blueconcrete": {
+                            "type": "string",
+                            "title": "Blue concrete",
+                            "description": "Can be True/False. States whether the building contains blue concrete. Blue concrete emits so much radon gas that there will be elevated radon levels (over 200 Bq / kbm) indoors. Blue concrete is one of the most common causes of elevated radon levels in indoor air."
+                        },
+                        "roomname": {
+                            "type": "string",
+                            "title": "Type of room",
+                            "description": "The type of room where the measurement was done."
+                        },
+                        "lat": {
+                            "type": "number",
+                            "title": "LAT",
+                            "description": "Latitude of the measurement given in WGS84. Note that this is a rough estimate and not an exact value."
+                        },
+                        "long": {
+                            "type": "number",
+                            "title": "LONG",
+                            "description": "Longitude of the measurement given in WGS84. Note that this is a rough estimate and not an exact value."
+                        },
+                        "position": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Position",
+                            "description": "A rough estimate, and not an exact value, of the geographical position of the measurement. Specified as a geo_point (Latitude, Longitude)"
+                        },
+                        "kommunkod": {
+                            "type": "string",
+                            "title": " Municipality code",
+                            "description": "Specifies SCB's municipality code for Umeå"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

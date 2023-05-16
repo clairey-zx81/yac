@@ -1,0 +1,698 @@
+{
+    "title": "town-of-morrisville-zoning@analyzemorrisville",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/town-of-morrisville-zoning@analyzemorrisville"
+        }
+    ],
+    "definitions": {
+        "town-of-morrisville-zoning@analyzemorrisville": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/town-of-morrisville-zoning@analyzemorrisville_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "town-of-morrisville-zoning@analyzemorrisville_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "join_count": {
+                            "type": "integer",
+                            "title": "Join_Count",
+                            "description": ""
+                        },
+                        "target_fid": {
+                            "type": "integer",
+                            "title": "TARGET_FID",
+                            "description": ""
+                        },
+                        "pin": {
+                            "type": "string",
+                            "title": "PIN",
+                            "description": ""
+                        },
+                        "parcel_pk": {
+                            "type": "integer",
+                            "title": "PARCEL_PK",
+                            "description": ""
+                        },
+                        "calc_area": {
+                            "type": "number",
+                            "title": "CALC_AREA_",
+                            "description": ""
+                        },
+                        "reid": {
+                            "type": "string",
+                            "title": "REID",
+                            "description": ""
+                        },
+                        "map_name": {
+                            "type": "string",
+                            "title": "MAP_NAME",
+                            "description": ""
+                        },
+                        "owner": {
+                            "type": "string",
+                            "title": "OWNER",
+                            "description": ""
+                        },
+                        "addr1": {
+                            "type": "string",
+                            "title": "ADDR1",
+                            "description": ""
+                        },
+                        "addr2": {
+                            "type": "string",
+                            "title": "ADDR2",
+                            "description": ""
+                        },
+                        "addr3": {
+                            "type": "string",
+                            "title": "ADDR3",
+                            "description": ""
+                        },
+                        "deed_book": {
+                            "type": "string",
+                            "title": "DEED_BOOK",
+                            "description": ""
+                        },
+                        "deed_page": {
+                            "type": "string",
+                            "title": "DEED_PAGE",
+                            "description": ""
+                        },
+                        "deed_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "DEED_DATE",
+                            "description": ""
+                        },
+                        "deed_acres": {
+                            "type": "number",
+                            "title": "DEED ACRES",
+                            "description": ""
+                        },
+                        "bldg_val": {
+                            "type": "number",
+                            "title": "BLDG_VAL",
+                            "description": ""
+                        },
+                        "land_val": {
+                            "type": "number",
+                            "title": "LAND_VAL",
+                            "description": ""
+                        },
+                        "totvalassd": {
+                            "type": "number",
+                            "title": "TOTVALASSD",
+                            "description": ""
+                        },
+                        "billclass": {
+                            "type": "number",
+                            "title": "BILLCLASS",
+                            "description": ""
+                        },
+                        "billcldeco": {
+                            "type": "string",
+                            "title": "BILLCLDECO",
+                            "description": ""
+                        },
+                        "propdesc": {
+                            "type": "string",
+                            "title": "PROPDESC",
+                            "description": ""
+                        },
+                        "heatedarea": {
+                            "type": "number",
+                            "title": "HEATEDAREA",
+                            "description": ""
+                        },
+                        "stname": {
+                            "type": "string",
+                            "title": "STNAME",
+                            "description": ""
+                        },
+                        "stype": {
+                            "type": "string",
+                            "title": "STYPE",
+                            "description": ""
+                        },
+                        "stpre": {
+                            "type": "string",
+                            "title": "STPRE",
+                            "description": ""
+                        },
+                        "stsuf": {
+                            "type": "string",
+                            "title": "STSUF",
+                            "description": ""
+                        },
+                        "stnum": {
+                            "type": "integer",
+                            "title": "STNUM",
+                            "description": ""
+                        },
+                        "stmisc": {
+                            "type": "string",
+                            "title": "STMISC",
+                            "description": ""
+                        },
+                        "siteaddr": {
+                            "type": "string",
+                            "title": "ADDRESS",
+                            "description": ""
+                        },
+                        "fullstname": {
+                            "type": "string",
+                            "title": "FULLSTNAME",
+                            "description": ""
+                        },
+                        "city": {
+                            "type": "string",
+                            "title": "CITY2",
+                            "description": ""
+                        },
+                        "citydecode": {
+                            "type": "string",
+                            "title": "CITY",
+                            "description": ""
+                        },
+                        "plan_juris": {
+                            "type": "string",
+                            "title": "PLANNING JURISDICTION",
+                            "description": ""
+                        },
+                        "township": {
+                            "type": "string",
+                            "title": "TOWNSHIP",
+                            "description": ""
+                        },
+                        "twnshpcode": {
+                            "type": "string",
+                            "title": "TWNSHPCODE",
+                            "description": ""
+                        },
+                        "firedist": {
+                            "type": "string",
+                            "title": "FIREDIST",
+                            "description": ""
+                        },
+                        "year_built": {
+                            "type": "integer",
+                            "title": "YEAR_BUILT",
+                            "description": ""
+                        },
+                        "totsalpric": {
+                            "type": "number",
+                            "title": "TOTSALPRIC",
+                            "description": ""
+                        },
+                        "sale_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "SALE_DATE",
+                            "description": ""
+                        },
+                        "typeanduse": {
+                            "type": "string",
+                            "title": "TYPEANDUSE",
+                            "description": ""
+                        },
+                        "typedecode": {
+                            "type": "string",
+                            "title": "TYPEDECODE",
+                            "description": ""
+                        },
+                        "designstyl": {
+                            "type": "string",
+                            "title": "DESIGNSTYL",
+                            "description": ""
+                        },
+                        "designdeco": {
+                            "type": "string",
+                            "title": "DESIGNDECO",
+                            "description": ""
+                        },
+                        "units": {
+                            "type": "number",
+                            "title": "UNITS",
+                            "description": ""
+                        },
+                        "landcode": {
+                            "type": "string",
+                            "title": "LANDCODE",
+                            "description": ""
+                        },
+                        "land_class": {
+                            "type": "string",
+                            "title": "LAND_CLASS",
+                            "description": ""
+                        },
+                        "landdecode": {
+                            "type": "string",
+                            "title": "LANDDECODE",
+                            "description": ""
+                        },
+                        "exemptdesc": {
+                            "type": "string",
+                            "title": "EXEMPTDESC",
+                            "description": ""
+                        },
+                        "exemptstat": {
+                            "type": "string",
+                            "title": "EXEMPTSTAT",
+                            "description": ""
+                        },
+                        "ownership": {
+                            "type": "integer",
+                            "title": "OWNERSHIP",
+                            "description": ""
+                        },
+                        "activity": {
+                            "type": "integer",
+                            "title": "ACTIVITY",
+                            "description": ""
+                        },
+                        "function": {
+                            "type": "integer",
+                            "title": "FUNCTION",
+                            "description": ""
+                        },
+                        "structure": {
+                            "type": "integer",
+                            "title": "STRUCTURE",
+                            "description": ""
+                        },
+                        "site": {
+                            "type": "integer",
+                            "title": "SITE",
+                            "description": ""
+                        },
+                        "totstructs": {
+                            "type": "integer",
+                            "title": "TOTSTRUCTS",
+                            "description": ""
+                        },
+                        "totunits": {
+                            "type": "integer",
+                            "title": "TOTUNITS",
+                            "description": ""
+                        },
+                        "oldprcnum": {
+                            "type": "string",
+                            "title": "OLDPRCNUM",
+                            "description": ""
+                        },
+                        "zipnum": {
+                            "type": "string",
+                            "title": "ZIP CODE",
+                            "description": ""
+                        },
+                        "shape_leng": {
+                            "type": "number",
+                            "title": "Shape_Leng",
+                            "description": ""
+                        },
+                        "shape_area": {
+                            "type": "number",
+                            "title": "Shape_Area",
+                            "description": ""
+                        },
+                        "class": {
+                            "type": "string",
+                            "title": "ZONING",
+                            "description": ""
+                        },
+                        "conduse": {
+                            "type": "string",
+                            "title": "CONDITIONAL",
+                            "description": ""
+                        },
+                        "class_full": {
+                            "type": "string",
+                            "title": "ZONING FULL",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

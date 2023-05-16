@@ -1,0 +1,693 @@
+{
+    "title": "projets-environnement-diffusion@orleansmetropole",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/projets-environnement-diffusion@orleansmetropole"
+        }
+    ],
+    "definitions": {
+        "projets-environnement-diffusion@orleansmetropole": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/projets-environnement-diffusion@orleansmetropole_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "projets-environnement-diffusion@orleansmetropole_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "dc_title": {
+                            "type": "string",
+                            "title": "Titre",
+                            "description": "titre du projet"
+                        },
+                        "descriptif_du_projet": {
+                            "type": "string",
+                            "title": "descriptif du projet",
+                            "description": ""
+                        },
+                        "dc_description_abstract": {
+                            "type": "string",
+                            "title": "DC.Description.abstract",
+                            "description": "Descriptif documentaire du projet"
+                        },
+                        "dc_description_freetext": {
+                            "type": "string",
+                            "title": "DC.Description.freetext",
+                            "description": "Descriptif libre du projet"
+                        },
+                        "dc_subject_category": {
+                            "type": "string",
+                            "title": "Nature",
+                            "description": "Indexation par nature de projet"
+                        },
+                        "dc_subject_theme": {
+                            "type": "string",
+                            "title": "Thématiques",
+                            "description": "Indexation thématique des projets. Référentiel Eurovoc Union européenne"
+                        },
+                        "vp_status": {
+                            "type": "string",
+                            "title": "Etat de la consultation publique",
+                            "description": "Etat de possibilité de participer à la consultation (ouvert/fermé)"
+                        },
+                        "dc_type": {
+                            "type": "string",
+                            "title": "Type de procédure",
+                            "description": "Nature du texte juridique sur lequel repose la consultation."
+                        },
+                        "vp_creator_corporatename": {
+                            "type": "string",
+                            "title": "Maîtrise d’ouvrage",
+                            "description": ""
+                        },
+                        "dc_contributor": {
+                            "type": "string",
+                            "title": "Auteur",
+                            "description": ""
+                        },
+                        "dc_creator_personalname": {
+                            "type": "string",
+                            "title": "DC.creator.personalName",
+                            "description": ""
+                        },
+                        "dc_contributor_corporatename": {
+                            "type": "string",
+                            "title": "Nom du bureau d’étude",
+                            "description": ""
+                        },
+                        "contact_du_bureau_d_etude": {
+                            "type": "string",
+                            "title": "Contact du bureau d'étude",
+                            "description": ""
+                        },
+                        "diffuseur": {
+                            "type": "string",
+                            "title": "Diffuseur",
+                            "description": ""
+                        },
+                        "dc_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Date de diffusion",
+                            "description": ""
+                        },
+                        "dc_date_issued": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "DC.Date_Issued",
+                            "description": ""
+                        },
+                        "dc_disposal_date": {
+                            "type": "string",
+                            "title": "DC.Disposal.Date",
+                            "description": ""
+                        },
+                        "dc_coverage": {
+                            "type": "string",
+                            "title": "DC.Coverage",
+                            "description": ""
+                        },
+                        "localisation": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Localisation",
+                            "description": ""
+                        },
+                        "coverage_temporal": {
+                            "type": "string",
+                            "title": "coverage_temporal",
+                            "description": ""
+                        },
+                        "dc_coverage_temporal_periodoftime": {
+                            "type": "integer",
+                            "title": "DC.Coverage.Temporal.PeriodOfTime",
+                            "description": ""
+                        },
+                        "modalite_de_participation_du_public": {
+                            "type": "string",
+                            "title": "Modalité de participation du public",
+                            "description": ""
+                        },
+                        "type_de_public": {
+                            "type": "string",
+                            "title": "Type de public",
+                            "description": ""
+                        },
+                        "format_de_l_affichage": {
+                            "type": "string",
+                            "title": "Format de l'affichage",
+                            "description": ""
+                        },
+                        "adresse_url": {
+                            "type": "string",
+                            "title": "Adresse url",
+                            "description": ""
+                        },
+                        "source": {
+                            "type": "string",
+                            "title": "Source",
+                            "description": ""
+                        },
+                        "langue_de_publication": {
+                            "type": "string",
+                            "title": "Langue de publication",
+                            "description": ""
+                        },
+                        "dc_relation": {
+                            "type": "string",
+                            "title": "DC.Relation",
+                            "description": ""
+                        },
+                        "dc_relation_websitedebate": {
+                            "type": "string",
+                            "title": "DC.Relation.Websitedebate",
+                            "description": ""
+                        },
+                        "dc_relation_websiteowner": {
+                            "type": "string",
+                            "title": "DC.Relation.Websiteowner",
+                            "description": ""
+                        },
+                        "date_avis_publication": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date avis publication",
+                            "description": ""
+                        },
+                        "dc_relation_officialdocument": {
+                            "type": "string",
+                            "title": "DC.Relation.Officialdocument",
+                            "description": ""
+                        },
+                        "dc_relation_informationnote": {
+                            "type": "string",
+                            "title": "DC.Relation.Informationnote",
+                            "description": ""
+                        },
+                        "dc_relation_extension_erc": {
+                            "type": "string",
+                            "title": "DC.Relation.Extension ERC",
+                            "description": ""
+                        },
+                        "dc_relation_extension_biodiv": {
+                            "type": "string",
+                            "title": "DC.Relation.Extension biodiv",
+                            "description": ""
+                        },
+                        "dc_relation_extension_photos": {
+                            "type": "string",
+                            "title": "DC.Relation.Extension photos",
+                            "description": ""
+                        },
+                        "dc_relation_extension_plan": {
+                            "type": "string",
+                            "title": "DC.Relation.Extension plan",
+                            "description": ""
+                        },
+                        "dc_relation_expertise_etudeimpact": {
+                            "type": "string",
+                            "title": "DC.Relation.Expertise étudeimpact",
+                            "description": ""
+                        },
+                        "dc_date_etudeimpact": {
+                            "type": "string",
+                            "title": "DC.Date etudeimpact",
+                            "description": ""
+                        },
+                        "dc_relation_expertise_certifbiodiv": {
+                            "type": "string",
+                            "title": "DC.Relation.Expertise certifbiodiv",
+                            "description": ""
+                        },
+                        "dc_relation_expertise_avisae": {
+                            "type": "string",
+                            "title": "DC.Relation.Expertise avisae",
+                            "description": ""
+                        },
+                        "dc_relation_synthesis": {
+                            "type": "string",
+                            "title": "DC.Relation.Synthesis",
+                            "description": ""
+                        },
+                        "date_de_la_prefecture": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de la Préfecture",
+                            "description": ""
+                        },
+                        "dc_relation_decision": {
+                            "type": "string",
+                            "title": "DC.Relation.Decision",
+                            "description": ""
+                        },
+                        "dc_date_rapportcommissaire": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "DC.Date rapportcommissaire",
+                            "description": ""
+                        },
+                        "dc_relation_assessment": {
+                            "type": "string",
+                            "title": "DC.Relation.Assessment",
+                            "description": ""
+                        },
+                        "dc_relation_verbatim": {
+                            "type": "string",
+                            "title": "DC.Relation.Verbatim",
+                            "description": ""
+                        },
+                        "licence": {
+                            "type": "string",
+                            "title": "licence",
+                            "description": ""
+                        },
+                        "dc_location": {
+                            "type": "string",
+                            "title": "departement_de_la_prefecture",
+                            "description": ""
+                        },
+                        "dateouverture": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "dateouverture",
+                            "description": ""
+                        },
+                        "datefermeture": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "datefermeture",
+                            "description": ""
+                        },
+                        "codepostal": {
+                            "type": "string",
+                            "title": "Code postal",
+                            "description": ""
+                        },
+                        "recordsid": {
+                            "type": "string",
+                            "title": "recordsid",
+                            "description": "Identifiant ODS"
+                        },
+                        "url_fiche_id": {
+                            "type": "string",
+                            "title": "url_fiche_id",
+                            "description": ""
+                        },
+                        "fiche": {
+                            "type": "string",
+                            "title": "fiche",
+                            "description": ""
+                        },
+                        "dc_relation_expertise_reponseavisae": {
+                            "type": "string",
+                            "title": "DC.Relation.Expertise reponseavisae",
+                            "description": ""
+                        },
+                        "dc_relation_expertise_autreavis": {
+                            "type": "string",
+                            "title": "DC.Relation.Expertise autreavis",
+                            "description": ""
+                        },
+                        "dc_relation_expertise_autredoc1": {
+                            "type": "string",
+                            "title": "DC.Relation.Expertise autredoc1",
+                            "description": ""
+                        },
+                        "dc_relation_expertise_autredoc2": {
+                            "type": "string",
+                            "title": "DC.Relation.Expertise autredoc2",
+                            "description": ""
+                        },
+                        "dc_relation_expertise_autredoc3": {
+                            "type": "string",
+                            "title": "DC.Relation.Expertise autredoc3",
+                            "description": ""
+                        },
+                        "location_ville": {
+                            "type": "string",
+                            "title": "location (ville)",
+                            "description": ""
+                        },
+                        "recordsid2": {
+                            "type": "string",
+                            "title": "recordsid2",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,488 @@
+{
+    "title": "sites-rebours-grtgaz@reseaux-energies-rte",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/sites-rebours-grtgaz@reseaux-energies-rte"
+        }
+    ],
+    "definitions": {
+        "sites-rebours-grtgaz@reseaux-energies-rte": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/sites-rebours-grtgaz@reseaux-energies-rte_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "sites-rebours-grtgaz@reseaux-energies-rte_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "donnees_rebours_nom_du_projet": {
+                            "type": "string",
+                            "title": "Nom du projet",
+                            "description": ""
+                        },
+                        "mes_dpi_agora": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Année de mise en service",
+                            "description": "L'année communiquée est prévisionnelle\n"
+                        },
+                        "horizon_de_saturation": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Horizon de saturation",
+                            "description": ""
+                        },
+                        "validation_cre": {
+                            "type": "string",
+                            "title": "Etat de validation CRE",
+                            "description": ""
+                        },
+                        "capacite_des_reseaux_apres_renforcement_nm3_h": {
+                            "type": "string",
+                            "title": "Gamme de débit rebours",
+                            "description": ""
+                        },
+                        "code_region": {
+                            "type": "string",
+                            "title": "Code Région",
+                            "description": ""
+                        },
+                        "nom_de_la_region": {
+                            "type": "string",
+                            "title": "Nom de la région",
+                            "description": ""
+                        },
+                        "code_departement": {
+                            "type": "string",
+                            "title": "Code Département",
+                            "description": ""
+                        },
+                        "nom_du_departement": {
+                            "type": "string",
+                            "title": "Nom du département",
+                            "description": ""
+                        },
+                        "projet_initial_ou_extension": {
+                            "type": "string",
+                            "title": "Projet Initial ou Extension",
+                            "description": ""
+                        },
+                        "operateur_de_transport": {
+                            "type": "string",
+                            "title": "Opérateur de transport",
+                            "description": ""
+                        },
+                        "capacite_du_rebours_gwh_an": {
+                            "type": "integer",
+                            "title": "Capacité du rebours (GWh/an)",
+                            "description": ""
+                        },
+                        "column_12": {
+                            "type": "string",
+                            "title": "Column 12",
+                            "description": ""
+                        },
+                        "column_13": {
+                            "type": "string",
+                            "title": "Column 13",
+                            "description": ""
+                        },
+                        "column_14": {
+                            "type": "string",
+                            "title": "Column 14",
+                            "description": ""
+                        },
+                        "column_15": {
+                            "type": "string",
+                            "title": "Column 15",
+                            "description": ""
+                        },
+                        "column_16": {
+                            "type": "string",
+                            "title": "Column 16",
+                            "description": ""
+                        },
+                        "column_17": {
+                            "type": "string",
+                            "title": "Column 17",
+                            "description": ""
+                        },
+                        "column_18": {
+                            "type": "string",
+                            "title": "Column 18",
+                            "description": ""
+                        },
+                        "column_19": {
+                            "type": "string",
+                            "title": "Column 19",
+                            "description": ""
+                        },
+                        "column_20": {
+                            "type": "string",
+                            "title": "Column 20",
+                            "description": ""
+                        },
+                        "nom_commune": {
+                            "type": "string",
+                            "title": "Nom Commune",
+                            "description": ""
+                        },
+                        "code_commune": {
+                            "type": "string",
+                            "title": "Code Commune",
+                            "description": ""
+                        },
+                        "centroid": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Barycentre Commune",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

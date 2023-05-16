@@ -1,0 +1,511 @@
+{
+    "title": "percorsi-di-memoria@bologna",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/percorsi-di-memoria@bologna"
+        }
+    ],
+    "definitions": {
+        "percorsi-di-memoria@bologna": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/percorsi-di-memoria@bologna_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "percorsi-di-memoria@bologna_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "quartiere": {
+                            "type": "string",
+                            "title": "Quartiere",
+                            "description": ""
+                        },
+                        "tema_generale": {
+                            "type": "string",
+                            "title": "Tema generale",
+                            "description": ""
+                        },
+                        "tema": {
+                            "type": "string",
+                            "title": "Tema",
+                            "description": ""
+                        },
+                        "nome": {
+                            "type": "string",
+                            "title": "Nome",
+                            "description": ""
+                        },
+                        "descrizione": {
+                            "type": "string",
+                            "title": "Descrizione",
+                            "description": ""
+                        },
+                        "foto": {
+                            "type": "string",
+                            "title": "Foto",
+                            "description": ""
+                        },
+                        "xcoord": {
+                            "type": "number",
+                            "title": "xcoord",
+                            "description": ""
+                        },
+                        "ycoord": {
+                            "type": "number",
+                            "title": "ycoord",
+                            "description": ""
+                        },
+                        "geopoint": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geopoint",
+                            "description": ""
+                        },
+                        "foto2": {
+                            "type": "string",
+                            "title": "foto2",
+                            "description": ""
+                        },
+                        "foto3": {
+                            "type": "string",
+                            "title": "foto3",
+                            "description": ""
+                        },
+                        "foto4": {
+                            "type": "string",
+                            "title": "foto4",
+                            "description": ""
+                        },
+                        "foto5": {
+                            "type": "string",
+                            "title": "foto5",
+                            "description": ""
+                        },
+                        "foto6": {
+                            "type": "string",
+                            "title": "foto6",
+                            "description": ""
+                        },
+                        "foto7": {
+                            "type": "string",
+                            "title": "foto7",
+                            "description": ""
+                        },
+                        "foto8": {
+                            "type": "string",
+                            "title": "foto8",
+                            "description": ""
+                        },
+                        "foto9": {
+                            "type": "string",
+                            "title": "foto9",
+                            "description": ""
+                        },
+                        "foto10": {
+                            "type": "string",
+                            "title": "foto10",
+                            "description": ""
+                        },
+                        "foto11": {
+                            "type": "string",
+                            "title": "foto11",
+                            "description": ""
+                        },
+                        "foto12": {
+                            "type": "string",
+                            "title": "foto12",
+                            "description": ""
+                        },
+                        "foto13": {
+                            "type": "string",
+                            "title": "foto13",
+                            "description": ""
+                        },
+                        "foto14": {
+                            "type": "string",
+                            "title": "foto14",
+                            "description": ""
+                        },
+                        "foto15": {
+                            "type": "string",
+                            "title": "foto15",
+                            "description": ""
+                        },
+                        "foto16": {
+                            "type": "string",
+                            "title": "foto16",
+                            "description": ""
+                        },
+                        "foto17": {
+                            "type": "string",
+                            "title": "foto17",
+                            "description": ""
+                        },
+                        "foto18": {
+                            "type": "string",
+                            "title": "foto18",
+                            "description": ""
+                        },
+                        "foto19": {
+                            "type": "string",
+                            "title": "foto19",
+                            "description": ""
+                        },
+                        "foto20": {
+                            "type": "string",
+                            "title": "foto20",
+                            "description": ""
+                        },
+                        "foto21": {
+                            "type": "string",
+                            "title": "foto21",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

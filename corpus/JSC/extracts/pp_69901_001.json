@@ -1,0 +1,164 @@
+{
+  "$schema": "http://json-schema.org/draft-04/hyper-schema",
+  "definitions": {
+    "branch": {
+      "description": "the branch within the GitHub repository that the build was triggered from",
+      "example": "master",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "completed_at": {
+      "description": "when the build moved to the `\"succeeded\"` or `\"failed\"` state",
+      "example": null,
+      "format": "date-time",
+      "readOnly": true,
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "created_at": {
+      "description": "when the build was created",
+      "format": "date-time",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "id": {
+      "description": "unique identifier of build",
+      "format": "uuid",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "identity": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/build/definitions/id"
+        },
+        {
+          "$ref": "#/definitions/build/definitions/repo_sha"
+        }
+      ]
+    },
+    "repo_sha": {
+      "description": "a compact identifier for an artifact the describes the repository and sha together",
+      "example": "remind101/acme-inc@139759bd61e98faeec619c45b1060b4288952164",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "repository": {
+      "description": "the GitHub repository that this build is for",
+      "example": "remind101/acme-inc",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "sha": {
+      "description": "the git commit to build",
+      "example": "139759bd61e98faeec619c45b1060b4288952164",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "started_at": {
+      "description": "when the build moved to the `\"building\"` state",
+      "format": "date-time",
+      "readOnly": true,
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "state": {
+      "description": "the current state of the build",
+      "enum": [
+        "pending",
+        "building",
+        "succeeded",
+        "failed"
+      ],
+      "example": "building",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    }
+  },
+  "description": "A build represents a request to build a git commit for a repo.",
+  "links": [
+    {
+      "description": "Create a new build and start it. Note that you cannot start a new build for a sha that is already in a \"pending\" or \"building\" state. You should cancel the existing build first, or wait for it to complete. You must specify either a `branch` OR a `sha`. If you provide a `branch` but no `sha`, Conveyor will use the GitHub API to resolve the HEAD commit on that branch to a sha. If you provide a `sha` but no `branch`, branch caching will be disabled.",
+      "href": "/builds",
+      "method": "POST",
+      "rel": "create",
+      "schema": {
+        "properties": {
+          "branch": {
+            "$ref": "#/definitions/build/definitions/branch"
+          },
+          "repository": {
+            "$ref": "#/definitions/build/definitions/repository"
+          },
+          "sha": {
+            "$ref": "#/definitions/build/definitions/sha"
+          }
+        },
+        "required": [
+          "repository"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "title": "Create"
+    },
+    {
+      "description": "Info for existing build.",
+      "href": "/builds/{(%23%2Fdefinitions%2Fbuild%2Fdefinitions%2Fidentity)}",
+      "method": "GET",
+      "rel": "self",
+      "title": "Info"
+    }
+  ],
+  "properties": {
+    "branch": {
+      "$ref": "#/definitions/build/definitions/branch"
+    },
+    "completed_at": {
+      "$ref": "#/definitions/build/definitions/completed_at"
+    },
+    "created_at": {
+      "$ref": "#/definitions/build/definitions/created_at"
+    },
+    "id": {
+      "$ref": "#/definitions/build/definitions/id"
+    },
+    "repository": {
+      "$ref": "#/definitions/build/definitions/repository"
+    },
+    "sha": {
+      "$ref": "#/definitions/build/definitions/sha"
+    },
+    "started_at": {
+      "$ref": "#/definitions/build/definitions/started_at"
+    },
+    "state": {
+      "$ref": "#/definitions/build/definitions/state"
+    }
+  },
+  "stability": "prototype",
+  "strictProperties": true,
+  "title": "Build",
+  "type": [
+    "object"
+  ]
+}

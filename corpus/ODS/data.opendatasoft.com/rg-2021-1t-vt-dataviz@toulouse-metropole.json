@@ -1,0 +1,511 @@
+{
+    "title": "rg-2021-1t-vt-dataviz@toulouse-metropole",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/rg-2021-1t-vt-dataviz@toulouse-metropole"
+        }
+    ],
+    "definitions": {
+        "rg-2021-1t-vt-dataviz@toulouse-metropole": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/rg-2021-1t-vt-dataviz@toulouse-metropole_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "rg-2021-1t-vt-dataviz@toulouse-metropole_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "sequence_incremente": {
+                            "type": "integer",
+                            "title": "sequence_incremente",
+                            "description": "Numéro de séquence incrémenté par ligne de 1 à n\n"
+                        },
+                        "type_election": {
+                            "type": "string",
+                            "title": "type_election",
+                            "description": ""
+                        },
+                        "annee_election": {
+                            "type": "string",
+                            "title": "annee_election",
+                            "description": ""
+                        },
+                        "numero_du_tour": {
+                            "type": "integer",
+                            "title": "numero_du_tour",
+                            "description": "« 1 » pour le 1ier tour, « 2 » pour le 2ième tour\nNombre de caractères = 1"
+                        },
+                        "code_du_departement": {
+                            "type": "integer",
+                            "title": "code_du_departement",
+                            "description": "Code du département : « 31 »\nNombre de caractères = 2"
+                        },
+                        "code_de_la_commune": {
+                            "type": "integer",
+                            "title": "code_de_la_commune",
+                            "description": "Code de la commune : « 555 » pour la Ville de Toulouse\nNombre de caractères = 3"
+                        },
+                        "uniq_bdv": {
+                            "type": "string",
+                            "title": "numero_du_bureau_de_vote",
+                            "description": "Numéro du bureau de vote : « 0001 » à « 0256 »\nNombre de caractères = 4"
+                        },
+                        "code_canton": {
+                            "type": "integer",
+                            "title": "code_canton",
+                            "description": "Code canton : \n« 15 » pour Toulouse 1\n« 16» pour Toulouse 2\n« 17 » pour Toulouse 3\n« 18 » pour Toulouse 4\n« 19 » pour Toulouse 5\n« 10 » pour Toulouse 6\n« 21 » pour Toulouse 7\n« 22 » pour Toulouse 8\n« 23 » pour Toulouse 9\n« 24 » pour Toulouse 10\n« 25 » pour Toulouse 11\nNombre de caractères = 2"
+                        },
+                        "code_circonscription": {
+                            "type": "integer",
+                            "title": "code_circonscription",
+                            "description": "Code circonscription : \n« 01 » pour circonscription 1\n« 02 » pour circonscription 2\n« 03 » pour circonscription 3\n« 05 » pour circonscription 5\n« 09 » pour circonscription 9\nNombre de caractères = 2"
+                        },
+                        "indicatif": {
+                            "type": "string",
+                            "title": "indicatif",
+                            "description": "Indicatif : valeur fixe « I » pour résultat initial (« R » si résultat rectifié)\nNombre de caractères = 1\n"
+                        },
+                        "inscrits": {
+                            "type": "integer",
+                            "title": "nombre_dinscrits",
+                            "description": "Nombre d'inscrits\nNombre de caractères =  1 à 8\n"
+                        },
+                        "nombre_dabstentions": {
+                            "type": "integer",
+                            "title": "nombre_dabstentions",
+                            "description": "Nombre d'abstentions\nNombre de caractères = 1 à 8"
+                        },
+                        "nombre_de_votants": {
+                            "type": "integer",
+                            "title": "nombre_de_votants",
+                            "description": "Nombre de votants\nNombre de caractères = 1 à 8"
+                        },
+                        "nombre_de_votants_emargement": {
+                            "type": "integer",
+                            "title": "nombre_de_votants_emargement",
+                            "description": "Nombre de votants d'après les feuilles d'émargement\nNombre de caractères = 1 à 8"
+                        },
+                        "blancs": {
+                            "type": "integer",
+                            "title": "nombre_de_bulletins_blancs",
+                            "description": "Nombre de bulletins blancs\nNombre de caractères = 1 à 8"
+                        },
+                        "nuls": {
+                            "type": "integer",
+                            "title": "nombre_de_bulletins_nuls",
+                            "description": "nombre_de_bulletins_nuls\nNombre de caractères = 1 à 8"
+                        },
+                        "exprimes": {
+                            "type": "integer",
+                            "title": "nombre_dexprimes",
+                            "description": "Nombre d'exprimés\nNombre de caractères = 1 à 8"
+                        },
+                        "nombre_de_listes": {
+                            "type": "integer",
+                            "title": "nombre_de_listes",
+                            "description": "Nombre de listes\nNombre de caractères = 1 à 2"
+                        },
+                        "candidat": {
+                            "type": "string",
+                            "title": "Candidat",
+                            "description": ""
+                        },
+                        "idcandidat": {
+                            "type": "string",
+                            "title": "idCandidat",
+                            "description": ""
+                        },
+                        "idlibellevoix": {
+                            "type": "string",
+                            "title": "idlibelleVoix",
+                            "description": ""
+                        },
+                        "voix": {
+                            "type": "integer",
+                            "title": "voix",
+                            "description": ""
+                        },
+                        "adresse": {
+                            "type": "string",
+                            "title": "adresse",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "canton": {
+                            "type": "string",
+                            "title": "canton",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "lieu_vote": {
+                            "type": "string",
+                            "title": "nom",
+                            "description": ""
+                        },
+                        "dedoublonage": {
+                            "type": "string",
+                            "title": "dedoublonage",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

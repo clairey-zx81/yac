@@ -1,0 +1,601 @@
+{
+    "title": "agences-banque-populaire@bpce",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/agences-banque-populaire@bpce"
+        }
+    ],
+    "definitions": {
+        "agences-banque-populaire@bpce": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/agences-banque-populaire@bpce_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "agences-banque-populaire@bpce_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "etablissement": {
+                            "type": "integer",
+                            "title": "Etablissement",
+                            "description": ""
+                        },
+                        "code_guichet": {
+                            "type": "string",
+                            "title": "Code_Guichet",
+                            "description": ""
+                        },
+                        "nom_guichet": {
+                            "type": "string",
+                            "title": "Nom_Guichet",
+                            "description": ""
+                        },
+                        "rue": {
+                            "type": "string",
+                            "title": "Rue",
+                            "description": ""
+                        },
+                        "complement_adresse": {
+                            "type": "string",
+                            "title": "Complement_adresse",
+                            "description": ""
+                        },
+                        "ville": {
+                            "type": "string",
+                            "title": "Ville",
+                            "description": ""
+                        },
+                        "code_postal": {
+                            "type": "string",
+                            "title": "Code_Postal",
+                            "description": ""
+                        },
+                        "horaires": {
+                            "type": "string",
+                            "title": "Horaires",
+                            "description": ""
+                        },
+                        "infos_complementaires": {
+                            "type": "string",
+                            "title": "Infos_Complementaires",
+                            "description": ""
+                        },
+                        "raison_sociale": {
+                            "type": "string",
+                            "title": "Raison_Sociale",
+                            "description": ""
+                        },
+                        "url_site": {
+                            "type": "string",
+                            "title": "Url_site",
+                            "description": ""
+                        },
+                        "coordonnees_gps": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "coordonnees_gps",
+                            "description": ""
+                        },
+                        "ouverture_lundi": {
+                            "type": "string",
+                            "title": "ouverture_lundi",
+                            "description": ""
+                        },
+                        "ouverture_mardi": {
+                            "type": "string",
+                            "title": "ouverture_mardi",
+                            "description": ""
+                        },
+                        "ouverture_mercredi": {
+                            "type": "string",
+                            "title": "ouverture_mercredi",
+                            "description": ""
+                        },
+                        "ouverture_jeudi": {
+                            "type": "string",
+                            "title": "ouverture_jeudi",
+                            "description": ""
+                        },
+                        "ouverture_vendredi": {
+                            "type": "string",
+                            "title": "ouverture_vendredi",
+                            "description": ""
+                        },
+                        "ouverture_samedi": {
+                            "type": "string",
+                            "title": "ouverture_samedi",
+                            "description": ""
+                        },
+                        "ouverture_dimanche": {
+                            "type": "string",
+                            "title": "ouverture_dimanche",
+                            "description": ""
+                        },
+                        "ouverture_lundi_matin": {
+                            "type": "string",
+                            "title": "ouverture_lundi_matin",
+                            "description": ""
+                        },
+                        "fermeture_lundi_matin": {
+                            "type": "string",
+                            "title": "fermeture_lundi_matin",
+                            "description": ""
+                        },
+                        "ouverture_lundi_apresmidi": {
+                            "type": "string",
+                            "title": "ouverture_lundi_apresmidi",
+                            "description": ""
+                        },
+                        "fermeture_lundi_apresmidi": {
+                            "type": "string",
+                            "title": "fermeture_lundi_apresmidi",
+                            "description": ""
+                        },
+                        "ouverture_mardi_matin": {
+                            "type": "string",
+                            "title": "ouverture_mardi_matin",
+                            "description": ""
+                        },
+                        "fermeture_mardi_matin": {
+                            "type": "string",
+                            "title": "fermeture_mardi_matin",
+                            "description": ""
+                        },
+                        "ouverture_mardi_apresmidi": {
+                            "type": "string",
+                            "title": "ouverture_mardi_apresmidi",
+                            "description": ""
+                        },
+                        "fermeture_mardi_apresmidi": {
+                            "type": "string",
+                            "title": "fermeture_mardi_apresmidi",
+                            "description": ""
+                        },
+                        "ouverture_mercredi_matin": {
+                            "type": "string",
+                            "title": "ouverture_mercredi_matin",
+                            "description": ""
+                        },
+                        "fermeture_mercredi_matin": {
+                            "type": "string",
+                            "title": "fermeture_mercredi_matin",
+                            "description": ""
+                        },
+                        "ouverture_mercredi_apresmidi": {
+                            "type": "string",
+                            "title": "ouverture_mercredi_apresmidi",
+                            "description": ""
+                        },
+                        "fermeture_mercredi_apresmidi": {
+                            "type": "string",
+                            "title": "fermeture_mercredi_apresmidi",
+                            "description": ""
+                        },
+                        "ouverture_jeudi_matin": {
+                            "type": "string",
+                            "title": "ouverture_jeudi_matin",
+                            "description": ""
+                        },
+                        "fermeture_jeudi_matin": {
+                            "type": "string",
+                            "title": "fermeture_jeudi_matin",
+                            "description": ""
+                        },
+                        "ouverture_jeudi_apresmidi": {
+                            "type": "string",
+                            "title": "ouverture_jeudi_apresmidi",
+                            "description": ""
+                        },
+                        "fermeture_jeudi_apresmidi": {
+                            "type": "string",
+                            "title": "fermeture_jeudi_apresmidi",
+                            "description": ""
+                        },
+                        "ouverture_vendredi_matin": {
+                            "type": "string",
+                            "title": "ouverture_vendredi_matin",
+                            "description": ""
+                        },
+                        "fermeture_vendredi_matin": {
+                            "type": "string",
+                            "title": "fermeture_vendredi_matin",
+                            "description": ""
+                        },
+                        "ouverture_vendredi_apresmidi": {
+                            "type": "string",
+                            "title": "ouverture_vendredi_apresmidi",
+                            "description": ""
+                        },
+                        "fermeture_vendredi_apresmidi": {
+                            "type": "string",
+                            "title": "fermeture_vendredi_apresmidi",
+                            "description": ""
+                        },
+                        "ouverture_samedi_matin": {
+                            "type": "string",
+                            "title": "ouverture_samedi_matin",
+                            "description": ""
+                        },
+                        "fermeture_samedi_matin": {
+                            "type": "string",
+                            "title": "fermeture_samedi_matin",
+                            "description": ""
+                        },
+                        "ouverture_samedi_apresmidi": {
+                            "type": "string",
+                            "title": "ouverture_samedi_apresmidi",
+                            "description": ""
+                        },
+                        "fermeture_samedi_apresmidi": {
+                            "type": "string",
+                            "title": "fermeture_samedi_apresmidi",
+                            "description": ""
+                        },
+                        "ouverture_dimanche_matin": {
+                            "type": "string",
+                            "title": "ouverture_dimanche_matin",
+                            "description": ""
+                        },
+                        "fermeture_dimanche_matin": {
+                            "type": "string",
+                            "title": "fermeture_dimanche_matin",
+                            "description": ""
+                        },
+                        "ouverture_dimanche_apresmidi": {
+                            "type": "string",
+                            "title": "ouverture_dimanche_apresmidi",
+                            "description": ""
+                        },
+                        "fermeture_dimanche_apresmidi": {
+                            "type": "string",
+                            "title": "fermeture_dimanche_apresmidi",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

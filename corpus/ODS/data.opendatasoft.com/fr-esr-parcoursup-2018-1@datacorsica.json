@@ -1,0 +1,791 @@
+{
+    "title": "fr-esr-parcoursup-2018-1@datacorsica",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/fr-esr-parcoursup-2018-1@datacorsica"
+        }
+    ],
+    "definitions": {
+        "fr-esr-parcoursup-2018-1@datacorsica": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/fr-esr-parcoursup-2018-1@datacorsica_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "fr-esr-parcoursup-2018-1@datacorsica_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "session": {
+                            "type": "string",
+                            "title": "Session",
+                            "description": ""
+                        },
+                        "code_uai_de_l_etablissement": {
+                            "type": "string",
+                            "title": "Code UAI de l'établissement",
+                            "description": ""
+                        },
+                        "etablissement": {
+                            "type": "string",
+                            "title": "Établissement",
+                            "description": ""
+                        },
+                        "code_departemental_de_l_etablissement": {
+                            "type": "string",
+                            "title": "Code départemental de l’établissement",
+                            "description": ""
+                        },
+                        "departement_de_l_etablissement": {
+                            "type": "string",
+                            "title": "Département de l’établissement",
+                            "description": ""
+                        },
+                        "region_de_l_etablissement": {
+                            "type": "string",
+                            "title": "Région de l’établissement",
+                            "description": ""
+                        },
+                        "academie_de_l_etablissement": {
+                            "type": "string",
+                            "title": "Académie de l’établissement",
+                            "description": ""
+                        },
+                        "filiere_de_formation_tres_agregee": {
+                            "type": "string",
+                            "title": "Filière de formation très agrégée",
+                            "description": ""
+                        },
+                        "filiere_de_formation": {
+                            "type": "string",
+                            "title": "Filière de formation",
+                            "description": ""
+                        },
+                        "concours_communs_et_banques_d_epreuves": {
+                            "type": "string",
+                            "title": "Concours communs et banques d'épreuves",
+                            "description": ""
+                        },
+                        "filiere_de_formation_detaillee": {
+                            "type": "string",
+                            "title": "Filière de formation détaillée",
+                            "description": ""
+                        },
+                        "filiere_de_formation_tres_detaillee": {
+                            "type": "string",
+                            "title": "Filière de formation très détaillée",
+                            "description": ""
+                        },
+                        "lien_de_la_formation_sur_la_plateforme_parcoursup": {
+                            "type": "string",
+                            "title": "Lien de la formation sur la plateforme Parcoursup",
+                            "description": ""
+                        },
+                        "coordonnees_gps_de_la_formation": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Coordonnées GPS de la formation",
+                            "description": ""
+                        },
+                        "capacite_de_l_etablissement_par_formation": {
+                            "type": "integer",
+                            "title": "Capacité de l’établissement par formation",
+                            "description": ""
+                        },
+                        "effectif_total_des_candidats_pour_une_formation": {
+                            "type": "integer",
+                            "title": "Effectif total des candidats pour une formation",
+                            "description": ""
+                        },
+                        "dont_effectif_des_candidates_pour_une_formation": {
+                            "type": "integer",
+                            "title": "Dont effectif des candidates pour une formation",
+                            "description": ""
+                        },
+                        "effectif_total_des_candidats_en_phase_principale": {
+                            "type": "integer",
+                            "title": "Effectif total des candidats en phase principale",
+                            "description": ""
+                        },
+                        "dont_effectif_des_candidats_ayant_postule_en_internat": {
+                            "type": "integer",
+                            "title": "Dont effectif des candidats ayant postulé en internat",
+                            "description": ""
+                        },
+                        "effectif_des_candidats_neo_bacheliers_generaux_en_phase_principale": {
+                            "type": "integer",
+                            "title": "Effectif des candidats néo bacheliers généraux en phase principale",
+                            "description": ""
+                        },
+                        "dont_effectif_des_candidats_boursiers_neo_bacheliers_generaux_en_phase_principale": {
+                            "type": "integer",
+                            "title": "Dont effectif des candidats boursiers néo bacheliers généraux en phase principale",
+                            "description": ""
+                        },
+                        "effectif_des_candidats_neo_bacheliers_technologiques_en_phase_principale": {
+                            "type": "integer",
+                            "title": "Effectif des candidats néo bacheliers technologiques en phase principale",
+                            "description": ""
+                        },
+                        "dont_effectif_des_candidats_boursiers_neo_bacheliers_technologiques_en_phase_principale": {
+                            "type": "integer",
+                            "title": "Dont effectif des candidats boursiers néo bacheliers technologiques en phase principale",
+                            "description": ""
+                        },
+                        "effectif_des_candidats_neo_bacheliers_professionnels_en_phase_principale": {
+                            "type": "integer",
+                            "title": "Effectif des candidats néo bacheliers professionnels en phase principale",
+                            "description": ""
+                        },
+                        "dont_effectif_des_candidats_boursiers_neo_bacheliers_professionnels_en_phase_principale": {
+                            "type": "integer",
+                            "title": "Dont effectif des candidats boursiers néo bacheliers professionnels en phase principale",
+                            "description": ""
+                        },
+                        "effectif_des_autres_candidats_en_phase_principale": {
+                            "type": "integer",
+                            "title": "Effectif des autres candidats en phase principale",
+                            "description": ""
+                        },
+                        "effectif_total_des_candidats_en_phase_complementaire": {
+                            "type": "integer",
+                            "title": "Effectif total des candidats en phase complémentaire",
+                            "description": ""
+                        },
+                        "effectif_des_candidats_neo_bacheliers_generaux_en_phase_complementaire": {
+                            "type": "integer",
+                            "title": "Effectif des candidats néo bacheliers généraux en phase complémentaire",
+                            "description": ""
+                        },
+                        "effectif_des_candidats_neo_bacheliers_technologique_en_phase_complementaire": {
+                            "type": "integer",
+                            "title": "Effectif des candidats néo bacheliers technologique en phase complémentaire",
+                            "description": ""
+                        },
+                        "effectif_des_candidats_neo_bacheliers_professionnels_en_phase_complementaire": {
+                            "type": "integer",
+                            "title": "Effectif des candidats néo bacheliers professionnels en phase complémentaire",
+                            "description": ""
+                        },
+                        "effectifs_des_autres_candidats_en_phase_complementaire": {
+                            "type": "integer",
+                            "title": "Effectifs des autres candidats en phase complémentaire",
+                            "description": ""
+                        },
+                        "effectif_total_des_candidats_classes_par_l_etablissement_en_phase_principale": {
+                            "type": "integer",
+                            "title": "Effectif total des candidats classés par l’établissement en phase principale",
+                            "description": ""
+                        },
+                        "effectif_des_candidats_classes_par_l_etablissement_en_phase_complementaire": {
+                            "type": "integer",
+                            "title": "Effectif des candidats classés par l’établissement en phase complémentaire",
+                            "description": ""
+                        },
+                        "effectif_des_candidats_classes_par_l_etablissement_en_internat_cpge": {
+                            "type": "integer",
+                            "title": "Effectif des candidats classés par l’établissement en internat (CPGE)",
+                            "description": ""
+                        },
+                        "effectif_des_candidats_classes_par_l_etablissement_hors_internat_cpge": {
+                            "type": "integer",
+                            "title": "Effectif des candidats classés par l’établissement hors internat (CPGE)",
+                            "description": ""
+                        },
+                        "effectif_des_candidats_neo_bacheliers_generaux_classes_par_l_etablissement": {
+                            "type": "integer",
+                            "title": "Effectif des candidats néo bacheliers généraux classés par l’établissement",
+                            "description": ""
+                        },
+                        "dont_effectif_des_candidats_boursiers_neo_bacheliers_generaux_classes_par_l_etablissement": {
+                            "type": "integer",
+                            "title": "Dont effectif des candidats boursiers néo bacheliers généraux classés par l’établissement",
+                            "description": ""
+                        },
+                        "effectif_des_candidats_neo_bacheliers_technologiques_classes_par_l_etablissement": {
+                            "type": "integer",
+                            "title": "Effectif des candidats néo bacheliers technologiques classés par l’établissement",
+                            "description": ""
+                        },
+                        "dont_effectif_des_candidats_boursiers_neo_bacheliers_technologiques_classes_par_l_etablissement": {
+                            "type": "integer",
+                            "title": "Dont effectif des candidats boursiers néo bacheliers technologiques classés par l’établissement",
+                            "description": ""
+                        },
+                        "effectif_des_candidats_neo_bacheliers_professionnels_classes_par_l_etablissement": {
+                            "type": "integer",
+                            "title": "Effectif des candidats néo bacheliers professionnels classés par l’établissement",
+                            "description": ""
+                        },
+                        "dont_effectif_des_candidats_boursiers_neo_bacheliers_professionnels_classes_par_l_etablissement": {
+                            "type": "integer",
+                            "title": "Dont effectif des candidats boursiers néo bacheliers professionnels classés par l’établissement",
+                            "description": ""
+                        },
+                        "effectif_des_autres_candidats_classes_par_l_etablissement": {
+                            "type": "integer",
+                            "title": "Effectif des autres candidats classés par l’établissement",
+                            "description": ""
+                        },
+                        "effectif_total_des_candidats_ayant_recu_une_proposition_d_admission_de_la_part_de_l_etablissement": {
+                            "type": "integer",
+                            "title": "Effectif total des candidats ayant reçu une proposition d’admission de la part de l’établissement",
+                            "description": ""
+                        },
+                        "rang_du_dernier_appele": {
+                            "type": "integer",
+                            "title": "Rang du dernier appelé",
+                            "description": ""
+                        },
+                        "effectif_total_des_candidats_ayant_accepte_la_proposition_de_l_etablissement_admis": {
+                            "type": "integer",
+                            "title": "Effectif total des candidats ayant accepté la proposition de l’établissement (admis)",
+                            "description": ""
+                        },
+                        "dont_effectif_des_candidates_admises": {
+                            "type": "integer",
+                            "title": "Dont effectif des candidates admises",
+                            "description": ""
+                        },
+                        "effectif_des_admis_en_phase_principale": {
+                            "type": "integer",
+                            "title": "Effectif des admis en phase principale",
+                            "description": ""
+                        },
+                        "effectif_des_admis_en_phase_complementaire": {
+                            "type": "integer",
+                            "title": "Effectif des admis en phase complémentaire",
+                            "description": ""
+                        },
+                        "dont_effectif_des_admis_en_internat": {
+                            "type": "integer",
+                            "title": "Dont effectif des admis en internat",
+                            "description": ""
+                        },
+                        "dont_effectif_des_admis_boursiers_neo_bacheliers": {
+                            "type": "integer",
+                            "title": "Dont effectif des admis boursiers néo bacheliers",
+                            "description": ""
+                        },
+                        "effectif_des_admis_neo_bacheliers": {
+                            "type": "integer",
+                            "title": "Effectif des admis néo bacheliers",
+                            "description": ""
+                        },
+                        "effectif_des_admis_neo_bacheliers_generaux": {
+                            "type": "integer",
+                            "title": "Effectif des admis néo bacheliers généraux",
+                            "description": ""
+                        },
+                        "effectif_des_admis_neo_bacheliers_technologiques": {
+                            "type": "integer",
+                            "title": "Effectif des admis néo bacheliers technologiques",
+                            "description": ""
+                        },
+                        "effectif_des_admis_neo_bacheliers_professionnels": {
+                            "type": "integer",
+                            "title": "Effectif des admis néo bacheliers professionnels",
+                            "description": ""
+                        },
+                        "effectif_des_autres_candidats_admis": {
+                            "type": "integer",
+                            "title": "Effectif des autres candidats admis",
+                            "description": ""
+                        },
+                        "dont_effectif_des_admis_neo_bacheliers_sans_information_sur_la_mention_au_bac": {
+                            "type": "integer",
+                            "title": "Dont effectif des admis néo bacheliers sans information sur la mention au bac",
+                            "description": ""
+                        },
+                        "dont_effectif_des_admis_neo_bacheliers_sans_mention_au_bac": {
+                            "type": "integer",
+                            "title": "Dont effectif des admis néo bacheliers sans mention au bac",
+                            "description": ""
+                        },
+                        "dont_effectif_des_admis_neo_bacheliers_avec_mention_assez_bien_au_bac": {
+                            "type": "integer",
+                            "title": "Dont effectif des admis néo bacheliers avec mention Assez Bien au bac",
+                            "description": ""
+                        },
+                        "dont_effectif_des_admis_neo_bacheliers_avec_mention_bien_au_bac": {
+                            "type": "integer",
+                            "title": "Dont effectif des admis néo bacheliers avec mention Bien au bac",
+                            "description": ""
+                        },
+                        "dont_effectif_des_admis_neo_bacheliers_avec_mention_tres_bien_au_bac": {
+                            "type": "integer",
+                            "title": "Dont effectif des admis néo bacheliers avec mention Très Bien au bac",
+                            "description": ""
+                        },
+                        "effectif_des_admis_neo_bacheliers_generaux_ayant_eu_une_mention_au_bac": {
+                            "type": "integer",
+                            "title": "Effectif des admis néo bacheliers généraux ayant eu une mention au bac",
+                            "description": ""
+                        },
+                        "effectif_des_admis_neo_bacheliers_technologiques_ayant_eu_une_mention_au_bac": {
+                            "type": "integer",
+                            "title": "Effectif des admis néo bacheliers technologiques ayant eu une mention au bac",
+                            "description": ""
+                        },
+                        "effectif_des_admis_neo_bacheliers_professionnels_ayant_eu_une_mention_au_bac": {
+                            "type": "integer",
+                            "title": "Effectif des admis néo bacheliers professionnels ayant eu une mention au bac",
+                            "description": ""
+                        },
+                        "dont_effectif_des_admis_issus_du_meme_etablissement_bts_cpge": {
+                            "type": "integer",
+                            "title": "Dont effectif des admis issus du même établissement (BTS/CPGE)",
+                            "description": ""
+                        },
+                        "dont_effectif_des_admises_issues_du_meme_etablissement_bts_cpge": {
+                            "type": "integer",
+                            "title": "Dont effectif des admises issues du même établissement (BTS/CPGE)",
+                            "description": ""
+                        },
+                        "dont_effectif_des_admis_issus_de_la_meme_academie": {
+                            "type": "integer",
+                            "title": "Dont effectif des admis issus de la même académie",
+                            "description": ""
+                        },
+                        "dont_effectif_des_admis_issus_de_la_meme_academie_paris_creteil_versailles_reunies": {
+                            "type": "integer",
+                            "title": "Dont effectif des admis issus de la même académie (Paris/Créteil/Versailles réunies)",
+                            "description": ""
+                        },
+                        "d_admis_dont_filles": {
+                            "type": "number",
+                            "title": "% d’admis dont filles",
+                            "description": ""
+                        },
+                        "d_admis_neo_bacheliers_issus_de_la_meme_academie": {
+                            "type": "number",
+                            "title": "% d’admis néo bacheliers issus de la même académie",
+                            "description": ""
+                        },
+                        "d_admis_neo_bacheliers_issus_de_la_meme_academie_paris_creteil_versailles_reunies": {
+                            "type": "number",
+                            "title": "% d’admis néo bacheliers issus de la même académie (Paris/Créteil/Versailles réunies)",
+                            "description": ""
+                        },
+                        "d_admis_neo_bacheliers_issus_du_meme_etablissement_bts_cpge": {
+                            "type": "number",
+                            "title": "% d’admis néo bacheliers issus du même établissement (BTS/CPGE)",
+                            "description": ""
+                        },
+                        "d_admis_neo_bacheliers_boursiers": {
+                            "type": "number",
+                            "title": "% d’admis néo bacheliers boursiers",
+                            "description": ""
+                        },
+                        "d_admis_neo_bacheliers": {
+                            "type": "number",
+                            "title": "% d’admis néo bacheliers",
+                            "description": ""
+                        },
+                        "d_admis_neo_bacheliers_sans_information_sur_la_mention_au_bac": {
+                            "type": "number",
+                            "title": "% d’admis néo bacheliers sans information sur la mention au bac",
+                            "description": ""
+                        },
+                        "d_admis_neo_bacheliers_sans_mention_au_bac": {
+                            "type": "number",
+                            "title": "% d’admis néo bacheliers sans mention au bac",
+                            "description": ""
+                        },
+                        "d_admis_neo_bacheliers_avec_mention_assez_bien_au_bac": {
+                            "type": "number",
+                            "title": "% d’admis néo bacheliers avec mention Assez Bien au bac",
+                            "description": ""
+                        },
+                        "d_admis_neo_bacheliers_avec_mention_bien_au_bac": {
+                            "type": "number",
+                            "title": "% d’admis néo bacheliers avec mention Bien au bac",
+                            "description": ""
+                        },
+                        "d_admis_neo_bacheliers_avec_mention_tres_bien_au_bac": {
+                            "type": "number",
+                            "title": "% d’admis néo bacheliers avec mention Très Bien au bac",
+                            "description": ""
+                        },
+                        "d_admis_neo_bacheliers_generaux": {
+                            "type": "number",
+                            "title": "% d’admis néo bacheliers généraux",
+                            "description": ""
+                        },
+                        "dont_d_admis_avec_mention": {
+                            "type": "number",
+                            "title": "Dont % d’admis avec mention",
+                            "description": ""
+                        },
+                        "d_admis_neo_bacheliers_technologiques": {
+                            "type": "number",
+                            "title": "% d’admis néo bacheliers technologiques",
+                            "description": ""
+                        },
+                        "dont_d_admis_avec_mention0": {
+                            "type": "number",
+                            "title": "Dont % d’admis avec mention",
+                            "description": ""
+                        },
+                        "d_admis_neo_bacheliers_professionnels": {
+                            "type": "number",
+                            "title": "% d’admis néo bacheliers professionnels",
+                            "description": ""
+                        },
+                        "dont_d_admis_avec_mention1": {
+                            "type": "number",
+                            "title": "Dont % d’admis avec mention",
+                            "description": ""
+                        },
+                        "tri": {
+                            "type": "string",
+                            "title": "tri",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

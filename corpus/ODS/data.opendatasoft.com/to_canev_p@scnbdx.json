@@ -1,0 +1,532 @@
+{
+    "title": "to_canev_p@scnbdx",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/to_canev_p@scnbdx"
+        }
+    ],
+    "definitions": {
+        "to_canev_p@scnbdx": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/to_canev_p@scnbdx_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "to_canev_p@scnbdx_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "localis4": {
+                            "type": "string",
+                            "title": "localis4",
+                            "description": "Eléments de localisation 4"
+                        },
+                        "localis3": {
+                            "type": "string",
+                            "title": "localis3",
+                            "description": "Eléments de localisation 3"
+                        },
+                        "localis2": {
+                            "type": "string",
+                            "title": "localis2",
+                            "description": "Eléments de localisation 2"
+                        },
+                        "localis1": {
+                            "type": "string",
+                            "title": "localis1",
+                            "description": "Eléments de localisation 1"
+                        },
+                        "y_cc45": {
+                            "type": "string",
+                            "title": "y_cc45",
+                            "description": "Coordonnée Y, RGF 93 Projection Lambert 93 - CC45"
+                        },
+                        "dat_rimp": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "dat_rimp",
+                            "description": "Date de réimplantation"
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "commune",
+                            "description": "Nom de la commune : \nListe des valeurs possibles : \n33001 : ABZAC\n33003 : AMBARES-ET-LAGRAVE\n33004 : AMBES\n33012 : ARSAC\n33013 : ARTIGUES-PRES-BORDEAUX\n33015 : ARVEYRES\n33016 : ASQUES\n33018 : AUBIE-ET-ESPESSAS\n33019 : AUDENGE\n33022 : AVENSAN\n33029 : LE BARP\n33032 : BASSENS\n33033 : BAURECH\n33035 : BAYON-sur-GIRONDE\n33039 : BEGLES\n33047 : BERSON\n33049 : BEYCHAC-ET-CAILLAU\n33056 : BLANQUEFORT\n33058 : BLAYE\n33063 : BORDEAUX\n33065 : BOULIAC\n33067 : BOURG\n33069 : LE BOUSCAT\n33070 : BRACH\n33071 : BRANNE\n33075 : BRUGES\n33080 : CADAUJAC\n33082 : CADILLAC-EN-FRONDSADAIS\n33083 : CARMASAC\n33084 : CAMBES\n33085 : CAMBLANES-ET-MEYNAC\n33090 : CANEJAN\n33091 : CANTENAC\n33096 : CARBON-BLANC\n33100 : CARS\n33104 : CASTELNEAU-DE-MEDOC\n33109 : CASTRES-GIRONDE\n33114 : CAVIGNAC\n33118 : CENAC\n33119 : CENON\n33122 : CESTAS\n33123 : CEZAC\n33126 : CIVRAC-DE-BLAYE\n33132 : COMPS\n33142 : CUBNEZAIS\n33143 : CUBZAC-LES-PONTS\n33162 : EYSINES\n33165 : FARGUES-SAINT-HILAIRE\n33167 : FLOIRAC\n33172 : FOURS\n33174 : FRONSAC\n33179 : GALGON\n33182 : GAURIAC\n33185 : GENISSAC\n33192 : GRADIGNAN\n33200 : LE HAILLAN\n33201 : HAUX\n33206 : ISLE-SAINT-GEORGES\n33207 : IZON\n33211 : LABARDE\n33213 : LA BREDE\n33214 : LACANAU\n33219 : LA LANDE-DE-FRONSAC\n33220 : LAMARQUE\n33222 : LALANDE-de-POMEROL\n33226 : LANGOIRAN\n33228 : LANSAC\n33229 : LANTON\n33234 : LATRESNE\n33238 : LEOGNAN\n33243 : LIBOURNE\n33245 : LIGNAN-DE-BORDEAUX\n33248 : LISTRAC-MEDOC\n33249 : LORMONT\n33252 : LOUPES\n33256 : LUDON-MEDOC\n33259 : LUGON-ET-L'ILE-DU-CARNAY\n33262 : MACAU\n33268 : MARGAUX\n33272 : MARSAS\n33273 : MARTIGNAS-SUR-JALLE\n33274 : MARTILLAC\n33280 : MAZION\n33281 : MERIGNAC\n33284 : MIOS\n33285 : MOMBRIER\n33293 : MONTUSSAN\n33297 : MOULIS-EN-MEDOC\n33298 : MOULON\n33302 : NEAC\n33303 : NERIGEAN\n33311 : PAILLET\n33312 : PAREMPUYRE\n33313 : PARSAC\n33318 : PESSAC\n33321 : PEUJARD\n33322 : LE PIAN-MEDOC\n33325 : PLASSAC\n33328 : POMEROL\n33330 : POMPIGNAC\n33334 : PORTETS\n33339 : PRIGNAC-ET-MARCAMPS\n33341 : PUGNAC\n33349 : QUINSAC\n33356 : LA RIVIERE\n33363 : SADIRAC\n33365 : SAINT-AIGNAN\n33366 : SAINT-ANDRE-DE-CUBZAC\n33376 : SAINT-AUBIN-DE-MEDOC\n33381 : SAINT-CAPRAIS-DE-BORDEAUX\n33382 : SAINT-CHRISTOLY-DE-BLAYE\n33393 : SAINT-DENIS-DE-PILE\n33397 : SAINTE-EULALIE\n33405 : SAINT-GENES-DE-BLAYE\n33413 : SAINT-GERMAIN-DU-PUCH\n33414 : SAINT-GERMAIN-DE-LA-RIVIERE\n33415 : SAINT-GERVAIS\n33416 : SAINT-GIRONS-d'AIGUEVIVES\n33417 : SAINTE-HELENE\n33422 : SAINT-JEAN-D'ILLAC\n33423 : SAINT-JULIEN-BEYCHEVELLE\n33425 : SAINT-LAURENT-D'ARCE\n33433 : SAINT-LOUBES\n33434 : SAINT-LOUIS-DE-MONTFERRAND\n33439 : SAINT-MARIENS\n33441 : SAINT-MARTIN-LACAUSSADE\n33448 : SAINT-MEDARD-d'EYRANS\n33449 : SAINT-MEDARD-en-JALLES\n33451 : SAINT-MICHEL-DE-FRONSAC\n33458 : SAINT-PAUL\n33470 : SAINT-ROMAIN-la-VIRVEE\n33473 : SAINT-SAVIN\n33475 : SAINT-SEURIN-DE-BOURG\n33480 : SAINT-SULPICE-DE-FALEYRENS\n33483 : SAINT-SULPICE-DE-CAMEYRAC\n33486 : SAINT-TROJAN\n33487 : SAINT-VINCENT-DE-PAUL\n33489 : SAINT-VIVIEN-DE-BLAYE\n33492 : SAINT-YZAN-DE-SOUDIAC\n33494 : SALAUNES\n33495 : SALIGNAC\n33500 : SAMONAC\n33501 : SAUCATS\n33502 : SAUGON\n33509 : SAVIGNAC-DE-L'ISLE\n33517 : SOUSSANS\n33518 : TABANAC\n33519 : LE TAILLAN-MEDOC\n33522 : TALENCE\n33525 : TAURIAC\n33528 : LE TEMPLE\n33530 : TEUILLAC\n33535 : TRESSES\n33539 : VAYRES\n33542 : VERAC\n33548 : VILLEGOUGE\n33550 : VILLENAVE-D'ORNON\n33551 : VILLENEVUE\n33552 : VIRELADE\n33553 : VIRSAC\n33554 : YVRAC\n33555 : MARCHEPRIME\n"
+                        },
+                        "type_l3": {
+                            "type": "string",
+                            "title": "type_l3",
+                            "description": "Type des coordonnées Lambert III : \nListe des valeurs possibles : \nCALCULEES : Coordonnées calculées\nTRANSFORMEES : Coordonnées transformées\n"
+                        },
+                        "geom_o": {
+                            "type": "string",
+                            "title": "geom_o",
+                            "description": "Orientation de l'objet"
+                        },
+                        "lat_rgf_ca": {
+                            "type": "string",
+                            "title": "lat_rgf_ca",
+                            "description": "Coordonnée N calculée, RGF 93"
+                        },
+                        "fichier": {
+                            "type": "string",
+                            "title": "fichier",
+                            "description": "Lien vers le PDF"
+                        },
+                        "ident": {
+                            "type": "string",
+                            "title": "ident",
+                            "description": "Numéro identifiant"
+                        },
+                        "mdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "mdate",
+                            "description": "Date de modification"
+                        },
+                        "nature": {
+                            "type": "string",
+                            "title": "nature",
+                            "description": "Nature physique du point : \nListe des valeurs possibles : \nANG_BATI : Angle bâti\nANTENNE : Antenne\nAUTRE : Autre\nAXE : Axe\nB_OGE : Borne OGE\nB_CIMEN : Borne ciment\nB_GRANIT : Borne granit\nB_METALL : Borne métallique\nB_PLCISP : Borne plastique cimentée + spit\nB_PLASTI : Borne plastique\nBOULON : Boulon\nBROCHE : Broche\nCLOCHER : Clocher\nCLOU : Clou\nCROIX : Croix gravée\nPAVA_REP_BRZ : Pava + repère bronze\nPAVA_SPIT : Pava + spit\nPAVA : Pava(bouche)\nPIQUETBO : Piquet bois\nPOINTE : Pointe\nR_ALUVER : Repère alu vertical\nR_BOURDA : Repère Bourdaloue\nREP_BRZ_HOR : Repère bronze horizontal\nREP_BRZ_VERT : Repère bronze vertical\nR_BRO : Repère bronze\nR_CADAST : Repère cadastre\nR_CONSOL : Repère console\nR_CUBID : Repère CUB identifié\nR_MRU : Repère MRU\nR_NBG : Repère NBG (bassin Garonne)\nR_NGF : Repère NGF\nR_NRU : Repère NRU\nR_NVB : Repère NVB (ville Bordeaux)\nR_PTCHAU : Repère Ponts et Chaussées\nR_CUB : Repère SCT/CUB\nR_SNCF : Repère SNCF (boule)\nRONDELLE : Rondelle\nSPIT_BM : Spit BM\nSPIT_CUB : Spit CUB\nSPIT_CADA : Spit Cadastre\nSPIT_SCT_CUB : Spit SCT/CUB\nSPIT_ARP : Spit arpentage\nSPIT_BLC_BET : Spit dans bloc béton\nSPIT_GEO : Spit géomètre\nSPIT_ROND : Spit rondelle\nSPIT : Spit\nTIRESNCF : Tirefond SNCF\n"
+                        },
+                        "dat_impl": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "dat_impl",
+                            "description": "Date implantation"
+                        },
+                        "type_cc45": {
+                            "type": "string",
+                            "title": "type_cc45",
+                            "description": "Type des coordonnées CC45 : \nListe des valeurs possibles : \nCALCULEES : Coordonnées calculées\nTRANSFORMEES : Coordonnées transformées\n"
+                        },
+                        "gid": {
+                            "type": "integer",
+                            "title": "gid",
+                            "description": "Clé primaire"
+                        },
+                        "refdos": {
+                            "type": "string",
+                            "title": "refdos",
+                            "description": "Référence du dossier"
+                        },
+                        "dat_derc": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "dat_derc",
+                            "description": "Date dernier calcul"
+                        },
+                        "geom_err": {
+                            "type": "string",
+                            "title": "geom_err",
+                            "description": "Code d'erreur géométrique : \nListe des valeurs possibles : \n9999 : Polygone compose et / ou à sections multiples\n9998 : Linéaire compose et / ou à sections multiples\n9996 : La géométrie contient des informations LRS\n9995 : Nombre de dimensions différent de 2 ou 3\n9994 : Présence d'un arc de cercle\n9000 : Erreur autre\n13343 : Polygone de moins de 4 points\n13349 : Polygone papillon\n13350 : Deux éléments d'un polygone archipel se touchent\n13351 : Deux éléments d'un polygone archipel  se touchent\n13356 : Point double\n13366 : Combinaison invalide d'intérieur / extérieur d'un polygone\n13367 : Orientation invalide d'intérieur / extérieur d'un polygone\n"
+                        },
+                        "x_cc45": {
+                            "type": "string",
+                            "title": "x_cc45",
+                            "description": "Coordonnée X, RGF 93 Projection Lambert 93 - CC45"
+                        },
+                        "z_precis": {
+                            "type": "number",
+                            "title": "z_precis",
+                            "description": "Coordonnée Z IGN 69"
+                        },
+                        "y_l3": {
+                            "type": "string",
+                            "title": "y_l3",
+                            "description": "Coordonnée Y, NTF Projection Lambert III Sud"
+                        },
+                        "x_l3": {
+                            "type": "string",
+                            "title": "x_l3",
+                            "description": "Coordonnée X, NTF Projection Lambert III Sud"
+                        },
+                        "dat_cexi": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "dat_cexi",
+                            "description": "Date contrôle existence"
+                        },
+                        "cdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "cdate",
+                            "description": "Date de création"
+                        },
+                        "typecod4": {
+                            "type": "string",
+                            "title": "typecod4",
+                            "description": "Typologie du CODE4 : \nListe des valeurs possibles : \nPLANIMETRIQUE : Point planimétrique\nALTIMETRIQUE : Repère de nivellement\n"
+                        },
+                        "h_elli": {
+                            "type": "string",
+                            "title": "h_elli",
+                            "description": "Hauteur ellipsoïdale"
+                        },
+                        "lon_rgf_ca": {
+                            "type": "string",
+                            "title": "lon_rgf_ca",
+                            "description": "Coordonnée E calculée, RGF 93"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

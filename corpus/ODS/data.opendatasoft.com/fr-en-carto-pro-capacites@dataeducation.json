@@ -1,0 +1,496 @@
+{
+    "title": "fr-en-carto-pro-capacites@dataeducation",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/fr-en-carto-pro-capacites@dataeducation"
+        }
+    ],
+    "definitions": {
+        "fr-en-carto-pro-capacites@dataeducation": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/fr-en-carto-pro-capacites@dataeducation_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "fr-en-carto-pro-capacites@dataeducation_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "rentree_scolaire": {
+                            "type": "string",
+                            "title": "Rentrée scolaire",
+                            "description": "Année de la rentrée scolaire"
+                        },
+                        "region": {
+                            "type": "string",
+                            "title": "Région",
+                            "description": "Libellé de la région"
+                        },
+                        "academie": {
+                            "type": "string",
+                            "title": "Académie",
+                            "description": "Libellé de l'académie"
+                        },
+                        "filiere": {
+                            "type": "string",
+                            "title": "Filière",
+                            "description": ""
+                        },
+                        "type_de_diplome": {
+                            "type": "string",
+                            "title": "Type de diplôme",
+                            "description": "Libellé court de la première année de formation de cycle professionnel (première année de CAP en deux ans : 1CAP2, ou seconde professionnelle : 2NDPRO)"
+                        },
+                        "intitule_diplome": {
+                            "type": "string",
+                            "title": "Intitulé Diplôme",
+                            "description": "Libellé de la spécialité du diplôme de la voie professionnelle"
+                        },
+                        "capacite": {
+                            "type": "number",
+                            "title": "Capacité",
+                            "description": "Capacité théorique de la formation sur la carte scolaire"
+                        },
+                        "demandes_voeux_1_garcons": {
+                            "type": "number",
+                            "title": "Demandes vœux 1 garçons",
+                            "description": "Nombre de vœux de rang 1 pour la première année de formation formulés par des garçons"
+                        },
+                        "demandes_voeux_1_filles": {
+                            "type": "number",
+                            "title": "Demandes vœux 1 filles",
+                            "description": "Nombre de vœux de rang 1 pour la première année de formation formulés par des filles"
+                        },
+                        "total_demandes_voeux1": {
+                            "type": "number",
+                            "title": "TOTAL demandes vœux 1",
+                            "description": "Nombre total de vœux de rang 1 pour la première année de formation"
+                        },
+                        "taux_de_pression_nbre_voeux_1_capacite_carte_scolaire": {
+                            "type": "number",
+                            "title": "Taux de pression",
+                            "description": "Taux de pression de la première année de formation, calculée en rapportant le total de vœux de rang 1 sur la capacité théorique de la carte scolaire"
+                        },
+                        "affectes_voeux_1_garcons": {
+                            "type": "number",
+                            "title": "Affectés vœux 1 garçons",
+                            "description": "Nombre de garçons affectés selon leur vœu de premier rang"
+                        },
+                        "affectees_voeux_1_filles": {
+                            "type": "number",
+                            "title": "Affectées vœux 1 filles",
+                            "description": "Nombre de filles affectées selon leur vœu de premier rang"
+                        },
+                        "total_affectes_sur_voeux_1": {
+                            "type": "number",
+                            "title": "TOTAL affectés sur vœux 1",
+                            "description": "Nombre total d'apprenants affectés selon leur vœu de premier rang"
+                        },
+                        "affectes_tout_voeux_garcons": {
+                            "type": "number",
+                            "title": "Affectés tout vœux garçons",
+                            "description": "Nombre total de garçons affectés quel que soit le rang de leur vœu d'affectation"
+                        },
+                        "affectees_tout_voeux_filles": {
+                            "type": "number",
+                            "title": "Affectées tout vœux Filles",
+                            "description": "Nombre total de filles affectées quel que soit le rang de leur vœu d'affectation"
+                        },
+                        "total_affectes_tout_rang": {
+                            "type": "number",
+                            "title": "TOTAL Affectés tout rang",
+                            "description": "Nombre total d'apprenants affectés quel que soit le rang de leur vœu d'affectation"
+                        },
+                        "affectes_sur_le_voeux_1_ensemble_affectes": {
+                            "type": "number",
+                            "title": "% Affectés sur le vœux 1 / ensemble affectés",
+                            "description": "Part des affectés en première intention"
+                        },
+                        "places_vacantes": {
+                            "type": "number",
+                            "title": "Places  vacantes",
+                            "description": "Nombre de places théoriques de la carte scolaire libres à l'issue du processus d'affectation"
+                        },
+                        "outre_mer": {
+                            "type": "string",
+                            "title": "Outre-mer",
+                            "description": "Localisation de la formation en Outre-mer"
+                        },
+                        "code_region": {
+                            "type": "string",
+                            "title": "Code Région",
+                            "description": "Code Insee de la région"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": "Coordonnées du polygone recouvrant l'académie"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": "Coordonnées du centroïde du polygone recouvrant l'académie"
+                        },
+                        "code_academie": {
+                            "type": "string",
+                            "title": "code_academie",
+                            "description": "Code de l'académie"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "libelle_aca",
+                            "description": "Libellé de l'académie"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

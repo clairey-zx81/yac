@@ -1,0 +1,508 @@
+{
+    "title": "infonihr-open-dataset@nihr",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/infonihr-open-dataset@nihr"
+        }
+    ],
+    "definitions": {
+        "infonihr-open-dataset@nihr": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/infonihr-open-dataset@nihr_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "infonihr-open-dataset@nihr_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "project_id": {
+                            "type": "string",
+                            "title": "﻿Project_ID",
+                            "description": "A unique identifier for an application, study or award. The identifier is maintained through and beyond the full lifetime of the project / award\n"
+                        },
+                        "project_title": {
+                            "type": "string",
+                            "title": "Project_Title",
+                            "description": "The title of research being carried out under the award"
+                        },
+                        "funder": {
+                            "type": "string",
+                            "title": "Funder",
+                            "description": "NIHR Funder"
+                        },
+                        "project_status": {
+                            "type": "string",
+                            "title": "Project_Status",
+                            "description": "Indicates the current research activity stage of a project or award. Values can include:\nActive\nClosed\nComplete\nContracted\nDiscontinued\nPublished\n\n"
+                        },
+                        "programme": {
+                            "type": "string",
+                            "title": "Programme",
+                            "description": "The NIHR funds a range of programmes addressing a broad range of health priorities. Funding is based on the quality and relevance of the research to personal social services, public health and the NHS. Values can include:\nEfficacy and Mechanism Evaluation\nHealth Services and Delivery Research\nHealth Technology Assessment\nIntegrated Academic Training Programme\nInvention for Innovation\nNHS England\nNIHR Fellowships\nNIHR Professorships\nProgramme Development Grants\nProgramme Grants for Applied Research\nPublic Health Research\nResearch for Patient Benefit\n\n"
+                        },
+                        "programme_type": {
+                            "type": "string",
+                            "title": "Programme_Type",
+                            "description": "Type of award: Research or Training"
+                        },
+                        "programme_stream": {
+                            "type": "string",
+                            "title": "Programme_Stream",
+                            "description": "An identifier of a sub-programme or stream of work as defined by the business of the Business Unit. Values can include:\nCommissioned\nResearcher Led\nTrainee Development\n\n"
+                        },
+                        "funding_stream": {
+                            "type": "string",
+                            "title": "Funding_Stream",
+                            "description": ""
+                        },
+                        "award_amount_from_dh": {
+                            "type": "number",
+                            "title": "Award_Amount",
+                            "description": "The original award amount / initial contract value which may be different from the Award_Amount in the event that there have been variations to contract prior to the extraction. "
+                        },
+                        "start_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Start_date",
+                            "description": "latest contracted project start date at the time of extraction that includes any variation"
+                        },
+                        "end_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "End_Date",
+                            "description": "The end date of the Project"
+                        },
+                        "plain_english_abstract": {
+                            "type": "string",
+                            "title": "Plain_English_Abstract",
+                            "description": "A plain English summary is a brief summary that has been written for members of the public and an interested audience rather than specialists.  It should be written clearly and simply, without jargon and with an explanation of any technical terms that have to be included."
+                        },
+                        "scientific_abstract": {
+                            "type": "string",
+                            "title": "Scientific_Abstract",
+                            "description": "Scientific abstract or, if not available, then expert summary"
+                        },
+                        "organisation_type": {
+                            "type": "string",
+                            "title": "Organisation_Type",
+                            "description": "The type or category of organisation"
+                        },
+                        "contracted_organisation": {
+                            "type": "string",
+                            "title": "Contracted_Organisation",
+                            "description": "The head office of the funded organisation"
+                        },
+                        "postcode": {
+                            "type": "string",
+                            "title": "Postcode",
+                            "description": "Postcode of the head office of the funded organisation"
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "title": "Latitude",
+                            "description": "Latitude of the head office of the funded organisation"
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "title": "Longitude",
+                            "description": "Longitude of the head office of the funded organisation"
+                        },
+                        "geo": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo",
+                            "description": "Geocoded Longitude and Latitude of Latitude of the head office of the funded organisation"
+                        },
+                        "award_amount_m": {
+                            "type": "number",
+                            "title": "award_amount_m",
+                            "description": "The original award amount / initial contract value which may be different from the Award_Amount in the event that there have been variations to contract prior to the extraction.  This is measured in millions of pounds."
+                        },
+                        "acronym": {
+                            "type": "string",
+                            "title": "Acronym",
+                            "description": "Programme Acronym"
+                        },
+                        "x": {
+                            "type": "string",
+                            "title": "X",
+                            "description": ""
+                        },
+                        "y": {
+                            "type": "string",
+                            "title": "Y",
+                            "description": ""
+                        },
+                        "ctrynm": {
+                            "type": "string",
+                            "title": "Devolved_Administration",
+                            "description": ""
+                        },
+                        "rgnnm": {
+                            "type": "string",
+                            "title": "English_Region",
+                            "description": ""
+                        },
+                        "ccgnm": {
+                            "type": "string",
+                            "title": "Clinical_Commissioning_Group",
+                            "description": ""
+                        },
+                        "ladnm": {
+                            "type": "string",
+                            "title": "Local_Authority",
+                            "description": ""
+                        },
+                        "pconnm": {
+                            "type": "string",
+                            "title": "Parliamentary_Constituency",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,713 @@
+{
+    "title": "annuaire-de-leducation@saint-louis-agglo",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/annuaire-de-leducation@saint-louis-agglo"
+        }
+    ],
+    "definitions": {
+        "annuaire-de-leducation@saint-louis-agglo": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/annuaire-de-leducation@saint-louis-agglo_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "annuaire-de-leducation@saint-louis-agglo_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "identifiant_de_l_etablissement": {
+                            "type": "string",
+                            "title": "Identifiant_de_l_etablissement",
+                            "description": "numéro de l'unité administrative immatriculée (uai)"
+                        },
+                        "nom_etablissement": {
+                            "type": "string",
+                            "title": "Nom_etablissement",
+                            "description": "nom de l'établissement"
+                        },
+                        "type_etablissement": {
+                            "type": "string",
+                            "title": "Type_etablissement",
+                            "description": "type regroupé d'établissement : école, collège, lycée, EREA, ..."
+                        },
+                        "statut_public_prive": {
+                            "type": "string",
+                            "title": "Statut_public_prive",
+                            "description": "Statut public ou privé, si applicable"
+                        },
+                        "adresse_1": {
+                            "type": "string",
+                            "title": "Adresse_1",
+                            "description": "premier élément de l'adresse"
+                        },
+                        "adresse_2": {
+                            "type": "string",
+                            "title": "Adresse_2",
+                            "description": "deuxième élément de l'adresse"
+                        },
+                        "adresse_3": {
+                            "type": "string",
+                            "title": "Adresse_3",
+                            "description": "troisième élément de l'adresse"
+                        },
+                        "code_postal": {
+                            "type": "string",
+                            "title": "Code postal",
+                            "description": "code postal"
+                        },
+                        "code_commune": {
+                            "type": "string",
+                            "title": "Code_commune",
+                            "description": "code insee de la commune"
+                        },
+                        "nom_commune": {
+                            "type": "string",
+                            "title": "Nom_commune",
+                            "description": "nom de la commune"
+                        },
+                        "code_departement": {
+                            "type": "string",
+                            "title": "Code_departement",
+                            "description": "code du département"
+                        },
+                        "code_academie": {
+                            "type": "string",
+                            "title": "Code_academie",
+                            "description": "code de l'académie"
+                        },
+                        "code_region": {
+                            "type": "string",
+                            "title": "Code_region",
+                            "description": ""
+                        },
+                        "ecole_maternelle": {
+                            "type": "integer",
+                            "title": "Ecole_maternelle",
+                            "description": "indique si l'établissement est une école maternelle"
+                        },
+                        "ecole_elementaire": {
+                            "type": "integer",
+                            "title": "Ecole_elementaire",
+                            "description": "indique si l'établissement est une école élémentaire"
+                        },
+                        "voie_generale": {
+                            "type": "string",
+                            "title": "Voie_generale",
+                            "description": "indique si l'établissement dispense les enseignements de la voie générale"
+                        },
+                        "voie_technologique": {
+                            "type": "string",
+                            "title": "Voie_technologique",
+                            "description": "indique si l'établissement dispense les enseignements de la voie technologique"
+                        },
+                        "voie_professionnelle": {
+                            "type": "string",
+                            "title": "Voie_professionnelle",
+                            "description": "indique si l'établissement dispense les enseignements de la voie professionnelle"
+                        },
+                        "telephone": {
+                            "type": "string",
+                            "title": "Telephone",
+                            "description": "numéro de téléphone"
+                        },
+                        "fax": {
+                            "type": "string",
+                            "title": "Fax",
+                            "description": "numéro de fax"
+                        },
+                        "web": {
+                            "type": "string",
+                            "title": "Web",
+                            "description": "site web"
+                        },
+                        "mail": {
+                            "type": "string",
+                            "title": "Mail",
+                            "description": "adresse mail"
+                        },
+                        "restauration": {
+                            "type": "integer",
+                            "title": "Restauration",
+                            "description": "indique si l'établissement dispose d'un service de restauration"
+                        },
+                        "hebergement": {
+                            "type": "integer",
+                            "title": "Hebergement",
+                            "description": "indique si l'établissement dispose d'un service d'hébergement"
+                        },
+                        "ulis": {
+                            "type": "integer",
+                            "title": "ULIS",
+                            "description": "indique si l'établissement dispose d'une unité localisée pour l'inclusion scolaire"
+                        },
+                        "apprentissage": {
+                            "type": "string",
+                            "title": "Apprentissage",
+                            "description": "indique si l'établissement propose des formations par apprentissage"
+                        },
+                        "segpa": {
+                            "type": "string",
+                            "title": "Segpa",
+                            "description": "indique si l'établissement dispose d'une \"section d'enseignement général et professionnel adapté\""
+                        },
+                        "section_arts": {
+                            "type": "string",
+                            "title": "Section_arts",
+                            "description": "indique si l'établissement possède une section arts"
+                        },
+                        "section_cinema": {
+                            "type": "string",
+                            "title": "Section_cinema",
+                            "description": "indique si l'établissement possède une section cinéma"
+                        },
+                        "section_theatre": {
+                            "type": "string",
+                            "title": "Section_theatre",
+                            "description": "indique si l'établissement possède une section théâtre"
+                        },
+                        "section_sport": {
+                            "type": "string",
+                            "title": "Section_sport",
+                            "description": "indique si l'établissement possède une section sport"
+                        },
+                        "section_internationale": {
+                            "type": "string",
+                            "title": "Section_internationale",
+                            "description": "indique si l'établissement possède une section internationale"
+                        },
+                        "section_europeenne": {
+                            "type": "string",
+                            "title": "Section_europeenne",
+                            "description": "indique si l'établissement possède une section européenne"
+                        },
+                        "lycee_agricole": {
+                            "type": "string",
+                            "title": "Lycee_Agricole",
+                            "description": "indique si l'établissement est un lycée agricole"
+                        },
+                        "lycee_militaire": {
+                            "type": "string",
+                            "title": "Lycee_militaire",
+                            "description": "indique si l'établissement est un lycée militaire"
+                        },
+                        "lycee_des_metiers": {
+                            "type": "string",
+                            "title": "Lycee_des_metiers",
+                            "description": "Indique si l'établissement est labellisé \"lycée des métiers\""
+                        },
+                        "post_bac": {
+                            "type": "string",
+                            "title": "Post_BAC",
+                            "description": "Indique si l'établissement propose des formations après le baccalauréat"
+                        },
+                        "appartenance_education_prioritaire": {
+                            "type": "string",
+                            "title": "Appartenance_Education_Prioritaire",
+                            "description": "Indique si l'établissement est situé en réseau d'éducation prioritaire (REP), ou réseau d'éducation prioritaire renforcé (REP+)"
+                        },
+                        "greta": {
+                            "type": "string",
+                            "title": "GRETA",
+                            "description": "indique si l'établissement fait partie d'un GRETA (groupement d'établissements)"
+                        },
+                        "siren_siret": {
+                            "type": "string",
+                            "title": "SIREN_SIRET",
+                            "description": "numéro SIRET de l'établissement (constitué du numéro SIREN sur 9 chiffres et du numéro NIC sur 5 chiffres)"
+                        },
+                        "nombre_d_eleves": {
+                            "type": "integer",
+                            "title": "Nombre_d_eleves",
+                            "description": "nombre d'élèves"
+                        },
+                        "fiche_onisep": {
+                            "type": "string",
+                            "title": "Fiche_onisep",
+                            "description": "url de la fiche onisep"
+                        },
+                        "position": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "position",
+                            "description": "position (latitude/longitude WGS 84) de l'établissement"
+                        },
+                        "type_contrat_prive": {
+                            "type": "string",
+                            "title": "Type_contrat_prive",
+                            "description": "dans le cas d'un établissement privé, libellé du type de contrat"
+                        },
+                        "libelle_departement": {
+                            "type": "string",
+                            "title": "Libelle_departement",
+                            "description": "nom du département"
+                        },
+                        "libelle_academie": {
+                            "type": "string",
+                            "title": "Libelle_academie",
+                            "description": "nom de l'académie"
+                        },
+                        "libelle_region": {
+                            "type": "string",
+                            "title": "Libelle_region",
+                            "description": "nom de la région"
+                        },
+                        "coordx_origine": {
+                            "type": "number",
+                            "title": "coordonnee_X",
+                            "description": "première coordonnée géographique de l'établissement dans le système de coordonnées légal"
+                        },
+                        "coordy_origine": {
+                            "type": "number",
+                            "title": "coordonnee_Y",
+                            "description": "deuxième coordonnée géographique de l'établissement dans le système de coordonnées légal"
+                        },
+                        "epsg_origine": {
+                            "type": "string",
+                            "title": "epsg",
+                            "description": "code EPSG du système de coordonnées légal"
+                        },
+                        "nom_circonscription": {
+                            "type": "string",
+                            "title": "nom_circonscription",
+                            "description": "nom de la circonscription"
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "title": "latitude",
+                            "description": "latitude WGS84  de l'établissement"
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "title": "longitude",
+                            "description": "longitude WGS84  de l'établissement"
+                        },
+                        "precision_localisation": {
+                            "type": "string",
+                            "title": "precision_localisation",
+                            "description": "précision de la localisation géographique\nValeurs possibles\n1/ l'adresse ponctuelle a été vérifiée par un collecteur:\n1. BÂTIMENT\n2/ l'adresse ponctuelle correspondant exactement à celle de l'établissement a été trouvée :\n2. PLAQUE_ADRESSE_PROJETEE : projection de la plaque adresse\n3. CENTRE_PARCELLE_PROJETE : projection du centroïde de parcelle\n3/ l'adresse précise n'a pas été trouvée mais une adresse ponctuelle voisine a été trouvée:\n- DEFAUT_D_INDICE [numéro et indice utilisé] : adresse projetée de même numéro, mais d'indice différent)\n- DEFAUT_DE_NUMERO [numéro cherché -> numéro utilisé] : adresse projetée la plus proche. Si l'adresse recherchée n'a pas de numéro, il est placé sur le plus petit numéro trouvé (ex. DEFAUT_DE_NUMERO [->2])\n4/ aucune adresse ponctuelle portant le même nom de voie n'a été trouvée, mais un tronçon portant ce nom a été trouvé :\n1. INTERPOLATION : adresse interpolée entre les bornes initiales et finales d'un tronçon (interpolation linéaire)\n2. DEFAUT_DE_TRONCON : aucun tronçon de la route appariée n'a de bornes permettant d'encadrer le numéro recherché. L'adresse est positionnée sur le tronçon dont les bornes sont le plus proche du numéro recherché.\n5/ ni adresse ni tronçon n’ont été trouvés, mais un lieu-dit (ponctuel) ou une zone nommée (ponctuelle) de même nom a été trouvée :\n- ZONE_D_ADRESSAGE\n6/ la géolocalisation se fait à la commune:\n- COMMUNE\n7/ pas de géolocalisation :\n- ERR"
+                        },
+                        "date_ouverture": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "date_ouverture",
+                            "description": "date d'ouverture de l'établissement"
+                        },
+                        "date_maj_ligne": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "date_maj_ligne",
+                            "description": "date de mise à jour des informations"
+                        },
+                        "etat": {
+                            "type": "string",
+                            "title": "etat",
+                            "description": "état de l'établissement (ouvert/à ouvrir/à fermer)"
+                        },
+                        "ministere_tutelle": {
+                            "type": "string",
+                            "title": "ministere_tutelle",
+                            "description": "ministère de tutelle"
+                        },
+                        "multi_uai": {
+                            "type": "integer",
+                            "title": "etablissement_multi_lignes",
+                            "description": "indique si plusieurs lignes possèdent le même identifiant (c'est le cas de certains établissements à plusieurs sites)"
+                        },
+                        "rpi_concentre": {
+                            "type": "integer",
+                            "title": "rpi_concentre",
+                            "description": "indique si l'établissement fait partie d'un réseau pédagogique intercommunal concentré"
+                        },
+                        "rpi_disperse": {
+                            "type": "string",
+                            "title": "rpi_disperse",
+                            "description": "si l'établissement fait partie d'un réseau pédagogique intercommunal (RPI) dispersé, identifiant de ce réseau"
+                        },
+                        "code_nature": {
+                            "type": "integer",
+                            "title": "code_nature",
+                            "description": "code nature (type d'établissement détaillé)"
+                        },
+                        "libelle_nature": {
+                            "type": "string",
+                            "title": "libelle_nature",
+                            "description": "libellé de la nature(type d'établissement détaillé)"
+                        },
+                        "code_type_contrat_prive": {
+                            "type": "string",
+                            "title": "Code_type_contrat_prive",
+                            "description": "dans le cas d'un établissement privé, code du type de contrat"
+                        },
+                        "pial": {
+                            "type": "string",
+                            "title": "PIAL",
+                            "description": "Lorsque l'établissement fait partie d'un PIAL (Pôles inclusifs d’accompagnement localisés), numéro UAI de l'établissement tête de réseau"
+                        },
+                        "etablissement_mere": {
+                            "type": "string",
+                            "title": "etablissement_mere",
+                            "description": "Identifiant de l'établissement mère, s'il y en a un"
+                        },
+                        "type_rattachement_etablissement_mere": {
+                            "type": "string",
+                            "title": "type_rattachement_etablissement_mere",
+                            "description": "type de rattachement à l'établissement mère"
+                        },
+                        "code_zone_animation_pedagogique": {
+                            "type": "string",
+                            "title": "code_bassin_formation",
+                            "description": "code du bassin de formation (niveau infradépartemental d'animation de la politique pédagogique, institué par la circulaire n°2001-114 du 20-6-2001 - NOR : MEND0101328C)"
+                        },
+                        "libelle_zone_animation_pedagogique": {
+                            "type": "string",
+                            "title": "libelle_bassin_formation",
+                            "description": "libellé du bassin de formation"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

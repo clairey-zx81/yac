@@ -1,0 +1,491 @@
+{
+    "title": "com_decoup_zdpl@eure-et-loir",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/com_decoup_zdpl@eure-et-loir"
+        }
+    ],
+    "definitions": {
+        "com_decoup_zdpl@eure-et-loir": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/com_decoup_zdpl@eure-et-loir_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "com_decoup_zdpl@eure-et-loir_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "id": {
+                            "type": "string",
+                            "title": "id",
+                            "description": ""
+                        },
+                        "statut": {
+                            "type": "string",
+                            "title": "statut",
+                            "description": "Statut de la commune"
+                        },
+                        "insee_com": {
+                            "type": "string",
+                            "title": "insee_com",
+                            "description": "Code INSEE de la commune"
+                        },
+                        "insee_arr": {
+                            "type": "string",
+                            "title": "insee_arr",
+                            "description": "Code INSEE de l'arrondissement"
+                        },
+                        "insee_dep": {
+                            "type": "string",
+                            "title": "insee_dep",
+                            "description": "Code INSEE du département"
+                        },
+                        "insee_reg": {
+                            "type": "string",
+                            "title": "insee_reg",
+                            "description": "Code INSEE de la région"
+                        },
+                        "code_epci": {
+                            "type": "string",
+                            "title": "code_epci",
+                            "description": "Code EPCI"
+                        },
+                        "nom_com_m": {
+                            "type": "string",
+                            "title": "nom_com_m",
+                            "description": "Commune en majuscules"
+                        },
+                        "population": {
+                            "type": "integer",
+                            "title": "population",
+                            "description": "Population"
+                        },
+                        "nom_com": {
+                            "type": "string",
+                            "title": "nom_com",
+                            "description": "Commune"
+                        },
+                        "typ_zone": {
+                            "type": "string",
+                            "title": "typ_zone",
+                            "description": "Type de zone\nRIP = Réseaux d’initiative publique\nAMII = Appel à manifestation d’intention d’investissement\nAMEL = Appel à manifestation d’engagements locaux"
+                        },
+                        "insee_old": {
+                            "type": "string",
+                            "title": "insee_old",
+                            "description": "Ancien code INSEE (les déploiements AMEL étant basés sur les anciens découpages communaux)"
+                        },
+                        "op_amii": {
+                            "type": "string",
+                            "title": "op_amii",
+                            "description": "Opérateur AMII\nREGIES (CMIN)\nOrange"
+                        },
+                        "com_old": {
+                            "type": "string",
+                            "title": "com_old",
+                            "description": "Ancienne commune avant regroupement communal"
+                        },
+                        "planning": {
+                            "type": "string",
+                            "title": "planning",
+                            "description": "Planning initialement annoncé"
+                        },
+                        "calc_sup": {
+                            "type": "number",
+                            "title": "calc_sup",
+                            "description": "Superficie du polygone"
+                        },
+                        "intercommu": {
+                            "type": "string",
+                            "title": "intercommu",
+                            "description": "Nom de l'intercommunalité"
+                        },
+                        "intercom_1": {
+                            "type": "string",
+                            "title": "intercom_1",
+                            "description": "Type d'intercommunalité\nCC = communauté de communes\nCA = communauté d'agglomération"
+                        },
+                        "intercom_2": {
+                            "type": "integer",
+                            "title": "intercom_2",
+                            "description": "Code intercommunalité"
+                        },
+                        "ref_nro": {
+                            "type": "string",
+                            "title": "ref_nro",
+                            "description": "Référence du nœud de raccordement optique"
+                        },
+                        "maj_plan": {
+                            "type": "string",
+                            "title": "maj_plan",
+                            "description": "Date de première commercialisation"
+                        },
+                        "num_class": {
+                            "type": "string",
+                            "title": "num_class",
+                            "description": "Codification par année (champ utilisé dans le cadre du webmapping)"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

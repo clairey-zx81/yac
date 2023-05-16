@@ -1,0 +1,576 @@
+{
+    "title": "fr-en-ecoles-ep@occitanie-dataeducation",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/fr-en-ecoles-ep@occitanie-dataeducation"
+        }
+    ],
+    "definitions": {
+        "fr-en-ecoles-ep@occitanie-dataeducation": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/fr-en-ecoles-ep@occitanie-dataeducation_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "fr-en-ecoles-ep@occitanie-dataeducation_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "title": "Identifiant de l'établissement dans la base",
+                            "description": "Concaténation de la rentrée scolaire et du numéro de l'école"
+                        },
+                        "rs": {
+                            "type": "integer",
+                            "title": "Rentrée scolaire",
+                            "description": "La rentrée scolaire N correspond à l'année scolaire N/N+1"
+                        },
+                        "uai": {
+                            "type": "string",
+                            "title": "Numéro école",
+                            "description": "Identifiant de l'école sur 8 caractères\n"
+                        },
+                        "appartep": {
+                            "type": "string",
+                            "title": "Appartenance EP",
+                            "description": "Appartenance à un groupe d'écoles relevant de l'éducation prioritaire ou non (HEP) à la rentrée scolaire N\n"
+                        },
+                        "typeetab": {
+                            "type": "integer",
+                            "title": "Type établissement code",
+                            "description": "Code de la catégorie d'établissement par regroupement de formations"
+                        },
+                        "typeetabn": {
+                            "type": "string",
+                            "title": "Type établissement nom",
+                            "description": "Nom générique de la catégorie d'établissement par regroupement de formations"
+                        },
+                        "patronyme": {
+                            "type": "string",
+                            "title": "Patronyme",
+                            "description": "Patronyme de l'école"
+                        },
+                        "xlamb93": {
+                            "type": "number",
+                            "title": "coordonnée X",
+                            "description": "Coordonnée géographique X de l'école en Lambert 93 pour la métropole, UTM zone 20 N(WGS 84) pour Guadeloupe et Martinique, UTM zone 22 N (WGS 84) pour la Guyane, UTM zone 38 S (WGS 84) pour Mayotte et UTM 40 S (RGR 92) pour La Réunion."
+                        },
+                        "ylamb93": {
+                            "type": "number",
+                            "title": "coordonnée Y",
+                            "description": "Coordonnée géographique Y de l'école en Lambert 93 pour la métropole, UTM zone 20 N(WGS 84) pour Guadeloupe et Martinique, UTM zone 22 N (WGS 84) pour la Guyane, UTM zone 38 S (WGS 84) pour Mayotte et UTM 40 S (RGR 92) pour La Réunion."
+                        },
+                        "secteur": {
+                            "type": "integer",
+                            "title": "Secteur code",
+                            "description": "Code du secteur d'enseignement"
+                        },
+                        "secteurn": {
+                            "type": "string",
+                            "title": "Secteur nom",
+                            "description": "Nom du secteur d'enseignement"
+                        },
+                        "sensible": {
+                            "type": "string",
+                            "title": "Etablissement sensible",
+                            "description": "Indicatrice d'appartenance à la catégorie des établissements dits \"sensibles\""
+                        },
+                        "zonage9": {
+                            "type": "integer",
+                            "title": "CATAEU2010",
+                            "description": "Catégorie de la commune de l'école en aires urbaines 2010"
+                        },
+                        "zonage3": {
+                            "type": "string",
+                            "title": "Situation relative à une zone rurale ou autre",
+                            "description": "Situation de l'école : dans une commune urbaine / dans une commune intermédiaire / dans une commune rurale (catégorie de la commune de l'école en 3 zones)"
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "Commune code",
+                            "description": "Code INSEE de la commune d'implantation de l'école sur 5 caractères"
+                        },
+                        "communen": {
+                            "type": "string",
+                            "title": "Commune nom",
+                            "description": "Nom de la commune d'implantation de l'école"
+                        },
+                        "arrond": {
+                            "type": "string",
+                            "title": "Commune et arrondissement code",
+                            "description": "Code de la commune d'implantation de l'école, au niveau des arrondissements pour Paris, Lyon et Marseille"
+                        },
+                        "arrondn": {
+                            "type": "string",
+                            "title": "Commune et arrondissement nom",
+                            "description": "Nom de la commune d'implantation de l'école, et nom de l'arrondissement pour Paris, Lyon et Marseille"
+                        },
+                        "dept": {
+                            "type": "string",
+                            "title": "Département code",
+                            "description": "Code INSEE du département d'implantation de l'école"
+                        },
+                        "deptn": {
+                            "type": "string",
+                            "title": "Département nom",
+                            "description": "Nom du département d'implantation de l'école"
+                        },
+                        "acad": {
+                            "type": "string",
+                            "title": "Académie code",
+                            "description": "Code de l'académie d'implantation de l'école"
+                        },
+                        "acadn": {
+                            "type": "string",
+                            "title": "Académie nom",
+                            "description": "Nom de l'académie d'implantation de l'école"
+                        },
+                        "region": {
+                            "type": "string",
+                            "title": "Région code",
+                            "description": "Code de la région d'implantation de l'école"
+                        },
+                        "regionn": {
+                            "type": "string",
+                            "title": "Région nom",
+                            "description": "Nom de la région d'implantation de l'école"
+                        },
+                        "nvlleregion": {
+                            "type": "string",
+                            "title": "Région 2016 code",
+                            "description": "Code de la  nouvelle région d'implantation de l'école"
+                        },
+                        "nvlleregionn": {
+                            "type": "string",
+                            "title": "Région 2016 nom",
+                            "description": "Nom de la nouvelle région d'implantation de l'école"
+                        },
+                        "nbeleves": {
+                            "type": "integer",
+                            "title": "Nb eleves",
+                            "description": "Effectif d'élèves à la rentrée N dans l'école"
+                        },
+                        "rpidisperse": {
+                            "type": "string",
+                            "title": "RPI dispersé",
+                            "description": "Existence d'un regroupement pédagogique intercommunal (RPI) dispersé : structure pédagogique d'enseignement dont l'existence repose sur un accord contractuel entre communes (les élèves sont regroupés par niveau scolaire sur plusieurs sites)  rentrée N"
+                        },
+                        "nbclasses": {
+                            "type": "integer",
+                            "title": "Nb classes",
+                            "description": "Nombre de classes rentrée N dans l'école"
+                        },
+                        "nbentrants6e": {
+                            "type": "integer",
+                            "title": "Nb entrants 6e",
+                            "description": "Effectif d'élèves entrant en 6ème hors SEGPA dans un collège de France métropolitaine + 5 DOM à la rentrée N, scolarisés dans l'école en CM2 ou CM1 à la rentrée N-1"
+                        },
+                        "nbeleves2ans": {
+                            "type": "integer",
+                            "title": "Nb élèves de 2 ans",
+                            "description": "Effectif d'élèves de 2 ans dans le prééléméntaire rentrée N dans l'école"
+                        },
+                        "nbelevespreelementaire": {
+                            "type": "integer",
+                            "title": "Nb élèves dans préélémentaire",
+                            "description": "Effectif d'élèves dans le prééléméntaire rentrée N dans l'école"
+                        },
+                        "enspreelementaire": {
+                            "type": "integer",
+                            "title": "Enseignement préélémentaire",
+                            "description": "Indicatrice d'existence d'un enseignement préélémentaire dans l'école à la rentrée N"
+                        },
+                        "nbreseau": {
+                            "type": "integer",
+                            "title": "Nb collèges têtes de réseau",
+                            "description": "Si l'école appartient à un réseau REP ou REP+ : nombre de UAI (collèges) têtes de ce réseau à la rentrée N (à partir de la rentrée 2015)"
+                        },
+                        "reseau": {
+                            "type": "string",
+                            "title": "Collège tête de réseau",
+                            "description": "Si l'école appartient à un réseau REP ou REP+ : UAI du collège tête de ce réseau, rentrée N (à partir de la rentrée 2015)"
+                        },
+                        "reseau2": {
+                            "type": "string",
+                            "title": "Collège tête de réseau 2",
+                            "description": "Si l'école appartient à un réseau REP ou REP+ : éventuellement, UAI du second collège tête du réseau à la rentrée N (à partir de la rentrée 2015)"
+                        },
+                        "nbclasseselementaires": {
+                            "type": "integer",
+                            "title": "Nb classes élémentaires",
+                            "description": "Nombre de classes élémentaires dans l'école à la rentrée N"
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "title": "Latitude",
+                            "description": "Latitude WGS84"
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "title": "Longitude",
+                            "description": "Longitude WGS84"
+                        },
+                        "position": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Position",
+                            "description": "Latitude et longitude"
+                        },
+                        "codetypecommunedepp": {
+                            "type": "string",
+                            "title": "typologieCommuneDEPP",
+                            "description": "code typologie des communes de la DEPP \nUne typologie des communes en neuf catégories a été établie par la DEPP (MEN) pour décrire le système éducatif.\nCette caractérisation du territoire, basée sur un croisement d’approches morphologique et fonctionnelle, permet de distinguer plusieurs types de communes rurales et urbaines.\nL’approche par les unités urbaines donne le contour global de la ruralité, correspondant aux communes hors unité urbaine. La ruralité est ensuite déclinée selon l’appartenance des communes aux espaces sous l’influence des grands pôles urbains (selon le zonage en aires urbaines), et leur classement dans la grille de densité: le rural éloigné peu et très peu dense, le rural périphérique peu et très peu dense.\nCes critères de distinction sont étendus aux communes urbaines: l’urbain très dense, dense et périphérique peu dense, ces trois catégories étant sous influence des pôles urbains; les petites villes et les bourgs, hors influence de ces pôles. La carte de France métropolitaine en neuf types qui en résulte reflète la morphologie du territoire avec une surreprésentation des communes rurales très peu denses sur la diagonale sud-ouest et nord-est, ainsi que dans les zones montagneuses. De nombreuses communes de type «rural périphérique» se situent dans le Bassin parisien, compte tenu notamment de l’étendue de l’aire urbaine de Paris."
+                        },
+                        "libelletypecommunedepp": {
+                            "type": "string",
+                            "title": "libelleTypologieCommuneDEPP",
+                            "description": "libellé correspondant au code typologie des communes de la DEPP "
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

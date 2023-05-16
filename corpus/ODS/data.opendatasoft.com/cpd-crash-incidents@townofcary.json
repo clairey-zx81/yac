@@ -1,0 +1,604 @@
+{
+    "title": "cpd-crash-incidents@townofcary",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/cpd-crash-incidents@townofcary"
+        }
+    ],
+    "definitions": {
+        "cpd-crash-incidents@townofcary": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/cpd-crash-incidents@townofcary_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "cpd-crash-incidents@townofcary_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "tamainid": {
+                            "type": "integer",
+                            "title": "tamainid",
+                            "description": "Incident Number from RMS"
+                        },
+                        "location_description": {
+                            "type": "string",
+                            "title": "Location Description",
+                            "description": "Description of where the crash occurred."
+                        },
+                        "rdfeature": {
+                            "type": "string",
+                            "title": "Road Feature",
+                            "description": "Special feature of the road where crash occurred."
+                        },
+                        "rdcharacter": {
+                            "type": "string",
+                            "title": "Road Character",
+                            "description": "Description of the road in which crash occurred."
+                        },
+                        "rdclass": {
+                            "type": "string",
+                            "title": "Road Class",
+                            "description": "Classification of the road type where crash occurred."
+                        },
+                        "rdconfigur": {
+                            "type": "string",
+                            "title": "Road Configuration",
+                            "description": "Indicates the design of the road where crash occurred."
+                        },
+                        "rdsurface": {
+                            "type": "string",
+                            "title": "Road Surface",
+                            "description": "Material or type of surface associated with the road in which the crash occurred."
+                        },
+                        "rdcondition": {
+                            "type": "string",
+                            "title": "Road Conditions",
+                            "description": "Condition of the road when crash occurred."
+                        },
+                        "lightcond": {
+                            "type": "string",
+                            "title": "Light Condition",
+                            "description": "Describes the lighting at the time of the crash."
+                        },
+                        "weather": {
+                            "type": "string",
+                            "title": "Weather",
+                            "description": "Describes the weather conditions at the time of the crash."
+                        },
+                        "trafcontrl": {
+                            "type": "string",
+                            "title": "Traffic Control",
+                            "description": "Indicates any traffic factor during the time of the crash."
+                        },
+                        "lat": {
+                            "type": "number",
+                            "title": "lat",
+                            "description": "Latitude which corresponds to the location of the crash."
+                        },
+                        "lon": {
+                            "type": "number",
+                            "title": "lon",
+                            "description": "Longitude which corresponds to the location of the crash."
+                        },
+                        "lon2": {
+                            "type": "number",
+                            "title": "lon2",
+                            "description": ""
+                        },
+                        "lat2": {
+                            "type": "number",
+                            "title": "lat2",
+                            "description": ""
+                        },
+                        "tract": {
+                            "type": "string",
+                            "title": "tract",
+                            "description": ""
+                        },
+                        "zone": {
+                            "type": "string",
+                            "title": "Beat",
+                            "description": ""
+                        },
+                        "fatality": {
+                            "type": "integer",
+                            "title": "Fatality",
+                            "description": "Indicates the number of fatalities involved in the crash."
+                        },
+                        "possblinj": {
+                            "type": "integer",
+                            "title": "Injury",
+                            "description": "Indicates the number of people involved in the crash who had injuries."
+                        },
+                        "numpassengers": {
+                            "type": "integer",
+                            "title": "Number of Passengers",
+                            "description": "Indicates the number of passengers involved in the crash."
+                        },
+                        "numpedestrians": {
+                            "type": "string",
+                            "title": "Number of Pedestrians",
+                            "description": "Indicates the number of pedestrians involved in the crash."
+                        },
+                        "contrcir1_desc": {
+                            "type": "string",
+                            "title": "Contributing Factor 1",
+                            "description": "Indicates a contributing factor for the crash."
+                        },
+                        "contrcir2_desc": {
+                            "type": "string",
+                            "title": "Contributing Factor 2",
+                            "description": "Indicates the second contributing factor for the crash."
+                        },
+                        "contrcir3_desc": {
+                            "type": "string",
+                            "title": "Contributing Factor 3",
+                            "description": "Indicates the third contributing factor for the crash."
+                        },
+                        "contrcir4_desc": {
+                            "type": "string",
+                            "title": "Contributing Factor 4",
+                            "description": "Indicates the fourth contributing factor for the crash."
+                        },
+                        "vehicle1": {
+                            "type": "string",
+                            "title": "Vehicle 1",
+                            "description": "Indicates a vehicle involved in the corresponding crash."
+                        },
+                        "vehicle2": {
+                            "type": "string",
+                            "title": "Vehicle 2",
+                            "description": "Indicates a vehicle involved in the corresponding crash."
+                        },
+                        "vehicle3": {
+                            "type": "string",
+                            "title": "Vehicle 3",
+                            "description": "Indicates a vehicle involved in the corresponding crash."
+                        },
+                        "vehicle4": {
+                            "type": "string",
+                            "title": "Vehicle 4",
+                            "description": "Indicates a vehicle involved in the corresponding crash."
+                        },
+                        "vehicle5": {
+                            "type": "string",
+                            "title": "Vehicle 5",
+                            "description": "Indicates a vehicle involved in the corresponding crash."
+                        },
+                        "workarea": {
+                            "type": "string",
+                            "title": "Work Area",
+                            "description": "Indicates if the corresponding crash location was a work area at the time of the crash."
+                        },
+                        "records": {
+                            "type": "integer",
+                            "title": "Records",
+                            "description": "Unique ID which corresponds to the order of the entire data set"
+                        },
+                        "ta_date": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "TA_Date",
+                            "description": "Date of Crash"
+                        },
+                        "ta_time": {
+                            "type": "string",
+                            "title": "TA_Time",
+                            "description": "Time of Crash"
+                        },
+                        "crash_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Crash Date/Time",
+                            "description": ""
+                        },
+                        "geo_location": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo_Location",
+                            "description": "Geographical Coordinates of Crash"
+                        },
+                        "year": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Crash Date - Year",
+                            "description": ""
+                        },
+                        "fatalities": {
+                            "type": "string",
+                            "title": "Fatalities",
+                            "description": ""
+                        },
+                        "injuries": {
+                            "type": "string",
+                            "title": "Injuries",
+                            "description": ""
+                        },
+                        "month": {
+                            "type": "string",
+                            "title": "Month",
+                            "description": ""
+                        },
+                        "contrfact1": {
+                            "type": "string",
+                            "title": "contrfact1",
+                            "description": ""
+                        },
+                        "contrfact2": {
+                            "type": "string",
+                            "title": "contrfact2",
+                            "description": ""
+                        },
+                        "contributing_factor": {
+                            "type": "string",
+                            "title": "Contributing Factor",
+                            "description": ""
+                        },
+                        "vehicleconcat1": {
+                            "type": "string",
+                            "title": "vehicleconcat1",
+                            "description": ""
+                        },
+                        "vehicleconcat2": {
+                            "type": "string",
+                            "title": "vehicleconcat2",
+                            "description": ""
+                        },
+                        "vehicleconcat3": {
+                            "type": "string",
+                            "title": "vehicleconcat3",
+                            "description": ""
+                        },
+                        "vehicle_type": {
+                            "type": "string",
+                            "title": "Vehicle Type",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

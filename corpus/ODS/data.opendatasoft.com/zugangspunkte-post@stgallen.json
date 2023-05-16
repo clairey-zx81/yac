@@ -1,0 +1,646 @@
+{
+    "title": "zugangspunkte-post@stgallen",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/zugangspunkte-post@stgallen"
+        }
+    ],
+    "definitions": {
+        "zugangspunkte-post@stgallen": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/zugangspunkte-post@stgallen_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "zugangspunkte-post@stgallen_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "title": "Id",
+                            "description": "Poi-ID (bspw. 001PST_25623) "
+                        },
+                        "poitypeid": {
+                            "type": "string",
+                            "title": "POITypeId",
+                            "description": "ID des PoiTypen (bspw. 001PST)\n\nLesbarer Namen des PoiTypen: Poststelle, PickPost, MyPost24 für 001PST, 001AG-PICK oder 001MP24. Für andere POI Typen wird die Beschreibung (Attribut desc) aus dem Service von ESRI übernommen. \n"
+                        },
+                        "description_de": {
+                            "type": "string",
+                            "title": "POIName_de",
+                            "description": "Name des POI (Point of Interest) \"deutsch\""
+                        },
+                        "description_fr": {
+                            "type": "string",
+                            "title": "POIName_fr",
+                            "description": "Name des POI (Point of Interest) \"französisch\""
+                        },
+                        "description_it": {
+                            "type": "string",
+                            "title": "POIName_it",
+                            "description": "Name des POI (Point of Interest) \"italienisch\""
+                        },
+                        "description_en": {
+                            "type": "string",
+                            "title": "POIName_en",
+                            "description": "Name des POI (Point of Interest) \"englisch\""
+                        },
+                        "address_city": {
+                            "type": "string",
+                            "title": "address_city",
+                            "description": "Ortsname"
+                        },
+                        "address_kantoncode": {
+                            "type": "string",
+                            "title": "address_kantoncode",
+                            "description": "Der Kanton Code"
+                        },
+                        "address_zip": {
+                            "type": "string",
+                            "title": "address_zip",
+                            "description": "Postleitzahl"
+                        },
+                        "address_countrycode": {
+                            "type": "string",
+                            "title": "address_countrycode",
+                            "description": "Länder Code"
+                        },
+                        "address_street": {
+                            "type": "string",
+                            "title": "address_street",
+                            "description": "Strassenname und Hausnummer"
+                        },
+                        "address_technicalplz6": {
+                            "type": "string",
+                            "title": "address_technicalplz6",
+                            "description": "die 6-Stellige Postleitzahl "
+                        },
+                        "address_gemeindeid": {
+                            "type": "string",
+                            "title": "address_gemeindeid",
+                            "description": "die Gemeinde ID "
+                        },
+                        "geopoint": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geopoint",
+                            "description": "Geokoordinaten"
+                        },
+                        "contact_phone": {
+                            "type": "string",
+                            "title": "contact_phone",
+                            "description": "Kontaktinformation: Telefonnummer"
+                        },
+                        "contact_fax": {
+                            "type": "string",
+                            "title": "contact_fax",
+                            "description": "Kontaktinformation: Faxnummer"
+                        },
+                        "contact_email_addresse_de": {
+                            "type": "string",
+                            "title": "contact_email_addresse_de",
+                            "description": "Kontaktinformation: E-Mailadresse \"deutsch\""
+                        },
+                        "contact_email_addresse_fr": {
+                            "type": "string",
+                            "title": "contact_email_addresse_fr",
+                            "description": "Kontaktinformation: E-Mailadresse \"französisch\""
+                        },
+                        "contact_email_addresse_it": {
+                            "type": "string",
+                            "title": "contact_email_addresse_it",
+                            "description": "Kontaktinformation: E-Mailadresse \"italienisch\""
+                        },
+                        "contact_email_addresse_en": {
+                            "type": "string",
+                            "title": "contact_email_addresse_en",
+                            "description": "Kontaktinformation: E-Mailadresse \"englisch\""
+                        },
+                        "pickuptime_description_de": {
+                            "type": "string",
+                            "title": "pickuptime_description_de",
+                            "description": "Information für die Abholung avisierter Sendungen \"deutsch\""
+                        },
+                        "pickuptime_description_fr": {
+                            "type": "string",
+                            "title": "pickuptime_description_fr",
+                            "description": "Information für die Abholung avisierter Sendungen \"französisch\""
+                        },
+                        "pickuptime_description_it": {
+                            "type": "string",
+                            "title": "pickuptime_description_it",
+                            "description": "Information für die Abholung avisierter Sendungen \"italienisch\""
+                        },
+                        "pickuptime_description_en": {
+                            "type": "string",
+                            "title": "pickuptime_description_en",
+                            "description": "Information für die Abholung avisierter Sendungen \"englisch\""
+                        },
+                        "pickuptime_time": {
+                            "type": "string",
+                            "title": "pickuptime_time",
+                            "description": "Abholzeit für avisierte Sendungen vom Vortag"
+                        },
+                        "additionaldescription": {
+                            "type": "string",
+                            "title": "AdditionalDescription",
+                            "description": ""
+                        },
+                        "offerpackage": {
+                            "type": "string",
+                            "title": "OfferPackage",
+                            "description": ""
+                        },
+                        "openinghoursevent": {
+                            "type": "string",
+                            "title": "OpeningHoursEvent",
+                            "description": ""
+                        },
+                        "accessinformation": {
+                            "type": "string",
+                            "title": "AccessInformation",
+                            "description": ""
+                        },
+                        "service_servicetypeid": {
+                            "type": "string",
+                            "title": "service_servicetypeid",
+                            "description": "ID-Nummer der Dienstleistungen die an einem POI de Post angeboten werden."
+                        },
+                        "poityp_de": {
+                            "type": "string",
+                            "title": "poityp_de",
+                            "description": "Typ eines Point of Interest (POI). Bspw. Poststelle, Postomat, Postfachanlage, Logistikzentrum, usw.\n(deutsch)"
+                        },
+                        "receipttype_de": {
+                            "type": "string",
+                            "title": "Verarbeitung_de",
+                            "description": "Beschreibung welche Sendungen an dem POI verarbeitet werden."
+                        },
+                        "poityp_fr": {
+                            "type": "string",
+                            "title": "poityp_fr",
+                            "description": "Typ eines Point of Interest (POI). Bspw. Poststelle, Postomat, Postfachanlage, Logistikzentrum, usw.\n(französisch)"
+                        },
+                        "receipttype_fr": {
+                            "type": "string",
+                            "title": "Verarbeitung_fr",
+                            "description": "Beschreibung welche Sendungen an dem POI verarbeitet werden."
+                        },
+                        "poityp_it": {
+                            "type": "string",
+                            "title": "poityp_it",
+                            "description": "Typ eines Point of Interest (POI). Bspw. Poststelle, Postomat, Postfachanlage, Logistikzentrum, usw.\n(italienisch)"
+                        },
+                        "receipttype_it": {
+                            "type": "string",
+                            "title": "Verarbeitung_it",
+                            "description": "Beschreibung welche Sendungen an dem POI verarbeitet werden."
+                        },
+                        "poityp_en": {
+                            "type": "string",
+                            "title": "poityp_en",
+                            "description": "Typ eines Point of Interest (POI). Bspw. Poststelle, Postomat, Postfachanlage, Logistikzentrum, usw.\n(englisch)"
+                        },
+                        "receipttype_en": {
+                            "type": "string",
+                            "title": "Verarbeitung_en",
+                            "description": "Beschreibung welche Sendungen an dem POI verarbeitet werden."
+                        },
+                        "forprivatecustomer": {
+                            "type": "string",
+                            "title": "ForPrivateCustomer",
+                            "description": "Richtet sich das Dienstleistungsangebot an Privatkunden\ntrue = Ja\nfalse = Nein"
+                        },
+                        "forbusinesscustomer": {
+                            "type": "string",
+                            "title": "ForBusinessCustomer",
+                            "description": "Richtet sich das Dienstleistungsangebot an Geschäftskunden\ntrue = Ja\nfalse = Nein"
+                        },
+                        "groupename_de": {
+                            "type": "string",
+                            "title": "groupename_de",
+                            "description": "Name der postalischen Dienstleistungsgruppe (deutsch)"
+                        },
+                        "service_de": {
+                            "type": "string",
+                            "title": "service_de",
+                            "description": "postalische Dienstleistungen welche an unterschiedlichen Zugangspunkt der Post angeboten werden (deutsch)"
+                        },
+                        "url_de": {
+                            "type": "string",
+                            "title": "url_de",
+                            "description": "Webseite mit Zusatzinformationen zu Dienstleistungen (deutsch)"
+                        },
+                        "urlmobil_de": {
+                            "type": "string",
+                            "title": "urlmobil_de",
+                            "description": "Mobile-Webseite mit Zusatzinformationen zu Dienstleistungen (deutsch)"
+                        },
+                        "groupename_fr": {
+                            "type": "string",
+                            "title": "groupename_fr",
+                            "description": "Name der postalischen Dienstleistungsgruppe (französisch)"
+                        },
+                        "service_fr": {
+                            "type": "string",
+                            "title": "service_fr",
+                            "description": "postalische Dienstleistungen welche an unterschiedlichen Zugangspunkt der Post angeboten werden (französisch)"
+                        },
+                        "url_fr": {
+                            "type": "string",
+                            "title": "url_fr",
+                            "description": "Webseite mit Zusatzinformationen zu Dienstleistungen (französisch)"
+                        },
+                        "urlmobil_fr": {
+                            "type": "string",
+                            "title": "urlmobil_fr",
+                            "description": "Mobile-Webseite mit Zusatzinformationen zu Dienstleistungen (französisch)"
+                        },
+                        "groupename_it": {
+                            "type": "string",
+                            "title": "groupename_it",
+                            "description": "Name der postalischen Dienstleistungsgruppe (italienisch)"
+                        },
+                        "service_it": {
+                            "type": "string",
+                            "title": "service_it",
+                            "description": "postalische Dienstleistungen welche an unterschiedlichen Zugangspunkt der Post angeboten werden (italienisch)"
+                        },
+                        "url_it": {
+                            "type": "string",
+                            "title": "url_it",
+                            "description": "Webseite mit Zusatzinformationen zu Dienstleistungen (italienisch)"
+                        },
+                        "urlmobil_it": {
+                            "type": "string",
+                            "title": "urlmobil_it",
+                            "description": "Mobile-Webseite mit Zusatzinformationen zu Dienstleistungen (italienisch)"
+                        },
+                        "groupename_en": {
+                            "type": "string",
+                            "title": "groupename_en",
+                            "description": "Name der postalischen Dienstleistungsgruppe (englisch)"
+                        },
+                        "service_en": {
+                            "type": "string",
+                            "title": "service_en",
+                            "description": "postalische Dienstleistungen welche an unterschiedlichen Zugangspunkt der Post angeboten werden (englisch"
+                        },
+                        "url_en": {
+                            "type": "string",
+                            "title": "url_en",
+                            "description": "Webseite mit Zusatzinformationen zu Dienstleistungen (englisch)"
+                        },
+                        "urlmobil_en": {
+                            "type": "string",
+                            "title": "urlmobil_en",
+                            "description": "Mobile-Webseite mit Zusatzinformationen zu Dienstleistungen (englisch)"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

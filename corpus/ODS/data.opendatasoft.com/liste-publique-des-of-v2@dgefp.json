@@ -1,0 +1,582 @@
+{
+    "title": "liste-publique-des-of-v2@dgefp",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/liste-publique-des-of-v2@dgefp"
+        }
+    ],
+    "definitions": {
+        "liste-publique-des-of-v2@dgefp": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/liste-publique-des-of-v2@dgefp_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "liste-publique-des-of-v2@dgefp_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "numerodeclarationactivite": {
+                            "type": "string",
+                            "title": "Numéro Déclaration Activité",
+                            "description": ""
+                        },
+                        "numerosdeclarationactiviteprecedent": {
+                            "type": "string",
+                            "title": "Numéro Déclaration Activité Précédent",
+                            "description": ""
+                        },
+                        "denomination": {
+                            "type": "string",
+                            "title": "denomination",
+                            "description": ""
+                        },
+                        "siren": {
+                            "type": "string",
+                            "title": "Code SIREN",
+                            "description": ""
+                        },
+                        "siretetablissementdeclarant": {
+                            "type": "string",
+                            "title": "Siret Etablissement Déclarant",
+                            "description": ""
+                        },
+                        "adressephysiqueorganismeformation_voie": {
+                            "type": "string",
+                            "title": "Adresse Organisme de Formation",
+                            "description": ""
+                        },
+                        "adressephysiqueorganismeformation_codepostal": {
+                            "type": "integer",
+                            "title": "Code Postal Organisme de Formation",
+                            "description": ""
+                        },
+                        "adressephysiqueorganismeformation_ville": {
+                            "type": "string",
+                            "title": "Ville Organisme de Formation",
+                            "description": ""
+                        },
+                        "adressephysiqueorganismeformation_coderegion": {
+                            "type": "string",
+                            "title": "Code Région Organisme de Formation",
+                            "description": ""
+                        },
+                        "geocodageban": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geocodageban",
+                            "description": ""
+                        },
+                        "certifications_actionsdeformation": {
+                            "type": "string",
+                            "title": "Actions de formations",
+                            "description": ""
+                        },
+                        "certifications_bilansdecompetences": {
+                            "type": "string",
+                            "title": "Bilans de compétences",
+                            "description": ""
+                        },
+                        "certifications_vae": {
+                            "type": "string",
+                            "title": "VAE",
+                            "description": ""
+                        },
+                        "certifications_actionsdeformationparapprentissage": {
+                            "type": "string",
+                            "title": "Actions de formations par apprentissage",
+                            "description": ""
+                        },
+                        "organismeetrangerrepresente_denomination": {
+                            "type": "string",
+                            "title": "Dénomination Organisme Etranger Représenté",
+                            "description": ""
+                        },
+                        "organismeetrangerrepresente_voie": {
+                            "type": "string",
+                            "title": "Adresse Organisme Etranger Représenté",
+                            "description": ""
+                        },
+                        "organismeetrangerrepresente_codepostal": {
+                            "type": "string",
+                            "title": "Code Postal Organisme Etranger Représenté",
+                            "description": ""
+                        },
+                        "organismeetrangerrepresente_ville": {
+                            "type": "string",
+                            "title": "Ville Organisme Etranger Représenté",
+                            "description": ""
+                        },
+                        "organismeetrangerrepresente_pays": {
+                            "type": "string",
+                            "title": "Pays Organisme Etranger Représenté",
+                            "description": ""
+                        },
+                        "informationsdeclarees_datedernieredeclaration": {
+                            "type": "string",
+                            "title": "Date dernière déclaration",
+                            "description": ""
+                        },
+                        "informationsdeclarees_debutexercice": {
+                            "type": "string",
+                            "title": "Début d'exercice",
+                            "description": ""
+                        },
+                        "informationsdeclarees_finexercice": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Fin d'exercice",
+                            "description": ""
+                        },
+                        "informationsdeclarees_specialitesdeformation_codespecialite1": {
+                            "type": "string",
+                            "title": "Code Spécialité 1",
+                            "description": ""
+                        },
+                        "informationsdeclarees_specialitesdeformation_libellespecialite1": {
+                            "type": "string",
+                            "title": "Libellé Spécialité 1",
+                            "description": ""
+                        },
+                        "informationsdeclarees_specialitesdeformation_codespecialite2": {
+                            "type": "string",
+                            "title": "Code Spécialité 2",
+                            "description": ""
+                        },
+                        "informationsdeclarees_specialitesdeformation_libellespecialite2": {
+                            "type": "string",
+                            "title": "Libellé Spécialité 2",
+                            "description": ""
+                        },
+                        "informationsdeclarees_specialitesdeformation_codespecialite3": {
+                            "type": "string",
+                            "title": "Code Spécialité 3",
+                            "description": ""
+                        },
+                        "informationsdeclarees_specialitesdeformation_libellespecialite3": {
+                            "type": "string",
+                            "title": "Libellé Spécialité 3",
+                            "description": ""
+                        },
+                        "informationsdeclarees_nbstagiaires": {
+                            "type": "integer",
+                            "title": "Nombre de stagiaires",
+                            "description": ""
+                        },
+                        "informationsdeclarees_nbstagiairesconfiesparunautreof": {
+                            "type": "integer",
+                            "title": "Nombre de stagiaires confiés par un autre Organisme de formation",
+                            "description": ""
+                        },
+                        "informationsdeclarees_effectifformateurs": {
+                            "type": "integer",
+                            "title": "Effectifs de formateurs",
+                            "description": ""
+                        },
+                        "com_arm_code": {
+                            "type": "string",
+                            "title": "Code Commune",
+                            "description": ""
+                        },
+                        "com_arm_name": {
+                            "type": "string",
+                            "title": "Nom Officiel Commune / Arrondissement Municipal",
+                            "description": ""
+                        },
+                        "epci_code": {
+                            "type": "string",
+                            "title": "Code Officiel EPCI",
+                            "description": ""
+                        },
+                        "epci_name": {
+                            "type": "string",
+                            "title": "Nom Officiel EPCI",
+                            "description": ""
+                        },
+                        "dep_code": {
+                            "type": "string",
+                            "title": "Code Officiel Département",
+                            "description": ""
+                        },
+                        "dep_name": {
+                            "type": "string",
+                            "title": "Nom Officiel Département",
+                            "description": ""
+                        },
+                        "reg_name": {
+                            "type": "string",
+                            "title": "Nom Officiel Région",
+                            "description": ""
+                        },
+                        "reg_code": {
+                            "type": "integer",
+                            "title": "Code Officiel Région",
+                            "description": ""
+                        },
+                        "toutes_specialites": {
+                            "type": "string",
+                            "title": "Toutes spécialités de l'organisme de formation",
+                            "description": ""
+                        },
+                        "organisme_formation_geocode": {
+                            "type": "string",
+                            "title": "Organisme Formation Géocodé",
+                            "description": ""
+                        },
+                        "certifications": {
+                            "type": "string",
+                            "title": "Certifications",
+                            "description": ""
+                        },
+                        "random_id": {
+                            "type": "number",
+                            "title": "random_id",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

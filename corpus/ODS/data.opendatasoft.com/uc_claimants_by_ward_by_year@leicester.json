@@ -1,0 +1,766 @@
+{
+    "title": "uc_claimants_by_ward_by_year@leicester",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/uc_claimants_by_ward_by_year@leicester"
+        }
+    ],
+    "definitions": {
+        "uc_claimants_by_ward_by_year@leicester": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/uc_claimants_by_ward_by_year@leicester_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "uc_claimants_by_ward_by_year@leicester_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "ward_name": {
+                            "type": "string",
+                            "title": "Ward Name",
+                            "description": ""
+                        },
+                        "oct_15": {
+                            "type": "integer",
+                            "title": "Oct-15",
+                            "description": ""
+                        },
+                        "nov_15": {
+                            "type": "integer",
+                            "title": "Nov-15",
+                            "description": ""
+                        },
+                        "dec_15": {
+                            "type": "string",
+                            "title": "Dec-15",
+                            "description": ""
+                        },
+                        "jan_16": {
+                            "type": "integer",
+                            "title": "Jan-16",
+                            "description": ""
+                        },
+                        "feb_16": {
+                            "type": "integer",
+                            "title": "Feb-16",
+                            "description": ""
+                        },
+                        "mar_16": {
+                            "type": "integer",
+                            "title": "Mar-16",
+                            "description": ""
+                        },
+                        "apr_16": {
+                            "type": "integer",
+                            "title": "Apr-16",
+                            "description": ""
+                        },
+                        "may_16": {
+                            "type": "integer",
+                            "title": "May-16",
+                            "description": ""
+                        },
+                        "jun_16": {
+                            "type": "integer",
+                            "title": "Jun-16",
+                            "description": ""
+                        },
+                        "jul_16": {
+                            "type": "integer",
+                            "title": "Jul-16",
+                            "description": ""
+                        },
+                        "aug_16": {
+                            "type": "integer",
+                            "title": "Aug-16",
+                            "description": ""
+                        },
+                        "sep_16": {
+                            "type": "integer",
+                            "title": "Sep-16",
+                            "description": ""
+                        },
+                        "oct_16": {
+                            "type": "integer",
+                            "title": "Oct-16",
+                            "description": ""
+                        },
+                        "nov_16": {
+                            "type": "integer",
+                            "title": "Nov-16",
+                            "description": ""
+                        },
+                        "dec_16": {
+                            "type": "integer",
+                            "title": "Dec-16",
+                            "description": ""
+                        },
+                        "jan_17": {
+                            "type": "integer",
+                            "title": "Jan-17",
+                            "description": ""
+                        },
+                        "feb_17": {
+                            "type": "integer",
+                            "title": "Feb-17",
+                            "description": ""
+                        },
+                        "mar_17": {
+                            "type": "integer",
+                            "title": "Mar-17",
+                            "description": ""
+                        },
+                        "apr_17": {
+                            "type": "integer",
+                            "title": "Apr-17",
+                            "description": ""
+                        },
+                        "may_17": {
+                            "type": "integer",
+                            "title": "May-17",
+                            "description": ""
+                        },
+                        "jun_17": {
+                            "type": "integer",
+                            "title": "Jun-17",
+                            "description": ""
+                        },
+                        "jul_17": {
+                            "type": "integer",
+                            "title": "Jul-17",
+                            "description": ""
+                        },
+                        "aug_17": {
+                            "type": "integer",
+                            "title": "Aug-17",
+                            "description": ""
+                        },
+                        "sep_17": {
+                            "type": "integer",
+                            "title": "Sep-17",
+                            "description": ""
+                        },
+                        "oct_17": {
+                            "type": "integer",
+                            "title": "Oct-17",
+                            "description": ""
+                        },
+                        "nov_17": {
+                            "type": "integer",
+                            "title": "Nov-17",
+                            "description": ""
+                        },
+                        "dec_17": {
+                            "type": "integer",
+                            "title": "Dec-17",
+                            "description": ""
+                        },
+                        "jan_18": {
+                            "type": "integer",
+                            "title": "Jan-18",
+                            "description": ""
+                        },
+                        "feb_18": {
+                            "type": "integer",
+                            "title": "Feb-18",
+                            "description": ""
+                        },
+                        "mar_18": {
+                            "type": "integer",
+                            "title": "Mar-18",
+                            "description": ""
+                        },
+                        "apr_18": {
+                            "type": "integer",
+                            "title": "Apr-18",
+                            "description": ""
+                        },
+                        "may_18": {
+                            "type": "integer",
+                            "title": "May-18",
+                            "description": ""
+                        },
+                        "jun_18": {
+                            "type": "integer",
+                            "title": "Jun-18",
+                            "description": ""
+                        },
+                        "jul_18": {
+                            "type": "integer",
+                            "title": "Jul-18",
+                            "description": ""
+                        },
+                        "aug_18": {
+                            "type": "integer",
+                            "title": "Aug-18",
+                            "description": ""
+                        },
+                        "sep_18": {
+                            "type": "integer",
+                            "title": "Sep-18",
+                            "description": ""
+                        },
+                        "oct_18": {
+                            "type": "integer",
+                            "title": "Oct-18",
+                            "description": ""
+                        },
+                        "nov_18": {
+                            "type": "integer",
+                            "title": "Nov-18",
+                            "description": ""
+                        },
+                        "dec_18": {
+                            "type": "integer",
+                            "title": "Dec-18",
+                            "description": ""
+                        },
+                        "jan_19": {
+                            "type": "integer",
+                            "title": "Jan-19",
+                            "description": ""
+                        },
+                        "feb_19": {
+                            "type": "integer",
+                            "title": "Feb-19",
+                            "description": ""
+                        },
+                        "mar_19": {
+                            "type": "integer",
+                            "title": "Mar-19",
+                            "description": ""
+                        },
+                        "apr_19": {
+                            "type": "integer",
+                            "title": "Apr-19",
+                            "description": ""
+                        },
+                        "may_19": {
+                            "type": "integer",
+                            "title": "May-19",
+                            "description": ""
+                        },
+                        "jun_19": {
+                            "type": "integer",
+                            "title": "Jun-19",
+                            "description": ""
+                        },
+                        "jul_19": {
+                            "type": "integer",
+                            "title": "Jul-19",
+                            "description": ""
+                        },
+                        "aug_19": {
+                            "type": "integer",
+                            "title": "Aug-19",
+                            "description": ""
+                        },
+                        "sep_19": {
+                            "type": "integer",
+                            "title": "Sep-19",
+                            "description": ""
+                        },
+                        "oct_19": {
+                            "type": "integer",
+                            "title": "Oct-19",
+                            "description": ""
+                        },
+                        "nov_19": {
+                            "type": "integer",
+                            "title": "Nov-19",
+                            "description": ""
+                        },
+                        "dec_19": {
+                            "type": "integer",
+                            "title": "Dec-19",
+                            "description": ""
+                        },
+                        "jan_20": {
+                            "type": "integer",
+                            "title": "Jan-20",
+                            "description": ""
+                        },
+                        "feb_20": {
+                            "type": "integer",
+                            "title": "Feb-20",
+                            "description": ""
+                        },
+                        "mar_20": {
+                            "type": "integer",
+                            "title": "Mar-20",
+                            "description": ""
+                        },
+                        "apr_20": {
+                            "type": "string",
+                            "title": "Apr-20",
+                            "description": ""
+                        },
+                        "may_20": {
+                            "type": "integer",
+                            "title": "May-20",
+                            "description": ""
+                        },
+                        "jun_20": {
+                            "type": "integer",
+                            "title": "Jun-20",
+                            "description": ""
+                        },
+                        "jul_20": {
+                            "type": "string",
+                            "title": "Jul-20",
+                            "description": ""
+                        },
+                        "aug_20": {
+                            "type": "string",
+                            "title": "Aug-20",
+                            "description": ""
+                        },
+                        "sep_20": {
+                            "type": "string",
+                            "title": "Sep-20",
+                            "description": ""
+                        },
+                        "oct_20": {
+                            "type": "string",
+                            "title": "Oct-20",
+                            "description": ""
+                        },
+                        "nov_20": {
+                            "type": "string",
+                            "title": "Nov-20",
+                            "description": ""
+                        },
+                        "dec_20": {
+                            "type": "string",
+                            "title": "Dec-20",
+                            "description": ""
+                        },
+                        "jan_21": {
+                            "type": "string",
+                            "title": "Jan-21",
+                            "description": ""
+                        },
+                        "feb_21": {
+                            "type": "string",
+                            "title": "Feb-21",
+                            "description": ""
+                        },
+                        "mar_21": {
+                            "type": "string",
+                            "title": "Mar-21",
+                            "description": ""
+                        },
+                        "apr_21": {
+                            "type": "string",
+                            "title": "Apr-21",
+                            "description": ""
+                        },
+                        "may_21": {
+                            "type": "string",
+                            "title": "May-21",
+                            "description": ""
+                        },
+                        "jun_21": {
+                            "type": "string",
+                            "title": "Jun-21",
+                            "description": ""
+                        },
+                        "jul_21": {
+                            "type": "string",
+                            "title": "Jul-21",
+                            "description": ""
+                        },
+                        "aug_21": {
+                            "type": "string",
+                            "title": "Aug-21",
+                            "description": ""
+                        },
+                        "sep_21": {
+                            "type": "string",
+                            "title": "Sep-21",
+                            "description": ""
+                        },
+                        "oct_21": {
+                            "type": "string",
+                            "title": "Oct-21",
+                            "description": ""
+                        },
+                        "nov_21": {
+                            "type": "string",
+                            "title": "Nov-21",
+                            "description": ""
+                        },
+                        "dec_21": {
+                            "type": "string",
+                            "title": "Dec-21",
+                            "description": ""
+                        },
+                        "jan_22": {
+                            "type": "string",
+                            "title": "Jan-22",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

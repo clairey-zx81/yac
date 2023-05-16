@@ -1,0 +1,613 @@
+{
+    "title": "registre-des-installations-de-production-et-de-stockage@datacorsica",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/registre-des-installations-de-production-et-de-stockage@datacorsica"
+        }
+    ],
+    "definitions": {
+        "registre-des-installations-de-production-et-de-stockage@datacorsica": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registre-des-installations-de-production-et-de-stockage@datacorsica_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "registre-des-installations-de-production-et-de-stockage@datacorsica_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "nominstallation": {
+                            "type": "string",
+                            "title": "Code installation",
+                            "description": ""
+                        },
+                        "codedepartement": {
+                            "type": "string",
+                            "title": "Département",
+                            "description": ""
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "Commune",
+                            "description": ""
+                        },
+                        "codeinseecommune": {
+                            "type": "string",
+                            "title": "Code INSEE",
+                            "description": ""
+                        },
+                        "codeiris": {
+                            "type": "string",
+                            "title": "codeIRIS",
+                            "description": ""
+                        },
+                        "coderegion": {
+                            "type": "integer",
+                            "title": "Code région",
+                            "description": ""
+                        },
+                        "codeinseecommuneimplantation": {
+                            "type": "string",
+                            "title": "codeINSEECommuneImplantation",
+                            "description": ""
+                        },
+                        "codeiriscommuneimplantation": {
+                            "type": "string",
+                            "title": "codeIRISCommuneImplantation",
+                            "description": ""
+                        },
+                        "codes3renr": {
+                            "type": "string",
+                            "title": "codeS3RENR",
+                            "description": ""
+                        },
+                        "dateraccordement": {
+                            "type": "string",
+                            "title": "dateRaccordement",
+                            "description": ""
+                        },
+                        "datederaccordement": {
+                            "type": "string",
+                            "title": "dateDeraccordement",
+                            "description": ""
+                        },
+                        "datemiseenservice": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date mise en service",
+                            "description": ""
+                        },
+                        "datedebutversion": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "DateDebutVersion",
+                            "description": ""
+                        },
+                        "codefiliere": {
+                            "type": "string",
+                            "title": "Filière",
+                            "description": ""
+                        },
+                        "moderaccordement": {
+                            "type": "string",
+                            "title": "modeRaccordement",
+                            "description": ""
+                        },
+                        "codecombustible": {
+                            "type": "string",
+                            "title": "codeCombustible",
+                            "description": ""
+                        },
+                        "codescombustiblessecondaires": {
+                            "type": "string",
+                            "title": "codesCombustiblesSecondaires",
+                            "description": ""
+                        },
+                        "codetechnologie": {
+                            "type": "string",
+                            "title": "codeTechnologie",
+                            "description": ""
+                        },
+                        "puismaxinstallee": {
+                            "type": "number",
+                            "title": "Puissance installée (kW)",
+                            "description": ""
+                        },
+                        "puismaxraccharge": {
+                            "type": "string",
+                            "title": "puisMaxRacCharge",
+                            "description": ""
+                        },
+                        "puismaxcharge": {
+                            "type": "string",
+                            "title": "puisMaxCharge",
+                            "description": ""
+                        },
+                        "puismaxrac": {
+                            "type": "string",
+                            "title": "puisMaxRac",
+                            "description": ""
+                        },
+                        "nbgroupes": {
+                            "type": "string",
+                            "title": "nbGroupes",
+                            "description": ""
+                        },
+                        "regime": {
+                            "type": "string",
+                            "title": "Régime",
+                            "description": ""
+                        },
+                        "energiestockable": {
+                            "type": "string",
+                            "title": "energieStockable",
+                            "description": ""
+                        },
+                        "capacitereservoir": {
+                            "type": "string",
+                            "title": "capaciteReservoir",
+                            "description": ""
+                        },
+                        "hauteurchute": {
+                            "type": "string",
+                            "title": "hauteurChute",
+                            "description": ""
+                        },
+                        "productible": {
+                            "type": "string",
+                            "title": "productible",
+                            "description": ""
+                        },
+                        "debitmaximal": {
+                            "type": "string",
+                            "title": "debitMaximal",
+                            "description": ""
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geom",
+                            "description": ""
+                        },
+                        "codeeicresourceobject": {
+                            "type": "string",
+                            "title": "codeEICResourceObject",
+                            "description": ""
+                        },
+                        "codeepci": {
+                            "type": "integer",
+                            "title": "codeEPCI",
+                            "description": ""
+                        },
+                        "epci": {
+                            "type": "string",
+                            "title": "EPCI",
+                            "description": ""
+                        },
+                        "region": {
+                            "type": "string",
+                            "title": "region",
+                            "description": ""
+                        },
+                        "postesource": {
+                            "type": "string",
+                            "title": "posteSource",
+                            "description": ""
+                        },
+                        "tensionraccordement": {
+                            "type": "string",
+                            "title": "tensionRaccordement",
+                            "description": ""
+                        },
+                        "filiere": {
+                            "type": "string",
+                            "title": "filiere",
+                            "description": ""
+                        },
+                        "combustible": {
+                            "type": "string",
+                            "title": "combustible",
+                            "description": ""
+                        },
+                        "combustiblessecondaires": {
+                            "type": "string",
+                            "title": "combustiblesSecondaires",
+                            "description": ""
+                        },
+                        "technologie": {
+                            "type": "string",
+                            "title": "technologie",
+                            "description": ""
+                        },
+                        "nbinstallations": {
+                            "type": "integer",
+                            "title": "nbInstallations",
+                            "description": ""
+                        },
+                        "codegestionnaire": {
+                            "type": "string",
+                            "title": "codeGestionnaire",
+                            "description": ""
+                        },
+                        "gestionnaire": {
+                            "type": "string",
+                            "title": "gestionnaire",
+                            "description": ""
+                        },
+                        "energieannuelleglissanteinjectee": {
+                            "type": "integer",
+                            "title": "energieAnnuelleGlissanteInjectee",
+                            "description": ""
+                        },
+                        "energieannuelleglissanteproduite": {
+                            "type": "string",
+                            "title": "energieAnnuelleGlissanteProduite",
+                            "description": ""
+                        },
+                        "energieannuelleglissantesoutiree": {
+                            "type": "integer",
+                            "title": "energieAnnuelleGlissanteSoutiree",
+                            "description": ""
+                        },
+                        "energieannuelleglissantestockee": {
+                            "type": "string",
+                            "title": "energieAnnuelleGlissanteStockee",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

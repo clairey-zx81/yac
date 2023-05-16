@@ -1,0 +1,474 @@
+{
+    "title": "istanze-autoriparatori@bologna",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/istanze-autoriparatori@bologna"
+        }
+    ],
+    "definitions": {
+        "istanze-autoriparatori@bologna": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/istanze-autoriparatori@bologna_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "istanze-autoriparatori@bologna_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "area": {
+                            "type": "string",
+                            "title": "Area",
+                            "description": "Area di riferimento dell'istanza"
+                        },
+                        "sottoarea": {
+                            "type": "string",
+                            "title": "Sottoarea",
+                            "description": "Sottoarea di riferimento dell'istanza"
+                        },
+                        "tipo_pratica": {
+                            "type": "string",
+                            "title": "Tipo pratica",
+                            "description": ""
+                        },
+                        "tipointervento": {
+                            "type": "string",
+                            "title": "TipoIntervento",
+                            "description": ""
+                        },
+                        "npg_rich": {
+                            "type": "string",
+                            "title": "NPg Rich.",
+                            "description": "Numero protocollo di arrivo dell'istanza"
+                        },
+                        "annorichiesta": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "AnnoRichiesta",
+                            "description": "Anno di arrivo dell'istanza"
+                        },
+                        "data_rich": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Data Rich.",
+                            "description": "Data di arrivo dell'istanza"
+                        },
+                        "esito": {
+                            "type": "string",
+                            "title": "Esito",
+                            "description": ""
+                        },
+                        "data_chiusura": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Data Chiusura",
+                            "description": "Data chiusura dell'istanza"
+                        },
+                        "esercizio_via_e_civico": {
+                            "type": "string",
+                            "title": "Esercizio Via e Civico",
+                            "description": "Indirizzo dell'esercizio"
+                        },
+                        "quartiere": {
+                            "type": "string",
+                            "title": "Quartiere",
+                            "description": "Quartiere dell'esercizio"
+                        },
+                        "zona": {
+                            "type": "string",
+                            "title": "Zona",
+                            "description": ""
+                        },
+                        "area_stat": {
+                            "type": "string",
+                            "title": "Area Stat.",
+                            "description": ""
+                        },
+                        "centro_stor": {
+                            "type": "string",
+                            "title": "Centro stor.",
+                            "description": "Presenza in centro storico"
+                        },
+                        "codimpresa": {
+                            "type": "integer",
+                            "title": "CodImpresa",
+                            "description": ""
+                        },
+                        "codicevia": {
+                            "type": "integer",
+                            "title": "CodiceVia",
+                            "description": "Codice anagrafe della via"
+                        },
+                        "civico": {
+                            "type": "string",
+                            "title": "Civico",
+                            "description": "Civico dell'esercizio"
+                        },
+                        "esponenteciv": {
+                            "type": "string",
+                            "title": "EsponenteCiv",
+                            "description": "esponente civico dell'esercizio"
+                        },
+                        "latitudine": {
+                            "type": "number",
+                            "title": "Latitudine",
+                            "description": ""
+                        },
+                        "longitudine": {
+                            "type": "number",
+                            "title": "Longitudine",
+                            "description": ""
+                        },
+                        "geopoint": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geopoint",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

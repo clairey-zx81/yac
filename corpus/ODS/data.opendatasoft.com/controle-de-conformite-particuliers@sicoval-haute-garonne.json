@@ -1,0 +1,564 @@
+{
+    "title": "controle-de-conformite-particuliers@sicoval-haute-garonne",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/controle-de-conformite-particuliers@sicoval-haute-garonne"
+        }
+    ],
+    "definitions": {
+        "controle-de-conformite-particuliers@sicoval-haute-garonne": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controle-de-conformite-particuliers@sicoval-haute-garonne_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "controle-de-conformite-particuliers@sicoval-haute-garonne_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "objectid": {
+                            "type": "integer",
+                            "title": "OBJECTID",
+                            "description": ""
+                        },
+                        "date_real": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Date de réalisation",
+                            "description": ""
+                        },
+                        "code_insee": {
+                            "type": "string",
+                            "title": "Commune",
+                            "description": ""
+                        },
+                        "conforme": {
+                            "type": "string",
+                            "title": "Niveau de conformité :",
+                            "description": ""
+                        },
+                        "ci_annee_construct": {
+                            "type": "integer",
+                            "title": "Année de construction",
+                            "description": ""
+                        },
+                        "ci_type_construct": {
+                            "type": "string",
+                            "title": "Type de construction",
+                            "description": ""
+                        },
+                        "ci_modif_real": {
+                            "type": "string",
+                            "title": "Modification depuis réalisation",
+                            "description": ""
+                        },
+                        "ci_deco_pret": {
+                            "type": "string",
+                            "title": "Les anciens dispositifs de prétraitement (fosse septique, bac à graisses, …) ont-ils été déconnectés ?",
+                            "description": ""
+                        },
+                        "ci_vidange": {
+                            "type": "string",
+                            "title": "Ont-ils été entièrement vidangés",
+                            "description": ""
+                        },
+                        "ci_certif_vidang": {
+                            "type": "string",
+                            "title": "Présence du certificat de vidange",
+                            "description": ""
+                        },
+                        "ci_comble_demo": {
+                            "type": "string",
+                            "title": "Ont-ils été comblés ou démolis  ?",
+                            "description": ""
+                        },
+                        "cc_brt_eu": {
+                            "type": "string",
+                            "title": "Boîte de Branchement EU :",
+                            "description": ""
+                        },
+                        "cc_brt_ep": {
+                            "type": "string",
+                            "title": "Boîte de Branchement EP :",
+                            "description": ""
+                        },
+                        "cc_pb_part1": {
+                            "type": "string",
+                            "title": "Problèmes particuliers ?",
+                            "description": ""
+                        },
+                        "cc_pb_part2": {
+                            "type": "string",
+                            "title": "Problèmes particuliers suite",
+                            "description": ""
+                        },
+                        "cc_dispo_anti_r": {
+                            "type": "string",
+                            "title": "Présence d’un dispositif anti retour :",
+                            "description": ""
+                        },
+                        "cc_pr": {
+                            "type": "string",
+                            "title": "Présence d’un poste de relevage :",
+                            "description": ""
+                        },
+                        "av_avis": {
+                            "type": "string",
+                            "title": "Avis (pour le rapport)",
+                            "description": ""
+                        },
+                        "av_travaux": {
+                            "type": "string",
+                            "title": "Travaux nécessaires pour la mise en conformité :",
+                            "description": ""
+                        },
+                        "av_travaux2": {
+                            "type": "string",
+                            "title": "Travaux nécessaires pour la mise en conformité (suite):",
+                            "description": ""
+                        },
+                        "cc_brt_eu_etat": {
+                            "type": "string",
+                            "title": "Etat boite EU",
+                            "description": ""
+                        },
+                        "cc_brt_ep_etat": {
+                            "type": "string",
+                            "title": "Etat boite EP",
+                            "description": ""
+                        },
+                        "cc1_type_effluent": {
+                            "type": "string",
+                            "title": "Type d’effluent :",
+                            "description": ""
+                        },
+                        "cc1_nb_wc": {
+                            "type": "integer",
+                            "title": "Nb point d'eau WC",
+                            "description": ""
+                        },
+                        "cc1_nb_sdb": {
+                            "type": "integer",
+                            "title": "Nb point d'eau salle de bain",
+                            "description": ""
+                        },
+                        "cc1_nb_cuisine": {
+                            "type": "integer",
+                            "title": "Nb point d'eau cuisine",
+                            "description": ""
+                        },
+                        "cc1_nb_buand": {
+                            "type": "integer",
+                            "title": "Nb point d'eau buanderie",
+                            "description": ""
+                        },
+                        "cc1_nb_autre": {
+                            "type": "integer",
+                            "title": "nb point d'eau autre",
+                            "description": ""
+                        },
+                        "cc1_racc_eu": {
+                            "type": "string",
+                            "title": "Sont-ils tous raccordés au réseau public d'eaux usées ?",
+                            "description": ""
+                        },
+                        "cc1_pente_ok": {
+                            "type": "string",
+                            "title": "La pente de la conduite en amont est elle suffisante?",
+                            "description": ""
+                        },
+                        "cc1_vent_prim": {
+                            "type": "string",
+                            "title": "Ventilation primaire (évents) :",
+                            "description": ""
+                        },
+                        "cc1_dest_plu": {
+                            "type": "string",
+                            "title": "Destination des eaux pluviales",
+                            "description": ""
+                        },
+                        "cc1_autres": {
+                            "type": "string",
+                            "title": "Autres point d'eau",
+                            "description": ""
+                        },
+                        "facturation": {
+                            "type": "number",
+                            "title": "Facturation (€)",
+                            "description": ""
+                        },
+                        "date_facturation": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Date de facturation",
+                            "description": ""
+                        },
+                        "date_signature": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Date de signature",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "geo_shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

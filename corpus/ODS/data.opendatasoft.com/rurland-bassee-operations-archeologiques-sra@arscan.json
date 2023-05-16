@@ -1,0 +1,521 @@
+{
+    "title": "rurland-bassee-operations-archeologiques-sra@arscan",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/rurland-bassee-operations-archeologiques-sra@arscan"
+        }
+    ],
+    "definitions": {
+        "rurland-bassee-operations-archeologiques-sra@arscan": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/rurland-bassee-operations-archeologiques-sra@arscan_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "rurland-bassee-operations-archeologiques-sra@arscan_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": "Point géographique"
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": "Forme vectorielle"
+                        },
+                        "objectid": {
+                            "type": "number",
+                            "title": "OBJECTID",
+                            "description": "OBJECTID"
+                        },
+                        "oa_natcode": {
+                            "type": "string",
+                            "title": "OA_NATCODE",
+                            "description": "Code national de l'opération archéologique"
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "TYPE",
+                            "description": "Type d'opération"
+                        },
+                        "intitule": {
+                            "type": "string",
+                            "title": "INTITULE",
+                            "description": "Nom d l'opération"
+                        },
+                        "nom_resp": {
+                            "type": "string",
+                            "title": "NOM_RESP",
+                            "description": "Nom du responsable de l'opération"
+                        },
+                        "prenom_res": {
+                            "type": "string",
+                            "title": "PRENOM_RES",
+                            "description": "Prénom du responsable de l'opération"
+                        },
+                        "etat": {
+                            "type": "string",
+                            "title": "ETAT",
+                            "description": "État de l'opération"
+                        },
+                        "adresse": {
+                            "type": "string",
+                            "title": "ADRESSE",
+                            "description": "Adresse de l'opération"
+                        },
+                        "origine": {
+                            "type": "string",
+                            "title": "ORIGINE",
+                            "description": "Origine de l'opération"
+                        },
+                        "chronologi": {
+                            "type": "string",
+                            "title": "CHRONOLOGI",
+                            "description": "Période chronologique"
+                        },
+                        "programme": {
+                            "type": "string",
+                            "title": "PROGRAMME",
+                            "description": "Programme"
+                        },
+                        "rattach_pc": {
+                            "type": "string",
+                            "title": "RATTACH_PC",
+                            "description": "Rattachement"
+                        },
+                        "code_dossi": {
+                            "type": "number",
+                            "title": "CODE_DOSSI",
+                            "description": "Code du dossier"
+                        },
+                        "numero_act": {
+                            "type": "number",
+                            "title": "NUMERO_ACT",
+                            "description": "Numéro d'acte"
+                        },
+                        "acte_date": {
+                            "type": "string",
+                            "title": "ACTE_DATE",
+                            "description": "Date de l'acte"
+                        },
+                        "date_debut": {
+                            "type": "string",
+                            "title": "DATE_DEBUT",
+                            "description": "Date de début d'opération"
+                        },
+                        "date_fin": {
+                            "type": "string",
+                            "title": "DATE_FIN",
+                            "description": "Date de foin d'opération"
+                        },
+                        "annee_real": {
+                            "type": "number",
+                            "title": "ANNEE_REAL",
+                            "description": "Année de l'opération"
+                        },
+                        "identifica": {
+                            "type": "string",
+                            "title": "IDENTIFICA",
+                            "description": "Identification de l'opération "
+                        },
+                        "x_degre": {
+                            "type": "number",
+                            "title": "X_DEGRE",
+                            "description": "Coordonnée X (WGS84)"
+                        },
+                        "y_degre": {
+                            "type": "number",
+                            "title": "Y_DEGRE",
+                            "description": "Coordonnée Y (WGS84)"
+                        },
+                        "x_saisi": {
+                            "type": "string",
+                            "title": "X_SAISI",
+                            "description": "Coordonnée X projeté"
+                        },
+                        "y_saisi": {
+                            "type": "string",
+                            "title": "Y_SAISI",
+                            "description": "Coordonnée Y projeté"
+                        },
+                        "georeferen": {
+                            "type": "string",
+                            "title": "GEOREFEREN",
+                            "description": "Géoréférencement"
+                        },
+                        "geometrie": {
+                            "type": "string",
+                            "title": "GEOMETRIE",
+                            "description": "Géométrie"
+                        },
+                        "oa_surface": {
+                            "type": "number",
+                            "title": "OA_SURFACE",
+                            "description": "Superficie de l'opération"
+                        },
+                        "shape_leng": {
+                            "type": "number",
+                            "title": "Shape_Leng",
+                            "description": "Périmètre de l'opération"
+                        },
+                        "shape_area": {
+                            "type": "number",
+                            "title": "Shape_Area",
+                            "description": "Superficie de l'opération"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

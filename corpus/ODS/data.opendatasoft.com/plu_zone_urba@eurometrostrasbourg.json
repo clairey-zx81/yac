@@ -1,0 +1,491 @@
+{
+    "title": "plu_zone_urba@eurometrostrasbourg",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/plu_zone_urba@eurometrostrasbourg"
+        }
+    ],
+    "definitions": {
+        "plu_zone_urba@eurometrostrasbourg": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/plu_zone_urba@eurometrostrasbourg_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "plu_zone_urba@eurometrostrasbourg_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "trig_comm": {
+                            "type": "string",
+                            "title": "TRIG_COMM",
+                            "description": "Trigramme \"commune\""
+                        },
+                        "num_unique": {
+                            "type": "string",
+                            "title": "NUM_UNIQUE",
+                            "description": "Numéro unique de l'objet PLU"
+                        },
+                        "ht_aff": {
+                            "type": "string",
+                            "title": "HT_AFF",
+                            "description": "Hauteur affichée"
+                        },
+                        "code_couleur": {
+                            "type": "string",
+                            "title": "CODE_COULEUR",
+                            "description": "Code couleur par famille de zone"
+                        },
+                        "couleur": {
+                            "type": "string",
+                            "title": "COULEUR",
+                            "description": "Couleur par famille de zone"
+                        },
+                        "hauteur_ht": {
+                            "type": "string",
+                            "title": "HAUTEUR_HT",
+                            "description": "Hauteur hors-tout"
+                        },
+                        "main_type": {
+                            "type": "string",
+                            "title": "MAIN_TYPE",
+                            "description": "Type de zone principal"
+                        },
+                        "paraph01": {
+                            "type": "string",
+                            "title": "Paraph01",
+                            "description": "Texte descriptif de la zone - paragraphe 1"
+                        },
+                        "paraph02": {
+                            "type": "string",
+                            "title": "Paraph02",
+                            "description": "Texte descriptif de la zone - paragraphe 2"
+                        },
+                        "paraph03": {
+                            "type": "string",
+                            "title": "Paraph03",
+                            "description": "Texte descriptif de la zone - paragraphe 3"
+                        },
+                        "paraph04": {
+                            "type": "string",
+                            "title": "Paraph04",
+                            "description": "Texte descriptif de la zone - paragraphe 4"
+                        },
+                        "paraph05": {
+                            "type": "string",
+                            "title": "Paraph05",
+                            "description": "Texte descriptif de la zone - paragraphe 5"
+                        },
+                        "paraph06": {
+                            "type": "string",
+                            "title": "Paraph06",
+                            "description": "Texte descriptif de la zone - paragraphe 6"
+                        },
+                        "paraph07": {
+                            "type": "string",
+                            "title": "Paraph07",
+                            "description": "Texte descriptif de la zone - paragraphe 7"
+                        },
+                        "texte_plan": {
+                            "type": "string",
+                            "title": "TEXTE_PLAN",
+                            "description": "Texte lié à la zone pour les éditions graphiques"
+                        },
+                        "photo": {
+                            "type": "string",
+                            "title": "PHOTO",
+                            "description": "Illustration"
+                        },
+                        "ms": {
+                            "type": "string",
+                            "title": "MS",
+                            "description": "Secteur de mixité sociale"
+                        },
+                        "hauteur_et": {
+                            "type": "string",
+                            "title": "HAUTEUR_ET",
+                            "description": "Hauteur toiture"
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "TYPE",
+                            "description": "Type de zone"
+                        },
+                        "page": {
+                            "type": "string",
+                            "title": "PAGE",
+                            "description": "Numéro de page renvoyant à la description de la zone dans le règlement écrit"
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "COMMUNE",
+                            "description": "Nom de la commune"
+                        },
+                        "surf_m2": {
+                            "type": "string",
+                            "title": "SURF_M2",
+                            "description": "Surface de la zone en m²"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

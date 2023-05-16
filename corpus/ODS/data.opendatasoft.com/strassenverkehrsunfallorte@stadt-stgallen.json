@@ -1,0 +1,564 @@
+{
+    "title": "strassenverkehrsunfallorte@stadt-stgallen",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/strassenverkehrsunfallorte@stadt-stgallen"
+        }
+    ],
+    "definitions": {
+        "strassenverkehrsunfallorte@stadt-stgallen": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/strassenverkehrsunfallorte@stadt-stgallen_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "strassenverkehrsunfallorte@stadt-stgallen_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "accidentuid": {
+                            "type": "string",
+                            "title": "﻿AccidentUID",
+                            "description": ""
+                        },
+                        "accidenttype": {
+                            "type": "string",
+                            "title": "AccidentType",
+                            "description": ""
+                        },
+                        "accidenttype_de": {
+                            "type": "string",
+                            "title": "AccidentType_de",
+                            "description": ""
+                        },
+                        "accidenttype_fr": {
+                            "type": "string",
+                            "title": "AccidentType_fr",
+                            "description": ""
+                        },
+                        "accidenttype_it": {
+                            "type": "string",
+                            "title": "AccidentType_it",
+                            "description": ""
+                        },
+                        "accidenttype_en": {
+                            "type": "string",
+                            "title": "AccidentType_en",
+                            "description": ""
+                        },
+                        "accidentseveritycategory": {
+                            "type": "string",
+                            "title": "AccidentSeverityCategory",
+                            "description": ""
+                        },
+                        "accidentseveritycategory_de": {
+                            "type": "string",
+                            "title": "AccidentSeverityCategory_de",
+                            "description": ""
+                        },
+                        "accidentseveritycategory_fr": {
+                            "type": "string",
+                            "title": "AccidentSeverityCategory_fr",
+                            "description": ""
+                        },
+                        "accidentseveritycategory_it": {
+                            "type": "string",
+                            "title": "AccidentSeverityCategory_it",
+                            "description": ""
+                        },
+                        "accidentseveritycategory_en": {
+                            "type": "string",
+                            "title": "AccidentSeverityCategory_en",
+                            "description": ""
+                        },
+                        "accidentinvolvingpedestrian": {
+                            "type": "string",
+                            "title": "AccidentInvolvingPedestrian",
+                            "description": ""
+                        },
+                        "accidentinvolvingbicycle": {
+                            "type": "string",
+                            "title": "AccidentInvolvingBicycle",
+                            "description": ""
+                        },
+                        "accidentinvolvingmotorcycle": {
+                            "type": "string",
+                            "title": "AccidentInvolvingMotorcycle",
+                            "description": ""
+                        },
+                        "roadtype": {
+                            "type": "string",
+                            "title": "RoadType",
+                            "description": ""
+                        },
+                        "roadtype_de": {
+                            "type": "string",
+                            "title": "RoadType_de",
+                            "description": ""
+                        },
+                        "roadtype_fr": {
+                            "type": "string",
+                            "title": "RoadType_fr",
+                            "description": ""
+                        },
+                        "roadtype_it": {
+                            "type": "string",
+                            "title": "RoadType_it",
+                            "description": ""
+                        },
+                        "roadtype_en": {
+                            "type": "string",
+                            "title": "RoadType_en",
+                            "description": ""
+                        },
+                        "accidentlocation_chlv95_e": {
+                            "type": "integer",
+                            "title": "AccidentLocation_CHLV95_E",
+                            "description": ""
+                        },
+                        "accidentlocation_chlv95_n": {
+                            "type": "integer",
+                            "title": "AccidentLocation_CHLV95_N",
+                            "description": ""
+                        },
+                        "location": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Location",
+                            "description": ""
+                        },
+                        "cantoncode": {
+                            "type": "string",
+                            "title": "CantonCode",
+                            "description": ""
+                        },
+                        "municipalitycode": {
+                            "type": "string",
+                            "title": "MunicipalityCode",
+                            "description": ""
+                        },
+                        "gem_name": {
+                            "type": "string",
+                            "title": "MunicipalityName",
+                            "description": ""
+                        },
+                        "accidentyear": {
+                            "type": "string",
+                            "title": "AccidentYear",
+                            "description": ""
+                        },
+                        "accidentmonth": {
+                            "type": "integer",
+                            "title": "AccidentMonth",
+                            "description": ""
+                        },
+                        "month_year": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Month_Year",
+                            "description": ""
+                        },
+                        "accidentmonth_de": {
+                            "type": "string",
+                            "title": "AccidentMonth_de",
+                            "description": ""
+                        },
+                        "accidentmonth_fr": {
+                            "type": "string",
+                            "title": "AccidentMonth_fr",
+                            "description": ""
+                        },
+                        "accidentmonth_it": {
+                            "type": "string",
+                            "title": "AccidentMonth_it",
+                            "description": ""
+                        },
+                        "accidentmonth_en": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "AccidentMonth_en",
+                            "description": ""
+                        },
+                        "accidentweekday": {
+                            "type": "string",
+                            "title": "AccidentWeekDay",
+                            "description": ""
+                        },
+                        "accidentweekday_de": {
+                            "type": "string",
+                            "title": "AccidentWeekDay_de",
+                            "description": ""
+                        },
+                        "accidentweekday_fr": {
+                            "type": "string",
+                            "title": "AccidentWeekDay_fr",
+                            "description": ""
+                        },
+                        "accidentweekday_it": {
+                            "type": "string",
+                            "title": "AccidentWeekDay_it",
+                            "description": ""
+                        },
+                        "accidentweekday_en": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "AccidentWeekDay_en",
+                            "description": ""
+                        },
+                        "accidenthour": {
+                            "type": "string",
+                            "title": "AccidentHour",
+                            "description": ""
+                        },
+                        "accidenthour_text": {
+                            "type": "string",
+                            "title": "AccidentHour_text",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

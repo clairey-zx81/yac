@@ -1,0 +1,253 @@
+{
+  "$schema": "http://json-schema.org/draft-04/hyper-schema",
+  "definitions": {
+    "expanded_permissions": {
+      "description": "enterprise account permissions",
+      "items": {
+        "properties": {
+          "description": {
+            "example": "View enterprise account members and teams.",
+            "type": [
+              "string"
+            ]
+          },
+          "name": {
+            "$ref": "#/definitions/enterprise-account-member/definitions/permission",
+            "example": "view"
+          }
+        },
+        "type": [
+          "object"
+        ]
+      },
+      "type": [
+        "array"
+      ]
+    },
+    "id": {
+      "description": "unique identifier of the member",
+      "example": "01234567-89ab-cdef-0123-456789abcdef",
+      "format": "uuid",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "identity": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/enterprise-account-member/definitions/id"
+        }
+      ]
+    },
+    "identity_provider": {
+      "description": "Identity Provider information the member is federated with",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/identity-provider/definitions/id"
+        },
+        "name": {
+          "description": "name of the identity provider",
+          "example": "acme",
+          "readOnly": true,
+          "type": [
+            "string"
+          ]
+        },
+        "owner": {
+          "$ref": "#/definitions/identity-provider/definitions/owner"
+        },
+        "redacted": {
+          "description": "whether the identity_provider information is redacted or not",
+          "example": false,
+          "readOnly": true,
+          "type": [
+            "boolean"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "permission": {
+      "description": "permission in the enterprise account",
+      "enum": [
+        "view",
+        "create",
+        "manage",
+        "billing"
+      ],
+      "example": "view",
+      "readOnly": true,
+      "type": [
+        "string"
+      ]
+    },
+    "permissions": {
+      "description": "permissions for enterprise account",
+      "example": [
+        "view"
+      ],
+      "items": {
+        "$ref": "#/definitions/enterprise-account-member/definitions/permission"
+      },
+      "readOnly": true,
+      "type": [
+        "array"
+      ]
+    },
+    "two_factor_authentication": {
+      "description": "whether the Enterprise Account member has two factor authentication enabled",
+      "example": true,
+      "readOnly": true,
+      "type": [
+        "boolean"
+      ]
+    },
+    "user_identity": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/account/definitions/email"
+        },
+        {
+          "$ref": "#/definitions/account/definitions/id"
+        }
+      ]
+    }
+  },
+  "description": "Enterprise account members are users with access to an enterprise account.",
+  "links": [
+    {
+      "description": "List members in an enterprise account.",
+      "href": "/enterprise-accounts/{(%23%2Fdefinitions%2Fenterprise-account%2Fdefinitions%2Fidentity)}/members",
+      "method": "GET",
+      "rel": "instances",
+      "targetSchema": {
+        "items": {
+          "$ref": "#/definitions/enterprise-account-member"
+        },
+        "type": [
+          "array"
+        ]
+      },
+      "title": "List"
+    },
+    {
+      "description": "Create a member in an enterprise account.",
+      "href": "/enterprise-accounts/{(%23%2Fdefinitions%2Fenterprise-account%2Fdefinitions%2Fidentity)}/members",
+      "method": "POST",
+      "rel": "create",
+      "schema": {
+        "properties": {
+          "federated": {
+            "description": "whether membership is being created as part of SSO JIT",
+            "example": false,
+            "type": [
+              "boolean"
+            ]
+          },
+          "permissions": {
+            "$ref": "#/definitions/enterprise-account-member/definitions/permissions"
+          },
+          "user": {
+            "$ref": "#/definitions/enterprise-account-member/definitions/user_identity"
+          }
+        },
+        "required": [
+          "user",
+          "permissions"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "targetSchema": {
+        "$ref": "#/definitions/enterprise-account-member"
+      },
+      "title": "Create"
+    },
+    {
+      "description": "Update a member in an enterprise account.",
+      "href": "/enterprise-accounts/{(%23%2Fdefinitions%2Fenterprise-account%2Fdefinitions%2Fidentity)}/members/{(%23%2Fdefinitions%2Fenterprise-account-member%2Fdefinitions%2Fuser_identity)}",
+      "method": "PATCH",
+      "rel": "update",
+      "schema": {
+        "properties": {
+          "permissions": {
+            "$ref": "#/definitions/enterprise-account-member/definitions/permissions"
+          }
+        },
+        "required": [
+          "permissions"
+        ],
+        "type": [
+          "object"
+        ]
+      },
+      "targetSchema": {
+        "$ref": "#/definitions/enterprise-account-member"
+      },
+      "title": "Update"
+    },
+    {
+      "description": "delete a member in an enterprise account.",
+      "href": "/enterprise-accounts/{(%23%2Fdefinitions%2Fenterprise-account%2Fdefinitions%2Fidentity)}/members/{(%23%2Fdefinitions%2Fenterprise-account-member%2Fdefinitions%2Fuser_identity)}",
+      "method": "DELETE",
+      "rel": "destroy",
+      "targetSchema": {
+        "$ref": "#/definitions/enterprise-account-member"
+      },
+      "title": "Delete"
+    }
+  ],
+  "properties": {
+    "enterprise_account": {
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/enterprise-account/definitions/id"
+        },
+        "name": {
+          "$ref": "#/definitions/enterprise-account/definitions/name"
+        }
+      },
+      "type": [
+        "object"
+      ]
+    },
+    "id": {
+      "$ref": "#/definitions/enterprise-account-member/definitions/id"
+    },
+    "identity_provider": {
+      "$ref": "#/definitions/enterprise-account-member/definitions/identity_provider"
+    },
+    "permissions": {
+      "$ref": "#/definitions/enterprise-account-member/definitions/expanded_permissions"
+    },
+    "two_factor_authentication": {
+      "$ref": "#/definitions/enterprise-account-member/definitions/two_factor_authentication"
+    },
+    "user": {
+      "description": "user information for the membership",
+      "properties": {
+        "email": {
+          "$ref": "#/definitions/account/definitions/email"
+        },
+        "id": {
+          "$ref": "#/definitions/account/definitions/id"
+        }
+      },
+      "strictProperties": true,
+      "type": [
+        "object"
+      ]
+    }
+  },
+  "stability": "development",
+  "strictProperties": true,
+  "title": "Heroku Platform API - Enterprise Account Member",
+  "type": [
+    "object"
+  ]
+}

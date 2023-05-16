@@ -1,0 +1,611 @@
+{
+    "title": "enquete-alimentation-resultats-brut",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/enquete-alimentation-resultats-brut"
+        }
+    ],
+    "definitions": {
+        "enquete-alimentation-resultats-brut": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/enquete-alimentation-resultats-brut_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "enquete-alimentation-resultats-brut_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "q1_i1": {
+                            "type": "string",
+                            "title": "q1_i1",
+                            "description": "1\tTout à fait d'accord\n2\tPlutôt d'accord\n3\tPlutôt pas d'accord\n4\tPas du tout d'accord\n5\tNe se prononce pas"
+                        },
+                        "q1_i2": {
+                            "type": "string",
+                            "title": "q1_i2",
+                            "description": "1\tTout à fait d'accord\n2\tPlutôt d'accord\n3\tPlutôt pas d'accord\n4\tPas du tout d'accord\n5\tNe se prononce pas"
+                        },
+                        "q1_i3": {
+                            "type": "string",
+                            "title": "q1_i3",
+                            "description": "1\tTout à fait d'accord\n2\tPlutôt d'accord\n3\tPlutôt pas d'accord\n4\tPas du tout d'accord\n5\tNe se prononce pas"
+                        },
+                        "q1_i4": {
+                            "type": "string",
+                            "title": "q1_i4",
+                            "description": "1\tTout à fait d'accord\n2\tPlutôt d'accord\n3\tPlutôt pas d'accord\n4\tPas du tout d'accord\n5\tNe se prononce pas"
+                        },
+                        "q2": {
+                            "type": "string",
+                            "title": "q2",
+                            "description": "1\tManger des produits labellisés (AOP, AOC, Label Rouge)\n2\tAvoir une alimentation peu calorique\n3\tLimiter/réduire certains aliments (viande, oeufs, laitage, etc.)\n4\tManger des produits bio\n5\tManger des produits de grandes marques\n6\tManger des produits de saison\n7\tManger des produits frais plutôt qu'en conserves ou surgelés\n8\tManger beaucoup de fruits et légumes\n9\tVarier/équilibrer les aliments (légumes et fruits, viandes et poissons, féculents...)\n10\tConsommer des produits locaux\n11\tNe se prononce pas\n12\tManger des produits de saison ET Varier/équilibrer les aliments ET Consommer des produits locaux\n13\tManger des produits de saison OU Varier/équilibrer les aliments OU Consommer des produits locaux\n"
+                        },
+                        "q3": {
+                            "type": "string",
+                            "title": "q3",
+                            "description": ""
+                        },
+                        "q4_i1": {
+                            "type": "string",
+                            "title": "q4_i1",
+                            "description": ""
+                        },
+                        "q4_i2": {
+                            "type": "string",
+                            "title": "q4_i2",
+                            "description": ""
+                        },
+                        "q4_i3": {
+                            "type": "string",
+                            "title": "q4_i3",
+                            "description": ""
+                        },
+                        "q4_i4": {
+                            "type": "string",
+                            "title": "q4_i4",
+                            "description": ""
+                        },
+                        "q5": {
+                            "type": "string",
+                            "title": "q5",
+                            "description": ""
+                        },
+                        "q6_i1": {
+                            "type": "string",
+                            "title": "q6_i1",
+                            "description": ""
+                        },
+                        "q6_i2": {
+                            "type": "string",
+                            "title": "q6_i2",
+                            "description": ""
+                        },
+                        "q6_i3": {
+                            "type": "string",
+                            "title": "q6_i3",
+                            "description": ""
+                        },
+                        "q7": {
+                            "type": "string",
+                            "title": "q7",
+                            "description": ""
+                        },
+                        "q8": {
+                            "type": "string",
+                            "title": "q8",
+                            "description": ""
+                        },
+                        "q8b": {
+                            "type": "string",
+                            "title": "q8b",
+                            "description": ""
+                        },
+                        "q9_1": {
+                            "type": "string",
+                            "title": "q9_1",
+                            "description": ""
+                        },
+                        "q9_13": {
+                            "type": "string",
+                            "title": "q9_13",
+                            "description": ""
+                        },
+                        "q9b": {
+                            "type": "string",
+                            "title": "q9b",
+                            "description": ""
+                        },
+                        "q10_1": {
+                            "type": "string",
+                            "title": "q10_1",
+                            "description": ""
+                        },
+                        "q10_13": {
+                            "type": "string",
+                            "title": "q10_13",
+                            "description": ""
+                        },
+                        "q11_i1": {
+                            "type": "string",
+                            "title": "q11_i1",
+                            "description": ""
+                        },
+                        "q11_i2": {
+                            "type": "string",
+                            "title": "q11_i2",
+                            "description": ""
+                        },
+                        "q11_i3": {
+                            "type": "string",
+                            "title": "q11_i3",
+                            "description": ""
+                        },
+                        "q11_i4": {
+                            "type": "string",
+                            "title": "q11_i4",
+                            "description": ""
+                        },
+                        "q11_i5": {
+                            "type": "string",
+                            "title": "q11_i5",
+                            "description": ""
+                        },
+                        "q11_i6": {
+                            "type": "string",
+                            "title": "q11_i6",
+                            "description": ""
+                        },
+                        "q12": {
+                            "type": "string",
+                            "title": "q12",
+                            "description": ""
+                        },
+                        "q13": {
+                            "type": "string",
+                            "title": "q13",
+                            "description": ""
+                        },
+                        "q14": {
+                            "type": "string",
+                            "title": "q14",
+                            "description": ""
+                        },
+                        "q15": {
+                            "type": "string",
+                            "title": "q15",
+                            "description": ""
+                        },
+                        "q15b": {
+                            "type": "string",
+                            "title": "q15b",
+                            "description": ""
+                        },
+                        "q16": {
+                            "type": "string",
+                            "title": "q16",
+                            "description": ""
+                        },
+                        "q17": {
+                            "type": "string",
+                            "title": "q17",
+                            "description": ""
+                        },
+                        "code_postal": {
+                            "type": "string",
+                            "title": "code_postal",
+                            "description": ""
+                        },
+                        "commune": {
+                            "type": "string",
+                            "title": "commune",
+                            "description": ""
+                        },
+                        "sexe": {
+                            "type": "string",
+                            "title": "sexe",
+                            "description": ""
+                        },
+                        "age": {
+                            "type": "string",
+                            "title": "age",
+                            "description": ""
+                        },
+                        "situation_pro": {
+                            "type": "string",
+                            "title": "situation pro",
+                            "description": ""
+                        },
+                        "csp": {
+                            "type": "string",
+                            "title": "CSP",
+                            "description": ""
+                        },
+                        "habitation": {
+                            "type": "string",
+                            "title": "habitation",
+                            "description": ""
+                        },
+                        "region": {
+                            "type": "string",
+                            "title": "region",
+                            "description": ""
+                        },
+                        "taille_agglo": {
+                            "type": "string",
+                            "title": "taille agglo",
+                            "description": ""
+                        },
+                        "departement": {
+                            "type": "string",
+                            "title": "departement",
+                            "description": ""
+                        },
+                        "code_departement": {
+                            "type": "number",
+                            "title": "code_departement",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

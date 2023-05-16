@@ -1,0 +1,747 @@
+{
+    "title": "rpls@eure-et-loir",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/rpls@eure-et-loir"
+        }
+    ],
+    "definitions": {
+        "rpls@eure-et-loir": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/rpls@eure-et-loir_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "rpls@eure-et-loir_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "reg": {
+                            "type": "string",
+                            "title": "REG",
+                            "description": ""
+                        },
+                        "libreg": {
+                            "type": "string",
+                            "title": "LIBREG",
+                            "description": ""
+                        },
+                        "dep": {
+                            "type": "string",
+                            "title": "DEP",
+                            "description": ""
+                        },
+                        "libdep": {
+                            "type": "string",
+                            "title": "LIBDEP",
+                            "description": ""
+                        },
+                        "epci": {
+                            "type": "string",
+                            "title": "EPCI",
+                            "description": ""
+                        },
+                        "libepci": {
+                            "type": "string",
+                            "title": "LIBEPCI",
+                            "description": ""
+                        },
+                        "droit": {
+                            "type": "integer",
+                            "title": "DROIT",
+                            "description": ""
+                        },
+                        "depcom": {
+                            "type": "string",
+                            "title": "DEPCOM",
+                            "description": ""
+                        },
+                        "codepostal": {
+                            "type": "string",
+                            "title": "CODEPOSTAL",
+                            "description": ""
+                        },
+                        "libcom": {
+                            "type": "string",
+                            "title": "LIBCOM",
+                            "description": ""
+                        },
+                        "numvoie": {
+                            "type": "string",
+                            "title": "NUMVOIE",
+                            "description": ""
+                        },
+                        "indrep": {
+                            "type": "string",
+                            "title": "INDREP",
+                            "description": ""
+                        },
+                        "typvoie": {
+                            "type": "string",
+                            "title": "TYPVOIE",
+                            "description": ""
+                        },
+                        "nomvoie": {
+                            "type": "string",
+                            "title": "NOMVOIE",
+                            "description": ""
+                        },
+                        "numappt": {
+                            "type": "string",
+                            "title": "NUMAPPT",
+                            "description": ""
+                        },
+                        "numboite": {
+                            "type": "string",
+                            "title": "NUMBOITE",
+                            "description": ""
+                        },
+                        "esc": {
+                            "type": "string",
+                            "title": "ESC",
+                            "description": ""
+                        },
+                        "couloir": {
+                            "type": "string",
+                            "title": "COULOIR",
+                            "description": ""
+                        },
+                        "etage": {
+                            "type": "string",
+                            "title": "ETAGE",
+                            "description": ""
+                        },
+                        "complident": {
+                            "type": "string",
+                            "title": "COMPLIDENT",
+                            "description": ""
+                        },
+                        "entree": {
+                            "type": "string",
+                            "title": "ENTREE",
+                            "description": ""
+                        },
+                        "bat": {
+                            "type": "string",
+                            "title": "BAT",
+                            "description": ""
+                        },
+                        "immeu": {
+                            "type": "string",
+                            "title": "IMMEU",
+                            "description": ""
+                        },
+                        "complgeo": {
+                            "type": "string",
+                            "title": "COMPLGEO",
+                            "description": ""
+                        },
+                        "lieudit": {
+                            "type": "string",
+                            "title": "LIEUDIT",
+                            "description": ""
+                        },
+                        "qpv": {
+                            "type": "string",
+                            "title": "QPV",
+                            "description": ""
+                        },
+                        "typeconst": {
+                            "type": "string",
+                            "title": "TYPECONST",
+                            "description": ""
+                        },
+                        "nbpiece": {
+                            "type": "integer",
+                            "title": "NBPIECE",
+                            "description": ""
+                        },
+                        "surfhab": {
+                            "type": "integer",
+                            "title": "SURFHAB",
+                            "description": ""
+                        },
+                        "construct": {
+                            "type": "string",
+                            "title": "CONSTRUCT",
+                            "description": ""
+                        },
+                        "locat": {
+                            "type": "string",
+                            "title": "LOCAT",
+                            "description": ""
+                        },
+                        "patrimoine": {
+                            "type": "string",
+                            "title": "PATRIMOINE",
+                            "description": ""
+                        },
+                        "origine": {
+                            "type": "integer",
+                            "title": "ORIGINE",
+                            "description": ""
+                        },
+                        "finan": {
+                            "type": "integer",
+                            "title": "FINAN",
+                            "description": ""
+                        },
+                        "finanautre": {
+                            "type": "integer",
+                            "title": "FINANAUTRE",
+                            "description": ""
+                        },
+                        "conv": {
+                            "type": "string",
+                            "title": "CONV",
+                            "description": ""
+                        },
+                        "numconv": {
+                            "type": "string",
+                            "title": "NUMCONV",
+                            "description": ""
+                        },
+                        "datconv": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "DATCONV",
+                            "description": ""
+                        },
+                        "newlogt": {
+                            "type": "string",
+                            "title": "NEWLOGT",
+                            "description": ""
+                        },
+                        "cus": {
+                            "type": "string",
+                            "title": "CUS",
+                            "description": ""
+                        },
+                        "dpedate": {
+                            "type": "string",
+                            "title": "DPEDATE",
+                            "description": ""
+                        },
+                        "dpeenergie": {
+                            "type": "string",
+                            "title": "DPEENERGIE",
+                            "description": ""
+                        },
+                        "dpeserre": {
+                            "type": "string",
+                            "title": "DPESERRE",
+                            "description": ""
+                        },
+                        "sru_expir": {
+                            "type": "string",
+                            "title": "SRU_EXPIR",
+                            "description": ""
+                        },
+                        "sru_alinea": {
+                            "type": "string",
+                            "title": "SRU_ALINEA",
+                            "description": ""
+                        },
+                        "codsegpatrim": {
+                            "type": "string",
+                            "title": "CODSEGPATRIM",
+                            "description": ""
+                        },
+                        "libsegpatrim": {
+                            "type": "string",
+                            "title": "LIBSEGPATRIM",
+                            "description": ""
+                        },
+                        "pmr": {
+                            "type": "integer",
+                            "title": "PMR",
+                            "description": ""
+                        },
+                        "plg_code_commune2021": {
+                            "type": "string",
+                            "title": "PLG_CODE_COMMUNE2021",
+                            "description": ""
+                        },
+                        "plg_voie": {
+                            "type": "string",
+                            "title": "PLG_VOIE",
+                            "description": ""
+                        },
+                        "epsg": {
+                            "type": "string",
+                            "title": "EPSG",
+                            "description": ""
+                        },
+                        "x": {
+                            "type": "string",
+                            "title": "X",
+                            "description": ""
+                        },
+                        "y": {
+                            "type": "string",
+                            "title": "Y",
+                            "description": ""
+                        },
+                        "plg_qp": {
+                            "type": "string",
+                            "title": "PLG_QP",
+                            "description": ""
+                        },
+                        "plg_iris2021": {
+                            "type": "string",
+                            "title": "PLG_IRIS2021",
+                            "description": ""
+                        },
+                        "plg_zus": {
+                            "type": "string",
+                            "title": "PLG_ZUS",
+                            "description": ""
+                        },
+                        "plg_zfu": {
+                            "type": "string",
+                            "title": "PLG_ZFU",
+                            "description": ""
+                        },
+                        "plg_qva": {
+                            "type": "string",
+                            "title": "PLG_QVA",
+                            "description": ""
+                        },
+                        "qualite_voie": {
+                            "type": "integer",
+                            "title": "QUALITE_VOIE",
+                            "description": ""
+                        },
+                        "qualite_numero": {
+                            "type": "integer",
+                            "title": "QUALITE_NUMERO",
+                            "description": ""
+                        },
+                        "qualite_xy": {
+                            "type": "integer",
+                            "title": "QUALITE_XY",
+                            "description": ""
+                        },
+                        "distance_precision": {
+                            "type": "number",
+                            "title": "DISTANCE_PRECISION",
+                            "description": ""
+                        },
+                        "qualite_qp": {
+                            "type": "integer",
+                            "title": "QUALITE_QP",
+                            "description": ""
+                        },
+                        "qualite_iris": {
+                            "type": "integer",
+                            "title": "QUALITE_IRIS",
+                            "description": ""
+                        },
+                        "qualite_zus": {
+                            "type": "integer",
+                            "title": "QUALITE_ZUS",
+                            "description": ""
+                        },
+                        "qualite_zfu": {
+                            "type": "integer",
+                            "title": "QUALITE_ZFU",
+                            "description": ""
+                        },
+                        "qualite_qva": {
+                            "type": "integer",
+                            "title": "QUALITE_QVA",
+                            "description": ""
+                        },
+                        "millesime": {
+                            "type": "string",
+                            "title": "MILLESIME",
+                            "description": ""
+                        },
+                        "comaqp": {
+                            "type": "integer",
+                            "title": "COMAQP",
+                            "description": ""
+                        },
+                        "comazus": {
+                            "type": "integer",
+                            "title": "COMAZUS",
+                            "description": ""
+                        },
+                        "comril": {
+                            "type": "integer",
+                            "title": "COMRIL",
+                            "description": ""
+                        },
+                        "epci_2021": {
+                            "type": "string",
+                            "title": "EPCI_2021",
+                            "description": ""
+                        },
+                        "uu2020": {
+                            "type": "string",
+                            "title": "UU2020",
+                            "description": ""
+                        },
+                        "aav2020": {
+                            "type": "string",
+                            "title": "AAV2020",
+                            "description": ""
+                        },
+                        "ze2020": {
+                            "type": "string",
+                            "title": "ZE2020",
+                            "description": ""
+                        },
+                        "geocodage": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geocodage",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

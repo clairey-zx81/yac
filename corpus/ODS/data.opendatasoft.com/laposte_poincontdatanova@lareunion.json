@@ -1,0 +1,526 @@
+{
+    "title": "laposte_poincontdatanova@lareunion",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/laposte_poincontdatanova@lareunion"
+        }
+    ],
+    "definitions": {
+        "laposte_poincontdatanova@lareunion": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/laposte_poincontdatanova@lareunion_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "laposte_poincontdatanova@lareunion_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "identifiant_a": {
+                            "type": "string",
+                            "title": "#Identifiant_du_site",
+                            "description": "Identifiant de l'entité ACORES"
+                        },
+                        "libelle_du_site": {
+                            "type": "string",
+                            "title": "Libellé_du_site",
+                            "description": ""
+                        },
+                        "adresse": {
+                            "type": "string",
+                            "title": "Adresse",
+                            "description": ""
+                        },
+                        "complement_d_adresse": {
+                            "type": "string",
+                            "title": "Complément_d_adresse",
+                            "description": ""
+                        },
+                        "lieu_dit": {
+                            "type": "string",
+                            "title": "Lieu_dit",
+                            "description": ""
+                        },
+                        "code_postal": {
+                            "type": "string",
+                            "title": "Code_postal",
+                            "description": ""
+                        },
+                        "localite": {
+                            "type": "string",
+                            "title": "Localité",
+                            "description": ""
+                        },
+                        "code_insee": {
+                            "type": "string",
+                            "title": "Code_INSEE",
+                            "description": ""
+                        },
+                        "pays": {
+                            "type": "string",
+                            "title": "Pays",
+                            "description": ""
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "title": "Latitude",
+                            "description": ""
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "title": "Longitude",
+                            "description": ""
+                        },
+                        "precision_du_geocodage": {
+                            "type": "string",
+                            "title": "Précision_du_géocodage",
+                            "description": ""
+                        },
+                        "numero_de_telephone": {
+                            "type": "string",
+                            "title": "Numéro_de_téléphone",
+                            "description": ""
+                        },
+                        "changeur_de_monnaie": {
+                            "type": "string",
+                            "title": "Changeur_de_monnaie",
+                            "description": ""
+                        },
+                        "distributeur_de_billets": {
+                            "type": "string",
+                            "title": "Distributeur_de_billets",
+                            "description": ""
+                        },
+                        "distributeur_de_timbres": {
+                            "type": "string",
+                            "title": "Distributeur_de_timbres",
+                            "description": ""
+                        },
+                        "distributeur_pret_a_poster": {
+                            "type": "string",
+                            "title": "Distributeur_Prêt_à_Poster",
+                            "description": ""
+                        },
+                        "affranchissement_libre_service": {
+                            "type": "string",
+                            "title": "Affranchissement_Libre_Service",
+                            "description": ""
+                        },
+                        "accessibilite_absence_de_ressaut_de_plus_de_2_cm_de_haut": {
+                            "type": "string",
+                            "title": "Accessibilité_Absence_de_ressaut_de_plus_de_2_cm_de_haut",
+                            "description": ""
+                        },
+                        "accessibilite_automate_d_affranchissement_avec_prise_audio": {
+                            "type": "string",
+                            "title": "Accessibilité_Automate_d_affranchissement_avec_prise_audio",
+                            "description": ""
+                        },
+                        "accessibilite_boucle_magnetique_en_etat_de_fonctionnement": {
+                            "type": "string",
+                            "title": "Accessibilité_Boucle_magnétique_en_état_de_fonctionnement",
+                            "description": ""
+                        },
+                        "accessibilite_distributeur_de_billets_avec_prise_audio": {
+                            "type": "string",
+                            "title": "Accessibilité_Distributeur_de_billets_avec_prise_audio",
+                            "description": ""
+                        },
+                        "accessibilite_entree_autonome_en_fauteuil_roulant_possible": {
+                            "type": "string",
+                            "title": "Accessibilité_Entrée_autonome_en_fauteuil_roulant_possible",
+                            "description": ""
+                        },
+                        "accessibilite_pas_d_escalier_ou_bandes_de_vigilance_presentes": {
+                            "type": "string",
+                            "title": "Accessibilité_Pas_d_escalier_ou_bandes_de_vigilance_présentes",
+                            "description": ""
+                        },
+                        "accessibilite_presence_d_un_panneau_prioritaire": {
+                            "type": "string",
+                            "title": "Accessibilité_Présence_d_un_panneau_prioritaire",
+                            "description": ""
+                        },
+                        "accessibilite_borne_sonore_en_etat_de_fonctionnement": {
+                            "type": "string",
+                            "title": "Accessibilité_Borne_sonore_en_état_de_fonctionnement",
+                            "description": ""
+                        },
+                        "accessibilite_espace_de_circulation_interieur_suffisant_pour_pmr": {
+                            "type": "string",
+                            "title": "Accessibilité_Espace_de_circulation_intérieur_suffisant_pour_PMR",
+                            "description": ""
+                        },
+                        "accessibilite_presence_d_un_espace_confidentiel_accessible_pmr": {
+                            "type": "string",
+                            "title": "Accessibilité_Présence_d_un_espace_confidentiel_accessible_PMR",
+                            "description": ""
+                        },
+                        "accessibilite_presence_d_un_gab_externe_accessible_pmr": {
+                            "type": "string",
+                            "title": "Accessibilité_Présence_d_un_GAB_externe_accessible_PMR",
+                            "description": ""
+                        },
+                        "accessibilite_presence_d_un_guichet_surbaisse_ou_d_un_ecritoire": {
+                            "type": "string",
+                            "title": "Accessibilité_Présence_d_un_guichet_surbaissé_ou_d_un_écritoire",
+                            "description": ""
+                        },
+                        "accessibilite_presence_d_une_bande_de_guidage_au_sol": {
+                            "type": "string",
+                            "title": "Accessibilité_Présence_d_une_bande_de_guidage_au_sol",
+                            "description": ""
+                        },
+                        "latlong": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "latlong",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

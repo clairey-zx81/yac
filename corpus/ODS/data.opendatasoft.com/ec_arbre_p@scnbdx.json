@@ -1,0 +1,582 @@
+{
+    "title": "ec_arbre_p@scnbdx",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/ec_arbre_p@scnbdx"
+        }
+    ],
+    "definitions": {
+        "ec_arbre_p@scnbdx": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ec_arbre_p@scnbdx_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "ec_arbre_p@scnbdx_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "Geo Point",
+                            "description": ""
+                        },
+                        "geo_shape": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geo Shape",
+                            "description": ""
+                        },
+                        "gid": {
+                            "type": "integer",
+                            "title": "gid",
+                            "description": "Clé primaire"
+                        },
+                        "geom_o": {
+                            "type": "string",
+                            "title": "geom_o",
+                            "description": "Orientation du point"
+                        },
+                        "geom_err": {
+                            "type": "string",
+                            "title": "geom_err",
+                            "description": "Code d'erreur géométrique : \nListe des valeurs possibles : \n9999 : Polygone compose et / ou à sections multiples\n9998 : Linéaire compose et / ou à sections multiples\n9996 : La géométrie contient des informations LRS\n9995 : Nombre de dimensions différent de 2 ou 3\n9994 : Présence d'un arc de cercle\n9000 : Erreur autre\n13343 : Polygone de moins de 4 points\n13349 : Polygone papillon\n13350 : Deux éléments d'un polygone archipel se touchent\n13351 : Deux éléments d'un polygone archipel  se touchent\n13356 : Point double\n13366 : Combinaison invalide d'intérieur / extérieur d'un polygone\n13367 : Orientation invalide d'intérieur / extérieur d'un polygone\n"
+                        },
+                        "insee": {
+                            "type": "string",
+                            "title": "insee",
+                            "description": "Code INSEE de la commune : \nListe des valeurs possibles : \n33003 : Ambarès-et-Lagrave\n33004 : Ambès\n33013 : Artigues-Près-Bordeaux\n33032 : Bassens\n33039 : Bègles\n33056 : Blanquefort\n33063 : Bordeaux\n33065 : Bouliac\n33069 : Le Bouscat\n33075 : Bruges\n33096 : Carbon-Blanc\n33119 : Cenon\n33162 : Eysines\n33167 : Floirac\n33192 : Gradignan\n33200 : Le Haillan\n33249 : Lormont\n33273 : Martignas-sur-Jalle\n33281 : Mérignac\n33312 : Parempuyre\n33318 : Pessac\n33376 : Saint-Aubin-de-Médoc\n33434 : Saint-Louis-de-Montferrand\n33449 : Saint-Médard-en-Jalles\n33487 : Saint-Vincent-de-Paul\n33519 : Le Taillan-Médoc\n33522 : Talence\n33550 : Villenave-d'Ornon\n"
+                        },
+                        "nom": {
+                            "type": "string",
+                            "title": "nom",
+                            "description": "Nom français de l'arbre"
+                        },
+                        "nom_francais": {
+                            "type": "string",
+                            "title": "nom_francais",
+                            "description": ""
+                        },
+                        "circonference": {
+                            "type": "integer",
+                            "title": "circonference",
+                            "description": "Circonférence (cm)"
+                        },
+                        "hauteur": {
+                            "type": "integer",
+                            "title": "hauteur",
+                            "description": "Hauteur (+/- 2 m)"
+                        },
+                        "typo_espace": {
+                            "type": "string",
+                            "title": "typo_espace",
+                            "description": "Typologie d'espace : \nListe des valeurs possibles : \nAUCUNE : Aucune\nCIMETIERE : Cimetière\nESPACE_DACCOMPAGNEMENT_DE_VOIRIE : Espace d'accompagnement de voirie\nESPACE_DACCOMPAGNEMENT_RESIDENTIEL : Espace d'accompagnement résidentiel\nESPACE_PUBLIC_NON_AMENAGE : Espace public non aménagé\nESPACE_PUBLIC_VEGETALISE : Espace public végétalisé\nETABLISSEMENT_ADMINISTRATIF_ET_TECHNIQUE : Etablissement administratif et technique\nETABLISSEMENT_CULTUREL : Etablissement culturel\nETABLISSEMENT_SCOLAIRE_ET_PETITE_ENFANCE : Etablissement scolaire et petite enfance\nETABLISSEMENT_SOCIAL : Etablissement social\nETABLISSEMENT_SPORTIF : Etablissement sportif\nPARC_JARDIN_ET_SQUARE : Parc Jardin et Square\nAUTRE_DONT_PROPRIETE_PRIVEE_DE_LA_VILLE : Autre dont propriété privée de la Ville\nESPACE_BOISE : Espace boisé\nESPACE_NATUREL : Espace naturel\nESPACE_NATUREL_PROTEGE : Espace naturel protégé\nRIPISYLVE : Ripisylve\nZONE_HUMIDE : Zone humide\n"
+                        },
+                        "localisation": {
+                            "type": "string",
+                            "title": "localisation",
+                            "description": "Typologie de lieu : \nListe des valeurs possibles : \nBAC_BANQUETTE : Bac / Banquette\nCOURS_DECOLE : Cours décole\nJEUX_DENFANTS : Jeux denfants\nLIEU_DE_STATIONNEMENT : Lieu de stationnement\nPARKING : Parking\nSUR_ESPACES_VERTS : Sur espaces-verts\nTERRE_PLEIN_CENTRAL_ROND-POINT : Terre plein central / Rond-point\nTERRE_PLEIN_LATERAL : Terre plein latéral\nTROTTOIR_DOMAINE_PIETONNIER : Trottoir / Domaine piétonnier\nTRAMWAY : Tramway\nTERRAIN_HUMIDE_INONDE : Terrain humide/inondé\nFOSSES_NOUES : Fosses/Noues\n"
+                        },
+                        "statut": {
+                            "type": "string",
+                            "title": "statut",
+                            "description": "Statut de l'arbre : \nListe des valeurs possibles : \nFOSSE : Fosse\nMORT : Mort\nSOUCHE : Souche\nVIVANT : Vivant\nELIMINE : Eliminé\nNICHE_ECO : Niche écologique\n"
+                        },
+                        "diametre": {
+                            "type": "integer",
+                            "title": "diametre",
+                            "description": "Diamètre (cm)"
+                        },
+                        "date_plantation": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "date_plantation",
+                            "description": "Date de plantation"
+                        },
+                        "cdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "cdate",
+                            "description": "Date de création"
+                        },
+                        "mdate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "mdate",
+                            "description": "Date de modification"
+                        },
+                        "emplacement": {
+                            "type": "string",
+                            "title": "emplacement",
+                            "description": "Numéro d'emplacement"
+                        },
+                        "station": {
+                            "type": "string",
+                            "title": "station",
+                            "description": "Station de gestion"
+                        },
+                        "carre": {
+                            "type": "string",
+                            "title": "carre",
+                            "description": "Carré au sein d'une station"
+                        },
+                        "essence": {
+                            "type": "string",
+                            "title": "essence",
+                            "description": "Essence (nom latin)"
+                        },
+                        "maintien": {
+                            "type": "string",
+                            "title": "maintien",
+                            "description": "Durée de maintien : \nListe des valeurs possibles : \nA_REMPLACER : A remplacer\n1_5_ANS : 1-5 ans\n6_10_ANS : 6-10 ans\n11_15_ANS : 11-15 ans\n16_20_ANS : 16-20 ans\nSUP_20_ANS : &gt; à 20 ans\n"
+                        },
+                        "patrimonial": {
+                            "type": "string",
+                            "title": "patrimonial",
+                            "description": "Statut patrimonial : \nListe des valeurs possibles : \nAYANT_UNE_VALEUR_DACCOMPAGNEMENT : Ayant une valeur d'accompagnement\nCLASSE_COMME_MONUMENT_OU_SITE_PLU : Classé comme monument ou site (au PLU)\nDANS_UN_AMENAGEMENT_PAYSAGER : Dans un aménagement paysager (voirie espace vert)\nREMARQUABLE_SYMBOLIQUE : Remarquable / symbolique\nSITUE_DANS_UN_JARDIN_OU_SITE_HISTORIQUE : Situé dans un jardin ou site historique\n"
+                        },
+                        "type_gestion": {
+                            "type": "string",
+                            "title": "type_gestion",
+                            "description": "Type de gestion raisonnée sur la station : \nListe des valeurs possibles : \nGESTION_ARCHITECTUREE : Gestion architecturée\nGESTION_ECOLOGIQUE : Gestion ecologique\nGESTION_DACCOMPAGNEMENT : Gestion d'accompagnement\nGESTION_LIBRE : Gestion libre\nGESTION_SEMI_LIBRE : Gestion semi-libre\nGESTION_MIXTE : Gestion mixte\nGESTION_SUR_PORT_ARCHITECTURE_EN_RIDEAU : Gestion sur port architecturé en rideau\nGESTION_SUR_PORT_ARCHITECTURE_EN_TETE_DE_CHAT : Gestion sur port architecturé en tête de chat\nGESTION_SUR_VOLUME_REDUIT_DE_SECURITE : Gestion sur volume réduit de sécurité\nRENOUVELLEMENT_STATION : Renouvellement de la station\nSUPPRESSION_STATION : Suppression de la station\n"
+                        },
+                        "fruitier": {
+                            "type": "string",
+                            "title": "fruitier",
+                            "description": "Arbre fruitier"
+                        },
+                        "cepee": {
+                            "type": "string",
+                            "title": "cepee",
+                            "description": "Cépée"
+                        },
+                        "diametre_couronne": {
+                            "type": "integer",
+                            "title": "diametre_couronne",
+                            "description": "Diamètre de la couronne (m)"
+                        },
+                        "diametre_souche": {
+                            "type": "integer",
+                            "title": "diametre_souche",
+                            "description": "Diamètre de la souche (cm)"
+                        },
+                        "distribution": {
+                            "type": "string",
+                            "title": "distribution",
+                            "description": "Distribution spatiale : \nListe des valeurs possibles : \nALIGNEMENT_MULTIPLE : Alignement multiple\nALIGNEMENT_SIMPLE : Alignement simple\nARBRE_ISOLE : Arbre isolé\nBOISE_FERME : Boisé fermé\nBOISE_OUVERT : Boisé ouvert\nSUP_5_ARBRES : Groupe d'arbres (&gt; 5)\n2_5_ARBRES : Groupe d'arbres (2 à 5)\n"
+                        },
+                        "port": {
+                            "type": "string",
+                            "title": "port",
+                            "description": "Port : \nListe des valeurs possibles : \nARCHITECTURE_EN_RIDEAU : Architecturé en rideau\nARCHITECTURE_EN_TONELLE : Architecturé en tonelle\nARCHITECTURE_PALISSE : Architecturé palissé\nARCHITECTURE_SUR_TETE_DE_CHAT : Architecturé sur tête de chat\nAUTRES_FORMES_ARCHITECTUREES : Autres formes architecturées\nCHANDELLE_NICHE_ECO : Chandelle ou Niche écologique\nCONTENU : Contenu\nDELAISSEE : Délaissée\nFORME_REDUITE_DE_SECURITE : Forme réduite de sécurité\nLIBRE : Libre\nLIBRE_MUTILEE : Libre mutilée\nMIXTE : Mixte\nMUTILEE : Mutilée\nSEMI_LIBRE : Semi-libre\nSEMI_LIBRE_MUTILEE : Semi-libre mutilée\nSEMI_LIBRE_SUR_TETE_DE_CHAT : Semi-libre sur tête de chat\nTETARD : Tétard\n"
+                        },
+                        "couverture": {
+                            "type": "string",
+                            "title": "couverture",
+                            "description": "Couverture du sol : \nListe des valeurs possibles : \nAUTRE_REVETEMENT_DRAINANT : Autre revêtement drainant\nAUTRE_REVETEMENT_NON_DRAINANT : Autre revêtement non drainant\nGRAVE : Grave\nLITIERE_NATURELLE : Litière naturelle\nMASSIF_DARBUSTES : Massif darbustes\nPAILLAGE : Paillage\nPAVES_DALLES : Pavés / dalles\nPELOUSE : Pelouse\nREVETEMENT_TYPE_RESINE : Revêtement type résine\nTERRE_NUE : Terre nue\nVEGETALISE : Végétalisé\n"
+                        },
+                        "stade_dev": {
+                            "type": "string",
+                            "title": "stade_dev",
+                            "description": "Stades de développement : \nListe des valeurs possibles : \nADULTE : Adulte\nADULTE_JEUNE : Adulte jeune\nADULTE_MUR_OU_SENESCENT : Adulte mûr ou sénescent\nJEUNE : Jeune\nJUVENILE : Juvénile\n"
+                        },
+                        "disparition": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "disparition",
+                            "description": "Date de disparition"
+                        },
+                        "vigueur": {
+                            "type": "string",
+                            "title": "vigueur",
+                            "description": "Vigueur : \nListe des valeurs possibles : \nELEVEE : Elevée\nFAIBLE : Faible\nMOYENNE : Moyenne\n"
+                        },
+                        "diag_visuel": {
+                            "type": "string",
+                            "title": "diag_visuel",
+                            "description": "Diagnostic visuel : expert : \nListe des valeurs possibles : \nOREADE : Oréade Brèche\nFORESTRY : Forestry Club de France\nONF : ONF\nREGIE : Régie\nAUTRE : Autre prestataire\n"
+                        },
+                        "diag_visuel_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "diag_visuel_date",
+                            "description": "Date de diagnostic visuel"
+                        },
+                        "diag_compl": {
+                            "type": "string",
+                            "title": "diag_compl",
+                            "description": "Diagnostic complémentaire : expert : \nListe des valeurs possibles : \nOREADE : Oréade Brèche\nFORESTRY : Forestry Club de France\nONF : ONF\nREGIE : Régie\nAUTRE : Autre prestataire\n"
+                        },
+                        "diag_compl_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "diag_compl_date",
+                            "description": "Date diagnostic complémentaire"
+                        },
+                        "url_espece": {
+                            "type": "string",
+                            "title": "url_espece",
+                            "description": "Fiche espèce"
+                        },
+                        "url_remarquable": {
+                            "type": "string",
+                            "title": "url_remarquable",
+                            "description": "Fiche remarquable"
+                        },
+                        "gestionnaire": {
+                            "type": "string",
+                            "title": "gestionnaire",
+                            "description": "Service gestionnaire : \nListe des valeurs possibles : \nST1 : Service territorial 1\nST2 : Service territorial 2\nST3 : Service territorial 3\nST4 : Service territorial 4\nST5 : Service territorial 5\nST6 : Service territorial 6\nST7 : Service territorial 7\nST8 : Service territorial 8\nST9 : Service territorial 9\nST10 : Service territorial 10\nSMC : SMC\nVGT : VGT\nDIR_EAU : Direction de leau\nDIR_FONCIER : Direction du foncier\nDIR_NATURE : Direction de la nature\nDIRA : Direction Interdépartementale des Routes Atlantique\nDEV : Direction des espaces verts\nPRIVE : Privé\nCOMMUNE : Commune\n"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

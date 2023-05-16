@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "add": {
+      "description": "add operation. Value can be any JSON value.",
+      "properties": {
+        "op": {
+          "enum": [
+            "add"
+          ]
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "copy": {
+      "description": "copy operation. \"from\" is a JSON Pointer.",
+      "properties": {
+        "from": {
+          "format": "json-pointer",
+          "type": "string"
+        },
+        "op": {
+          "enum": [
+            "copy"
+          ]
+        }
+      },
+      "required": [
+        "from"
+      ]
+    },
+    "move": {
+      "description": "move operation. \"from\" is a JSON Pointer.",
+      "properties": {
+        "from": {
+          "format": "json-pointer",
+          "type": "string"
+        },
+        "op": {
+          "enum": [
+            "move"
+          ]
+        }
+      },
+      "required": [
+        "from"
+      ]
+    },
+    "oneOperation": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/add"
+        },
+        {
+          "$ref": "#/definitions/remove"
+        },
+        {
+          "$ref": "#/definitions/replace"
+        },
+        {
+          "$ref": "#/definitions/move"
+        },
+        {
+          "$ref": "#/definitions/copy"
+        },
+        {
+          "$ref": "#/definitions/test"
+        }
+      ]
+    },
+    "remove": {
+      "description": "remove operation. Only a path is specified.",
+      "properties": {
+        "op": {
+          "enum": [
+            "remove"
+          ]
+        }
+      }
+    },
+    "replace": {
+      "description": "replace operation. Value can be any JSON value.",
+      "properties": {
+        "op": {
+          "enum": [
+            "replace"
+          ]
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "test": {
+      "description": "test operation. Value can be any JSON value.",
+      "properties": {
+        "op": {
+          "enum": [
+            "test"
+          ]
+        }
+      },
+      "required": [
+        "value"
+      ]
+    }
+  },
+  "description": "A JSON Schema describing a JSON Patch",
+  "items": {
+    "allOf": [
+      {
+        "description": "Members common to all operations",
+        "properties": {
+          "path": {
+            "format": "json-pointer",
+            "type": "string"
+          }
+        },
+        "required": [
+          "op",
+          "path"
+        ],
+        "type": "object"
+      },
+      {
+        "$ref": "#/definitions/oneOperation"
+      }
+    ],
+    "description": "one JSON Patch operation"
+  },
+  "notes": [
+    "Defines a \"json-pointer\" format attribute",
+    "Only required members are accounted for, other members are ignored",
+    "FIXME: are zero-length patches allowed?"
+  ],
+  "title": "JSON Patch",
+  "type": "array"
+}

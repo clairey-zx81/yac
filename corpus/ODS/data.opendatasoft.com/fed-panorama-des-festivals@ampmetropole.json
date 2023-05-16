@@ -1,0 +1,554 @@
+{
+    "title": "fed-panorama-des-festivals@ampmetropole",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/fed-panorama-des-festivals@ampmetropole"
+        }
+    ],
+    "definitions": {
+        "fed-panorama-des-festivals@ampmetropole": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/fed-panorama-des-festivals@ampmetropole_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "fed-panorama-des-festivals@ampmetropole_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "nom_de_la_manifestation": {
+                            "type": "string",
+                            "title": "Nom de la manifestation",
+                            "description": ""
+                        },
+                        "region": {
+                            "type": "string",
+                            "title": "Région",
+                            "description": ""
+                        },
+                        "domaine": {
+                            "type": "string",
+                            "title": "Domaine",
+                            "description": ""
+                        },
+                        "complement_domaine": {
+                            "type": "string",
+                            "title": "Complément domaine",
+                            "description": ""
+                        },
+                        "departement": {
+                            "type": "string",
+                            "title": "Département",
+                            "description": ""
+                        },
+                        "periodicite": {
+                            "type": "string",
+                            "title": "Périodicité",
+                            "description": ""
+                        },
+                        "mois_habituel_de_debut": {
+                            "type": "string",
+                            "title": "Mois habituel de début",
+                            "description": ""
+                        },
+                        "site_web": {
+                            "type": "string",
+                            "title": "Site web",
+                            "description": ""
+                        },
+                        "ndeg_identification": {
+                            "type": "string",
+                            "title": "N° Identification",
+                            "description": ""
+                        },
+                        "commune_principale": {
+                            "type": "string",
+                            "title": "Commune principale",
+                            "description": ""
+                        },
+                        "autres_communes": {
+                            "type": "string",
+                            "title": "Autres communes",
+                            "description": ""
+                        },
+                        "ndeg_de_l_edition_2018": {
+                            "type": "number",
+                            "title": "N° de l'édition 2018",
+                            "description": ""
+                        },
+                        "date_de_creation": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de création",
+                            "description": ""
+                        },
+                        "soutenu_en_2017_par_le_ministere_de_la_culture": {
+                            "type": "string",
+                            "title": "Soutenu en 2017 par le ministère de la culture ",
+                            "description": ""
+                        },
+                        "soutenu_en_2017_par_le_centre_national_du_cinema": {
+                            "type": "string",
+                            "title": "Soutenu en 2017 par le Centre national du cinéma ",
+                            "description": ""
+                        },
+                        "soutenu_en_2017_par_le_centre_national_du_livre": {
+                            "type": "string",
+                            "title": "Soutenu en 2017 par le Centre national du livre ",
+                            "description": ""
+                        },
+                        "soutenu_en_2017_par_le_centre_national_des_varietes": {
+                            "type": "string",
+                            "title": "Soutenu en 2017 par le Centre national des variétés ",
+                            "description": ""
+                        },
+                        "soutenu_en_2018_par_le_ministere_de_la_culture": {
+                            "type": "string",
+                            "title": "Soutenu en 2018 par le ministère de la culture ",
+                            "description": ""
+                        },
+                        "soutenu_en_2018_par_le_centre_national_du_cinema": {
+                            "type": "string",
+                            "title": "Soutenu en 2018 par le Centre national du cinéma ",
+                            "description": ""
+                        },
+                        "soutenu_en_2018_par_le_centre_national_du_livre": {
+                            "type": "string",
+                            "title": "Soutenu en 2018 par le Centre national du livre ",
+                            "description": ""
+                        },
+                        "soutenu_en_2018_par_le_centre_national_des_varietes": {
+                            "type": "string",
+                            "title": "Soutenu en 2018 par le Centre national des variétés ",
+                            "description": ""
+                        },
+                        "code_postal": {
+                            "type": "string",
+                            "title": "Code postal",
+                            "description": ""
+                        },
+                        "code_insee": {
+                            "type": "string",
+                            "title": "Code INSEE",
+                            "description": ""
+                        },
+                        "coordonnees_insee": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "coordonnees_insee",
+                            "description": ""
+                        },
+                        "libelle_commune_pour_calcul_cp_insee": {
+                            "type": "string",
+                            "title": "Libellé commune pour calcul CP, INSEE",
+                            "description": ""
+                        },
+                        "dept_sk": {
+                            "type": "number",
+                            "title": "Dépt SK",
+                            "description": ""
+                        },
+                        "nom_departement": {
+                            "type": "string",
+                            "title": "Nom Département",
+                            "description": ""
+                        },
+                        "commentaires": {
+                            "type": "string",
+                            "title": "Commentaires",
+                            "description": ""
+                        },
+                        "ndeg_de_l_edition_2019": {
+                            "type": "number",
+                            "title": "N° de l'édition 2019",
+                            "description": ""
+                        },
+                        "check_edition": {
+                            "type": "number",
+                            "title": "Check édition",
+                            "description": ""
+                        },
+                        "mois_indicatif_en_chiffre_y_compris_double_mois": {
+                            "type": "number",
+                            "title": "Mois indicatif en chiffre, y compris double mois",
+                            "description": ""
+                        },
+                        "mois_indicatif": {
+                            "type": "string",
+                            "title": "Mois indicatif",
+                            "description": ""
+                        },
+                        "date_debut_ancien": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date début ancien",
+                            "description": ""
+                        },
+                        "date_de_fin_ancien": {
+                            "type": "string",
+                            "format": "date",
+                            "title": "Date de fin ancien",
+                            "description": ""
+                        },
+                        "soutien_2017_mcc_a_la_structure": {
+                            "type": "string",
+                            "title": "Soutien 2017 MCC à la structure",
+                            "description": ""
+                        },
+                        "part_festival_sur_soutien_a_la_structure": {
+                            "type": "string",
+                            "title": "Part festival sur soutien à la structure",
+                            "description": ""
+                        },
+                        "enquete_drac_2017": {
+                            "type": "string",
+                            "title": "Enquête DRAC 2017",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

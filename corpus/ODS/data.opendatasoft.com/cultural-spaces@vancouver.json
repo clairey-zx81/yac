@@ -1,0 +1,436 @@
+{
+    "title": "cultural-spaces@vancouver",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/cultural-spaces@vancouver"
+        }
+    ],
+    "definitions": {
+        "cultural-spaces@vancouver": {
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/cultural-spaces@vancouver_records"
+                    }
+                }
+            }
+        },
+        "geoJSON": {
+            "title": "Geo JSON object",
+            "description": "Schema for a Geo JSON object",
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "crs": {
+                    "$ref": "#/definitions/crs"
+                },
+                "bbox": {
+                    "$ref": "#/definitions/bbox"
+                }
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/geometry"
+                },
+                {
+                    "$ref": "#/definitions/geometryCollection"
+                },
+                {
+                    "$ref": "#/definitions/feature"
+                },
+                {
+                    "$ref": "#/definitions/featureCollection"
+                }
+            ]
+        },
+        "bbox": {
+            "description": "A bounding box as defined by GeoJSON",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "crs": {
+            "title": "crs",
+            "description": "a Coordinate Reference System object",
+            "type": [
+                "object",
+                "null"
+            ],
+            "required": [
+                "type",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/namedCrs"
+                },
+                {
+                    "$ref": "#/definitions/linkedCrs"
+                }
+            ]
+        },
+        "namedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "name"
+                    ]
+                },
+                "properties": {
+                    "required": [
+                        "name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "linkedObject": {
+            "type": "object",
+            "required": [
+                "href"
+            ],
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Suggested values: proj4, ogjwkt, esriwkt"
+                }
+            }
+        },
+        "linkedCrs": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "link"
+                    ]
+                },
+                "properties": {
+                    "$ref": "#/definitions/linkedObject"
+                }
+            }
+        },
+        "geometryCollection": {
+            "title": "GeometryCollection",
+            "description": "A collection of geometry objects",
+            "required": [
+                "geometries"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "GeometryCollection"
+                    ]
+                },
+                "geometries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://json-schema.org/geojson/geometry.json#"
+                    }
+                }
+            }
+        },
+        "feature": {
+            "title": "Feature",
+            "description": "A Geo JSON feature object",
+            "required": [
+                "geometry",
+                "properties"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "Feature"
+                    ]
+                },
+                "geometry": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "#/definitions/geometry"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {}
+            }
+        },
+        "featureCollection": {
+            "title": "FeatureCollection",
+            "description": "A Geo JSON feature collection",
+            "required": [
+                "features"
+            ],
+            "properties": {
+                "type": {
+                    "enum": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feature"
+                    }
+                }
+            }
+        },
+        "geometry": {
+            "title": "geometry",
+            "description": "One geometry as defined by GeoJSON",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "oneOf": [
+                {
+                    "title": "Point",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Point"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/position"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPoint",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPoint"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/positionArray"
+                        }
+                    }
+                },
+                {
+                    "title": "LineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "LineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/lineString"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiLineString",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiLineString"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lineString"
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "Polygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "Polygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "$ref": "#/definitions/polygon"
+                        }
+                    }
+                },
+                {
+                    "title": "MultiPolygon",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "MultiPolygon"
+                            ]
+                        },
+                        "coordinates": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/polygon"
+                            }
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "description": "A single position",
+                "type": "array",
+                "minItems": 2,
+                "items": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "number"
+                    }
+                ],
+                "additionalItems": false
+            },
+            "positionArray": {
+                "description": "An array of positions",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/position"
+                }
+            },
+            "lineString": {
+                "description": "An array of two or more positions",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 2
+                    }
+                ]
+            },
+            "linearRing": {
+                "description": "An array of four positions where the first equals the last",
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/positionArray"
+                    },
+                    {
+                        "minItems": 4
+                    }
+                ]
+            },
+            "polygon": {
+                "description": "An array of linear rings",
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/linearRing"
+                }
+            }
+        },
+        "cultural-spaces@vancouver_records": {
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "properties": {
+                        "year": {
+                            "type": "string",
+                            "title": "YEAR",
+                            "description": "Year"
+                        },
+                        "cultural_space_name": {
+                            "type": "string",
+                            "title": "CULTURAL_SPACE_NAME",
+                            "description": "Name of cultural space or facility that it is formally or commonly known by"
+                        },
+                        "website": {
+                            "type": "string",
+                            "title": "WEBSITE",
+                            "description": "Web page address; usually for the operator of the facility or space"
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "TYPE",
+                            "description": "Seven groupings of Primary_Use categories for the purpose of display on the map legend.\n\nMUSEUM/GALLERY: Museum/Gallery, Garden/Aquarium/Science Centre, Library/Archives\n\nSTUDIO/REHEARSAL: Artist Studio, Workshop, Rehearsal Studio, Film/Recording Studio, Artist Studio\n\nCOMMUNITY SPACE: Community Centre/Hall, Arena/Stadium, Plaza/Park/Band Shell, Place of Worship\n\nTHEATRE/PERFORMANCE: Theatre, Cinema, Performance Space\n\nEDUCATIONAL: Educational Institution\n\nCAFE/RESTAURANT/BAR: Bar/Lounge/Cabaret, Cafe/Restaurant\n\nOTHER: Category type of cultural spaces which falls outside defined Types"
+                        },
+                        "primary_use": {
+                            "type": "string",
+                            "title": "PRIMARY_USE",
+                            "description": "Description of type of use of the cultural space or facility; where there is more than one use, the most significant cultural use is indicated\n\nARENA/STADIUM: Facility or space used for cultural programs\n\nARTIST HOUSING: Facility primarily providing artist housing with no studio or production facilities\n\nARTIST STUDIO: Facility with four or more individual studios; may have multiple artists; does not have employees\n\nARTIST STUDIO WITH RESIDENCE: Facility with one or more individual studios; may have multiple artists; incorporates living area for the artist(s).\n\nBAR/LOUNGE/CABARET:  Facility or space with well-defined curated cultural program\n\nCAFE/RESTAURANT: Facility or space with well-defined curated cultural program\n\nCINEMA: Screen-based facility or space\n\nCOMMUNITY CENTRE/HALL: Community Centre, Community Hall or Neighbourhood House used for cultural programs\n\nEDUCATIONAL INSTITUTION: Facility or space focused on arts and cultural education\n\nFILM/RECORDING STUDIO: Film, video or sound production facility or space\n\nGARDEN/AQUARIUM/SCIENCE CENTRE: Includes planetariums; considered museums according to provincial, national and international definitions\n\nLIBRARY/ARCHIVES: Facility or space used for cultural programs\n\nMUSEUM/GALLERY: Exhibition-based facility or space; includes collecting and non-collecting institutions\n\nPERFORMANCE SPACE: Performance facility or space other than theatres\n\nPLACE OF WORSHIP: Facility or space used for cultural programs\n\nPLAZA/PARK/BAND SHELL: Facility or space used for cultural programs\n\nREHEARSAL STUDIO: Primarily used for performing arts (dance, music, theatre, etc.)\n\nRETAIL:  Retail space dedicated to cultural products or used for cultural programs\n\nTHEATRE: Purpose-built theatre facility or space; with seats (permanent or temporary); including proscenium or black box\n\nWORKSHOP: Facility or space used for large-scale production; may have employees"
+                        },
+                        "address": {
+                            "type": "string",
+                            "title": "ADDRESS",
+                            "description": "Full street address of the facility or space; usually includes postal code"
+                        },
+                        "local_area": {
+                            "type": "string",
+                            "title": "LOCAL_AREA",
+                            "description": "Local area where the facility or space is located\nNote: includes City's defined local areas which are within the City's legal jurisdiction, as well as UBC and Stanley Park"
+                        },
+                        "ownership": {
+                            "type": "string",
+                            "title": "OWNERSHIP",
+                            "description": "Indicates the type of ownership of the space (City of Vancouver, Government, Non-profit, Other, Privately-owned, Vancouver Park Board)"
+                        },
+                        "square_feet": {
+                            "type": "integer",
+                            "title": "SQUARE_FEET",
+                            "description": "Total square footage (measured in feet) of the cultural facility or space"
+                        },
+                        "number_of_seats": {
+                            "type": "integer",
+                            "title": "NUMBER_OF_SEATS",
+                            "description": "Maximum capacity seated; primarily for arena/stadium, cinema, performance space and theatre"
+                        },
+                        "active_space": {
+                            "type": "string",
+                            "title": "ACTIVE_SPACE",
+                            "description": "“Yes” if the facility or space currently has a cultural use; “No” – if it no longer has a cultural use"
+                        },
+                        "geom": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/geometry"
+                                }
+                            ],
+                            "title": "Geom",
+                            "description": "Spatial representation"
+                        },
+                        "geo_point_2d": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "number"
+                            },
+                            "title": "geo_point_2d",
+                            "description": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
