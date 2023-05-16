@@ -21,6 +21,7 @@ schema.list:
 	  find ./Ref/json-schema-spec/ -name '*.json' -print
 	  find ./Ref/JSON-Schema-Test-Suite/ -name '*-schema.json' -print
 	  find ./Ref/test-suite-extracts/ -name '*.json' -print
+	  find ./Ref/schemas/ -name '*.json' -print
 	  # Misc
 	  find ./Misc/VRAC/ -name '*.json' -print
 	  find ./Misc/apidae/ -name '*.schema' -print
