@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/JustinGrote/AzurePolicySchema/main/policyParameters.schema.json",
+  "title": "Azure Policy Parameters",
+  "description": "Azure Policy Parameters: https://docs.microsoft.com/en-us/azure/governance/policy/concepts/definition-structure",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object",
+    "description": "Input parameter definitions",
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The name of your parameter. Used by the parameters deployment function within the policy rule. For more information, see https://docs.microsoft.com/en-us/azure/governance/policy/concepts/definition-structure#using-a-parameter-value."
+      },
+      "type": {
+        "type": "string",
+        "description": "Type of input parameter",
+        "enum": [
+          "string",
+          "securestring",
+          "int",
+          "bool",
+          "object",
+          "secureObject",
+          "array"
+        ]
+      },
+      "defaultValue": {
+        "type": [
+          "string",
+          "boolean",
+          "integer",
+          "number",
+          "object",
+          "array",
+          "null"
+        ],
+        "description": "Default value to be used if one is not provided"
+      },
+      "allowedValues": {
+        "type": "array",
+        "description": "Value can only be one of these values"
+      },
+      "metadata": {
+        "type": "object",
+        "description": "Metadata for the parameter, can be any valid JSON object but there are some well known properties that influence the Azure Portal",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "The friendly name shown in the portal for the parameter."
+          },
+          "description": {
+            "type": "string",
+            "description": "The explanation of what the parameter is used for. Can be used to provide examples of acceptable values."
+          },
+          "strongType": {
+            "type": "string",
+            "description": "You can use strongType to provide a multiselect list of options within The Azure portal. strongType can be a supported resource type or an allowed value. To determine whether a resource type is valid for strongType, use Get-AzResourceProvider. The format for a resource type strongType is <Resource Provider>/<Resource Type>. Some resource types not returned by Get-AzResourceProvider are supported. Those types are: Microsoft.RecoveryServices/vaults/backupPolicies. The non resource type allowed values for strongType are: location, resourceTypes, storageSkus, vmSKUs, existingResourceGroups",
+            "examples": [
+              "location",
+              "resourceTypes",
+              "storageSkus",
+              "vmSKUs",
+              "existingResourceGroups",
+              "Microsoft.Network/virtualNetworks/subnets"
+            ]
+          },
+          "assignPermissions": {
+            "type": "boolean",
+            "description": "Set as true to have Azure portal create role assignments during policy assignment. This property is useful in case you wish to assign permissions outside the assignment scope. There's one role assignment per role definition in the policy (or per role definition in all of the policies in the initiative). The parameter value must be a valid resource or scope."
+          }
+        }
+      },
+      "schema": {
+        "type": "string",
+        "description": "Provides validation of parameter inputs during assignment using a self-defined JSON schema. This property is only supported for object-type parameters and follows the Json.NET Schema 2019-09 implementation. You can learn more about using schemas at https://json-schema.org/ and test draft schemas at https://www.jsonschemavalidator.net/."
+      }
+    },
+    "required": [
+      "type"
+    ]
+  }
+}

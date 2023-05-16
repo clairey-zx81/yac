@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Catalog of open data schemas",
+  "description": "References to remote schemas, by URL or Git repository",
+  "type": "object",
+  "required": [
+    "version",
+    "schemas"
+  ],
+  "properties": {
+    "schemas": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/Schema"
+          },
+          {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/GitSchema"
+              },
+              {
+                "$ref": "#/definitions/URLSchema"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "version": {
+      "description": "The version of the schema defining the catalog file",
+      "type": "number"
+    }
+  },
+  "definitions": {
+    "GitSchema": {
+      "required": [
+        "repo_url"
+      ],
+      "properties": {
+        "doc_url_by_ref": {
+          "description": "Schema documentation URL by Git reference (branch or tag name)",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "repo_url": {
+          "description": "Git repository URL",
+          "type": "string",
+          "format": "uri"
+        },
+        "repo_type": {
+          "description": "Git platform type",
+          "type": "string",
+          "enum": [
+            "github",
+            "gitlab"
+          ]
+        },
+        "schema_filename": {
+          "description": "Schema filename",
+          "type": "string",
+          "default": "schema.json"
+        },
+        "schema_filename_by_ref": {
+          "description": "Schema filename by Git reference (branch or tag name)",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    "Schema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Machine name of the schema",
+          "type": "string"
+        },
+        "schema_type": {
+          "description": "Schema type",
+          "type": "string",
+          "enum": ["tableschema", "jsonschema", "datapackage", "xsd", "other"],
+          "default": "tableschema"
+        },
+        "title": {
+          "description": "Human name of the schema",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the schema",
+          "type": "string"
+        },
+        "doc_url": {
+          "description": "Schema documentation URL from latest version",
+          "type": "string",
+          "format": "uri"
+        },
+        "versions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "version_name":{
+                "description": "Version name of the schema",
+                "type": "string"
+              },
+              "schema_url":{
+                "description": "Schema documentation URL of a specific version",
+                "type": "string",
+                "format": "uri"
+              },
+              "examples":{
+                "type": "array",
+                "items": {
+                  "description": "Schema example URL of a specific version",
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "URLSchema": {
+      "required": [
+        "schema_url"
+      ],
+      "properties": {
+        "schema_url": {
+          "description": "URL to schema file",
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    }
+  }
+}
