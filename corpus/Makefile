@@ -11,28 +11,30 @@ pull:
 clean:
 	$(RM) schema.list
 
+# WARNING MacOS find can generate //
+
 schema.list:
 	{ 
 	  # Store
 	  # argh… stupid files which contain ' characters
-	  find ./Store/schemastore-analysis/JSON/ -name '*.json' -print | sed "s/'/\\\'/"
-	  find ./Store/schemastore/src/schemas/json/ -name '*.json' -print
+	  find ./Store/schemastore-analysis/JSON -name '*.json' -print | sed "s/'/\\\'/"
+	  find ./Store/schemastore/src/schemas/json -name '*.json' -print
 	  # Ref
-	  find ./Ref/json-schema-spec/ -name '*.json' -print
-	  find ./Ref/JSON-Schema-Test-Suite/ -name '*-schema.json' -print
-	  find ./Ref/test-suite-extracts/ -name '*.json' -print
-	  find ./Ref/schemas/ -name '*.json' -print
+	  find ./Ref/json-schema-spec -name '*.json' -print
+	  find ./Ref/JSON-Schema-Test-Suite -name '*-schema.json' -print
+	  find ./Ref/test-suite-extracts -name '*.json' -print
+	  find ./Ref/schemas -name '*.json' -print
 	  # Misc
-	  find ./Misc/VRAC/ -name '*.json' -print
-	  find ./Misc/apidae/ -name '*.schema' -print
+	  find ./Misc/VRAC -name '*.json' -print
+	  find ./Misc/apidae -name '*.schema' -print
 	  find ./Misc/kubernetes/*-standalone-strict -name '*.json' -print
-	  find ./Misc/openAPI/schemas/ -name '*.json' -print
-	  find ./Misc/schema.data.gouv.fr/schemas/ -name '*.json' -print
-	  find ./Misc/sp-simulateurs/ -name '*.schema.json' -print
-	  find ./Misc/washington-post/src/ -name '*.json' -print
+	  find ./Misc/openAPI/schemas -name '*.json' -print
+	  find ./Misc/schema.data.gouv.fr/schemas -name '*.json' -print
+	  find ./Misc/sp-simulateurs -name '*.schema.json' -print
+	  find ./Misc/washington-post/src -name '*.json' -print
 	  # ODS
-	  find ./ODS/ -name '*.json' -print
+	  find ./ODS -name '*.json' -print
 	  # JSC
-	  find ./JSC/json-schema-corpus/ -name '*.json' -print
-	  find ./JSC/extracts/ -name '*.json' -print
+	  find ./JSC/json-schema-corpus -name '*.json' -print
+	  find ./JSC/JSC_extracts -name '*.json' -print
 	} | sort -d > $@
