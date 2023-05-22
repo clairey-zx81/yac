@@ -66,3 +66,28 @@ extract "Fig 11.a" \
 extract "Fig 11.b" \
 		".items.anyOf[13]" \
 		"corpus/store/schemastore-analysis/JSON/Ansible_2.5.json"
+
+extract "Fig 12.a" \
+		".properties.postActions.items.allOf[1].oneOf[3].properties.args.properties.targetFiles.oneOf[0]|del(.description)" \
+		"corpus/store/schemastore/src/schemas/json/template.json"
+
+extract "Fig 12.b" \
+		'.properties."sap.ui5".properties.routing.properties.routes' \
+		"corpus/store/schemastore-analysis/JSON/JSON_schema_for_UI5_manifest.json_project_declaration.json"
+
+extract "Fig 12.c" \
+		".definitions.fileHashes" \
+		"corpus/store/schemastore/src/schemas/json/azure-deviceupdate-manifest-definitions-4.0.json"
+
+extract "Fig 12.d" \
+		".|del(.name)" \
+		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_81088.json"
+
+extract "Fig 12.e" \
+		".|del(.name)" \
+		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_81088.json"
+
+extract "Fig 12.f" \
+		".items" \
+		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_37714.json"
+
