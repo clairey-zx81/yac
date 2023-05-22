@@ -91,3 +91,34 @@ extract "Fig 12.f" \
 		".items" \
 		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_37714.json"
 
+extract "Fig 13" \
+		".definitions.geometry|del(.required)" \
+		"corpus/ODS/data.laregion.fr/20181005_opendata_dej.json"
+
+extract "Fig 14.a" \
+		".properties|del(.age_group)" \
+		"corpus/JSC/JSC_extracts/pp_53086_000.json"
+
+extract "Fig 14.b" \
+		".properties.update_configs.items.properties.allowed_updates" \
+		"corpus/store/schemastore/src/schemas/json/dependabot.json"
+
+extract "Fig 14.c" \
+		".definitions.job_template.properties.artifacts.properties.paths|del(.description)" \
+		"corpus/store/schemastore-analysis/JSON/Gitlab_CI_configuration.json"
+
+extract "Fig 14.d" \
+		".|del(.title)" \
+		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_73935.json"
+
+extract "Fig 14.e" \
+		".properties.experienceEndpoints.properties.items.items.properties.unauthorizedReply.oneOf[0].properties.statusCode" \
+		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_9882.json"
+
+extract "Fig 14.f" \
+		".definitions.billow.properties.OctaveCount|del(.description)" \
+		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_17072.json"
+
+extract "Fig 14.g" \
+		".definition.commandStep.groupStep.properties.steps" \
+		"corpus/store/schemastore-analysis/JSON/JSON_schema_for_Buildkite_pipeline_configuration_files.json"
