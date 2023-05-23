@@ -91,8 +91,8 @@ extract "Fig 12.d" \
 		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_81088.json"
 
 extract "Fig 12.e" \
-		"FIXME PAS LE BON FICHIER" \
-		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_81088.json"
+		'.properties.build|del(.description,.properties.buildpacks,.properties.dockerfile,.properties."build-target",.properties.builder,.properties.args,.properties.image.description)' \
+		"corpus/Store/schemastore/src/schemas/json/fly.json"
 
 extract "Fig 12.f" \
 		'.items|del(.description,.properties.label[],.properties.namespaces,.properties.tag)' \
@@ -129,3 +129,11 @@ extract "Fig 14.f" \
 extract "Fig 14.g" \
         '.definitions.groupStep.properties.steps|del(.description,.items[])' \
 		"corpus/Store/schemastore-analysis/JSON/JSON_schema_for_Buildkite_pipeline_configuration_files.json"
+
+extract "Fig 15" \
+		".properties.errorPage|del(.items.properties,.items.file,.items.required)" \
+		"corpus/Store/schemastore/src/schemas/json/xs-app.json"
+
+extract "Fig 16.a" \
+		".definitions.imgUrl|del(.links)" \
+		"corpus/Store/schemastore/src/schemas/json/jasonette.json"
