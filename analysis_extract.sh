@@ -99,7 +99,7 @@ extract "Fig 12.f" \
 		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_37714.json"
 
 extract "Fig 13" \
-		".definitions.geometry|del(.required)" \
+		'.|del(.description,.title,.definitions."20181005_opendata_dej",.definitions.geoJSON,.definitions.bbox,.definitions.crs,.definitions.namedCrs,.definitions.linkedObject,.definitions.geometryCollection,.definitions.feature,.definitions.featureCollection,.definitions.linkedCrs,.definitions.geometry["title","required","position","positionArray","lineString","linearRing"],.definitions.geometry.oneOf[0,1,2,3,5],.definitions.geometry.polygon[],.definitions."20181005_opendata_dej_records",.definitions.geometry.oneOf[4].title,.definitions.geometry.oneOf[].properties.type)' \
 		"corpus/ODS/data.laregion.fr/20181005_opendata_dej.json"
 
 extract "Fig 14.a" \
