@@ -205,3 +205,19 @@ extract "Fig 19.b" \
 		 .definitions.keyValuePairVariables.patternProperties,
 		 .title,.type)' \
 		"corpus/Store/schemastore/src/schemas/json/hws-config.json"
+
+extract "Fig 20.a" \
+		'."$defs"."r2c-internal-project-depends-on-content".properties."depends-on-either"|del(.properties.package,.required)' \
+		"corpus/Store//schemastore/src/schemas/json/semgrep.json"
+
+extract "Fig 20.b" \
+		".definitions.notification.properties.recipients|del(.anyOf[].properties[])" \
+		"corpus/Store/schemastore/src/schemas/json/bamboo-spec.json"
+
+extract "Fig 21.a" \
+		'.|del(."$schema")' \
+		"corpus/Misc/kubernetes/master-standalone-strict/microtime-meta-v1.json"
+
+extract "Fig 21.b" \
+		'.defs.scale.allOf[1].oneOf[0].properties.range.oneOf[3].properties.extent.oneOf[0]' \
+		"corpus/Store/schemastore/src/schemas/json/vega.json"
