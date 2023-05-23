@@ -43,7 +43,11 @@ extract "Fig 8.e" \
 		"corpus/Store/schemastore/src/schemas/json/cloudify.json"
 
 extract "Fig 9.a" \
-		".properties.externally_connectable|del(.description,.items.properties.ids[],.items.properties.accepts_tls_channel_id,.items.properties.matches,.items.additionalProperties)" \
+		'.properties.externally_connectable|
+         del(.description,.items.properties.ids[],
+             .items.properties.accepts_tls_channel_id,
+             .items.properties.matches,
+             .items.additionalProperties)' \
 		"corpus/Store/schemastore-analysis/JSON/JSON_schema_for_Google_Chrome_extension_manifest_files.json"
 
 extract "Fig 9.b" \
@@ -91,15 +95,42 @@ extract "Fig 12.d" \
 		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_81088.json"
 
 extract "Fig 12.e" \
-		'.properties.build|del(.description,.properties.buildpacks,.properties.dockerfile,.properties."build-target",.properties.builder,.properties.args,.properties.image.description)' \
+		'.properties.build|
+         del(.description,
+             .properties.buildpacks,
+             .properties.dockerfile,
+             .properties."build-target",
+             .properties.builder,
+             .properties.args,
+             .properties.image.description)' \
 		"corpus/Store/schemastore/src/schemas/json/fly.json"
 
 extract "Fig 12.f" \
-		'.items|del(.description,.properties.label[],.properties.namespaces,.properties.tag)' \
+		'.items|
+         del(.description,
+             .properties.label[],
+             .properties.namespaces,
+             .properties.tag)' \
 		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_37714.json"
 
 extract "Fig 13" \
-		'.|del(.description,.title,.definitions."20181005_opendata_dej",.definitions.geoJSON,.definitions.bbox,.definitions.crs,.definitions.namedCrs,.definitions.linkedObject,.definitions.geometryCollection,.definitions.feature,.definitions.featureCollection,.definitions.linkedCrs,.definitions.geometry["title","required","position","positionArray","lineString","linearRing"],.definitions.geometry.oneOf[0,1,2,3,5],.definitions.geometry.polygon[],.definitions."20181005_opendata_dej_records",.definitions.geometry.oneOf[4].title,.definitions.geometry.oneOf[].properties.type)' \
+		'.|del(.description,.title,
+               .definitions."20181005_opendata_dej",
+               .definitions.geoJSON,
+               .definitions.bbox,
+               .definitions.crs,
+               .definitions.namedCrs,
+               .definitions.linkedObject,
+               .definitions.geometryCollection,
+               .definitions.feature,
+               .definitions.featureCollection,
+               .definitions.linkedCrs,
+               .definitions.geometry["title","required","position","positionArray","lineString","linearRing"],
+               .definitions.geometry.oneOf[0,1,2,3,5],
+               .definitions.geometry.polygon[],
+               .definitions."20181005_opendata_dej_records",
+               .definitions.geometry.oneOf[4].title,
+               .definitions.geometry.oneOf[].properties.type)' \
 		"corpus/ODS/data.laregion.fr/20181005_opendata_dej.json"
 
 extract "Fig 14.a" \
@@ -107,11 +138,13 @@ extract "Fig 14.a" \
 		"corpus/JSC/JSC_extracts/pp_53086_000.json"
 
 extract "Fig 14.b" \
-		'.properties.update_configs.items.properties.allowed_updates|del(.description,.items.properties)' \
+		'.properties.update_configs.items.properties.allowed_updates|
+         del(.description,.items.properties)' \
 		"corpus/Store/schemastore/src/schemas/json/dependabot.json"
 
 extract "Fig 14.c" \
-		".definitions.job_template.properties.artifacts.properties.paths|del(.description)" \
+		'.definitions.job_template.properties.artifacts.properties.paths|
+         del(.description)' \
 		"corpus/Store/schemastore-analysis/JSON/Gitlab_CI_configuration.json"
 
 extract "Fig 14.d" \
@@ -119,19 +152,22 @@ extract "Fig 14.d" \
 		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_73935.json"
 
 extract "Fig 14.e" \
-		".properties.experienceEndpoints.properties.items.items.properties.unauthorizedReply.oneOf[0].properties.statusCode" \
+		'.properties.experienceEndpoints.properties.items.items.properties.unauthorizedReply.oneOf[0].properties.statusCode' \
 		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_9882.json"
 
 extract "Fig 14.f" \
-		".definitions.billow.properties.OctaveCount|del(.description,.title)" \
+		'.definitions.billow.properties.OctaveCount|
+         del(.description,.title)' \
 		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_17072.json"
 
 extract "Fig 14.g" \
-        '.definitions.groupStep.properties.steps|del(.description,.items[])' \
+        '.definitions.groupStep.properties.steps|
+         del(.description,.items[])' \
 		"corpus/Store/schemastore-analysis/JSON/JSON_schema_for_Buildkite_pipeline_configuration_files.json"
 
 extract "Fig 15" \
-		".properties.errorPage|del(.items.properties,.items.file,.items.required)" \
+		".properties.errorPage|
+         del(.items.properties,.items.file,.items.required)" \
 		"corpus/Store/schemastore/src/schemas/json/xs-app.json"
 
 extract "Fig 16.a" \
