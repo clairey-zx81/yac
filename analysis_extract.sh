@@ -69,7 +69,7 @@ extract "Fig 11.b" \
 
 extract "Fig 12.a" \
 		".properties.postActions.items.allOf[1].oneOf[3].properties.args.properties.targetFiles.oneOf[0]|del(.description)" \
-		"corpus/store/schemastore/src/schemas/json/template.json"
+		"corpus/Store/schemastore/src/schemas/json/template.json"
 
 extract "Fig 12.b" \
 		'.properties."sap.ui5".properties.routing.properties.routes' \
