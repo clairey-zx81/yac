@@ -107,7 +107,7 @@ extract "Fig 14.a" \
 		"corpus/JSC/JSC_extracts/pp_53086_000.json"
 
 extract "Fig 14.b" \
-		".properties.update_configs.items.properties.allowed_updates" \
+		'.properties.update_configs.items.properties.allowed_updates|del(.description,.items.properties)' \
 		"corpus/Store/schemastore/src/schemas/json/dependabot.json"
 
 extract "Fig 14.c" \
@@ -123,9 +123,9 @@ extract "Fig 14.e" \
 		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_9882.json"
 
 extract "Fig 14.f" \
-		".definitions.billow.properties.OctaveCount|del(.description)" \
+		".definitions.billow.properties.OctaveCount|del(.description,.title)" \
 		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_17072.json"
 
 extract "Fig 14.g" \
-		".definition.commandStep.groupStep.properties.steps" \
+        '.definitions.groupStep.properties.steps|del(.description,.items[])' \
 		"corpus/Store/schemastore-analysis/JSON/JSON_schema_for_Buildkite_pipeline_configuration_files.json"
