@@ -1,4 +1,11 @@
 #! /bin/bash
+#
+# Generate all extracts for report:
+#
+# "An Analysis of Defects in Public JSON Schema"
+# Claire Yannou-Medrala and Fabien Coelho
+# Technical Report A/794/CRI, Mines Paris - PSL
+#
 
 function extract()
 {
