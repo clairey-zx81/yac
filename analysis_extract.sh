@@ -17,11 +17,11 @@ extract "Fig 5" \
 
 extract "Fig 8.a" \
 		".items.anyOf[15].properties.clc_loadbalancer.properties.port|del(.description)" \
-		"corpus/store/schemastore-analysis/JSON/Ansible_2.5.json"
+		"corpus/Store/schemastore-analysis/JSON/Ansible_2.5.json"
 
 extract "Fig 8.b" \
 		".definitions.arrayStringRule.oneOf[1].items.anyOf[0]" \
-		"corpus/store/schemastore/src/schemas/json/stylelintrc.json"
+		"corpus/Store/schemastore/src/schemas/json/stylelintrc.json"
 
 extract "Fig 8.c" \
 		".|del(.additionalProperties)" \
@@ -29,15 +29,15 @@ extract "Fig 8.c" \
 
 extract "Fig 8.d" \
 		".definitions.notification.properties.recipients" \
-		"corpus/store/schemastore/src/schemas/json/bamboo-spec.json"
+		"corpus/Store/schemastore/src/schemas/json/bamboo-spec.json"
 
 extract "Fig 8.e" \
 		'.definitions.nodeTypeCloudifyAzureNodesNetworkLoadBalancerProbeInterfaces.properties."cloudify.interfaces.lifecycle".properties.delete' \
-		"corpus/store/schemastore/src/schemas/json/cloudify.json"
+		"corpus/Store/schemastore/src/schemas/json/cloudify.json"
 
 extract "Fig 9.a" \
 		".properties.externally_connectable" \
-		"corpus/store/schemastore-analysis/JSON/JSON_schema_for_Google_Chrome_extension_manifest_files.json"
+		"corpus/Store/schemastore-analysis/JSON/JSON_schema_for_Google_Chrome_extension_manifest_files.json"
 
 extract "Fig 9.b" \
 		'.definitions."github_com-brainicorn-skelp-skelplate-SimpleVar".properties.default|del(.description)' \
@@ -53,19 +53,19 @@ extract "Fig 9.d" \
 
 extract "Fig 10.a" \
 		".properties.reporterOptions|del(.description)" \
-		"corpus/store/schemastore-analysis/JSON/JSON_schema_for_https__cypress.io_test_runner_cypress.json_file._Details_at_https__on.cypress.io_configuration.json"
+		"corpus/Store/schemastore-analysis/JSON/JSON_schema_for_https__cypress.io_test_runner_cypress.json_file._Details_at_https__on.cypress.io_configuration.json"
 
 extract "Fig 10.b" \
 		".definitions.mongo.items.properties.port|del(.description)" \
-		"corpus/store/schemastore/src/schemas/json/monika-config-schema.json"
+		"corpus/Store/schemastore/src/schemas/json/monika-config-schema.json"
 
 extract "Fig 11.a" \
 		".properties.extensions.items" \
-		"corpus/store/schemastore/src/schemas/json/vsext.json"
+		"corpus/Store/schemastore/src/schemas/json/vsext.json"
 
 extract "Fig 11.b" \
 		".items.anyOf[13]" \
-		"corpus/store/schemastore-analysis/JSON/Ansible_2.5.json"
+		"corpus/Store/schemastore-analysis/JSON/Ansible_2.5.json"
 
 extract "Fig 12.a" \
 		".properties.postActions.items.allOf[1].oneOf[3].properties.args.properties.targetFiles.oneOf[0]|del(.description)" \
@@ -73,11 +73,11 @@ extract "Fig 12.a" \
 
 extract "Fig 12.b" \
 		'.properties."sap.ui5".properties.routing.properties.routes' \
-		"corpus/store/schemastore-analysis/JSON/JSON_schema_for_UI5_manifest.json_project_declaration.json"
+		"corpus/Store/schemastore-analysis/JSON/JSON_schema_for_UI5_manifest.json_project_declaration.json"
 
 extract "Fig 12.c" \
 		".definitions.fileHashes" \
-		"corpus/store/schemastore/src/schemas/json/azure-deviceupdate-manifest-definitions-4.0.json"
+		"corpus/Store/schemastore/src/schemas/json/azure-deviceupdate-manifest-definitions-4.0.json"
 
 extract "Fig 12.d" \
 		".|del(.name)" \
@@ -101,11 +101,11 @@ extract "Fig 14.a" \
 
 extract "Fig 14.b" \
 		".properties.update_configs.items.properties.allowed_updates" \
-		"corpus/store/schemastore/src/schemas/json/dependabot.json"
+		"corpus/Store/schemastore/src/schemas/json/dependabot.json"
 
 extract "Fig 14.c" \
 		".definitions.job_template.properties.artifacts.properties.paths|del(.description)" \
-		"corpus/store/schemastore-analysis/JSON/Gitlab_CI_configuration.json"
+		"corpus/Store/schemastore-analysis/JSON/Gitlab_CI_configuration.json"
 
 extract "Fig 14.d" \
 		".|del(.title)" \
@@ -121,4 +121,4 @@ extract "Fig 14.f" \
 
 extract "Fig 14.g" \
 		".definition.commandStep.groupStep.properties.steps" \
-		"corpus/store/schemastore-analysis/JSON/JSON_schema_for_Buildkite_pipeline_configuration_files.json"
+		"corpus/Store/schemastore-analysis/JSON/JSON_schema_for_Buildkite_pipeline_configuration_files.json"
