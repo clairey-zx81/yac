@@ -137,3 +137,35 @@ extract "Fig 15" \
 extract "Fig 16.a" \
 		".definitions.imgUrl|del(.links)" \
 		"corpus/Store/schemastore/src/schemas/json/jasonette.json"
+
+extract "Fig 16.b" \
+		'.definitions.possibleErrors.properties."no-unsafe-finally"' \
+		"corpus/Store/schemastore-analysis/JSON/JSON_schema_for_ESLint_configuration_files.json"
+
+extract "Fig 16.c" \
+		".|del(.title,.properties,.required,.definitions,.description,.type,.anyOf)" \
+		"corpus/Store/schemastore-analysis/JSON/Unity_Assembly_Definition.json"
+
+extract "Fig 16.d" \
+		".properties.id" \
+		"corpus/JSC/JSC_extracts/pp_80381_013.json"
+
+extract "Fig 16.e" \
+		'.properties.""' \
+		"corpus/JSC/json-schema-corpus/json_schema_corpus/pp_54206.json"
+
+extract "Fig 18" \
+		'.|del(.properties[],.definitions,.required)' \
+		"corpus/Store/schemastore-analysis/JSON//CryProj_schema.json"
+
+extract "Fig 19.a" \
+		'.|del(.allOf,.definitions.foo,.definitions.base_foo.type)' \
+		"corpus/Ref/test-suite-extracts/draft4_ref_006.json"
+
+extract "Fig 19.b" \
+		'.|del(.additionalProperties,.properties,.definitions.duration,.definitions.loggerLevel,
+		 .definitions.transportProtocols,.definitions.namespace,.definitions.hostType,
+		 .definitions.hardwareProblemTemplate,.definitions.sequential,.definitions.outputDirectory,
+		 .definitions.keyValuePairVariables.patternProperties,
+		 .title,.type)' \
+		"corpus/Store/schemastore/src/schemas/json/hws-config.json"
