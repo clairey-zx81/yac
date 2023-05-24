@@ -221,3 +221,13 @@ extract "Fig 21.a" \
 extract "Fig 21.b" \
 		'.defs.scale.allOf[1].oneOf[0].properties.range.oneOf[3].properties.extent.oneOf[0]' \
 		"corpus/Store/schemastore/src/schemas/json/vega.json"
+
+extract "Fig 22" \
+		'.definitions."http_sd_configs".items|
+		 del(.description,.properties.url."description,format",.required,.additionalProperties,
+		 .properties["refresh_interval","basic_auth","authorization","oauth2","bearer_token","bearer_token_file","proxy_url","follow_redirects","tls_config"])' \
+		"corpus/Store/schemastore/src/schemas/json/prometheus.json"
+
+extract "Fig 23" \
+		'.properties."manifest_version"|del(.description)' \
+		"corpus/Store/schemastore-analysis/JSON/JSON_schema_for_Google_Chrome_extension_manifest_files.json"
