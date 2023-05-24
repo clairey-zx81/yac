@@ -192,7 +192,7 @@ extract "Fig 16.e" \
 
 extract "Fig 18" \
 		'.|del(.properties[],.definitions,.required)' \
-		"corpus/Store/schemastore-analysis/JSON//CryProj_schema.json"
+		"corpus/Store/schemastore-analysis/JSON/CryProj_schema.json"
 
 extract "Fig 19.a" \
 		'.|del(.allOf,.definitions.foo,.definitions.base_foo.type)' \
@@ -208,7 +208,7 @@ extract "Fig 19.b" \
 
 extract "Fig 20.a" \
 		'."$defs"."r2c-internal-project-depends-on-content".properties."depends-on-either"|del(.properties.package,.required)' \
-		"corpus/Store//schemastore/src/schemas/json/semgrep.json"
+		"corpus/Store/schemastore/src/schemas/json/semgrep.json"
 
 extract "Fig 20.b" \
 		".definitions.notification.properties.recipients|del(.anyOf[].properties[])" \
