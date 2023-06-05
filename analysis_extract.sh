@@ -211,7 +211,7 @@ extract "Fig 20.a" \
 		"corpus/Store/schemastore/src/schemas/json/semgrep.json"
 
 extract "Fig 20.b" \
-		".definitions.notification.properties.recipients|del(.anyOf[].properties[])" \
+		".definitions.notification.properties.recipients|del(.anyOf[].properties)" \
 		"corpus/Store/schemastore/src/schemas/json/bamboo-spec.json"
 
 extract "Fig 21.a" \
