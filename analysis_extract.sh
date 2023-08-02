@@ -75,8 +75,8 @@ extract "Fig 11.a" \
 		"corpus/Store/schemastore/src/schemas/json/vsext.json"
 
 extract "Fig 11.b" \
-		".items.anyOf[13]|del(.include[],.name[])" \
-		"corpus/Store/schemastore-analysis/JSON/Ansible_2.5.json"
+        '."$defs".ActionInput' \
+        "corpus/Misc/VRAC/openapi_launchdarkly_components.json"
 
 extract "Fig 12.a" \
 		".properties.postActions.items.allOf[1].oneOf[3].properties.args.properties.targetFiles.oneOf[0]|del(.description)" \
