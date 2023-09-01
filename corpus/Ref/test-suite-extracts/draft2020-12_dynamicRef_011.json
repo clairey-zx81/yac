@@ -1,35 +1,58 @@
 {
   "$defs": {
-    "inner": {
-      "$dynamicAnchor": "foo",
-      "$id": "inner",
-      "additionalProperties": {
-        "$dynamicRef": "#foo"
+    "genericList": {
+      "$defs": {
+        "defaultItemType": {
+          "$comment": "Only needed to satisfy bookending requirement",
+          "$dynamicAnchor": "itemType"
+        }
       },
-      "title": "inner"
+      "$id": "genericList",
+      "properties": {
+        "list": {
+          "items": {
+            "$dynamicRef": "#itemType"
+          }
+        }
+      }
+    },
+    "numberList": {
+      "$defs": {
+        "itemType": {
+          "$dynamicAnchor": "itemType",
+          "type": "number"
+        }
+      },
+      "$id": "numberList",
+      "$ref": "genericList"
+    },
+    "stringList": {
+      "$defs": {
+        "itemType": {
+          "$dynamicAnchor": "itemType",
+          "type": "string"
+        }
+      },
+      "$id": "stringList",
+      "$ref": "genericList"
     }
   },
   "$id": "https://test.json-schema.org/dynamic-ref-with-multiple-paths/main",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "else": {
-    "$dynamicAnchor": "foo",
-    "$id": "integerNode",
-    "$ref": "inner",
-    "title": "integer node",
-    "type": [
-      "object",
-      "integer"
-    ]
+    "$ref": "stringList"
   },
   "if": {
-    "propertyNames": {
-      "pattern": "^[a-m]"
-    }
+    "properties": {
+      "kindOfList": {
+        "const": "numbers"
+      }
+    },
+    "required": [
+      "kindOfList"
+    ]
   },
   "then": {
-    "$dynamicAnchor": "foo",
-    "$id": "anyLeafNode",
-    "$ref": "inner",
-    "title": "any type of node"
+    "$ref": "numberList"
   }
 }
