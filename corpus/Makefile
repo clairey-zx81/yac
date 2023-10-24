@@ -32,6 +32,7 @@ schema.list:
 	  find ./Misc/schema.data.gouv.fr/schemas -name '*.json' -print
 	  find ./Misc/sp-simulateurs -name '*.schema.json' -print
 	  find ./Misc/washington-post/src -name '*.json' -print
+	  find ./Misc/snowplow/schemas -type f -print
 	  # ODS
 	  find ./ODS -name '*.json' -print
 	  # JSC
