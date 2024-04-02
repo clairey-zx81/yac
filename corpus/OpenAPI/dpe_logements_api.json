@@ -1,0 +1,4528 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "API publique du jeu de données : DPE Logements (avant juillet 2021)",
+    "description": "\nCette documentation interactive à destination des développeurs permet de consommer les ressources du jeu de données \"DPE Logements (avant juillet 2021)\".\n\nPour protéger l'infrastructure de publication de données, les appels sont limités par quelques règles simples :\n\n- Un utilisateur anonyme ne peut pas effectuer plus de 100 requêtes par interval de 5 secondes.\n  Sa vitesse de téléchargement totale sera limitée à 2 MB/s pour les contenus statiques (fichiers de données, pièces jointes, etc.) et à 500 kB/s pour les autres appels.\n- Un utilisateur authentifié (session ou clé d'API) ne peut pas effectuer plus de 100 requêtes par interval de 1 seconde.\n  Sa vitesse de téléchargement totale sera limitée à 4 MB/s pour les contenus statiques (fichiers de données, pièces jointes, etc.) et à 1 MB/s pour les autres appels.\n  ",
+    "version": "4.0.2",
+    "x-api-id": "data-ademe-fr-dataset-dpe-france",
+    "contact": {
+      "name": "Laurent MORICE",
+      "email": "laurent.morice@ademe.fr"
+    },
+    "termsOfService": "https://koumoul.com/platform/term-of-service"
+  },
+  "components": {
+    "securitySchemes": {},
+    "schemas": {
+      "datasetSchema": {
+        "title": "Dataset",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Globally unique identifier of the dataset"
+          },
+          "slug": {
+            "type": "string",
+            "description": "Identifier of the dataset, usually a slug for URL readability (unique inside the tenant)"
+          },
+          "href": {
+            "type": "string",
+            "description": "Readonly field. The URL where this resource can be fetched"
+          },
+          "page": {
+            "type": "string",
+            "description": "Readonly field. The URL where this resource can be viewed in the UI"
+          },
+          "title": {
+            "type": "string",
+            "description": "Short title of the dataset"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the dataset"
+          },
+          "image": {
+            "type": "string",
+            "description": "URL d'une image, illustration du jeu de données"
+          },
+          "spatial": {
+            "type": "string",
+            "description": "spatial coverage"
+          },
+          "temporal": {
+            "type": "object",
+            "description": "temporal coverage",
+            "properties": {
+              "start": {
+                "type": "string",
+                "format": "date"
+              },
+              "end": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          },
+          "keywords": {
+            "type": "array",
+            "description": "keywords",
+            "items": {
+              "type": "string"
+            }
+          },
+          "frequency": {
+            "type": "string",
+            "description": "update frequency",
+            "enum": [
+              "",
+              "triennial",
+              "biennial",
+              "annual",
+              "semiannual",
+              "threeTimesAYear",
+              "quarterly",
+              "bimonthly",
+              "monthly",
+              "semimonthly",
+              "biweekly",
+              "threeTimesAMonth",
+              "weekly",
+              "semiweekly",
+              "threeTimesAWeek",
+              "daily",
+              "continuous",
+              "irregular"
+            ]
+          },
+          "file": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "size",
+              "encoding",
+              "mimetype"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the file that was used to create or update this dataset"
+              },
+              "size": {
+                "type": "number",
+                "description": "Size of the file on disk"
+              },
+              "encoding": {
+                "type": "string",
+                "description": "Encoding of the file"
+              },
+              "mimetype": {
+                "type": "string",
+                "enum": [
+                  "text/csv"
+                ],
+                "description": "Mime type of the file"
+              },
+              "schema": {
+                "type": "array",
+                "description": "JSON schema properties of the fields in the file",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "key"
+                  ],
+                  "properties": {
+                    "ignoreDetection": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "ignoreIntegerDetection": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "separator": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "dateFormat": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "dateTimeFormat": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "timeZone": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  }
+                }
+              },
+              "props": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "numLines": {
+                    "type": "number",
+                    "description": "Number of lines this file has."
+                  },
+                  "linesDelimiter": {
+                    "type": "string",
+                    "description": "New line character or characters (can be \r\n))"
+                  },
+                  "fieldsDelimiter": {
+                    "type": "string",
+                    "description": "Fields delimiter"
+                  },
+                  "escapeChar": {
+                    "type": "string",
+                    "description": "Character used to escape string"
+                  }
+                }
+              }
+            }
+          },
+          "originalFile": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "size",
+              "mimetype"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the file that was used to create or update this dataset"
+              },
+              "size": {
+                "type": "number",
+                "description": "Size of the file on disk"
+              },
+              "mimetype": {
+                "type": "string",
+                "enum": [
+                  "text/csv"
+                ],
+                "description": "Mime type of the file"
+              },
+              "md5": {
+                "type": "string",
+                "description": "MD5 hash of the file content"
+              }
+            }
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "title"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "title": "Titre",
+                  "x-props": {
+                    "outlined": true,
+                    "dense": true
+                  }
+                },
+                "description": {
+                  "type": "string",
+                  "title": "Description",
+                  "x-display": "markdown"
+                }
+              },
+              "oneOf": [
+                {
+                  "title": "Fichier",
+                  "required": [
+                    "name"
+                  ],
+                  "properties": {
+                    "type": {
+                      "title": "Type de pièce jointe",
+                      "const": "file"
+                    },
+                    "name": {
+                      "x-display": "hidden",
+                      "type": "string",
+                      "description": "Name of the file that was used to create or update this attachment"
+                    },
+                    "size": {
+                      "x-display": "hidden",
+                      "type": "number",
+                      "description": "Size of the file on disk"
+                    },
+                    "mimetype": {
+                      "x-display": "hidden",
+                      "type": "string",
+                      "description": "Mime type of the file"
+                    },
+                    "updatedAt": {
+                      "x-display": "hidden",
+                      "type": "string",
+                      "description": "Date of the last update for this attachment",
+                      "format": "date-time"
+                    },
+                    "url": {
+                      "x-display": "hidden",
+                      "readOnly": true,
+                      "type": "string",
+                      "title": "URL"
+                    }
+                  }
+                },
+                {
+                  "title": "Lien",
+                  "required": [
+                    "url"
+                  ],
+                  "properties": {
+                    "type": {
+                      "title": "Type de pièce jointe",
+                      "const": "url"
+                    },
+                    "url": {
+                      "type": "string",
+                      "title": "URL"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "remoteFile": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "url"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the remote file that was used to create or update this dataset"
+              },
+              "url": {
+                "type": "string",
+                "description": "Url from where the file can be fetched"
+              },
+              "catalog": {
+                "type": "string",
+                "description": "Identifiant du catalogue d'origine"
+              },
+              "size": {
+                "type": "number",
+                "description": "Size of the file on disk"
+              },
+              "mimetype": {
+                "type": "string",
+                "description": "Mime type of the file"
+              },
+              "etag": {
+                "type": "string",
+                "description": "content of the \"etag\" response header if it was provided"
+              },
+              "lastModified": {
+                "type": "string",
+                "description": "content of the \"last-modified\" response header if it was provided"
+              },
+              "autoUpdate": {
+                "type": "object",
+                "properties": {
+                  "active": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "nextUpdate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "lastUpdate": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          },
+          "storage": {
+            "type": "object",
+            "description": "All storage space info of this dataset",
+            "properties": {
+              "size": {
+                "type": "integer"
+              },
+              "indexed": {
+                "type": "object",
+                "properties": {
+                  "size": {
+                    "type": "integer"
+                  },
+                  "parts": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "collection",
+                        "original-file",
+                        "normalized-file",
+                        "full-file",
+                        "attachments",
+                        "master-data"
+                      ]
+                    }
+                  }
+                }
+              },
+              "attachments": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer"
+                  },
+                  "size": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "metadataAttachments": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer"
+                  },
+                  "size": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "collection": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer"
+                  },
+                  "size": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "revisions": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer"
+                  },
+                  "size": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "masterData": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer"
+                  },
+                  "size": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "dataFiles": {
+                "type": "array",
+                "description": "Le tableau de résultats.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "size": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "mimetype": {
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Creation date of this dataset",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Date of the last metadata update for this dataset",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "dataUpdatedAt": {
+            "type": "string",
+            "description": "Date of the last update for this dataset",
+            "format": "date-time"
+          },
+          "dataUpdatedBy": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "finalizedAt": {
+            "type": "string",
+            "description": "Date of the last finalization for this dataset",
+            "format": "date-time"
+          },
+          "owner": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "id"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "user",
+                  "organization"
+                ],
+                "description": "If the owner is a user or an organization"
+              },
+              "id": {
+                "type": "string",
+                "description": "The unique id of the user or organization"
+              },
+              "name": {
+                "type": "string",
+                "description": "The display name of the user or organization"
+              },
+              "role": {
+                "type": "string",
+                "deprecated": true,
+                "description": "DEPRECATED - If this is set and owner is an organization, this restrict ownership to users of this organization having this role or admin role"
+              },
+              "department": {
+                "type": "string",
+                "description": "If this is set and owner is an organization, this gives ownership to users of this organization that belong to this department"
+              },
+              "departmentName": {
+                "type": "string",
+                "description": "The display name of the department"
+              }
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "remote",
+              "uploaded",
+              "loaded",
+              "analyzed",
+              "schematized",
+              "indexed",
+              "extended",
+              "finalized",
+              "error"
+            ],
+            "description": "The processing steps of a dataset."
+          },
+          "primaryKey": {
+            "type": "array",
+            "description": "List of properties of the schema used as unique primary key for each line",
+            "items": {
+              "type": "string"
+            }
+          },
+          "schema": {
+            "type": "array",
+            "description": "JSON schema properties of the fields",
+            "items": {
+              "type": "object",
+              "required": [
+                "key"
+              ],
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "readOnly": true,
+                  "x-display": "hidden"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "format": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "x-originalName": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "x-group": {
+                  "type": "string"
+                },
+                "x-refersTo": {
+                  "deprecated": true,
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "x-concept": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "primary": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "x-calculated": {
+                  "type": "boolean"
+                },
+                "x-capabilities": {
+                  "type": "object",
+                  "properties": {
+                    "index": {
+                      "type": "boolean",
+                      "default": true,
+                      "x-display": "switch",
+                      "title": "Filtrable sur valeur exacte",
+                      "description": "Désactivez cette capacité si la donnée contient par exemple des textes longs pour lesquels des filtres sur valeurs exactes ont peu de sens."
+                    },
+                    "values": {
+                      "type": "boolean",
+                      "default": true,
+                      "x-display": "switch",
+                      "title": "Triable et groupable",
+                      "description": "Désactivez cette capacité si la donnée contient par exemple des textes longs pour lesquels trier ou grouper par valeur a peu de sens."
+                    },
+                    "textStandard": {
+                      "type": "boolean",
+                      "default": true,
+                      "x-display": "switch",
+                      "title": "Texte analysé pour recherche textuelle",
+                      "description": "Désactivez cette capacité dans le cas d'un code, une url, etc. N'importe quel contenu sur lequel la recherche de mots a peu de sens."
+                    },
+                    "text": {
+                      "type": "boolean",
+                      "default": true,
+                      "x-display": "switch",
+                      "title": "Texte analysé spécifiquement pour la langue française.",
+                      "description": "Désactivez cette capacité pour tout contenu qui n'est pas en langue française ou pour lequel la recherche de mots a peu de sens."
+                    },
+                    "textAgg": {
+                      "type": "boolean",
+                      "default": false,
+                      "x-display": "switch",
+                      "title": "Statistiques de mots",
+                      "description": "Activez cette capacité si avez l'intention d'obtenir des statistiques sur les occurences de mots (par exemple pour construire un nuage de mot)."
+                    },
+                    "wildcard": {
+                      "type": "boolean",
+                      "default": false,
+                      "x-display": "switch",
+                      "title": "Texte filtrable sur groupe de caractères",
+                      "description": "Activez cette capacité si vous avez l'intention de filtrer ce contenu spécifiquement sur une suite de caractères (par exemple si un filtre sur mots entiers ou sur valeur exacte ne convient pas)."
+                    },
+                    "insensitive": {
+                      "type": "boolean",
+                      "default": true,
+                      "x-display": "switch",
+                      "title": "Tri amélioré avec casse et accents",
+                      "description": "Désactivez cette capacité si le contenu ne sera pas utilisé pour du tri ou bien si il ne contient pas de variations avec accents et majuscules."
+                    },
+                    "geoShape": {
+                      "type": "boolean",
+                      "default": true,
+                      "x-display": "switch",
+                      "title": "Formes géométriques complexes",
+                      "description": "Désactivez cette capacité si la donnée ne contient que des géométries basiques de points ou bien si requêter les géométries uniquement à partir de leurs centroïdes est suffisant pour vos besoins."
+                    },
+                    "indexAttachment": {
+                      "type": "boolean",
+                      "default": true,
+                      "x-display": "switch",
+                      "title": "Contenu des pièces jointes analysé pour recherche textuelle",
+                      "description": "Désactivez cette option si vous souhaitez que les pièces jointes soient simplement téléchargeables et que l'extraction de leur contenu textuel pour recherche de mots n'est pas pertinente."
+                    }
+                  }
+                },
+                "x-labels": {
+                  "type": "object"
+                },
+                "x-labelsRestricted": {
+                  "type": "boolean"
+                },
+                "x-master": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "remoteService": {
+                      "type": "string",
+                      "description": "L'identifiant du service distant utilisé pour l'enrichissement"
+                    },
+                    "action": {
+                      "type": "string",
+                      "description": "L'identifiant de l'action du service distant à utiliser pour l'enrichissement"
+                    }
+                  }
+                },
+                "x-display": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "count": {
+            "type": "number",
+            "description": "The number of indexed documents of a dataset"
+          },
+          "bbox": {
+            "type": "array",
+            "description": "The spatial coverage of this dataset, in bounding box format.",
+            "items": {
+              "type": "number"
+            }
+          },
+          "timePeriod": {
+            "type": "object",
+            "description": "The temporal coverage of this dataset",
+            "properties": {
+              "startDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "endDate": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          },
+          "timeZone": {
+            "type": "string",
+            "description": "The original time zone of the calendar."
+          },
+          "projection": {
+            "type": "object",
+            "description": "The cartographic projection of this dataset. Refers to the list of supported projections in contract/projections.json",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              }
+            }
+          },
+          "license": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "title",
+              "href"
+            ],
+            "properties": {
+              "title": {
+                "type": "string",
+                "description": "Short title for the license"
+              },
+              "href": {
+                "type": "string",
+                "description": "The URL where the license can be read"
+              }
+            }
+          },
+          "origin": {
+            "type": "string",
+            "description": "The URL where the original data can be found"
+          },
+          "extensions": {
+            "type": "array",
+            "description": "Définition des enrichissements appliqués à ce jeu de données",
+            "items": {
+              "type": "object",
+              "properties": {
+                "active": {
+                  "type": "boolean",
+                  "description": "Toggle on and off the extension"
+                }
+              },
+              "oneOf": [
+                {
+                  "required": [
+                    "type",
+                    "expr",
+                    "property"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "exprEval"
+                    },
+                    "expr": {
+                      "type": "string"
+                    },
+                    "property": {
+                      "type": "object",
+                      "required": [
+                        "key",
+                        "type"
+                      ],
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "type",
+                    "remoteService",
+                    "action"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "remoteService"
+                    },
+                    "remoteService": {
+                      "type": "string",
+                      "description": "L'identifiant du service distant utilisé pour l'enrichissement"
+                    },
+                    "action": {
+                      "type": "string",
+                      "description": "L'identifiant de l'action du service distant à utiliser pour l'enrichissement"
+                    },
+                    "select": {
+                      "type": "array",
+                      "description": "La liste des colonnes à sélectionner dans le retour du service distant. Toutes les colonnes si absent ou vide.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "shortId": {
+                      "type": "string",
+                      "description": "Id court (déprécié)",
+                      "readOnly": true
+                    },
+                    "propertyPrefix": {
+                      "type": "string",
+                      "description": "Chaine à utiliser comme préfixe des clés de champs issus de cette extension"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "masterData": {
+            "type": "object",
+            "title": "Données de référence",
+            "properties": {
+              "bulkSearchs": {
+                "type": "array",
+                "title": "Récupération de lignes en masse",
+                "x-class": "my-4",
+                "x-options": {
+                  "editMode": "dialog"
+                },
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "title"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "title": "Identifiant",
+                      "x-if": "parent.value.id",
+                      "readOnly": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "title": "Titre",
+                      "x-props": {
+                        "placeholder": "exemple \"récupérer les informations de plusieurs produits\""
+                      },
+                      "minLength": 3
+                    },
+                    "description": {
+                      "type": "string",
+                      "title": "Description",
+                      "x-display": "textarea",
+                      "x-props": {
+                        "placeholder": "exemple \"cet enrichissement vous permet de récupérer les informations de plusieurs produits à partir d'une liste de codes produits.\""
+                      }
+                    },
+                    "input": {
+                      "type": "array",
+                      "title": "Méthodes de correspondance",
+                      "x-class": "mb-4",
+                      "minItems": 1,
+                      "x-options": {
+                        "editMode": "inline"
+                      },
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "type",
+                          "property"
+                        ],
+                        "oneOf": [
+                          {
+                            "title": "Valeurs exactement égales",
+                            "required": [
+                              "type",
+                              "property"
+                            ],
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "equals",
+                                "title": "Type de méthode de correspondance"
+                              },
+                              "property": {
+                                "type": "object",
+                                "title": "Propriété comparée",
+                                "x-fromData": "context.propertiesWithConcepts",
+                                "x-itemTitle": "title",
+                                "x-itemKey": "key"
+                              }
+                            }
+                          },
+                          {
+                            "title": "Date dans un interval",
+                            "x-if": "context.hasDateIntervalConcepts",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "date-in-interval"
+                              },
+                              "property": {
+                                "type": "object",
+                                "title": "Date à renseigner",
+                                "properties": {
+                                  "x-refersTo": {
+                                    "type": "string",
+                                    "const": "http://schema.org/Date"
+                                  },
+                                  "key": {
+                                    "type": "string",
+                                    "const": "_date"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "const": "string"
+                                  },
+                                  "format": {
+                                    "type": "string",
+                                    "const": "date-time"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "title": "Coordonnée géographique à proximité",
+                            "x-if": "context.dataset.bbox",
+                            "required": [
+                              "type",
+                              "distance"
+                            ],
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "geo-distance"
+                              },
+                              "distance": {
+                                "type": "integer",
+                                "title": "Distance",
+                                "default": 0
+                              },
+                              "property": {
+                                "type": "object",
+                                "title": "Point à renseigner",
+                                "properties": {
+                                  "x-refersTo": {
+                                    "type": "string",
+                                    "const": "http://www.w3.org/2003/01/geo/wgs84_pos#lat_long"
+                                  },
+                                  "key": {
+                                    "type": "string",
+                                    "const": "_geopoint"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "const": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "sort": {
+                      "type": "string",
+                      "title": "Tri pour choisir parmi des résultats ambigus",
+                      "description": "\nRemarque : ce paramètre est optionnel et utile uniquement si la manière d'établir une correspondance est susceptible de retourner plusieurs résultats par ligne.\n\nLe tri est exprimé sous forme d'une liste de clés de colonnes séparées par des virgules. Par défaut le tri est ascendant, si un nom de colonne est préfixé par un \"-\" alors le tri sera descendant.\n\nExemple: ma_colonne,-ma_colonne2"
+                    }
+                  }
+                }
+              },
+              "singleSearchs": {
+                "type": "array",
+                "title": "Recherche de paires code / libellé",
+                "x-class": "mb-4",
+                "x-options": {
+                  "editMode": "dialog"
+                },
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "title",
+                    "output"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "title": "Identifiant",
+                      "x-if": "parent.value.id",
+                      "readOnly": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "title": "Titre",
+                      "x-props": {
+                        "placeholder": "exemple \"recherche d'un produit\""
+                      },
+                      "minLength": 3
+                    },
+                    "description": {
+                      "type": "string",
+                      "title": "Description",
+                      "x-display": "textarea",
+                      "x-props": {
+                        "placeholder": "exemple \"récupérez un code produit en effectuant une recherche dans son code ou son libellé\""
+                      }
+                    },
+                    "output": {
+                      "type": "object",
+                      "title": "Propriété à retourner (code)",
+                      "x-fromData": "context.propertiesWithConcepts",
+                      "x-itemTitle": "title",
+                      "x-itemKey": "key"
+                    },
+                    "label": {
+                      "type": "object",
+                      "title": "Propriété utilisée pour la recherche (libellé)",
+                      "x-fromData": "context.stringProperties",
+                      "x-itemTitle": "title",
+                      "x-itemKey": "key"
+                    }
+                  }
+                }
+              },
+              "virtualDatasets": {
+                "type": "object",
+                "x-class": "mt-4",
+                "properties": {
+                  "active": {
+                    "type": "boolean",
+                    "title": "Création de jeux virtuels"
+                  }
+                }
+              },
+              "standardSchema": {
+                "type": "object",
+                "x-class": "mt-4",
+                "properties": {
+                  "active": {
+                    "type": "boolean",
+                    "title": "Initialisation de jeux éditables"
+                  }
+                }
+              }
+            }
+          },
+          "publications": {
+            "type": "array",
+            "description": "References to all the catalogs the dataset metadata is published too",
+            "items": {
+              "type": "object",
+              "required": [
+                "catalog",
+                "status"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "catalog": {
+                  "type": "string",
+                  "description": "L'identifiant du catalogue de destination de cette publication."
+                },
+                "status": {
+                  "type": "string",
+                  "description": "A simple flag to clearly identify the publications that were successful. If \"published\" then the targetUrl key should be defined, If \"error\" then the error key should be defined.",
+                  "enum": [
+                    "waiting",
+                    "published",
+                    "error",
+                    "deleted"
+                  ]
+                },
+                "publishedAt": {
+                  "type": "string",
+                  "description": "Date of the last update for this publication",
+                  "format": "date-time"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "targetUrl": {
+                  "type": "string"
+                },
+                "result": {
+                  "type": "object",
+                  "description": "The result of pushing the publication. The structure of this object is permissive and depends on the type of catalog"
+                },
+                "addToDataset": {
+                  "type": "object",
+                  "description": "Fill this object to create a new resource (or community resource) to an existing dataset.",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "replaceDataset": {
+                  "type": "object",
+                  "description": "Fill this object to overwrite an existing dataset.",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "publicationSites": {
+            "type": "array",
+            "description": "References to all sites the dataset is exposed in.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "requestedPublicationSites": {
+            "type": "array",
+            "description": "References to all sites the dataset would be exposed in if validated by an admin.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hasFiles": {
+            "type": "boolean",
+            "default": false,
+            "description": "true when the dataset has attached files"
+          },
+          "attachmentsAsImage": {
+            "type": "boolean",
+            "default": false,
+            "description": "Set to true to use attached files as illustrations of the line"
+          },
+          "isVirtual": {
+            "type": "boolean",
+            "default": false,
+            "description": "Used to identify virtual datasets. A virtual datasets does not have data, only references to other datasets."
+          },
+          "virtual": {
+            "type": "object",
+            "description": "A configuration object dedicated to virtual datasets.",
+            "required": [
+              "children"
+            ],
+            "properties": {
+              "children": {
+                "type": "array",
+                "description": "Array of ids of the children datasets",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "filters": {
+                "type": "array",
+                "description": "Array of static filters to always apply when querying the dataset",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "key",
+                    "values"
+                  ],
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "description": "Key of the field in the schema"
+                    },
+                    "values": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "isRest": {
+            "type": "boolean",
+            "default": false,
+            "description": "Used to identify REST datasets. A REST dataset is not created from a data file, but instead is based on a dynamic collection in a database."
+          },
+          "rest": {
+            "type": "object",
+            "description": "A configuration object dedicated to REST datasets.",
+            "properties": {
+              "ttl": {
+                "type": "object",
+                "properties": {
+                  "active": {
+                    "type": "boolean"
+                  },
+                  "prop": {
+                    "type": "string"
+                  },
+                  "checkedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                  },
+                  "delay": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "integer",
+                        "default": 0
+                      },
+                      "unit": {
+                        "type": "string",
+                        "enum": [
+                          "hours",
+                          "days",
+                          "weeks",
+                          "months"
+                        ],
+                        "default": "days"
+                      }
+                    }
+                  }
+                }
+              },
+              "history": {
+                "type": "boolean",
+                "default": false,
+                "description": "Set to true to let data-fair store revisions of the lines in the dataset."
+              },
+              "historyTTL": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "active": {
+                    "type": "boolean"
+                  },
+                  "delay": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "value": {
+                        "type": "integer",
+                        "default": 0
+                      },
+                      "unit": {
+                        "type": "string",
+                        "enum": [
+                          "hours",
+                          "days",
+                          "weeks",
+                          "months"
+                        ],
+                        "default": "days"
+                      }
+                    }
+                  }
+                }
+              },
+              "lineOwnership": {
+                "type": "boolean"
+              },
+              "storeUpdatedBy": {
+                "type": "boolean"
+              },
+              "primaryKeyMode": {
+                "type": "string",
+                "enum": [
+                  "base64",
+                  "sha256"
+                ]
+              }
+            }
+          },
+          "isMetaOnly": {
+            "type": "boolean",
+            "default": false,
+            "description": "Used to identify datasets without any local data and only some metadata."
+          },
+          "topics": {
+            "type": "array",
+            "title": "Liste de thématiques",
+            "x-itemTitle": "title",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "title"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "readOnly": true,
+                  "x-display": "hidden"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string",
+                  "x-display": "color-picker"
+                },
+                "icon": {
+                  "title": "Icône",
+                  "description": "Il est possible de consulter plus facilement la liste des icones disponibles sur <a href=\"https://materialdesignicons.com\" target=\"_blank\">ce site</a>.",
+                  "type": "object",
+                  "x-fromUrl": "https://koumoul.com/data-fair/api/v1/datasets/icons-mdi-latest/lines?q={q}",
+                  "x-itemKey": "name",
+                  "x-itemTitle": "name",
+                  "x-itemIcon": "name",
+                  "x-itemsProp": "results",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "svg": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "thumbnails": {
+            "type": "object",
+            "properties": {
+              "resizeMode": {
+                "type": "string",
+                "description": "Define how the thumbnails will be adapted to the size requested by visualizations",
+                "enum": [
+                  "crop",
+                  "smartCrop",
+                  "fitIn"
+                ],
+                "default": "crop"
+              }
+            }
+          },
+          "exports": {
+            "type": "object",
+            "properties": {
+              "restToCSV": {
+                "type": "object",
+                "properties": {
+                  "active": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "nextExport": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "lastExport": {
+                    "type": "object",
+                    "properties": {
+                      "date": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "extras": {
+            "type": "object",
+            "description": "An object for extra content from client services of data-fair"
+          },
+          "analysis": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "escapeKeyAlgorithm": {
+                "type": "string",
+                "default": "slug",
+                "enum": [
+                  "legacy",
+                  "slug"
+                ]
+              }
+            }
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Permission to do the operations (identified by their id). If type and id are not set, then the operation is set to public. roles array is used only with type organization",
+              "additionalProperties": false,
+              "anyOf": [
+                {
+                  "required": [
+                    "operations"
+                  ]
+                },
+                {
+                  "required": [
+                    "classes"
+                  ]
+                }
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "user",
+                    "organization"
+                  ],
+                  "description": "If the entity is a user or an organization"
+                },
+                "id": {
+                  "type": "string",
+                  "description": "Identifier of the entity"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the entity"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "Email of the user"
+                },
+                "department": {
+                  "type": "string",
+                  "description": "Identifier of the department or \"*\" for any department (same as empty) or \"-\" for no department"
+                },
+                "departmentName": {
+                  "type": "string",
+                  "description": "Name of the department"
+                },
+                "roles": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Role name"
+                  }
+                },
+                "operations": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "API operation that can be used"
+                  }
+                },
+                "classes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "API permission classes that can be used"
+                  }
+                }
+              }
+            }
+          },
+          "previews": {
+            "type": "array",
+            "title": "Prévisualisations",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "href": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "draft": {
+            "title": "Dataset draft",
+            "description": "Some properties waiting for confirmation before being merged into the main dataset info",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "draftReason": {
+                "type": "object",
+                "title": "Why was the dataset switched in draft mode",
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "enum": [
+                      "manual",
+                      "file-new",
+                      "file-updated"
+                    ]
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "details": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "schema": {
+                "type": "array",
+                "description": "JSON schema properties of the fields",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "key"
+                  ],
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "readOnly": true,
+                      "x-display": "hidden"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "format": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "x-originalName": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "x-group": {
+                      "type": "string"
+                    },
+                    "x-refersTo": {
+                      "deprecated": true,
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "x-concept": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "primary": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "x-calculated": {
+                      "type": "boolean"
+                    },
+                    "x-capabilities": {
+                      "type": "object",
+                      "properties": {
+                        "index": {
+                          "type": "boolean",
+                          "default": true,
+                          "x-display": "switch",
+                          "title": "Filtrable sur valeur exacte",
+                          "description": "Désactivez cette capacité si la donnée contient par exemple des textes longs pour lesquels des filtres sur valeurs exactes ont peu de sens."
+                        },
+                        "values": {
+                          "type": "boolean",
+                          "default": true,
+                          "x-display": "switch",
+                          "title": "Triable et groupable",
+                          "description": "Désactivez cette capacité si la donnée contient par exemple des textes longs pour lesquels trier ou grouper par valeur a peu de sens."
+                        },
+                        "textStandard": {
+                          "type": "boolean",
+                          "default": true,
+                          "x-display": "switch",
+                          "title": "Texte analysé pour recherche textuelle",
+                          "description": "Désactivez cette capacité dans le cas d'un code, une url, etc. N'importe quel contenu sur lequel la recherche de mots a peu de sens."
+                        },
+                        "text": {
+                          "type": "boolean",
+                          "default": true,
+                          "x-display": "switch",
+                          "title": "Texte analysé spécifiquement pour la langue française.",
+                          "description": "Désactivez cette capacité pour tout contenu qui n'est pas en langue française ou pour lequel la recherche de mots a peu de sens."
+                        },
+                        "textAgg": {
+                          "type": "boolean",
+                          "default": false,
+                          "x-display": "switch",
+                          "title": "Statistiques de mots",
+                          "description": "Activez cette capacité si avez l'intention d'obtenir des statistiques sur les occurences de mots (par exemple pour construire un nuage de mot)."
+                        },
+                        "wildcard": {
+                          "type": "boolean",
+                          "default": false,
+                          "x-display": "switch",
+                          "title": "Texte filtrable sur groupe de caractères",
+                          "description": "Activez cette capacité si vous avez l'intention de filtrer ce contenu spécifiquement sur une suite de caractères (par exemple si un filtre sur mots entiers ou sur valeur exacte ne convient pas)."
+                        },
+                        "insensitive": {
+                          "type": "boolean",
+                          "default": true,
+                          "x-display": "switch",
+                          "title": "Tri amélioré avec casse et accents",
+                          "description": "Désactivez cette capacité si le contenu ne sera pas utilisé pour du tri ou bien si il ne contient pas de variations avec accents et majuscules."
+                        },
+                        "geoShape": {
+                          "type": "boolean",
+                          "default": true,
+                          "x-display": "switch",
+                          "title": "Formes géométriques complexes",
+                          "description": "Désactivez cette capacité si la donnée ne contient que des géométries basiques de points ou bien si requêter les géométries uniquement à partir de leurs centroïdes est suffisant pour vos besoins."
+                        },
+                        "indexAttachment": {
+                          "type": "boolean",
+                          "default": true,
+                          "x-display": "switch",
+                          "title": "Contenu des pièces jointes analysé pour recherche textuelle",
+                          "description": "Désactivez cette option si vous souhaitez que les pièces jointes soient simplement téléchargeables et que l'extraction de leur contenu textuel pour recherche de mots n'est pas pertinente."
+                        }
+                      }
+                    },
+                    "x-labels": {
+                      "type": "object"
+                    },
+                    "x-labelsRestricted": {
+                      "type": "boolean"
+                    },
+                    "x-master": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "remoteService": {
+                          "type": "string",
+                          "description": "L'identifiant du service distant utilisé pour l'enrichissement"
+                        },
+                        "action": {
+                          "type": "string",
+                          "description": "L'identifiant de l'action du service distant à utiliser pour l'enrichissement"
+                        }
+                      }
+                    },
+                    "x-display": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "description": {
+                "type": "string",
+                "description": "Detailed description of the dataset"
+              },
+              "title": {
+                "type": "string",
+                "description": "Short title of the dataset"
+              },
+              "license": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "title",
+                  "href"
+                ],
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Short title for the license"
+                  },
+                  "href": {
+                    "type": "string",
+                    "description": "The URL where the license can be read"
+                  }
+                }
+              },
+              "origin": {
+                "type": "string",
+                "description": "The URL where the original data can be found"
+              },
+              "extensions": {
+                "type": "array",
+                "description": "Définition des enrichissements appliqués à ce jeu de données",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "active": {
+                      "type": "boolean",
+                      "description": "Toggle on and off the extension"
+                    }
+                  },
+                  "oneOf": [
+                    {
+                      "required": [
+                        "type",
+                        "expr",
+                        "property"
+                      ],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "const": "exprEval"
+                        },
+                        "expr": {
+                          "type": "string"
+                        },
+                        "property": {
+                          "type": "object",
+                          "required": [
+                            "key",
+                            "type"
+                          ],
+                          "properties": {
+                            "key": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "required": [
+                        "type",
+                        "remoteService",
+                        "action"
+                      ],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "const": "remoteService"
+                        },
+                        "remoteService": {
+                          "type": "string",
+                          "description": "L'identifiant du service distant utilisé pour l'enrichissement"
+                        },
+                        "action": {
+                          "type": "string",
+                          "description": "L'identifiant de l'action du service distant à utiliser pour l'enrichissement"
+                        },
+                        "select": {
+                          "type": "array",
+                          "description": "La liste des colonnes à sélectionner dans le retour du service distant. Toutes les colonnes si absent ou vide.",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "shortId": {
+                          "type": "string",
+                          "description": "Id court (déprécié)",
+                          "readOnly": true
+                        },
+                        "propertyPrefix": {
+                          "type": "string",
+                          "description": "Chaine à utiliser comme préfixe des clés de champs issus de cette extension"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "publications": {
+                "type": "array",
+                "description": "References to all the catalogs the dataset metadata is published too",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "catalog",
+                    "status"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "catalog": {
+                      "type": "string",
+                      "description": "L'identifiant du catalogue de destination de cette publication."
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "A simple flag to clearly identify the publications that were successful. If \"published\" then the targetUrl key should be defined, If \"error\" then the error key should be defined.",
+                      "enum": [
+                        "waiting",
+                        "published",
+                        "error",
+                        "deleted"
+                      ]
+                    },
+                    "publishedAt": {
+                      "type": "string",
+                      "description": "Date of the last update for this publication",
+                      "format": "date-time"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "targetUrl": {
+                      "type": "string"
+                    },
+                    "result": {
+                      "type": "object",
+                      "description": "The result of pushing the publication. The structure of this object is permissive and depends on the type of catalog"
+                    },
+                    "addToDataset": {
+                      "type": "object",
+                      "description": "Fill this object to create a new resource (or community resource) to an existing dataset.",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "replaceDataset": {
+                      "type": "object",
+                      "description": "Fill this object to overwrite an existing dataset.",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "publicationSites": {
+                "type": "array",
+                "description": "References to all sites the dataset is exposed in.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "virtual": {
+                "type": "object",
+                "description": "A configuration object dedicated to virtual datasets.",
+                "required": [
+                  "children"
+                ],
+                "properties": {
+                  "children": {
+                    "type": "array",
+                    "description": "Array of ids of the children datasets",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "filters": {
+                    "type": "array",
+                    "description": "Array of static filters to always apply when querying the dataset",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "key",
+                        "values"
+                      ],
+                      "properties": {
+                        "key": {
+                          "type": "string",
+                          "description": "Key of the field in the schema"
+                        },
+                        "values": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "rest": {
+                "type": "object",
+                "description": "A configuration object dedicated to REST datasets.",
+                "properties": {
+                  "ttl": {
+                    "type": "object",
+                    "properties": {
+                      "active": {
+                        "type": "boolean"
+                      },
+                      "prop": {
+                        "type": "string"
+                      },
+                      "checkedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                      },
+                      "delay": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "integer",
+                            "default": 0
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": [
+                              "hours",
+                              "days",
+                              "weeks",
+                              "months"
+                            ],
+                            "default": "days"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "history": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Set to true to let data-fair store revisions of the lines in the dataset."
+                  },
+                  "historyTTL": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "active": {
+                        "type": "boolean"
+                      },
+                      "delay": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "value": {
+                            "type": "integer",
+                            "default": 0
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": [
+                              "hours",
+                              "days",
+                              "weeks",
+                              "months"
+                            ],
+                            "default": "days"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "lineOwnership": {
+                    "type": "boolean"
+                  },
+                  "storeUpdatedBy": {
+                    "type": "boolean"
+                  },
+                  "primaryKeyMode": {
+                    "type": "string",
+                    "enum": [
+                      "base64",
+                      "sha256"
+                    ]
+                  }
+                }
+              },
+              "extras": {
+                "type": "object",
+                "description": "An object for extra content from client services of data-fair"
+              },
+              "attachmentsAsImage": {
+                "type": "boolean",
+                "default": false,
+                "description": "Set to true to use attached files as illustrations of the line"
+              },
+              "projection": {
+                "type": "object",
+                "description": "The cartographic projection of this dataset. Refers to the list of supported projections in contract/projections.json",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "code": {
+                    "type": "string"
+                  }
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "title"
+                  ],
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "title": "Titre",
+                      "x-props": {
+                        "outlined": true,
+                        "dense": true
+                      }
+                    },
+                    "description": {
+                      "type": "string",
+                      "title": "Description",
+                      "x-display": "markdown"
+                    }
+                  },
+                  "oneOf": [
+                    {
+                      "title": "Fichier",
+                      "required": [
+                        "name"
+                      ],
+                      "properties": {
+                        "type": {
+                          "title": "Type de pièce jointe",
+                          "const": "file"
+                        },
+                        "name": {
+                          "x-display": "hidden",
+                          "type": "string",
+                          "description": "Name of the file that was used to create or update this attachment"
+                        },
+                        "size": {
+                          "x-display": "hidden",
+                          "type": "number",
+                          "description": "Size of the file on disk"
+                        },
+                        "mimetype": {
+                          "x-display": "hidden",
+                          "type": "string",
+                          "description": "Mime type of the file"
+                        },
+                        "updatedAt": {
+                          "x-display": "hidden",
+                          "type": "string",
+                          "description": "Date of the last update for this attachment",
+                          "format": "date-time"
+                        },
+                        "url": {
+                          "x-display": "hidden",
+                          "readOnly": true,
+                          "type": "string",
+                          "title": "URL"
+                        }
+                      }
+                    },
+                    {
+                      "title": "Lien",
+                      "required": [
+                        "url"
+                      ],
+                      "properties": {
+                        "type": {
+                          "title": "Type de pièce jointe",
+                          "const": "url"
+                        },
+                        "url": {
+                          "type": "string",
+                          "title": "URL"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "topics": {
+                "type": "array",
+                "title": "Liste de thématiques",
+                "x-itemTitle": "title",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "title"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "readOnly": true,
+                      "x-display": "hidden"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "color": {
+                      "type": "string",
+                      "x-display": "color-picker"
+                    },
+                    "icon": {
+                      "title": "Icône",
+                      "description": "Il est possible de consulter plus facilement la liste des icones disponibles sur <a href=\"https://materialdesignicons.com\" target=\"_blank\">ce site</a>.",
+                      "type": "object",
+                      "x-fromUrl": "https://koumoul.com/data-fair/api/v1/datasets/icons-mdi-latest/lines?q={q}",
+                      "x-itemKey": "name",
+                      "x-itemTitle": "name",
+                      "x-itemIcon": "name",
+                      "x-itemsProp": "results",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "svg": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "thumbnails": {
+                "type": "object",
+                "properties": {
+                  "resizeMode": {
+                    "type": "string",
+                    "description": "Define how the thumbnails will be adapted to the size requested by visualizations",
+                    "enum": [
+                      "crop",
+                      "smartCrop",
+                      "fitIn"
+                    ],
+                    "default": "crop"
+                  }
+                }
+              },
+              "masterData": {
+                "type": "object",
+                "title": "Données de référence",
+                "properties": {
+                  "bulkSearchs": {
+                    "type": "array",
+                    "title": "Récupération de lignes en masse",
+                    "x-class": "my-4",
+                    "x-options": {
+                      "editMode": "dialog"
+                    },
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "title"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "title": "Identifiant",
+                          "x-if": "parent.value.id",
+                          "readOnly": true
+                        },
+                        "title": {
+                          "type": "string",
+                          "title": "Titre",
+                          "x-props": {
+                            "placeholder": "exemple \"récupérer les informations de plusieurs produits\""
+                          },
+                          "minLength": 3
+                        },
+                        "description": {
+                          "type": "string",
+                          "title": "Description",
+                          "x-display": "textarea",
+                          "x-props": {
+                            "placeholder": "exemple \"cet enrichissement vous permet de récupérer les informations de plusieurs produits à partir d'une liste de codes produits.\""
+                          }
+                        },
+                        "input": {
+                          "type": "array",
+                          "title": "Méthodes de correspondance",
+                          "x-class": "mb-4",
+                          "minItems": 1,
+                          "x-options": {
+                            "editMode": "inline"
+                          },
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "type",
+                              "property"
+                            ],
+                            "oneOf": [
+                              {
+                                "title": "Valeurs exactement égales",
+                                "required": [
+                                  "type",
+                                  "property"
+                                ],
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "const": "equals",
+                                    "title": "Type de méthode de correspondance"
+                                  },
+                                  "property": {
+                                    "type": "object",
+                                    "title": "Propriété comparée",
+                                    "x-fromData": "context.propertiesWithConcepts",
+                                    "x-itemTitle": "title",
+                                    "x-itemKey": "key"
+                                  }
+                                }
+                              },
+                              {
+                                "title": "Date dans un interval",
+                                "x-if": "context.hasDateIntervalConcepts",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "const": "date-in-interval"
+                                  },
+                                  "property": {
+                                    "type": "object",
+                                    "title": "Date à renseigner",
+                                    "properties": {
+                                      "x-refersTo": {
+                                        "type": "string",
+                                        "const": "http://schema.org/Date"
+                                      },
+                                      "key": {
+                                        "type": "string",
+                                        "const": "_date"
+                                      },
+                                      "type": {
+                                        "type": "string",
+                                        "const": "string"
+                                      },
+                                      "format": {
+                                        "type": "string",
+                                        "const": "date-time"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "title": "Coordonnée géographique à proximité",
+                                "x-if": "context.dataset.bbox",
+                                "required": [
+                                  "type",
+                                  "distance"
+                                ],
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "const": "geo-distance"
+                                  },
+                                  "distance": {
+                                    "type": "integer",
+                                    "title": "Distance",
+                                    "default": 0
+                                  },
+                                  "property": {
+                                    "type": "object",
+                                    "title": "Point à renseigner",
+                                    "properties": {
+                                      "x-refersTo": {
+                                        "type": "string",
+                                        "const": "http://www.w3.org/2003/01/geo/wgs84_pos#lat_long"
+                                      },
+                                      "key": {
+                                        "type": "string",
+                                        "const": "_geopoint"
+                                      },
+                                      "type": {
+                                        "type": "string",
+                                        "const": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "sort": {
+                          "type": "string",
+                          "title": "Tri pour choisir parmi des résultats ambigus",
+                          "description": "\nRemarque : ce paramètre est optionnel et utile uniquement si la manière d'établir une correspondance est susceptible de retourner plusieurs résultats par ligne.\n\nLe tri est exprimé sous forme d'une liste de clés de colonnes séparées par des virgules. Par défaut le tri est ascendant, si un nom de colonne est préfixé par un \"-\" alors le tri sera descendant.\n\nExemple: ma_colonne,-ma_colonne2"
+                        }
+                      }
+                    }
+                  },
+                  "singleSearchs": {
+                    "type": "array",
+                    "title": "Recherche de paires code / libellé",
+                    "x-class": "mb-4",
+                    "x-options": {
+                      "editMode": "dialog"
+                    },
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "title",
+                        "output"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "title": "Identifiant",
+                          "x-if": "parent.value.id",
+                          "readOnly": true
+                        },
+                        "title": {
+                          "type": "string",
+                          "title": "Titre",
+                          "x-props": {
+                            "placeholder": "exemple \"recherche d'un produit\""
+                          },
+                          "minLength": 3
+                        },
+                        "description": {
+                          "type": "string",
+                          "title": "Description",
+                          "x-display": "textarea",
+                          "x-props": {
+                            "placeholder": "exemple \"récupérez un code produit en effectuant une recherche dans son code ou son libellé\""
+                          }
+                        },
+                        "output": {
+                          "type": "object",
+                          "title": "Propriété à retourner (code)",
+                          "x-fromData": "context.propertiesWithConcepts",
+                          "x-itemTitle": "title",
+                          "x-itemKey": "key"
+                        },
+                        "label": {
+                          "type": "object",
+                          "title": "Propriété utilisée pour la recherche (libellé)",
+                          "x-fromData": "context.stringProperties",
+                          "x-itemTitle": "title",
+                          "x-itemKey": "key"
+                        }
+                      }
+                    }
+                  },
+                  "virtualDatasets": {
+                    "type": "object",
+                    "x-class": "mt-4",
+                    "properties": {
+                      "active": {
+                        "type": "boolean",
+                        "title": "Création de jeux virtuels"
+                      }
+                    }
+                  },
+                  "standardSchema": {
+                    "type": "object",
+                    "x-class": "mt-4",
+                    "properties": {
+                      "active": {
+                        "type": "boolean",
+                        "title": "Initialisation de jeux éditables"
+                      }
+                    }
+                  }
+                }
+              },
+              "primaryKey": {
+                "type": "array",
+                "description": "List of properties of the schema used as unique primary key for each line",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "image": {
+                "type": "string",
+                "description": "URL d'une image, illustration du jeu de données"
+              },
+              "spatial": {
+                "type": "string",
+                "description": "spatial coverage"
+              },
+              "temporal": {
+                "type": "object",
+                "description": "temporal coverage",
+                "properties": {
+                  "start": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "end": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                }
+              },
+              "keywords": {
+                "type": "array",
+                "description": "keywords",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "frequency": {
+                "type": "string",
+                "description": "update frequency",
+                "enum": [
+                  "",
+                  "triennial",
+                  "biennial",
+                  "annual",
+                  "semiannual",
+                  "threeTimesAYear",
+                  "quarterly",
+                  "bimonthly",
+                  "monthly",
+                  "semimonthly",
+                  "biweekly",
+                  "threeTimesAMonth",
+                  "weekly",
+                  "semiweekly",
+                  "threeTimesAWeek",
+                  "daily",
+                  "continuous",
+                  "irregular"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [],
+  "servers": [
+    {
+      "url": "https://data.ademe.fr/data-fair/api/v1/datasets/dpe-france",
+      "description": "Jeu de données Data Fair - data.ademe.fr - DPE Logements (avant juillet 2021)"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Récupérer les informations du jeu de données",
+        "operationId": "readDescription",
+        "x-permissionClass": "read",
+        "tags": [
+          "Métadonnées"
+        ],
+        "responses": {
+          "200": {
+            "description": "Les informations du jeu de données",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/datasetSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lines": {
+      "get": {
+        "summary": "Requêter les lignes du jeu de données",
+        "operationId": "readLines",
+        "x-permissionClass": "read",
+        "tags": [
+          "Données"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Le numéro de la page (indice de la pagination). Débute à 1. Pour paginer sur de gros volumes de données utilisez plutôt le paramètre after",
+            "schema": {
+              "default": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "after",
+            "description": "Pagination en profondeur. Automatiquement renseigné par la propriété next du résultat de la requête précédente",
+            "schema": {
+              "default": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "description": "Le nombre de résultats à retourner (taille de la pagination), 12 par défaut",
+            "schema": {
+              "default": 12,
+              "type": "integer",
+              "maximum": 10000
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "description": "\nLe tri à effectuer sous forme d'une liste de clés de colonnes séparées par des virgules.\n\nPar défaut le tri est ascendant, si un nom de colonne est préfixé par un \"-\" alors le tri sera descendant.\n\nExemple: ma_colonne,-ma_colonne2",
+            "schema": {
+              "type": "array",
+              "default": [],
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "date_etablissement_dpe",
+                  "consommation_energie",
+                  "classe_consommation_energie",
+                  "estimation_ges",
+                  "classe_estimation_ges",
+                  "annee_construction",
+                  "surface_thermique_lot",
+                  "latitude",
+                  "longitude",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse",
+                  "geo_score",
+                  "_geopoint",
+                  "_id",
+                  "_i",
+                  "_rand"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "select",
+            "description": "La liste des colonnes à retourner",
+            "schema": {
+              "default": [
+                "*"
+              ],
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "date_etablissement_dpe",
+                  "consommation_energie",
+                  "classe_consommation_energie",
+                  "estimation_ges",
+                  "classe_estimation_ges",
+                  "annee_construction",
+                  "surface_thermique_lot",
+                  "latitude",
+                  "longitude",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse",
+                  "geo_score",
+                  "_geopoint",
+                  "_id",
+                  "_i",
+                  "_rand"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "highlight",
+            "description": "\nDemande à retourner des extraits du document qui contiennent les mots utilisés en filtre (paramètres q et qs).\n\nLa valeur est une liste de colonnes séparées par des virgules.\n    ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "classe_consommation_energie",
+                  "classe_estimation_ges",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "sampling",
+            "description": "\n  **Uniquement avec le paramètre de tuilage xyz**. Configure le mode d'échantillonage des resultats pour privilégier soit l'exhaustivité des données soit une densité plus homogène sur la carte.\n  \n    - **neighbors** (défaut) : utilise la densité maximale parmi les tuiles voisines pour réduire la densité de la tuile courante au même niveau d'échantillonage (couteux en performance).\n    - **max** : retourne le maximum (limité par le paramètre size) de résultat pour chaque tuile.\n      ",
+            "schema": {
+              "type": "string",
+              "enum": [
+                null,
+                "neighbors",
+                "max"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "description": "Le format de sérialisation de la donnée.\n  \n  - **json** (défaut)\n  - **csv** pour format compatibles tableurs\n  - **pbf** pour tuiles vectorielles\n  - **geojson** et **wkt** pour formats géographiques",
+            "schema": {
+              "enum": [
+                null,
+                "json",
+                "csv",
+                "xlsx",
+                "ods",
+                "pbf",
+                "geojson",
+                "wkt"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "html",
+            "description": "Effectuer le rendu des contenus formattés de **markdown** vers **HTML**",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "description": "\n  Colonne de recherche simple. Ce paramètre peut-être utilisé pour exposer une fonctionalité de recherche textuelle riche aux utilisateurs sans risque de créer des erreurs de syntaxe.\n\n  Exemple: \"open data\" | \"open source\"\n\n  Pour plus d'information voir la documentation [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) correspondante.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q_mode",
+            "description": "\n  Ce paramètre permet d'altérer le comportement du paramètre \"q\".\n\n  Le mode par défaut \"simple\" expose directement la fonctionnalité [simple-query-string de Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html)\n\n  Le mode \"complete\" permet d'enrichir automatiquement la requête soumise par l'utilisateur pour un résultat intuitif dans le contexte d'un champ de type autocomplete. Attention ce mode est potentiellement moins performant et à limiter à des jeux de données au volume raisonnable.\n    ",
+            "schema": {
+              "type": "string",
+              "default": "simple",
+              "enum": [
+                null,
+                "simple",
+                "complete"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "q_fields",
+            "description": "\n  Ce paramètre permet de spécifier les colonnes sur lesquelles appliquer le paramètre \"q\".\n\n  Par défaut toutes les colonnes supportant une recherche textuelle sont utilisées.\n    ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "classe_consommation_energie",
+                  "classe_estimation_ges",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "qs",
+            "description": "\nColonne de filtre et recherche textuelle avancée. Ce paramètre permet d'effectuer des requêtes complexes sur la source de données. Vous pouvez spécifier des filtres par colonne, créer des combinaisons logiques à volonté, etc.\n\nExemple: ma_colonne:\"du texte\" AND ma_colonne2:valeur\n\nPour plus d'information voir la documentation [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html) correspondante.\n  ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "bbox",
+            "description": "Un filtre pour restreindre les résultats à une zone géographique. Le format est 'gauche,bas,droite,haut' autrement dit 'lonMin,latMin,lonMax,latMax'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "xyz",
+            "description": "\n  Un filtre pour restreindre les résultats à une zone géographique avec les paramètres standards de tuiles géographiques x,y et z.\n\n  Le format est 'x,y,z'.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "geo_distance",
+            "description": "\n  Un filtre pour restreindre les résultats à moins d'une certaine distance du point passé en paramètre.\n\n  Le format est 'lon:lat:distance'. La distance optionnelle (0 par défaut) et est exprimée en mètres.\n\n  Si les documents contiennent des géométries la distance est calculée à partir de leurs centroïdes à moins que la distance soit 0 auquel cas le filtre retourne tous les documents dont la géométrie contient le point passé en paramètre.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "collapse",
+            "description": "Afficher une ligne de résultat par valeur distince d'un champ",
+            "schema": {
+              "type": "string",
+              "enum": [
+                null,
+                "nom_methode_dpe",
+                "version_methode_dpe",
+                "classe_consommation_energie",
+                "classe_estimation_ges",
+                "tr001_modele_dpe_type_libelle",
+                "tr002_type_batiment_description",
+                "code_insee_commune_actualise",
+                "tv016_departement_code",
+                "geo_adresse"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Le résultat de la requête",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total": {
+                      "type": "integer",
+                      "description": "Le nombre total de résultat si on ignore la pagination"
+                    },
+                    "results": {
+                      "type": "array",
+                      "description": "Le tableau de résultats",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "nom_methode_dpe": {
+                            "type": "string",
+                            "title": "Nom de la méthode DPE utilisée",
+                            "description": "Nom de la méthode DPE utilisée",
+                            "x-cardinality": 491,
+                            "x-capabilities": {
+                              "textAgg": true
+                            }
+                          },
+                          "version_methode_dpe": {
+                            "type": "string",
+                            "title": "Version de la méthode DPE utilisée",
+                            "description": "Version de la méthode DPE utilisée",
+                            "x-cardinality": 91,
+                            "x-capabilities": {
+                              "textAgg": true
+                            }
+                          },
+                          "date_etablissement_dpe": {
+                            "type": "string",
+                            "format": "date",
+                            "x-refersTo": "http://schema.org/Date",
+                            "title": "Date DPE",
+                            "description": "",
+                            "x-capabilities": {},
+                            "x-cardinality": 3701,
+                            "x-concept": {
+                              "id": "date",
+                              "title": "Date d'évènement",
+                              "primary": true
+                            }
+                          },
+                          "consommation_energie": {
+                            "type": "number",
+                            "title": "Consommation énergie en kWhEP/m².an",
+                            "description": "Consommation énergie en kWhEP/m².an",
+                            "x-cardinality": 82613,
+                            "x-capabilities": {}
+                          },
+                          "classe_consommation_energie": {
+                            "type": "string",
+                            "title": "Classement consommation d'énergie",
+                            "description": "Classement consommation d'énergie",
+                            "x-cardinality": 19,
+                            "x-capabilities": {
+                              "textAgg": true
+                            },
+                            "examples": [
+                              "D",
+                              "E",
+                              "N",
+                              "C",
+                              "B",
+                              "A",
+                              "F",
+                              "G",
+                              "S",
+                              "I",
+                              "5",
+                              "6",
+                              "-",
+                              "4",
+                              "7",
+                              "8",
+                              "H",
+                              "0",
+                              "3"
+                            ]
+                          },
+                          "estimation_ges": {
+                            "type": "number",
+                            "title": "Estimation GES en Kg eqCO2/m².an",
+                            "description": "Estimation GES en Kg eqCO2/m².an",
+                            "x-cardinality": 19770,
+                            "x-capabilities": {}
+                          },
+                          "classe_estimation_ges": {
+                            "type": "string",
+                            "title": "Classement GES",
+                            "description": "Classement GES",
+                            "x-cardinality": 16,
+                            "x-capabilities": {
+                              "textAgg": true
+                            },
+                            "examples": [
+                              "C",
+                              "N",
+                              "B",
+                              "D",
+                              "E",
+                              "A",
+                              "F",
+                              "G",
+                              "S",
+                              "I",
+                              "1",
+                              "-",
+                              "2",
+                              "0",
+                              "7",
+                              "H"
+                            ]
+                          },
+                          "annee_construction": {
+                            "type": "integer",
+                            "title": "Année de construction ou évaluation de cette date",
+                            "description": "Année de construction ou évaluation de cette date",
+                            "x-cardinality": 873,
+                            "x-capabilities": {}
+                          },
+                          "surface_thermique_lot": {
+                            "type": "number",
+                            "title": "Surface thermique du lot pour un bâtiment à usage principal autre qu'habitation",
+                            "description": "Surface thermique du lot pour un bâtiment à usage principal autre qu'habitation",
+                            "x-cardinality": 69031,
+                            "x-capabilities": {}
+                          },
+                          "latitude": {
+                            "type": "number",
+                            "title": "Latitude du Bâtiment",
+                            "description": "Latitude du Bâtiment",
+                            "x-cardinality": 2458746,
+                            "x-refersTo": "http://schema.org/latitude",
+                            "x-capabilities": {},
+                            "x-concept": {
+                              "id": "latitude",
+                              "title": "Latitude",
+                              "primary": true
+                            }
+                          },
+                          "longitude": {
+                            "type": "number",
+                            "title": "Longitude du Bâtiment",
+                            "description": "Longitude du Bâtiment",
+                            "x-cardinality": 2680100,
+                            "x-refersTo": "http://schema.org/longitude",
+                            "x-capabilities": {},
+                            "x-concept": {
+                              "id": "longitude",
+                              "title": "Longitude",
+                              "primary": true
+                            }
+                          },
+                          "tr001_modele_dpe_type_libelle": {
+                            "type": "string",
+                            "title": "Type de DPE",
+                            "description": "Type de DPE",
+                            "x-cardinality": 6,
+                            "x-capabilities": {
+                              "textAgg": true
+                            },
+                            "examples": [
+                              "Vente",
+                              "Location",
+                              "Neuf",
+                              "Copropriété",
+                              "Bâtiment public",
+                              "Centre commercial"
+                            ]
+                          },
+                          "tr002_type_batiment_description": {
+                            "type": "string",
+                            "title": "Type de bâtiment",
+                            "description": "Type de bâtiment",
+                            "x-cardinality": 3,
+                            "x-capabilities": {
+                              "textAgg": true
+                            },
+                            "examples": [
+                              "Logement",
+                              "Maison Individuelle",
+                              "Bâtiment collectif à usage principal d'habitation"
+                            ]
+                          },
+                          "code_insee_commune_actualise": {
+                            "title": "Code INSEE Commune",
+                            "description": "",
+                            "type": "string",
+                            "x-cardinality": 47011,
+                            "x-refersTo": "http://rdf.insee.fr/def/geo#codeCommune",
+                            "x-capabilities": {
+                              "textAgg": true
+                            },
+                            "x-concept": {
+                              "id": "codeCommune",
+                              "title": "Code commune",
+                              "primary": true
+                            }
+                          },
+                          "tv016_departement_code": {
+                            "title": "Code département",
+                            "description": "",
+                            "type": "string",
+                            "x-cardinality": 96,
+                            "x-capabilities": {
+                              "textAgg": true
+                            }
+                          },
+                          "geo_adresse": {
+                            "title": "",
+                            "description": "",
+                            "type": "string",
+                            "x-cardinality": 3336184,
+                            "x-capabilities": {
+                              "textAgg": true
+                            }
+                          },
+                          "geo_score": {
+                            "title": "",
+                            "description": "",
+                            "type": "number",
+                            "x-cardinality": 71,
+                            "x-capabilities": {}
+                          },
+                          "_geopoint": {
+                            "x-calculated": true,
+                            "type": "string",
+                            "title": "Coordonnée géographique",
+                            "description": "Centroïde au format \"lat,lon\"",
+                            "x-refersTo": "http://www.w3.org/2003/01/geo/wgs84_pos#lat_long",
+                            "x-concept": {
+                              "id": "latLon",
+                              "title": "Latitude / Longitude",
+                              "primary": true
+                            },
+                            "readOnly": true
+                          },
+                          "_id": {
+                            "x-calculated": true,
+                            "type": "string",
+                            "format": "uri-reference",
+                            "title": "Identifiant",
+                            "description": "Identifiant unique parmi toutes les lignes du jeu de données",
+                            "readOnly": true
+                          },
+                          "_i": {
+                            "x-calculated": true,
+                            "type": "integer",
+                            "title": "Numéro de ligne",
+                            "description": "Indice de la ligne dans le fichier d'origine",
+                            "readOnly": true
+                          },
+                          "_rand": {
+                            "x-calculated": true,
+                            "type": "integer",
+                            "title": "Nombre aléatoire",
+                            "description": "Un nombre aléatoire associé à la ligne qui permet d'obtenir un tri aléatoire par exemple",
+                            "readOnly": true
+                          }
+                        }
+                      }
+                    },
+                    "next": {
+                      "type": "string",
+                      "description": "URL pour continuer la pagination"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/values_agg": {
+      "get": {
+        "summary": "Récupérer des informations agrégées en fonction des valeurs d'une colonne",
+        "operationId": "getValuesAgg",
+        "x-permissionClass": "read",
+        "tags": [
+          "Données"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "field",
+            "description": "La colonne en fonction des valeurs desquelles grouper les lignes du jeu de données",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "nom_methode_dpe",
+                "version_methode_dpe",
+                "classe_consommation_energie",
+                "classe_estimation_ges",
+                "tr001_modele_dpe_type_libelle",
+                "tr002_type_batiment_description",
+                "code_insee_commune_actualise",
+                "tv016_departement_code",
+                "geo_adresse"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "description": "Le format de sérialisation de la donnée.\n  \n  - **json** (défaut)\n  - **csv** pour format compatibles tableurs\n  - **pbf** pour tuiles vectorielles\n  - **geojson** et **wkt** pour formats géographiques",
+            "schema": {
+              "enum": [
+                null,
+                "json",
+                "csv",
+                "xlsx",
+                "ods",
+                "pbf",
+                "geojson",
+                "wkt"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "html",
+            "description": "Effectuer le rendu des contenus formattés de **markdown** vers **HTML**",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "metric",
+            "description": "La métrique à appliquer",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "avg",
+                "sum",
+                "min",
+                "max"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "metric_field",
+            "description": "La colonne sur lequel effectuer la calcul de métrique",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "consommation_energie",
+                "estimation_ges",
+                "surface_thermique_lot",
+                "latitude",
+                "longitude",
+                "geo_score"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "agg_size",
+            "description": "Le nombre de buckets pour l'agrégation (défaut 20)",
+            "schema": {
+              "default": 20,
+              "type": "integer",
+              "maximum": 10000
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "description": "\n  Colonne de recherche simple. Ce paramètre peut-être utilisé pour exposer une fonctionalité de recherche textuelle riche aux utilisateurs sans risque de créer des erreurs de syntaxe.\n\n  Exemple: \"open data\" | \"open source\"\n\n  Pour plus d'information voir la documentation [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) correspondante.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q_mode",
+            "description": "\n  Ce paramètre permet d'altérer le comportement du paramètre \"q\".\n\n  Le mode par défaut \"simple\" expose directement la fonctionnalité [simple-query-string de Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html)\n\n  Le mode \"complete\" permet d'enrichir automatiquement la requête soumise par l'utilisateur pour un résultat intuitif dans le contexte d'un champ de type autocomplete. Attention ce mode est potentiellement moins performant et à limiter à des jeux de données au volume raisonnable.\n    ",
+            "schema": {
+              "type": "string",
+              "default": "simple",
+              "enum": [
+                null,
+                "simple",
+                "complete"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "q_fields",
+            "description": "\n  Ce paramètre permet de spécifier les colonnes sur lesquelles appliquer le paramètre \"q\".\n\n  Par défaut toutes les colonnes supportant une recherche textuelle sont utilisées.\n    ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "classe_consommation_energie",
+                  "classe_estimation_ges",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "qs",
+            "description": "\nColonne de filtre et recherche textuelle avancée. Ce paramètre permet d'effectuer des requêtes complexes sur la source de données. Vous pouvez spécifier des filtres par colonne, créer des combinaisons logiques à volonté, etc.\n\nExemple: ma_colonne:\"du texte\" AND ma_colonne2:valeur\n\nPour plus d'information voir la documentation [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html) correspondante.\n  ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "bbox",
+            "description": "Un filtre pour restreindre les résultats à une zone géographique. Le format est 'gauche,bas,droite,haut' autrement dit 'lonMin,latMin,lonMax,latMax'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "xyz",
+            "description": "\n  Un filtre pour restreindre les résultats à une zone géographique avec les paramètres standards de tuiles géographiques x,y et z.\n\n  Le format est 'x,y,z'.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "geo_distance",
+            "description": "\n  Un filtre pour restreindre les résultats à moins d'une certaine distance du point passé en paramètre.\n\n  Le format est 'lon:lat:distance'. La distance optionnelle (0 par défaut) et est exprimée en mètres.\n\n  Si les documents contiennent des géométries la distance est calculée à partir de leurs centroïdes à moins que la distance soit 0 auquel cas le filtre retourne tous les documents dont la géométrie contient le point passé en paramètre.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "description": "Le nombre de résultats à retourner (taille de la pagination), 0 par défaut",
+            "schema": {
+              "default": 0,
+              "type": "integer",
+              "maximum": 100
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "description": "\nLe tri à effectuer sous forme d'une liste de clés de colonnes séparées par des virgules.\n\nPar défaut le tri est ascendant, si un nom de colonne est préfixé par un \"-\" alors le tri sera descendant.\n\nExemple: ma_colonne,-ma_colonne2",
+            "schema": {
+              "type": "array",
+              "default": [],
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "date_etablissement_dpe",
+                  "consommation_energie",
+                  "classe_consommation_energie",
+                  "estimation_ges",
+                  "classe_estimation_ges",
+                  "annee_construction",
+                  "surface_thermique_lot",
+                  "latitude",
+                  "longitude",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse",
+                  "geo_score",
+                  "_geopoint",
+                  "_id",
+                  "_i",
+                  "_rand"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "select",
+            "description": "La liste des colonnes à retourner",
+            "schema": {
+              "default": [
+                "*"
+              ],
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "date_etablissement_dpe",
+                  "consommation_energie",
+                  "classe_consommation_energie",
+                  "estimation_ges",
+                  "classe_estimation_ges",
+                  "annee_construction",
+                  "surface_thermique_lot",
+                  "latitude",
+                  "longitude",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse",
+                  "geo_score",
+                  "_geopoint",
+                  "_id",
+                  "_i",
+                  "_rand"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "highlight",
+            "description": "\nDemande à retourner des extraits du document qui contiennent les mots utilisés en filtre (paramètres q et qs).\n\nLa valeur est une liste de colonnes séparées par des virgules.\n    ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "classe_consommation_energie",
+                  "classe_estimation_ges",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "sampling",
+            "description": "\n  **Uniquement avec le paramètre de tuilage xyz**. Configure le mode d'échantillonage des resultats pour privilégier soit l'exhaustivité des données soit une densité plus homogène sur la carte.\n  \n    - **neighbors** (défaut) : utilise la densité maximale parmi les tuiles voisines pour réduire la densité de la tuile courante au même niveau d'échantillonage (couteux en performance).\n    - **max** : retourne le maximum (limité par le paramètre size) de résultat pour chaque tuile.\n      ",
+            "schema": {
+              "type": "string",
+              "enum": [
+                null,
+                "neighbors",
+                "max"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Les informations du jeu de données agrégées par valeurs d'une colonne",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/values/{field}": {
+      "get": {
+        "summary": "Récupérer la liste des valeurs distinctes d'une colonne éventuellement filtrée par le paramètre q",
+        "operationId": "getValues",
+        "x-permissionClass": "read",
+        "tags": [
+          "Données"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "field",
+            "description": "La colonne de laquelle lister les valeurs",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "nom_methode_dpe",
+                "version_methode_dpe",
+                "classe_consommation_energie",
+                "classe_estimation_ges",
+                "tr001_modele_dpe_type_libelle",
+                "tr002_type_batiment_description",
+                "code_insee_commune_actualise",
+                "tv016_departement_code",
+                "geo_adresse"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "description": "Le nombre de résultats à retourner (taille de la pagination). 10 par défaut",
+            "schema": {
+              "default": 10,
+              "type": "integer",
+              "maximum": 10000
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "description": "\n  Colonne de recherche simple. Ce paramètre peut-être utilisé pour exposer une fonctionalité de recherche textuelle riche aux utilisateurs sans risque de créer des erreurs de syntaxe.\n\n  Exemple: \"open data\" | \"open source\"\n\n  Pour plus d'information voir la documentation [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) correspondante.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q_mode",
+            "description": "\n  Ce paramètre permet d'altérer le comportement du paramètre \"q\".\n\n  Le mode par défaut \"simple\" expose directement la fonctionnalité [simple-query-string de Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html)\n\n  Le mode \"complete\" permet d'enrichir automatiquement la requête soumise par l'utilisateur pour un résultat intuitif dans le contexte d'un champ de type autocomplete. Attention ce mode est potentiellement moins performant et à limiter à des jeux de données au volume raisonnable.\n    ",
+            "schema": {
+              "type": "string",
+              "default": "simple",
+              "enum": [
+                null,
+                "simple",
+                "complete"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "q_fields",
+            "description": "\n  Ce paramètre permet de spécifier les colonnes sur lesquelles appliquer le paramètre \"q\".\n\n  Par défaut toutes les colonnes supportant une recherche textuelle sont utilisées.\n    ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "classe_consommation_energie",
+                  "classe_estimation_ges",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "qs",
+            "description": "\nColonne de filtre et recherche textuelle avancée. Ce paramètre permet d'effectuer des requêtes complexes sur la source de données. Vous pouvez spécifier des filtres par colonne, créer des combinaisons logiques à volonté, etc.\n\nExemple: ma_colonne:\"du texte\" AND ma_colonne2:valeur\n\nPour plus d'information voir la documentation [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html) correspondante.\n  ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "bbox",
+            "description": "Un filtre pour restreindre les résultats à une zone géographique. Le format est 'gauche,bas,droite,haut' autrement dit 'lonMin,latMin,lonMax,latMax'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "xyz",
+            "description": "\n  Un filtre pour restreindre les résultats à une zone géographique avec les paramètres standards de tuiles géographiques x,y et z.\n\n  Le format est 'x,y,z'.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "geo_distance",
+            "description": "\n  Un filtre pour restreindre les résultats à moins d'une certaine distance du point passé en paramètre.\n\n  Le format est 'lon:lat:distance'. La distance optionnelle (0 par défaut) et est exprimée en mètres.\n\n  Si les documents contiennent des géométries la distance est calculée à partir de leurs centroïdes à moins que la distance soit 0 auquel cas le filtre retourne tous les documents dont la géométrie contient le point passé en paramètre.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Les valeurs d'une colonne",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/metric_agg": {
+      "get": {
+        "summary": "Calculer une métrique sur un ensemble de lignes",
+        "operationId": "getMetricAgg",
+        "x-permissionClass": "read",
+        "tags": [
+          "Données"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "metric",
+            "description": "La métrique à appliquer",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "avg",
+                "sum",
+                "min",
+                "max",
+                "stats",
+                "value_count",
+                "percentiles",
+                "cardinality"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "description": "La colonne sur laquelle calculer la métrique",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "nom_methode_dpe",
+                "version_methode_dpe",
+                "date_etablissement_dpe",
+                "consommation_energie",
+                "classe_consommation_energie",
+                "estimation_ges",
+                "classe_estimation_ges",
+                "annee_construction",
+                "surface_thermique_lot",
+                "latitude",
+                "longitude",
+                "tr001_modele_dpe_type_libelle",
+                "tr002_type_batiment_description",
+                "code_insee_commune_actualise",
+                "tv016_departement_code",
+                "geo_adresse",
+                "geo_score",
+                "_geopoint",
+                "_id",
+                "_i",
+                "_rand"
+              ]
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "percents",
+            "description": "Les pourcentages sur lesquels calculer la métrique percentiles (inutile pour les autres métriques). La valeur par défaut est \"1,5,25,50,75,95,99\"",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "description": "\n  Colonne de recherche simple. Ce paramètre peut-être utilisé pour exposer une fonctionalité de recherche textuelle riche aux utilisateurs sans risque de créer des erreurs de syntaxe.\n\n  Exemple: \"open data\" | \"open source\"\n\n  Pour plus d'information voir la documentation [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) correspondante.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q_mode",
+            "description": "\n  Ce paramètre permet d'altérer le comportement du paramètre \"q\".\n\n  Le mode par défaut \"simple\" expose directement la fonctionnalité [simple-query-string de Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html)\n\n  Le mode \"complete\" permet d'enrichir automatiquement la requête soumise par l'utilisateur pour un résultat intuitif dans le contexte d'un champ de type autocomplete. Attention ce mode est potentiellement moins performant et à limiter à des jeux de données au volume raisonnable.\n    ",
+            "schema": {
+              "type": "string",
+              "default": "simple",
+              "enum": [
+                null,
+                "simple",
+                "complete"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "q_fields",
+            "description": "\n  Ce paramètre permet de spécifier les colonnes sur lesquelles appliquer le paramètre \"q\".\n\n  Par défaut toutes les colonnes supportant une recherche textuelle sont utilisées.\n    ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "classe_consommation_energie",
+                  "classe_estimation_ges",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "qs",
+            "description": "\nColonne de filtre et recherche textuelle avancée. Ce paramètre permet d'effectuer des requêtes complexes sur la source de données. Vous pouvez spécifier des filtres par colonne, créer des combinaisons logiques à volonté, etc.\n\nExemple: ma_colonne:\"du texte\" AND ma_colonne2:valeur\n\nPour plus d'information voir la documentation [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html) correspondante.\n  ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "bbox",
+            "description": "Un filtre pour restreindre les résultats à une zone géographique. Le format est 'gauche,bas,droite,haut' autrement dit 'lonMin,latMin,lonMax,latMax'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "xyz",
+            "description": "\n  Un filtre pour restreindre les résultats à une zone géographique avec les paramètres standards de tuiles géographiques x,y et z.\n\n  Le format est 'x,y,z'.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "geo_distance",
+            "description": "\n  Un filtre pour restreindre les résultats à moins d'une certaine distance du point passé en paramètre.\n\n  Le format est 'lon:lat:distance'. La distance optionnelle (0 par défaut) et est exprimée en mètres.\n\n  Si les documents contiennent des géométries la distance est calculée à partir de leurs centroïdes à moins que la distance soit 0 auquel cas le filtre retourne tous les documents dont la géométrie contient le point passé en paramètre.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Le résultat du calcul",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/simple_metrics_agg": {
+      "get": {
+        "summary": "Calculer des métriques simples standards sur toutes les colonnes possibles ou sur une liste de colonnes",
+        "operationId": "getSimpleMetricsAgg",
+        "x-permissionClass": "read",
+        "tags": [
+          "Données"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "fields",
+            "description": "Les colonnes sur lesquelles calculer les métriques",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "date_etablissement_dpe",
+                  "consommation_energie",
+                  "classe_consommation_energie",
+                  "estimation_ges",
+                  "classe_estimation_ges",
+                  "annee_construction",
+                  "surface_thermique_lot",
+                  "latitude",
+                  "longitude",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse",
+                  "geo_score",
+                  "_geopoint",
+                  "_id",
+                  "_i",
+                  "_rand"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "description": "\n  Colonne de recherche simple. Ce paramètre peut-être utilisé pour exposer une fonctionalité de recherche textuelle riche aux utilisateurs sans risque de créer des erreurs de syntaxe.\n\n  Exemple: \"open data\" | \"open source\"\n\n  Pour plus d'information voir la documentation [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) correspondante.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q_mode",
+            "description": "\n  Ce paramètre permet d'altérer le comportement du paramètre \"q\".\n\n  Le mode par défaut \"simple\" expose directement la fonctionnalité [simple-query-string de Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html)\n\n  Le mode \"complete\" permet d'enrichir automatiquement la requête soumise par l'utilisateur pour un résultat intuitif dans le contexte d'un champ de type autocomplete. Attention ce mode est potentiellement moins performant et à limiter à des jeux de données au volume raisonnable.\n    ",
+            "schema": {
+              "type": "string",
+              "default": "simple",
+              "enum": [
+                null,
+                "simple",
+                "complete"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "q_fields",
+            "description": "\n  Ce paramètre permet de spécifier les colonnes sur lesquelles appliquer le paramètre \"q\".\n\n  Par défaut toutes les colonnes supportant une recherche textuelle sont utilisées.\n    ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "classe_consommation_energie",
+                  "classe_estimation_ges",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "qs",
+            "description": "\nColonne de filtre et recherche textuelle avancée. Ce paramètre permet d'effectuer des requêtes complexes sur la source de données. Vous pouvez spécifier des filtres par colonne, créer des combinaisons logiques à volonté, etc.\n\nExemple: ma_colonne:\"du texte\" AND ma_colonne2:valeur\n\nPour plus d'information voir la documentation [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html) correspondante.\n  ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "bbox",
+            "description": "Un filtre pour restreindre les résultats à une zone géographique. Le format est 'gauche,bas,droite,haut' autrement dit 'lonMin,latMin,lonMax,latMax'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "xyz",
+            "description": "\n  Un filtre pour restreindre les résultats à une zone géographique avec les paramètres standards de tuiles géographiques x,y et z.\n\n  Le format est 'x,y,z'.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "geo_distance",
+            "description": "\n  Un filtre pour restreindre les résultats à moins d'une certaine distance du point passé en paramètre.\n\n  Le format est 'lon:lat:distance'. La distance optionnelle (0 par défaut) et est exprimée en mètres.\n\n  Si les documents contiennent des géométries la distance est calculée à partir de leurs centroïdes à moins que la distance soit 0 auquel cas le filtre retourne tous les documents dont la géométrie contient le point passé en paramètre.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Le résultat du calcul",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/words_agg": {
+      "get": {
+        "summary": "Récupérer des mots significatifs dans un jeu de données",
+        "operationId": "getWordsAgg",
+        "x-permissionClass": "read",
+        "tags": [
+          "Données"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "field",
+            "description": "La colonne sur lequel effectuer l'analyse",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "nom_methode_dpe",
+                "version_methode_dpe",
+                "classe_consommation_energie",
+                "classe_estimation_ges",
+                "tr001_modele_dpe_type_libelle",
+                "tr002_type_batiment_description",
+                "code_insee_commune_actualise",
+                "tv016_departement_code",
+                "geo_adresse"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "analysis",
+            "description": "Le type d'analyse textuelle effectuée sur la colonne. L'analyse \"lang\" est intelligente en fonction de la langue, elle calcule la racine grammaticale des mots et ignore les mots les moins significatifs. L'analyse \"standard\" effectue un travail plus basique d'extraction de mots bruts depuis le texte",
+            "schema": {
+              "type": "string",
+              "default": "lang",
+              "enum": [
+                "lang",
+                "standard"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "description": "\n  Colonne de recherche simple. Ce paramètre peut-être utilisé pour exposer une fonctionalité de recherche textuelle riche aux utilisateurs sans risque de créer des erreurs de syntaxe.\n\n  Exemple: \"open data\" | \"open source\"\n\n  Pour plus d'information voir la documentation [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) correspondante.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q_mode",
+            "description": "\n  Ce paramètre permet d'altérer le comportement du paramètre \"q\".\n\n  Le mode par défaut \"simple\" expose directement la fonctionnalité [simple-query-string de Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html)\n\n  Le mode \"complete\" permet d'enrichir automatiquement la requête soumise par l'utilisateur pour un résultat intuitif dans le contexte d'un champ de type autocomplete. Attention ce mode est potentiellement moins performant et à limiter à des jeux de données au volume raisonnable.\n    ",
+            "schema": {
+              "type": "string",
+              "default": "simple",
+              "enum": [
+                null,
+                "simple",
+                "complete"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "q_fields",
+            "description": "\n  Ce paramètre permet de spécifier les colonnes sur lesquelles appliquer le paramètre \"q\".\n\n  Par défaut toutes les colonnes supportant une recherche textuelle sont utilisées.\n    ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "classe_consommation_energie",
+                  "classe_estimation_ges",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "qs",
+            "description": "\nColonne de filtre et recherche textuelle avancée. Ce paramètre permet d'effectuer des requêtes complexes sur la source de données. Vous pouvez spécifier des filtres par colonne, créer des combinaisons logiques à volonté, etc.\n\nExemple: ma_colonne:\"du texte\" AND ma_colonne2:valeur\n\nPour plus d'information voir la documentation [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html) correspondante.\n  ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "bbox",
+            "description": "Un filtre pour restreindre les résultats à une zone géographique. Le format est 'gauche,bas,droite,haut' autrement dit 'lonMin,latMin,lonMax,latMax'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "xyz",
+            "description": "\n  Un filtre pour restreindre les résultats à une zone géographique avec les paramètres standards de tuiles géographiques x,y et z.\n\n  Le format est 'x,y,z'.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "geo_distance",
+            "description": "\n  Un filtre pour restreindre les résultats à moins d'une certaine distance du point passé en paramètre.\n\n  Le format est 'lon:lat:distance'. La distance optionnelle (0 par défaut) et est exprimée en mètres.\n\n  Si les documents contiennent des géométries la distance est calculée à partir de leurs centroïdes à moins que la distance soit 0 auquel cas le filtre retourne tous les documents dont la géométrie contient le point passé en paramètre.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Le résultat de l'analyse",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/schema": {
+      "get": {
+        "summary": "Récupérer la liste des colonnes",
+        "operationId": "readSchema",
+        "x-permissionClass": "read",
+        "tags": [
+          "Métadonnées"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "mimeType",
+            "description": "Définir le format du schéma",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "application/json",
+              "enum": [
+                "application/json",
+                "application/tableschema+json",
+                "application/schema+json"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "description": "Filtre sur le type de colonne",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "string",
+                  "boolean",
+                  "integer",
+                  "number"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "description": "Filtre sur de format d'une colonne de type chaine de caractère",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "uri-reference",
+                  "date",
+                  "date-time"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "capability",
+            "description": "Restreindre aux colonnes ayant une capacité particulière",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                null,
+                "index",
+                "values",
+                "textStandard",
+                "text",
+                "textAgg",
+                "wildcard",
+                "insensitive",
+                "geoShape",
+                "indexAttachment"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "enum",
+            "description": "Restreindre aux colonnes ayant une énumération de valeurs (moins de 50 valeurs distinctes)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "false",
+                "true"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "calculated",
+            "description": "Include les colonnes calculées (non issues du fichier d'origine)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "La liste des colonnes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/safe-schema": {
+      "get": {
+        "summary": "Récupérer la liste des colonnes - les indices sur le contenu de la donnée sont purgés",
+        "operationId": "readSafeSchema",
+        "x-permissionClass": "read",
+        "tags": [
+          "Métadonnées"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "mimeType",
+            "description": "Définir le format du schéma",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "application/json",
+              "enum": [
+                "application/json",
+                "application/tableschema+json",
+                "application/schema+json"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "description": "Filtre sur le type de colonne",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "string",
+                  "boolean",
+                  "integer",
+                  "number"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "description": "Filtre sur de format d'une colonne de type chaine de caractère",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "uri-reference",
+                  "date",
+                  "date-time"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "capability",
+            "description": "Restreindre aux colonnes ayant une capacité particulière",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                null,
+                "index",
+                "values",
+                "textStandard",
+                "text",
+                "textAgg",
+                "wildcard",
+                "insensitive",
+                "geoShape",
+                "indexAttachment"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "enum",
+            "description": "Restreindre aux colonnes ayant une énumération de valeurs (moins de 50 valeurs distinctes)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "false",
+                "true"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "calculated",
+            "description": "Include les colonnes calculées (non issues du fichier d'origine)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "La liste des colonnes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-docs.json": {
+      "get": {
+        "summary": "Accéder à la documentation publique de l'API",
+        "operationId": "readApiDoc",
+        "x-permissionClass": "read",
+        "tags": [
+          "Métadonnées"
+        ],
+        "responses": {
+          "200": {
+            "description": "La documentation publique de l'API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/geo_agg": {
+      "get": {
+        "summary": "Récupérer des informations agrégées spatialement sur le jeu de données",
+        "operationId": "getGeoAgg",
+        "x-permissionClass": "read",
+        "tags": [
+          "Données"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "agg_size",
+            "description": "Le nombre de buckets pour l'agrégation (défaut 20)",
+            "schema": {
+              "default": 20,
+              "type": "integer",
+              "maximum": 10000
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "description": "\n  Colonne de recherche simple. Ce paramètre peut-être utilisé pour exposer une fonctionalité de recherche textuelle riche aux utilisateurs sans risque de créer des erreurs de syntaxe.\n\n  Exemple: \"open data\" | \"open source\"\n\n  Pour plus d'information voir la documentation [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) correspondante.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q_mode",
+            "description": "\n  Ce paramètre permet d'altérer le comportement du paramètre \"q\".\n\n  Le mode par défaut \"simple\" expose directement la fonctionnalité [simple-query-string de Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html)\n\n  Le mode \"complete\" permet d'enrichir automatiquement la requête soumise par l'utilisateur pour un résultat intuitif dans le contexte d'un champ de type autocomplete. Attention ce mode est potentiellement moins performant et à limiter à des jeux de données au volume raisonnable.\n    ",
+            "schema": {
+              "type": "string",
+              "default": "simple",
+              "enum": [
+                null,
+                "simple",
+                "complete"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "q_fields",
+            "description": "\n  Ce paramètre permet de spécifier les colonnes sur lesquelles appliquer le paramètre \"q\".\n\n  Par défaut toutes les colonnes supportant une recherche textuelle sont utilisées.\n    ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "classe_consommation_energie",
+                  "classe_estimation_ges",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "qs",
+            "description": "\nColonne de filtre et recherche textuelle avancée. Ce paramètre permet d'effectuer des requêtes complexes sur la source de données. Vous pouvez spécifier des filtres par colonne, créer des combinaisons logiques à volonté, etc.\n\nExemple: ma_colonne:\"du texte\" AND ma_colonne2:valeur\n\nPour plus d'information voir la documentation [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html) correspondante.\n  ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "bbox",
+            "description": "Un filtre pour restreindre les résultats à une zone géographique. Le format est 'gauche,bas,droite,haut' autrement dit 'lonMin,latMin,lonMax,latMax'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "xyz",
+            "description": "\n  Un filtre pour restreindre les résultats à une zone géographique avec les paramètres standards de tuiles géographiques x,y et z.\n\n  Le format est 'x,y,z'.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "geo_distance",
+            "description": "\n  Un filtre pour restreindre les résultats à moins d'une certaine distance du point passé en paramètre.\n\n  Le format est 'lon:lat:distance'. La distance optionnelle (0 par défaut) et est exprimée en mètres.\n\n  Si les documents contiennent des géométries la distance est calculée à partir de leurs centroïdes à moins que la distance soit 0 auquel cas le filtre retourne tous les documents dont la géométrie contient le point passé en paramètre.\n    ",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "description": "Le nombre de résultats à retourner (taille de la pagination), 0 par défaut",
+            "schema": {
+              "default": 0,
+              "type": "integer",
+              "maximum": 100
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "description": "\nLe tri à effectuer sous forme d'une liste de clés de colonnes séparées par des virgules.\n\nPar défaut le tri est ascendant, si un nom de colonne est préfixé par un \"-\" alors le tri sera descendant.\n\nExemple: ma_colonne,-ma_colonne2",
+            "schema": {
+              "type": "array",
+              "default": [],
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "date_etablissement_dpe",
+                  "consommation_energie",
+                  "classe_consommation_energie",
+                  "estimation_ges",
+                  "classe_estimation_ges",
+                  "annee_construction",
+                  "surface_thermique_lot",
+                  "latitude",
+                  "longitude",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse",
+                  "geo_score",
+                  "_geopoint",
+                  "_id",
+                  "_i",
+                  "_rand"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "select",
+            "description": "La liste des colonnes à retourner",
+            "schema": {
+              "default": [
+                "*"
+              ],
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "date_etablissement_dpe",
+                  "consommation_energie",
+                  "classe_consommation_energie",
+                  "estimation_ges",
+                  "classe_estimation_ges",
+                  "annee_construction",
+                  "surface_thermique_lot",
+                  "latitude",
+                  "longitude",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse",
+                  "geo_score",
+                  "_geopoint",
+                  "_id",
+                  "_i",
+                  "_rand"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "highlight",
+            "description": "\nDemande à retourner des extraits du document qui contiennent les mots utilisés en filtre (paramètres q et qs).\n\nLa valeur est une liste de colonnes séparées par des virgules.\n    ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nom_methode_dpe",
+                  "version_methode_dpe",
+                  "classe_consommation_energie",
+                  "classe_estimation_ges",
+                  "tr001_modele_dpe_type_libelle",
+                  "tr002_type_batiment_description",
+                  "code_insee_commune_actualise",
+                  "tv016_departement_code",
+                  "geo_adresse"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "in": "query",
+            "name": "sampling",
+            "description": "\n  **Uniquement avec le paramètre de tuilage xyz**. Configure le mode d'échantillonage des resultats pour privilégier soit l'exhaustivité des données soit une densité plus homogène sur la carte.\n  \n    - **neighbors** (défaut) : utilise la densité maximale parmi les tuiles voisines pour réduire la densité de la tuile courante au même niveau d'échantillonage (couteux en performance).\n    - **max** : retourne le maximum (limité par le paramètre size) de résultat pour chaque tuile.\n      ",
+            "schema": {
+              "type": "string",
+              "enum": [
+                null,
+                "neighbors",
+                "max"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "description": "Le format de sérialisation de la donnée.\n  \n  - **json** (défaut)\n  - **csv** pour format compatibles tableurs\n  - **pbf** pour tuiles vectorielles\n  - **geojson** et **wkt** pour formats géographiques",
+            "schema": {
+              "enum": [
+                null,
+                "json",
+                "csv",
+                "xlsx",
+                "ods",
+                "pbf",
+                "geojson",
+                "wkt"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "html",
+            "description": "Effectuer le rendu des contenus formattés de **markdown** vers **HTML**",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Les informations du jeu de données agrégées spatialement",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Documentation sur Github",
+    "url": "https://data-fair.github.io"
+  }
+}

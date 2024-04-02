@@ -1,0 +1,3641 @@
+{
+  "openapi": "3.0.5",
+  "info": {
+    "version": "1.0.0",
+    "title": "Stuart API",
+    "description": "This section details the full technical specification of the Stuart Delivery API. Please find additional content, help and guides in our <a href=\"https://community.stuart.engineering\" target=\"_blank\" rel=\"noreferrer\"><span>Developer Community Forum</span></a> <br/> Before starting your integration, we strongly recommend reading our <a href=\"https://community.stuart.engineering/t/starting-my-integration/472\" target=\"_blank\" rel=\"noreferrer\"><span>getting started</span></a>  guide and following the linked guidance, including signing up to the forum to receive announcements of API changes and updates that may impact your integration."
+  },
+  "servers": [
+    {
+      "description": "Sandbox environment",
+      "url": "https://api.sandbox.stuart.com"
+    },
+    {
+      "description": "Production environment",
+      "url": "https://api.stuart.com"
+    }
+  ],
+  "paths": {
+    "/oauth/token": {
+      "post": {
+        "summary": "Get an OAuth 2.0 token",
+        "tags": [
+          "Authentication"
+        ],
+        "description": "To start sending authenticated HTTP requests you need to get an OAuth access token using your client_id and client_secret keys",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "client_id",
+                  "client_secret",
+                  "grant_type",
+                  "scope"
+                ],
+                "properties": {
+                  "client_id": {
+                    "type": "string",
+                    "description": "Oauth client id",
+                    "example": "client_id"
+                  },
+                  "client_secret": {
+                    "type": "string",
+                    "description": "Oauth client secreet",
+                    "example": "client_secret"
+                  },
+                  "grant_type": {
+                    "type": "string",
+                    "description": "",
+                    "enum": [
+                      "client_credentials"
+                    ],
+                    "example": "client_credentials"
+                  },
+                  "scope": {
+                    "type": "string",
+                    "description": "",
+                    "enum": [
+                      "api"
+                    ],
+                    "example": "api"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string",
+                      "description": "Access token value"
+                    },
+                    "token_type": {
+                      "type": "string",
+                      "description": "Bearer",
+                      "example": "Bearer",
+                      "enum": [
+                        "Bearer"
+                      ]
+                    },
+                    "expires_in": {
+                      "type": "number",
+                      "description": "Expiration time in seconds"
+                    },
+                    "scope": {
+                      "type": "string",
+                      "description": "",
+                      "example": "api",
+                      "enum": [
+                        "api"
+                      ]
+                    },
+                    "created_at": {
+                      "type": "number",
+                      "description": "Timestamp",
+                      "example": 1652712570
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error code",
+                      "example": "invalid_client"
+                    },
+                    "error_description": {
+                      "type": "string",
+                      "description": "Error description"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/addresses/validate": {
+      "get": {
+        "summary": "Address validation",
+        "tags": [
+          "Addresses"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "description": "Correct and valid addresses are a core aspect of being able to successfully conduct  deliveries with Stuart. To ensure your addresses will be accepted by the Stuart API, be sure to read our addresses best practices. <br/>  We observe two types of addresses, precise and approximate, the definition of which can be found below. Note that when the address is approximate, a valid contact phone is required for successful validation.<br/>  Additionally, we recommend providing a valid phone number with every delivery request to ensure the best possible delivery experience",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "description": "Full-text address you want to validate",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "picking",
+                "delivering"
+              ]
+            }
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "description": "Phone number is required if the address is approximate and must be in E.164 standard",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Succesful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "successful response",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid address or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error key",
+                      "enum": [
+                        "CANT_GEOCODE_ADDRESS",
+                        "OUT_OF_RANGE",
+                        "RECORD_INVALID",
+                        "ADDRESS_CONTACT_PHONE_REQUIRED"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error description",
+                      "example": [
+                        "address is missing and address is empty"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "description": "List of errors",
+                      "items": {
+                        "type": "string",
+                        "example": [
+                          "address is missing",
+                          "address is empty"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          },
+          "500": {
+            "$ref": "#/components/responses/500_internal_server_error"
+          }
+        }
+      }
+    },
+    "/v2/areas/{zone}": {
+      "get": {
+        "summary": "Get zone coverage",
+        "tags": [
+          "Opened zones"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "description": "Get the picking or delivery area of an open Stuart zone. This endpoint response is in <a href=\"https://geojson.org\" rel=\"noreferrer\">GeoJSON standard</a>",
+        "parameters": [
+          {
+            "name": "zone",
+            "in": "path",
+            "description": "Zone's code",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ZonesList"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Type of zone: pickup or dropoff",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "picking",
+                "delivering"
+              ],
+              "example": "picking"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Succesful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "FeatureCollection"
+                      ]
+                    },
+                    "features": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "example": "Feature"
+                          },
+                          "properties": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "Paris Operational Area"
+                              },
+                              "zipcode": {
+                                "type": "string",
+                                "example": "paris - pu area"
+                              }
+                            }
+                          },
+                          "geometry": {
+                            "type": "object",
+                            "properties": {
+                              "coordinates": {
+                                "type": "array",
+                                "items": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "number",
+                                      "example": "1.625374"
+                                    }
+                                  }
+                                }
+                              },
+                              "type": {
+                                "type": "string",
+                                "example": "Polygon"
+                              }
+                            }
+                          },
+                          "id": {
+                            "type": "string",
+                            "example": "378259afa690d017bb41f09313aa88cc"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Zone not found",
+            "$ref": "#/components/responses/404_error"
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          }
+        }
+      }
+    },
+    "/v2/deliveries/{delivery_id}/phone_number": {
+      "get": {
+        "summary": "Get courier's anonymous phone number.",
+        "tags": [
+          "Deliveries"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "description": "Once your delivery is assigned to a courier, you can request their anonymous phone number. Once the delivery is complete, the phone number will expire. <br/> Read more about our <a href=\"https://community.stuart.engineering/t/anonymised-calling/319\" target=\"_blank\" rel=\"noreferrer\">two-way anonymised calling</a>.",
+        "parameters": [
+          {
+            "name": "delivery_id",
+            "in": "path",
+            "description": "Delivery id received in job creation response",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "example": 100317494
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Succesful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "phone_number"
+                  ],
+                  "properties": {
+                    "phone_number": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ],
+                      "example": "+33728934950"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid address or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error key",
+                      "enum": [
+                        "NO_CURRENT_DELIVERY",
+                        "PHONE_CALL_NOT_AVAILABLE"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error description",
+                      "example": [
+                        "Cannot create a phone call for the given delivery."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/jobs/schedules/{zone}/{type}/{date}": {
+      "get": {
+        "summary": "Get zone's scheduling slots",
+        "tags": [
+          "Scheduling Slots"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "description": "Get scheduling slots of 15 minutes which can be used to display directly to your customer on your site. These slots also allow you to recognise Stuart's opening and closing times for a given zone.",
+        "parameters": [
+          {
+            "name": "zone",
+            "in": "path",
+            "description": "Zone's code",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "paris"
+            }
+          },
+          {
+            "name": "type",
+            "in": "path",
+            "description": "Type of slots",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "pickup",
+                "dropoff"
+              ],
+              "example": "pickup"
+            }
+          },
+          {
+            "name": "date",
+            "in": "path",
+            "description": "Date",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2022-06-14"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Succesful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "date",
+                    "type",
+                    "slots"
+                  ],
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "example": "2022-06-14T00:00:00.000+01:00"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "pickup"
+                    },
+                    "slots": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "start_time": {
+                            "type": "string",
+                            "example": "2022-06-14T00:00:00.000+01:00"
+                          },
+                          "end_time": {
+                            "type": "string",
+                            "example": "2022-06-14T00:15:00.000+01:00"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "enum": [
+                        "INVALID_TYPE"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid type. Valid types: pickup or dropoff."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Job not found",
+            "$ref": "#/components/responses/404_error"
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          }
+        }
+      }
+    },
+    "/v2/jobs/pricing": {
+      "post": {
+        "summary": "Job pricing",
+        "description": "Request the price for a job (VAT excluded) by using the same request payload used to [create a job](#0de55537-941b-49f4-ba53-5672dc6edccf).<br/> The minimal details required to get the pricing are the pickup and dropoff `address`, and `transport_type`/`package_type` information.",
+        "tags": [
+          "Jobs"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "amount",
+                    "currency"
+                  ],
+                  "properties": {
+                    "amount": {
+                      "type": "number",
+                      "description": "Price of the job in the associated currency.",
+                      "example": 5.4
+                    },
+                    "currency": {
+                      "type": "string",
+                      "description": "Currency code (ISO 4217).",
+                      "example": "EUR"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/422_jobError"
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          }
+        }
+      }
+    },
+    "/v2/jobs/eta": {
+      "post": {
+        "summary": "Job eta",
+        "description": "This endpoint allows you to get an estimated time of arrival at the origin address for a given Job using exactly the same request body as the [Create a job](#0de55537-941b-49f4-ba53-5672dc6edccf) endpoint.<br/> Read more about how you might use this endpoint in our <a href=\"https://community.stuart.engineering/t/uses-of-our-request-a-job-eta-endpoint/599\" target=\"_blank\" rel=\"noreferrer\">Developer Community Forum</a>.",
+        "tags": [
+          "Jobs"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "eta"
+                  ],
+                  "properties": {
+                    "eta": {
+                      "type": "number",
+                      "description": "Seconds",
+                      "example": 124
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/422_jobError"
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          }
+        }
+      }
+    },
+    "/v2/jobs/validate": {
+      "post": {
+        "summary": "Job validation",
+        "description": "Verify that the payload validity according to job's creation requirements",
+        "tags": [
+          "Jobs"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/422_jobError"
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          }
+        }
+      }
+    },
+    "/v2/jobs": {
+      "post": {
+        "summary": "Job creation",
+        "description": "Request a Stuart courier to handle your job, we will optimise the route for you unless you specifically request otherwise. <br/>  By default, we will send a courier to you as soon as possible, we call this an 'instant job'. Note that instant jobs can only be created during operational hours. <br/> To schedule a job in the future, define a valid pickup_at date/time up to 30 days into the future for a corporate account (invoiced monthly), and up to 6 days for a regular account (invoiced per order). <br/> For further tips and advice on order scheduling, check out our <a href=\"https://community.stuart.engineering/t/order-scheduling/627\" target=\"_blank\" rel=\"noreferrer\">order scheduling</a> tips and best practices.",
+        "tags": [
+          "Jobs"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobRequest"
+              },
+              "examples": {
+                "JobCreation": {
+                  "$ref": "#/components/examples/JobCreationRequestExample"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                },
+                "examples": {
+                  "JobCreation": {
+                    "$ref": "#/components/examples/JobCreationResponseExample"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/422_jobError"
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get jobs",
+        "tags": [
+          "Jobs"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "description": "This endpoint allows you to retrieve all the jobs created in your Stuart account from the last 90 days. <br/>The results will come back paginated in descending order of the 'pickup_at' job scheduling value.",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Job's stauts",
+            "schema": {
+              "$ref": "#/components/schemas/JobStatuses"
+            }
+          },
+          {
+            "name": "page",
+            "description": "The page number you want to retrieve.",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Max number of result you want per page.",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "client_reference",
+            "in": "query",
+            "description": "The client_reference used during the Job creation.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "description": "Boolean: Overrides the status to give only currently active orders.",
+            "chema": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Succesful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "minItems": 0,
+                  "items": {
+                    "$ref": "#/components/schemas/JobResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Job not found",
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          }
+        }
+      }
+    },
+    "/v2/jobs/{jobId}": {
+      "get": {
+        "summary": "Get a job",
+        "tags": [
+          "Jobs"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "description": "Get the details of a job using the `id` in the response of your [job creation request](#0de55537-941b-49f4-ba53-5672dc6edccf).",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "description": "Job id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid address or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error key",
+                      "enum": [
+                        "CANT_GEOCODE_ADDRESS",
+                        "OUT_OF_RANGE",
+                        "RECORD_INVALID",
+                        "ADDRESS_CONTACT_PHONE_REQUIRED"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error description",
+                      "example": [
+                        "address is missing and address is empty"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "description": "List of errors",
+                      "items": {
+                        "type": "string",
+                        "example": [
+                          "address is missing",
+                          "address is empty"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Job update",
+        "description": "Update some details of a job in accordance with the restrictions detailed below.<br/> When the delivery status is `pending`, `picking`, `almost_picking`, `waiting_at_pickup` you can update: <br/> <ul><li>client_reference</li><li>comment</li><li>package_description</li><li>origin.comment</li><li>origin.contact.firstname</li><li>origin.contact.lastname</li><li>origin.contact.phone</li><li>origin.contact.email</li><li>origin.contact.company</li><li>destination.comment</li><li>destination.contact.firstname</li><li>destination.contact.lastname</li><li>destination.contact.phone</li><li>destination.contact.email</li><li>destination.contact.company</li></ul> <br/> When the delivery status is `delivering`, `almost_delivering`, `waiting_at_dropoff` you can update: <br/> <ul><li>client_reference</li><li>comment</li><li>package_description</li><li>destination.comment</li><li>destination.contact.firstname</li><li>destination.contact.lastname</li><li>destination.contact.phone</li><li>destination.contact.email</li><li>destination.contact.company</li></ul> <br/> When the delivery status is `delivered` you can only update the `client_reference`",
+        "tags": [
+          "Jobs"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "description": "Job's id returned in the job creation response",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 100202989
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "job"
+                ],
+                "properties": {
+                  "job": {
+                    "type": "object",
+                    "required": [
+                      "deliveries"
+                    ],
+                    "properties": {
+                      "deliveries": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "id"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "format": "int32",
+                              "example": 100317494
+                            },
+                            "client_reference": {
+                              "type": "string",
+                              "example": "updated_client_ref"
+                            },
+                            "comment": {
+                              "type": "string",
+                              "example": "upodated comment"
+                            },
+                            "package_description": {
+                              "type": "string",
+                              "example": "updated description"
+                            },
+                            "pickup": {
+                              "type": "object",
+                              "properties": {
+                                "comment": {
+                                  "type": "string",
+                                  "example": "updated test comment"
+                                },
+                                "contact": {
+                                  "type": "object",
+                                  "properties": {
+                                    "firstname": {
+                                      "type": "string",
+                                      "example": "firstname update"
+                                    },
+                                    "lastname": {
+                                      "type": "string",
+                                      "example": "lastname update"
+                                    },
+                                    "email": {
+                                      "type": "string",
+                                      "example": "test_update@test.com"
+                                    },
+                                    "company": {
+                                      "type": "string",
+                                      "example": "Sample company update"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "dropoff": {
+                              "type": "object",
+                              "properties": {
+                                "comment": {
+                                  "type": "string",
+                                  "example": "update dropoff comment"
+                                },
+                                "contact": {
+                                  "type": "object",
+                                  "properties": {
+                                    "firstname": {
+                                      "type": "string",
+                                      "example": "Update firstname"
+                                    },
+                                    "lastname": {
+                                      "type": "string",
+                                      "example": "Update lastname"
+                                    },
+                                    "email": {
+                                      "type": "string",
+                                      "example": "test_update2@test.com"
+                                    },
+                                    "company": {
+                                      "type": "string",
+                                      "example": "company Update"
+                                    },
+                                    "phone": {
+                                      "type": "string",
+                                      "example": "0101010101"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/422_jobError"
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          },
+          "404": {
+            "description": "Delivery not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "NOT_FOUND"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Couldn't find Delivery with 'id'=(0)"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/jobs/{jobId}/cancel": {
+      "post": {
+        "summary": "Job cancellation",
+        "tags": [
+          "Cancellations"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "description": "Cancel a job including all of it's deliveries. We advise providing your reason for cancelling to provide visibility for reporting, the allowed values are detailed in the parameters below.",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "description": "Job id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "comment",
+            "in": "query",
+            "description": "Free text comment",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Wrong address sent"
+          },
+          {
+            "name": "public_reason_key",
+            "in": "query",
+            "description": "Free text comment",
+            "schema": {
+              "$ref": "#/components/schemas/CancellationReasonValues"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "422": {
+            "description": "Invalid address or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error key",
+                      "enum": [
+                        "CANCELLATION_ERROR"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error description",
+                      "example": [
+                        "Job already picked up"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Job not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error key",
+                      "enum": [
+                        "Path not found"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          }
+        }
+      }
+    },
+    "/v2/deliveries/{deliveryId}/cancel": {
+      "post": {
+        "summary": "Delivery cancellation",
+        "tags": [
+          "Cancellations"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "description": "Cancel a single delivery of your job. We advise providing your reason for cancelling to provide visibility for reporting, the allowed values are detailed in the parameters below.",
+        "parameters": [
+          {
+            "name": "deliveryId",
+            "in": "path",
+            "description": "Delivery id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "comment",
+            "in": "query",
+            "description": "Free text comment",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Wrong address sent"
+          },
+          {
+            "name": "public_reason_key",
+            "in": "query",
+            "description": "Free text comment",
+            "schema": {
+              "$ref": "#/components/schemas/CancellationReasonValues"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "422": {
+            "description": "Invalid address or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error key",
+                      "enum": [
+                        "CANCELLATION_ERROR"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error description",
+                      "example": [
+                        "Delivery can't be canceled"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          }
+        }
+      }
+    },
+    "/your-job-create-webhooks-endpoint": {
+      "servers": [
+        {
+          "url": "https://your.domain.com"
+        }
+      ],
+      "post": {
+        "summary": "Job create webhook event",
+        "tags": [
+          "Webhooks examples"
+        ],
+        "security": [],
+        "description": "Job creation webhook schema. Please use the ```clientReference``` to track your deliveries",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobWebhookEvent"
+              },
+              "example": {
+                "event": "job",
+                "type": "create",
+                "data": {
+                  "id": 100214157,
+                  "status": "searching",
+                  "comment": null,
+                  "pickupAt": null,
+                  "dropoffAt": null,
+                  "createdAt": "2022-01-19T14:19:44.000+01:00",
+                  "endedAt": null,
+                  "transportType": {
+                    "code": "bike"
+                  },
+                  "packageType": null,
+                  "originComment": null,
+                  "destinationComment": null,
+                  "jobReference": "12345",
+                  "currentDelivery": null,
+                  "deliveries": [
+                    {
+                      "id": 100259470,
+                      "clientReference": "12345"
+                    },
+                    {
+                      "id": 100259471,
+                      "clientReference": "465768798"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "OK"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/your-job-update-webhooks-endpoint": {
+      "servers": [
+        {
+          "url": "https://your.domain.com"
+        }
+      ],
+      "post": {
+        "summary": "Job update webhook event",
+        "tags": [
+          "Webhooks examples"
+        ],
+        "security": [],
+        "description": "Job update webhook schema. Please use the ```clientReference``` to track your deliveries",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobWebhookEvent"
+              },
+              "example": {
+                "event": "job",
+                "type": "update",
+                "data": {
+                  "id": 100214157,
+                  "status": "in_progress",
+                  "comment": null,
+                  "pickupAt": null,
+                  "dropoffAt": null,
+                  "createdAt": "2022-01-19T14:19:44.000+01:00",
+                  "endedAt": null,
+                  "transportType": {
+                    "code": "bike"
+                  },
+                  "packageType": null,
+                  "originComment": null,
+                  "destinationComment": null,
+                  "jobReference": "12345",
+                  "currentDelivery": {
+                    "id": 100259470,
+                    "trackingUrl": "https://stuart.sandbox.followmy.delivery/100259470/8ff0ecfc54c9b55f66f4fa1223e3fffd",
+                    "clientReference": "12345",
+                    "driver": {
+                      "status": "busy",
+                      "latitude": 48.87818527,
+                      "longitude": 2.29685044,
+                      "name": "Eveline Green",
+                      "firstname": "Eveline",
+                      "lastname": "Green",
+                      "phone": "+33601010101",
+                      "picture_path_imgix": null,
+                      "transportType": {
+                        "code": "bike"
+                      }
+                    },
+                    "status": "picking",
+                    "transportType": {
+                      "code": "bike"
+                    },
+                    "packageType": null,
+                    "etaToDestination": "2022-01-19T14:24:56.000+01:00",
+                    "etaToOrigin": "2022-01-19T14:22:57.000+01:00",
+                    "cancellation": {
+                      "canceledBy": null,
+                      "reasonKey": null,
+                      "comment": null
+                    }
+                  },
+                  "deliveries": [
+                    {
+                      "id": 100259470,
+                      "clientReference": "12345"
+                    },
+                    {
+                      "id": 100259471,
+                      "clientReference": "465768798"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "OK"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/your-delivery-create-webhooks-endpoint": {
+      "servers": [
+        {
+          "url": "https://your.domain.com"
+        }
+      ],
+      "post": {
+        "summary": "Delivery create webhook event",
+        "tags": [
+          "Webhooks examples"
+        ],
+        "security": [],
+        "description": "Delivery creation webhook schema. Please use the ```clientReference``` to track your deliveries",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeliveryWehookEvent"
+              },
+              "example": {
+                "event": "delivery",
+                "type": "create",
+                "data": {
+                  "id": 100259470,
+                  "trackingUrl": "https://stuart.sandbox.followmy.delivery/100259470/8ff0ecfc54c9b55f66f4fa1223e3fffd",
+                  "clientReference": "12345",
+                  "driver": null,
+                  "status": "pending",
+                  "transportType": {
+                    "code": "bike"
+                  },
+                  "packageType": null,
+                  "etaToDestination": null,
+                  "etaToOrigin": null,
+                  "cancellation": {
+                    "canceledBy": null,
+                    "reasonKey": null,
+                    "comment": null
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "OK"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/your-delivery-update-webhooks-endpoint": {
+      "servers": [
+        {
+          "url": "https://your.domain.com"
+        }
+      ],
+      "post": {
+        "summary": "Delivery update webhook event",
+        "tags": [
+          "Webhooks examples"
+        ],
+        "security": [],
+        "description": "Delivery update webhook schema. Please use the ```clientReference``` to track your deliveries",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeliveryWehookEvent"
+              },
+              "example": {
+                "event": "delivery",
+                "type": "update",
+                "data": {
+                  "id": 100259471,
+                  "trackingUrl": "https://stuart.sandbox.followmy.delivery/100259471/a0f6ec2a332eae5e882f5c14619bfbb5",
+                  "clientReference": "465768798",
+                  "driver": {
+                    "status": "busy",
+                    "latitude": 48.8781395,
+                    "longitude": 2.29643011,
+                    "name": "Eveline Green",
+                    "firstname": "Eveline",
+                    "lastname": "Green",
+                    "phone": "+33610101010",
+                    "picture_path_imgix": null,
+                    "transportType": {
+                      "code": "bike"
+                    }
+                  },
+                  "status": "almost_picking",
+                  "transportType": {
+                    "code": "bike"
+                  },
+                  "packageType": null,
+                  "etaToDestination": "2022-01-19T14:25:59.000+01:00",
+                  "etaToOrigin": "2022-01-19T14:23:14.000+01:00",
+                  "cancellation": {
+                    "canceledBy": null,
+                    "reasonKey": null,
+                    "comment": null
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "OK"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/webhooks": {
+      "get": {
+        "summary": "Get all webhooks",
+        "tags": [
+          "Webhook Management"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "description": "Return a list of your current webhooks. Currently, you are able to have a maximum of **6** webhooks.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "minItems": 0,
+                  "items": {
+                    "$ref": "#/components/schemas/WebhookManagementResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Webhook creation",
+        "description": "Create a webhook through the Stuart API.",
+        "tags": [
+          "Webhook Management"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookManagementRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookManagementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/422_webhookError"
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          }
+        }
+      }
+    },
+    "/v2/webhooks/{webhookId}": {
+      "get": {
+        "summary": "Get a webhook",
+        "tags": [
+          "Webhook Management"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "description": "Get information on a specific webhook that you have created. {webhookId} in the path refers to the webhook id generated when creating your webhook.",
+        "parameters": [
+          {
+            "name": "webhookId",
+            "in": "path",
+            "description": "Webhook id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1521
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookManagementResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Webhook not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "NOT_FOUND"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "The webhook doesn't exists"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          }
+        }
+      },
+      "put": {
+        "summary": "Webhook update",
+        "description": "This endpoint allows you to update any webhooks you have created.",
+        "tags": [
+          "Webhook Management"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "webhookId",
+            "in": "path",
+            "description": "Webhook id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1521
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookManagementRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookManagementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/422_webhookError"
+          },
+          "401": {
+            "$ref": "#/components/responses/401_invaliddGrantError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a webhook",
+        "tags": [
+          "Webhook Management"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+              "api"
+            ]
+          }
+        ],
+        "description": "This endpoint allows you to delete a particular webhook.",
+        "parameters": [
+          {
+            "name": "webhookId",
+            "in": "path",
+            "description": "Webhook id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1521
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Succesful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "successful response"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "500_internal_server_error": {
+        "description": "Internal server error",
+        "content": {
+          "text/html": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "404_error": {
+        "description": "Not found error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "error",
+                "message"
+              ],
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "NOT_FOUND"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "422_jobError": {
+        "description": "API error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "error",
+                "message"
+              ],
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "Error key",
+                  "enum": [
+                    "CANT_GEOCODE_ADDRESS",
+                    "ADDRESS_CONTACT_PHONE_REQUIRED",
+                    "OUT_OF_RANGE",
+                    "RECORD_INVALID",
+                    "PHONE_INVALID",
+                    "EMAIL_INVALID",
+                    "JOB_DISTANCE_NOT_ALLOWED",
+                    "JOB_INVALID_DUPLICATED_ORDER_ID",
+                    "ADDRESS_INVALID",
+                    "CREDIT_CARD_NOT_FOUND"
+                  ]
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Error description",
+                  "example": [
+                    "a origin phone is invalid"
+                  ]
+                },
+                "data": {
+                  "type": "array",
+                  "description": "List of errors",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    {
+                      "job.pickups.contact_phone": [
+                        "is an invalid number"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "422_webhookError": {
+        "description": "Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "RECORD_INVALID"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Unable to save record"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "has already been taken"
+                      }
+                    },
+                    "topics": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "can't be blank"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "401_invaliddGrantError": {
+        "description": "Invalid grant",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "error",
+                "message"
+              ],
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "enum": [
+                    "INVALID_GRANT"
+                  ]
+                },
+                "message": {
+                  "type": "string",
+                  "enum": [
+                    "The access token was revoked",
+                    "The access token is invali"
+                  ],
+                  "example": "The access token is invalid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ZonesList": {
+        "type": "string",
+        "description": "List of zones where Stuart is currently operating, these codes can be used to get zone coverage GeoJSON through the get zone coverage endpoint.",
+        "enum": [
+          "amiens",
+          "angers",
+          "angouleme",
+          "annecy",
+          "antibes",
+          "aubagne",
+          "avignon",
+          "beauvais",
+          "besancon",
+          "beziers",
+          "blois",
+          "bordeaux",
+          "boulogne_sur_mer",
+          "brest",
+          "brive",
+          "caen",
+          "calais",
+          "cannes",
+          "cazeres",
+          "charleville_mezieres",
+          "cherbourg",
+          "cholet",
+          "clermont_ferrand",
+          "colmar",
+          "dijon",
+          "dinard",
+          "douai",
+          "dunkerque",
+          "evreux",
+          "foix",
+          "grenoble",
+          "guerande",
+          "la_rochelle",
+          "le_havre",
+          "le_mans",
+          "lille",
+          "limoges",
+          "lyon",
+          "marseille",
+          "merignac",
+          "merlimont",
+          "metz",
+          "montpellier",
+          "mulhouse",
+          "nancy",
+          "nantes",
+          "nice",
+          "nimes",
+          "niort",
+          "orleans",
+          "pamiers",
+          "paris",
+          "perigueux",
+          "perpignan",
+          "poitiers",
+          "quimper",
+          "reims",
+          "rennes",
+          "roubaix",
+          "rouen",
+          "saint_brieuc",
+          "saint_etienne",
+          "saint_nazaire",
+          "saint_quentin",
+          "strasbourg",
+          "thionville",
+          "toulon",
+          "toulouse",
+          "tours",
+          "valence",
+          "valenciennes",
+          "vannes",
+          "bayonne",
+          "tarbes",
+          "belfort",
+          "lens",
+          "bethune",
+          "chalons_en_champagne",
+          "cambrai",
+          "soissons niort",
+          "lorient",
+          "chambery",
+          "bourges",
+          "la_roche_sur_yon",
+          "carcassonne",
+          "narbonne",
+          "dieppe",
+          "montauban",
+          "hyeres",
+          "sedan",
+          "orleans",
+          "frejus_saint_raphael",
+          "cherbourg",
+          "neydens",
+          "chalon_sur_saone",
+          "troyes",
+          "arras",
+          "pau",
+          "chartres",
+          "aix-en-Provence",
+          "albi",
+          "auxerre",
+          "chambly",
+          "clairoix",
+          "conde_sur_lescaut",
+          "dax",
+          "denain",
+          "dreux",
+          "epernay",
+          "forbach",
+          "montluçon",
+          "roanne",
+          "saint-dizier",
+          "saint-malo",
+          "sens",
+          "villefranche_sur_saone",
+          "basildon",
+          "belfast",
+          "birmingham",
+          "blackpool",
+          "bournemouth",
+          "brighton",
+          "bristol",
+          "cambridge",
+          "cardiff",
+          "coventry",
+          "crawley",
+          "darlington",
+          "derby",
+          "edinburgh",
+          "exeter",
+          "farnborough",
+          "gillingham",
+          "glasgow ,grimsby",
+          "harlow",
+          "huddersfield",
+          "hull",
+          "leeds",
+          "leicester",
+          "liverpool",
+          "london",
+          "manchester",
+          "milton_keynes",
+          "newcastle_gateshead",
+          "northampton",
+          "nottingham",
+          "norwich",
+          "oxford",
+          "portsmouth",
+          "plymouth",
+          "reading",
+          "sheffield",
+          "south_shields",
+          "southampton",
+          "stoke ,sunderland",
+          "swansea",
+          "teesside",
+          "wakefield",
+          "warrington",
+          "wigan",
+          "york",
+          "kraków",
+          "lodz",
+          "poznan",
+          "silesia",
+          "szczecin",
+          "torun",
+          "tricity",
+          "warszawa",
+          "wroclaw",
+          "almada-Seixal",
+          "lisboa",
+          "porto",
+          "milano"
+        ],
+        "example": "paris"
+      },
+      "JobRequest": {
+        "type": "object",
+        "required": [
+          "job"
+        ],
+        "properties": {
+          "job": {
+            "type": "object",
+            "required": [
+              "pickups",
+              "dropoffs"
+            ],
+            "properties": {
+              "transport_type": {
+                "description": "We recommend providing package_type in pickups, rather than transport_type.",
+                "$ref": "#/components/schemas/TransportTypeValues"
+              },
+              "pickup_at": {
+                "type": "string",
+                "format": "date-time",
+                "description": "A datetime (ISO 8601) of when the courier should arrive at the pickup.",
+                "example": "2022-05-25T11:00:00.000+02:00"
+              },
+              "assignment_code": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "nullable": true,
+                "description": "Internal invoicing reference number. Note that providing the same assignment_code and client_reference will prevent us from stacking your orders.",
+                "example": "12345436-2"
+              },
+              "fleets": {
+                "type": "array",
+                "description": "Array of fleet id's to be used only with dedicated fleet account set up. Read more about <a href=\"https://community.stuart.engineering/t/dedicated-fleets-fleet-targeting/710\">dedicated fleets & fleet targeting</a>",
+                "minItems": 1,
+                "nullable": true,
+                "items": {
+                  "type": "integer",
+                  "example": [
+                    1
+                  ]
+                }
+              },
+              "pickups": {
+                "type": "array",
+                "maxItems": 1,
+                "description": "The origin of the deliveries. Maximum of one pickup location per job.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "address"
+                  ],
+                  "properties": {
+                    "address": {
+                      "type": "string",
+                      "description": "Geographical address. Do not include values such as floor number, building names, apartment numbers and other details. Use the 'comment' field instead of this field.",
+                      "example": "32 Coombe Ln Raynes Park London SW20 0LA"
+                    },
+                    "coordinates": {
+                      "type": "object",
+                      "description": "",
+                      "properties": {
+                        "lat": {
+                          "type": "number",
+                          "example": 51.409676
+                        },
+                        "long": {
+                          "type": "number",
+                          "example": -0.230138
+                        }
+                      }
+                    },
+                    "comment": {
+                      "type": "string",
+                      "description": "Optional comment",
+                      "example": "Ask Bobby",
+                      "format": "nulable"
+                    },
+                    "contact": {
+                      "$ref": "#/components/schemas/ContactType"
+                    },
+                    "access_codes": {
+                      "$ref": "#/components/schemas/AccessCodesType"
+                    }
+                  }
+                }
+              },
+              "dropoffs": {
+                "type": "array",
+                "minItems": 1,
+                "description": "The destinations of the deliveries.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "package_type",
+                    "address"
+                  ],
+                  "properties": {
+                    "client_reference": {
+                      "type": "string",
+                      "description": "Your internal reference. Should be used for tracking.",
+                      "example": 12345436
+                    },
+                    "package_type": {
+                      "$ref": "#/components/schemas/PackageTypeValues"
+                    },
+                    "package_description": {
+                      "type": "string",
+                      "description": "Optional package description for the courier. Flag age-restricted items in this field.",
+                      "example": "yellow package"
+                    },
+                    "address": {
+                      "type": "string",
+                      "example": "23 Ethelbert Rd London SW20 8QD"
+                    },
+                    "comment": {
+                      "type": "string",
+                      "example": "3nd floor on the right"
+                    },
+                    "end_customer_time_window_start": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A datetime (ISO 8601) indicating the start of the delivery window. format: date-time",
+                      "example": "2022-12-12T09:00:00.000Z"
+                    },
+                    "end_customer_time_window_end": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A datetime (ISO 8601) indicating the end of the delivery window. format: date-time",
+                      "example": "2022-12-12T13:00:00.000Z"
+                    },
+                    "contact": {
+                      "$ref": "#/components/schemas/ContactType"
+                    },
+                    "access_codes": {
+                      "$ref": "#/components/schemas/AccessCodesType"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "JobResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "example": 100202968
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-05-25T10:00:00.000+02:00"
+          },
+          "status": {
+            "$ref": "#/components/schemas/JobStatuses"
+          },
+          "package_type": {
+            "$ref": "#/components/schemas/PackageTypeValues"
+          },
+          "transport_type": {
+            "$ref": "#/components/schemas/TransportTypeValues",
+            "nullable": true
+          },
+          "assignment_code": {
+            "type": "string",
+            "nullable": true,
+            "example": "12345436-2"
+          },
+          "pickup_at": {
+            "type": "string",
+            "nullable": true,
+            "example": "2022-05-25T11:00:00.000+02:00"
+          },
+          "dropoff_at": {
+            "type": "string",
+            "nullable": true,
+            "example": "2022-05-25T11:30:00.000+02:00"
+          },
+          "ended_at": {
+            "type": "string",
+            "nullable": true,
+            "example": "2022-05-25T11:30:00.000+02:00"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true,
+            "example": "Example comment"
+          },
+          "distance": {
+            "type": "number",
+            "example": 0.919
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32",
+            "example": 30
+          },
+          "traveled_time": {
+            "type": "integer",
+            "format": "int32",
+            "example": 30
+          },
+          "traveled_distance": {
+            "type": "integer",
+            "format": "int32",
+            "example": 0.919
+          },
+          "deliveries": {
+            "type": "array",
+            "maxItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int32",
+                  "example": 100247837
+                },
+                "status": {
+                  "$ref": "#/components/schemas/JobStatuses"
+                },
+                "picked_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2022-05-25T11:00:00.000+02:00"
+                },
+                "delivered_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2022-05-25T11:30:00.000+02:00"
+                },
+                "tracking_url": {
+                  "type": "string",
+                  "example": "https://stuart.sandbox.followmy.delivery/100247837/ae5ff497d3c66d79627371f695a3a107"
+                },
+                "client_reference": {
+                  "type": "string",
+                  "example": 1640181124
+                },
+                "package_description": {
+                  "type": "string",
+                  "description": "Optional package description for the courier. Flag age-restricted items in this field.",
+                  "example": "yellow package"
+                },
+                "package_type": {
+                  "$ref": "#/components/schemas/PackageTypeValues"
+                },
+                "fleet_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 1
+                  }
+                },
+                "pickup": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 2062809
+                    },
+                    "address": {
+                      "type": "object",
+                      "properties": {
+                        "street": {
+                          "type": "string",
+                          "example": "32 Coombe Lane"
+                        },
+                        "postcode": {
+                          "type": "string",
+                          "example": "SW20 0LA"
+                        },
+                        "city": {
+                          "type": "string",
+                          "example": "London"
+                        },
+                        "zone": {
+                          "type": "string",
+                          "example": "london"
+                        },
+                        "country": {
+                          "type": "string",
+                          "example": "The United Kingdom"
+                        },
+                        "formatted_address": {
+                          "type": "string",
+                          "example": "32 Coombe Lane SW20 0LA London The United Kingdom"
+                        }
+                      }
+                    },
+                    "latitude": {
+                      "type": "number",
+                      "example": 51.4096757
+                    },
+                    "longitude": {
+                      "type": "number",
+                      "example": -0.2301377
+                    },
+                    "comment": {
+                      "type": "string",
+                      "example": "Ask Bobby"
+                    },
+                    "contact": {
+                      "$ref": "#/components/schemas/ContactTypeResponse"
+                    },
+                    "access_codes": {
+                      "$ref": "#/components/schemas/AccessCodesType"
+                    }
+                  }
+                },
+                "dropoff": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 2062810
+                    },
+                    "address": {
+                      "type": "object",
+                      "properties": {
+                        "street": {
+                          "type": "string",
+                          "example": "23 Ethelbert Road"
+                        },
+                        "postcode": {
+                          "type": "string",
+                          "example": "SW20 8QD"
+                        },
+                        "city": {
+                          "type": "string",
+                          "example": "London"
+                        },
+                        "zone": {
+                          "type": "string",
+                          "example": "london"
+                        },
+                        "country": {
+                          "type": "string",
+                          "example": "The United Kingdom"
+                        },
+                        "formatted_address": {
+                          "type": "string",
+                          "example": "23 Ethelbert Road SW20 8QD London The United Kingdom"
+                        }
+                      }
+                    },
+                    "latitude": {
+                      "type": "number",
+                      "example": 51.4133427
+                    },
+                    "longitude": {
+                      "type": "number",
+                      "example": -0.2208565
+                    },
+                    "comment": {
+                      "type": "string",
+                      "example": "3nd floor on the right"
+                    },
+                    "contact": {
+                      "$ref": "#/components/schemas/ContactTypeResponse"
+                    },
+                    "access_codes": {
+                      "$ref": "#/components/schemas/AccessCodesType"
+                    }
+                  }
+                },
+                "cancellation": {
+                  "type": "object",
+                  "properties": {
+                    "canceled_by": {
+                      "type": "string",
+                      "enum": [
+                        "client",
+                        "operations",
+                        "system"
+                      ],
+                      "nullable": true
+                    },
+                    "reason_key": {
+                      "type": "string",
+                      "nullable": true,
+                      "example": "technical_issue",
+                      "$ref": "#/components/schemas/CancellationReasonValues"
+                    },
+                    "comment": {
+                      "type": "string",
+                      "nullable": true,
+                      "example": "Cancellation comment"
+                    }
+                  }
+                },
+                "eta": {
+                  "type": "object",
+                  "properties": {
+                    "pickup": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "dropoff": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                },
+                "proof": {
+                  "type": "object",
+                  "properties": {
+                    "signature_url": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                },
+                "package_image_url": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "driver": {
+            "type": "string",
+            "nullable": true
+          },
+          "pricing": {
+            "type": "object",
+            "properties": {
+              "price_tax_included": {
+                "type": "number",
+                "example": 6.48
+              },
+              "price_tax_excluded": {
+                "type": "number",
+                "example": 5.4
+              },
+              "tax_amount": {
+                "type": "number",
+                "example": 1.08
+              },
+              "invoice_url": {
+                "type": "string",
+                "nullable": true
+              },
+              "tax_percentage": {
+                "type": "number",
+                "example": 0.2
+              },
+              "currency": {
+                "type": "string",
+                "example": "GBP"
+              }
+            }
+          },
+          "rating": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "JobStatuses": {
+        "type": "string",
+        "enum": [
+          "new",
+          "scheduled",
+          "searching",
+          "in_progress",
+          "finished",
+          "canceled",
+          "expired",
+          "voided"
+        ],
+        "example": "pending"
+      },
+      "DeliveryStatuses": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "picking",
+          "almost_picking",
+          "waiting_at_pickup",
+          "delivering",
+          "almost_delivering",
+          "waiting_at_dropoff",
+          "delivered",
+          "cancelled"
+        ],
+        "example": "picking"
+      },
+      "JobWebhookEvent": {
+        "type": "object",
+        "required": [
+          "event",
+          "type",
+          "data"
+        ],
+        "properties": {
+          "event": {
+            "type": "string",
+            "enum": [
+              "job"
+            ],
+            "example": "job"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "create",
+              "update"
+            ],
+            "example": "update"
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "id",
+              "status",
+              "transportType"
+            ],
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 100214157
+              },
+              "status": {
+                "$ref": "#/components/schemas/JobStatuses"
+              },
+              "comment": {
+                "type": "string",
+                "nullable": true
+              },
+              "pickupAt": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2022-06-06T11:40:30.000+01:00"
+              },
+              "dropoffAt": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2022-06-06T11:40:30.000+01:00"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2022-06-06T11:40:30.000+01:00"
+              },
+              "endedAt": {
+                "type": "string",
+                "oneOf": [
+                  {
+                    "format": "date-time"
+                  },
+                  {
+                    "nullable": true
+                  }
+                ],
+                "example": "2022-06-06T11:40:30.000+01:00"
+              },
+              "transportType": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "$ref": "#/components/schemas/TransportTypeValues",
+                    "nullable": true
+                  }
+                }
+              },
+              "packageType": {
+                "$ref": "#/components/schemas/PackageTypeValues",
+                "nullable": true
+              },
+              "originComment": {
+                "type": "string",
+                "nullable": true
+              },
+              "destinationComment": {
+                "type": "string",
+                "nullable": true
+              },
+              "jobReference": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "example": "12345"
+              },
+              "currentDelivery": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 100259470
+                  },
+                  "trackingUrl": {
+                    "type": "string",
+                    "example": "https://stuart.sandbox.followmy.delivery/100259470/8ff0ecfc54c9b55f66f4fa1223e3fffd"
+                  },
+                  "clientReference": {
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "integer"
+                      }
+                    ],
+                    "example": "12345"
+                  },
+                  "driver": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "busy"
+                      },
+                      "latitude": {
+                        "type": "number",
+                        "example": 48.87818527
+                      },
+                      "longitude": {
+                        "type": "number",
+                        "example": 2.29685044
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Eveline Green"
+                      },
+                      "firstname": {
+                        "type": "string",
+                        "example": "Eveline"
+                      },
+                      "lastname": {
+                        "type": "string",
+                        "example": "Green"
+                      },
+                      "phone": {
+                        "type": "string",
+                        "example": "+33601010101"
+                      },
+                      "picture_path_imgix": {
+                        "type": "string",
+                        "nullable": true,
+                        "example": null
+                      },
+                      "transportType": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "$ref": "#/components/schemas/TransportTypeValues"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "status": {
+                    "type": "string",
+                    "$ref": "#/components/schemas/DeliveryStatuses"
+                  },
+                  "transportType": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/TransportTypeValues"
+                      }
+                    }
+                  },
+                  "packageType": {
+                    "$ref": "#/components/schemas/PackageTypeValues",
+                    "nullable": true
+                  },
+                  "etaToDestination": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2022-01-19T14:24:56.000+01:00"
+                  },
+                  "etaToOrigin": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2022-01-19T14:22:57.000+01:00"
+                  },
+                  "cancellation": {
+                    "type": "object",
+                    "properties": {
+                      "canceledBy": {
+                        "type": "string",
+                        "nullable": true,
+                        "enum": [
+                          "operations",
+                          "client",
+                          "system"
+                        ]
+                      },
+                      "reasonKey": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/CancellationReasonValues"
+                          },
+                          {
+                            "$ref": "#/components/schemas/CancellationCourierReasignationValues"
+                          },
+                          {
+                            "$ref": "#/components/schemas/CancellationReturnValues"
+                          }
+                        ]
+                      },
+                      "comment": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    }
+                  }
+                }
+              },
+              "deliveries": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 100259470
+                    },
+                    "clientReference": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ],
+                      "example": "12345"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "DeliveryWehookEvent": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "string",
+            "enum": [
+              "delivery"
+            ],
+            "example": "delivery"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "create",
+              "update"
+            ],
+            "example": "update"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 100259471
+              },
+              "trackingUrl": {
+                "type": "string",
+                "example": "https://stuart.sandbox.followmy.delivery/100259471/a0f6ec2a332eae5e882f5c14619bfbb5"
+              },
+              "clientReference": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "example": "465768798"
+              },
+              "driver": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "example": "busy"
+                  },
+                  "latitude": {
+                    "type": "number",
+                    "example": 48.87818527
+                  },
+                  "longitude": {
+                    "type": "number",
+                    "example": 2.29685044
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Eveline Green"
+                  },
+                  "firstname": {
+                    "type": "string",
+                    "example": "Eveline"
+                  },
+                  "lastname": {
+                    "type": "string",
+                    "example": "Green"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "example": "+33601010101"
+                  },
+                  "picture_path_imgix": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": null
+                  },
+                  "transportType": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/TransportTypeValues"
+                      }
+                    }
+                  }
+                }
+              },
+              "status": {
+                "type": "string",
+                "$ref": "#/components/schemas/DeliveryStatuses"
+              },
+              "transportType": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "$ref": "#/components/schemas/TransportTypeValues"
+                  }
+                }
+              },
+              "packageType": {
+                "$ref": "#/components/schemas/PackageTypeValues",
+                "nullable": true
+              },
+              "etaToDestination": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2022-01-19T14:25:59.000+01:00"
+              },
+              "etaToOrigin": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2022-01-19T14:23:14.000+01:00"
+              },
+              "cancellation": {
+                "type": "object",
+                "properties": {
+                  "canceledBy": {
+                    "type": "string",
+                    "nullable": true,
+                    "enum": [
+                      "operations",
+                      "client",
+                      "system"
+                    ]
+                  },
+                  "reasonKey": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/CancellationReasonValues"
+                      },
+                      {
+                        "$ref": "#/components/schemas/CancellationCourierReasignationValues"
+                      },
+                      {
+                        "$ref": "#/components/schemas/CancellationReturnValues"
+                      }
+                    ]
+                  },
+                  "comment": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "WebhookManagementRequest": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "example": "https://webhoook.site/#!/03dd1cda-4261-41f4-8776-d58af4ede597"
+          },
+          "topics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WebhooksTopicsValues"
+            }
+          },
+          "enabled": {
+            "type": "boolean",
+            "example": true
+          },
+          "authentication_header": {
+            "type": "string",
+            "example": "X-0c533bf8"
+          },
+          "authentication_key": {
+            "type": "string",
+            "example": "auth_key"
+          }
+        }
+      },
+      "WebhookManagementResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": "1521"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2021-12-22T16:33:40.000+01:00"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2021-12-22T16:33:40.000+01:00"
+          },
+          "url": {
+            "type": "string",
+            "example": "https://webhoook.site/#!/03dd1cda-4261-41f4-8776-d58af4ede597"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "authentication_header": {
+            "type": "string",
+            "example": "X-0c533bf8"
+          },
+          "authentication_key": {
+            "type": "string",
+            "example": "auth_key"
+          },
+          "topics": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "$ref": "#/components/schemas/WebhooksTopicsValues"
+                }
+              }
+            },
+            "example": [
+              {
+                "name": "job/create"
+              },
+              {
+                "name": "job/update"
+              }
+            ]
+          }
+        }
+      },
+      "WebhooksTopicsValues": {
+        "type": "string",
+        "enum": [
+          "job/create",
+          "job/update",
+          "delivery/create",
+          "delivery/update",
+          "driver/update",
+          "driver/online",
+          "driver/offline"
+        ],
+        "example": [
+          "job/create",
+          "job/update"
+        ]
+      },
+      "TransportTypeValues": {
+        "type": "string",
+        "enum": [
+          "bike",
+          "cargobike",
+          "cargobikexl",
+          "motorbike",
+          "motorbikexl",
+          "car",
+          "van"
+        ],
+        "example": "bike"
+      },
+      "PackageTypeValues": {
+        "type": "string",
+        "description": "Size of the package",
+        "example": "small",
+        "enum": [
+          "xsmall",
+          "small",
+          "medium",
+          "large",
+          "xlarge"
+        ]
+      },
+      "CancellationReasonValues": {
+        "type": "string",
+        "description": "Cancellation reasonkey",
+        "example": "package_damaged",
+        "enum": [
+          "address_error",
+          "courier_issue",
+          "customer_cancellation_requested",
+          "duplicate_job",
+          "incorrect_package",
+          "no_supply",
+          "other",
+          "package_damaged",
+          "package_not_ready",
+          "pu_closed",
+          "technical_issue",
+          "wrong_transport_type"
+        ]
+      },
+      "CancellationCourierReasignationValues": {
+        "type": "string",
+        "description": "Courier reasignation reasonkey",
+        "example": "package_damaged",
+        "enum": [
+          "reassigned_to_better_courier",
+          "manually_stacked",
+          "wrong_package_size",
+          "wrong_transport_type",
+          "wrong_weight",
+          "package_damaged",
+          "package_not_ready",
+          "customer_cancellation_requested",
+          "courier_issue",
+          "no_supply"
+        ]
+      },
+      "CancellationReturnValues": {
+        "type": "string",
+        "description": "Courier reasignation reasonkey",
+        "example": "customer_unreachable",
+        "enum": [
+          "end-customer_unreachable",
+          "address_error",
+          "package_damaged",
+          "end-customer_refused_package",
+          "cash_or_equipment_return",
+          "incorrect_package",
+          "cold_chain",
+          "end-customer_underaged",
+          "customer_cancellation_requested"
+        ]
+      },
+      "AccessCodesType": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "code",
+            "type"
+          ],
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Value of the code to display or scan",
+              "example": "your_access_code_2"
+            },
+            "type": {
+              "type": "string",
+              "description": "Type of code to display or scan.<br/>- text: displays the access code value on the courier mobile app,<br/>- qr_text: displays a qr code that you can scan on the courier mobile app, <br/>- barcode_128: displays a barcode that you can scan on the courier mobile app, <br/>- qr_text: displays a qr code that you can scan on the courier mobile app, <br/>- scan_barcode_128: allows the courier to scan a barcode with the courier mobile app,<br/>- scan_qr_text: allows the courier to scan a qr code with the courier mobile app,",
+              "enum": [
+                "text",
+                "qr_text",
+                "barcode_128",
+                "scan_qr_text",
+                "scan_barcode_128"
+              ],
+              "example": "text"
+            },
+            "title": {
+              "type": "string",
+              "description": "Access code title, displayed on the courier'app",
+              "example": "access code title"
+            },
+            "instructions": {
+              "type": "string",
+              "description": "Access code instructions, displayed on the courier'app",
+              "example": "please put your instructions here"
+            }
+          }
+        }
+      },
+      "ContactType": {
+        "type": "object",
+        "description": "",
+        "properties": {
+          "firstname": {
+            "type": "string",
+            "nullable": true,
+            "example": "Bobby"
+          },
+          "lastname": {
+            "type": "string",
+            "nullable": true,
+            "example": "Brown"
+          },
+          "phone": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "nullable": true,
+            "example": 33610101010
+          },
+          "email": {
+            "type": "string",
+            "nullable": true,
+            "example": "test@email.com"
+          },
+          "company": {
+            "type": "string",
+            "nullable": true,
+            "example": "Company name"
+          }
+        }
+      },
+      "ContactTypeResponse": {
+        "type": "object",
+        "description": "",
+        "properties": {
+          "firstname": {
+            "type": "string",
+            "nullable": true,
+            "example": "Bobby"
+          },
+          "lastname": {
+            "type": "string",
+            "nullable": true,
+            "example": "Brown"
+          },
+          "phone": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "nullable": true,
+            "example": 33610101010
+          },
+          "email": {
+            "type": "string",
+            "nullable": true,
+            "example": "test@email.com"
+          },
+          "company_name": {
+            "type": "string",
+            "nullable": true,
+            "example": "Company name"
+          }
+        }
+      }
+    },
+    "examples": {
+      "JobCreationRequestExample": {
+        "summary": "Job creation request example",
+        "value": {
+          "job": {
+            "assignment_code": "12345436-2",
+            "pickups": [
+              {
+                "address": "32 Coombe Ln, Raynes Park, London SW20 0LA",
+                "comment": "Ask Bobby",
+                "contact": {
+                  "firstname": "Bobby",
+                  "lastname": "Brown",
+                  "phone": "+33610101010",
+                  "email": "bobby.brown@client.com",
+                  "company": "Sample company"
+                },
+                "access_codes": [
+                  {
+                    "code": "your_access_code_1",
+                    "type": "text",
+                    "title": "access code title",
+                    "instructions": "please put your instructions here"
+                  }
+                ]
+              }
+            ],
+            "dropoffs": [
+              {
+                "package_type": "medium",
+                "package_description": "yellow package",
+                "client_reference": "1234_abc",
+                "address": "23 Ethelbert Rd, London SW20 8QD",
+                "comment": "3nd floor on the right",
+                "end_customer_time_window_start": "2021-12-12T11:00:00.000+02:00",
+                "end_customer_time_window_end": "2021-12-12T13:00:00.000+02:00",
+                "contact": {
+                  "firstname": "Julia",
+                  "lastname": "Moore",
+                  "phone": "+33712222222",
+                  "email": "client3@email.com",
+                  "company": "Sample Company Inc."
+                },
+                "access_codes": [
+                  {
+                    "code": "your_access_code_2",
+                    "type": "text",
+                    "title": "access code title",
+                    "instructions": "please put your instructions here"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "JobCreationResponseExample": {
+        "summary": "Job creation response example",
+        "value": {
+          "id": 100202968,
+          "created_at": "2021-12-22T14:52:04.000+01:00",
+          "status": "searching",
+          "package_type": "medium",
+          "transport_type": null,
+          "assignment_code": "12345436-2",
+          "pickup_at": null,
+          "dropoff_at": null,
+          "ended_at": null,
+          "comment": null,
+          "distance": 0.919,
+          "duration": 4,
+          "traveled_time": 0,
+          "traveled_distance": 0,
+          "deliveries": [
+            {
+              "id": 100247837,
+              "status": "pending",
+              "picked_at": null,
+              "delivered_at": null,
+              "tracking_url": "https://stuart.sandbox.followmy.delivery/100247837/ae5ff497d3c66d79627371f695a3a107",
+              "client_reference": "1640181124",
+              "package_description": "yellow package",
+              "package_type": "medium",
+              "fleet_ids": [
+                1
+              ],
+              "pickup": {
+                "id": 2062809,
+                "address": {
+                  "street": "32 Coombe Lane",
+                  "postcode": "SW20 0LA",
+                  "city": "London",
+                  "zone": "london",
+                  "country": "The United Kingdom",
+                  "formatted_address": "32 Coombe Lane, SW20 0LA, London, The United Kingdom"
+                },
+                "latitude": 51.4096757,
+                "longitude": -0.2301377,
+                "comment": "Ask Bobby",
+                "contact": {
+                  "firstname": "Bobby",
+                  "lastname": "Brown",
+                  "phone": "+33610101010",
+                  "company_name": "Sample company",
+                  "email": "bobby.brown@client.com"
+                },
+                "access_codes": [
+                  {
+                    "code": "your_access_code_1",
+                    "type": "text",
+                    "title": "access code title",
+                    "instructions": "please put your instructions here"
+                  }
+                ]
+              },
+              "dropoff": {
+                "id": 2062810,
+                "address": {
+                  "street": "23 Ethelbert Road",
+                  "postcode": "SW20 8QD",
+                  "city": "London",
+                  "zone": "london",
+                  "country": "The United Kingdom",
+                  "formatted_address": "23 Ethelbert Road, SW20 8QD, London, The United Kingdom"
+                },
+                "latitude": 51.4133427,
+                "longitude": -0.2208565,
+                "comment": "3nd floor on the right",
+                "contact": {
+                  "firstname": "Julia",
+                  "lastname": "Moore",
+                  "phone": "+33712222222",
+                  "company_name": "Sample Company Inc.",
+                  "email": "client3@email.com"
+                },
+                "access_codes": [
+                  {
+                    "code": "your_access_code_2",
+                    "type": "text",
+                    "title": "access code title",
+                    "instructions": "please put your instructions here"
+                  }
+                ]
+              },
+              "cancellation": {
+                "canceled_by": null,
+                "reason_key": null,
+                "comment": null
+              },
+              "eta": {
+                "pickup": null,
+                "dropoff": null
+              },
+              "proof": {
+                "signature_url": null
+              },
+              "package_image_url": null
+            }
+          ],
+          "driver": null,
+          "pricing": {
+            "price_tax_included": 6.48,
+            "price_tax_excluded": 5.4,
+            "tax_amount": 1.08,
+            "invoice_url": null,
+            "tax_percentage": 0.2,
+            "currency": "GBP"
+          },
+          "rating": null
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "/oauth/token?grant_type=client_credentials",
+            "scopes": {
+              "api": "Api access"
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Authentication"
+    },
+    {
+      "name": "Addresses",
+      "description": ""
+    },
+    {
+      "name": "Opened zones",
+      "description": ""
+    },
+    {
+      "name": "Scheduling Slots",
+      "description": ""
+    },
+    {
+      "name": "Jobs",
+      "description": "Everything about jobs endpoints"
+    },
+    {
+      "name": "Deliveries"
+    },
+    {
+      "name": "Cancellations"
+    },
+    {
+      "name": "Webhook Management"
+    },
+    {
+      "name": "Webhooks examples"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": [
+        "api"
+      ]
+    }
+  ]
+}
