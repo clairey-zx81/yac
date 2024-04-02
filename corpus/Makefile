@@ -10,10 +10,15 @@ pull:
 .PHONY: clean
 clean:
 	$(RM) schema.list
+	$(MAKE) -C OpenAPI clean
 
 # WARNING MacOS find can generate //
 
-schema.list:
+.PHONY: openapi
+openapi:
+	$(MAKE) -C OpenAPI schema
+
+schema.list: openapi
 	{ 
 	  # Store
 	  # argh… stupid files which contain ' characters
@@ -38,4 +43,6 @@ schema.list:
 	  # JSC
 	  find ./JSC/json-schema-corpus -name '*.json' -print
 	  find ./JSC/JSC_extracts -name '*.json' -print
+	  # OpenAPI
+	  find ./OpenAPI -name '*.schema.json' -print
 	} | sort -d > $@
