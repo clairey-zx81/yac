@@ -31,4 +31,4 @@ for fn in sys.argv[1:]:
     with open(fn) as f:
         loaded = yaml.load(f.read(), Loader=Loader)
         jsoned = jsonify(loaded)
-        print(json.dumps(jsoned))
+        print(json.dumps(jsoned, indent=2, sort_keys=False))

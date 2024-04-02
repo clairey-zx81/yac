@@ -18,10 +18,10 @@ schema: $(F.schema)
 model: $(F.model)
 
 %.json: %.yaml
-	./yaml2json.py $< | jq > $@
+	./yaml2json.py $< > $@
 
 %.schema.json: %.json
-	./extract.py $< | jq > $@
+	./extract.py $< > $@
 
 %.model.json: %.schema.json
 	schema2model -e $< > $@

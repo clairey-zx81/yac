@@ -138,6 +138,6 @@ for fn in sys.argv[1:]:
             if not isinstance(data, dict):
                 raise Exception("expecting a dict")
             out = convert(data)
-            print(json.dumps(out))
+            print(json.dumps(out, indent=2, sort_keys=False))
         except Exception as e:
             log.error(e)
