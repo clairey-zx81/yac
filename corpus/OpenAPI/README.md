@@ -18,11 +18,14 @@ API Type :
 [OpenAPI Initiative](https://www.openapis.org/).
 
 - [Callback](https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/callback-example.json)
+  Bug: missing object
 - [Link](https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/link-example.json)
 - [Petstore](https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/petstore.json)
 - [Petstore expanded](https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/petstore-expanded.json)
 - [Uspto](https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/uspto.json)
+  Bug: `uriref` format instead of `uri-ref`.
 - [Webhook](https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.1/webhook-example.json)
+  Bug: missing object
 
 ## From postman.com
 
