@@ -12,6 +12,9 @@ F.stats = $(F.schema:%.schema.json=%.stats.json)
 clean:
 	$(RM) $(D.json) *.schema.json *.model.json *.stats.json
 
+.PHONY: all
+all: schema stats model
+
 .PHONY: schema
 schema: $(F.schema)
 
