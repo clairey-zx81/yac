@@ -10,6 +10,9 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger("oa2js")
 
+# slash replacement
+slash = "_s_"
+
 def replaceRefs(data):
     if isinstance(data, dict):
         # rewrite references
@@ -90,6 +93,7 @@ def convert(data):
     # .paths.XXX.<method>.reponses.<status>.content."application/json".schema
     if "paths" in data:
         for path, pval in data["paths"].items():
+            path = path.replace("/", slash)
             for method, mval in pval.items():
                 if "parameters" in mval:
                     params = mval["parameters"]
@@ -104,7 +108,7 @@ def convert(data):
                         if schema is not None:
                             name = param.get("name", "?")
                             pin = param.get("in", "?")
-                            out["$defs"][f"{path}:{method}:param:{name}/{pin}"] = schema
+                            out["$defs"][f"{path}:{method}:param:{name}:{pin}"] = schema
 
                 if "responses" in mval:
                     responses = mval["responses"]
@@ -129,7 +133,7 @@ def convert(data):
 
     replaceRefs(out)
 
-    out["anyOf"] = [{"$ref": f"#/$defs{name}"} for name in out["$defs"] if name.startswith("/")]
+    out["anyOf"] = [{"$ref": f"#/$defs/{name}"} for name in out["$defs"] if name.startswith(slash)]
 
     return out
 
