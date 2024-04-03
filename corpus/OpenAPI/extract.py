@@ -129,7 +129,7 @@ def convert(data):
 
     replaceRefs(out)
 
-    out["anyOf"] = [name for name in out["$defs"] if name.startswith("/")]
+    out["anyOf"] = [{"$ref": f"#/$defs{name}"} for name in out["$defs"] if name.startswith("/")]
 
     return out
 
