@@ -7,6 +7,8 @@
 import sys
 import json
 import logging
+from typing import Any
+
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger("oa2js")
 
@@ -62,6 +64,49 @@ def extractContentAppJson(data):
     else:
         return None
 
+def processEntries(entry: str, data:dict[str, Any], out: dict[str, Any]):
+    assert isinstance(data, dict)
+    for key, pval in data.items():
+        key = entry + ":" + key.replace("/", slash)
+        for method, mval in pval.items():
+            if "parameters" in mval:
+                params = mval["parameters"]
+                assert isinstance(params, list)
+                for param in params:
+                    if "schema" in param:
+                        schema = param["schema"]
+                    elif "type" in param:  # swagger 2.0
+                        schema = {"type": param["type"]}
+                    else:
+                        schema = None
+                    if schema is not None:
+                        name = param.get("name", "?")
+                        pin = param.get("in", "?")
+                        out["$defs"][f"{key}:{method}:param:{name}:{pin}"] = schema
+
+            if "responses" in mval:
+                responses = mval["responses"]
+                for status, rval in responses.items():
+                    if "$ref" in rval:
+                       out["$defs"][f"{key}:{method}:resp:{status}"] = rval
+                    else:
+                        schema = extractContentAppJson(rval)
+                        if schema is not None:
+                            out["$defs"][f"{key}:{method}:resp:{status}"] = schema
+                        if "headers" in rval:
+                            headers = rval["headers"]
+                            for head, hval in headers.items():
+                                if "$ref" in hval:
+                                    out["$defs"][f"{key}:{method}:resp:{status}:head:{head}"] = hval
+                                elif "schema" in hval:
+                                    out["$defs"][f"{key}:{method}:resp:{status}:head:{head}"] = hval["schema"]
+            if "requestBody" in mval:
+                schema = extractContentAppJson(mval["requestBody"])
+                if schema is not None:
+                    out["$defs"][f"{key}:{method}:reqbod"] = schema
+
+    return out
+
 def convert(data):
     out = {"$defs": {}}
 
@@ -88,52 +133,18 @@ def convert(data):
     if "definitions" in data:  # swagger 2.0
         out["$defs"].update(data["definitions"])
 
-    # .paths.XXX.<method>.parameters[*].schema
-    # .paths.XXX.<method>.requestBody.content."application/json".schema
-    # .paths.XXX.<method>.reponses.<status>.content."application/json".schema
-    if "paths" in data:
-        for path, pval in data["paths"].items():
-            path = path.replace("/", slash)
-            for method, mval in pval.items():
-                if "parameters" in mval:
-                    params = mval["parameters"]
-                    assert isinstance(params, list)
-                    for param in params:
-                        if "schema" in param:
-                            schema = param["schema"]
-                        elif "type" in param:  # swagger 2.0
-                            schema = {"type": param["type"]}
-                        else:
-                            schema = None
-                        if schema is not None:
-                            name = param.get("name", "?")
-                            pin = param.get("in", "?")
-                            out["$defs"][f"{path}:{method}:param:{name}:{pin}"] = schema
-
-                if "responses" in mval:
-                    responses = mval["responses"]
-                    for status, rval in responses.items():
-                        if "$ref" in rval:
-                           out["$defs"][f"{path}:{method}:resp:{status}"] = rval
-                        else:
-                            schema = extractContentAppJson(rval)
-                            if schema is not None:
-                                out["$defs"][f"{path}:{method}:resp:{status}"] = schema
-                            if "headers" in rval:
-                                headers = rval["headers"]
-                                for head, hval in headers.items():
-                                    if "$ref" in hval:
-                                        out["$defs"][f"{path}:{method}:resp:{status}:head:{head}"] = hval
-                                    elif "schema" in hval:
-                                        out["$defs"][f"{path}:{method}:resp:{status}:head:{head}"] = hval["schema"]
-                if "requestBody" in mval:
-                    schema = extractContentAppJson(mval["requestBody"])
-                    if schema is not None:
-                        out["$defs"][f"{path}:{method}:reqbod"] = schema
+    # .{paths,webhooks}.XXX.<method>.parameters[*].schema
+    # .{paths,webhooks}.XXX.<method>.requestBody.content."application/json".schema
+    # .{paths,webhooks}.XXX.<method>.reponses.<status>.content."application/json".schema
+    for key in ("paths", "webhooks"):
+        if key in data:
+            processEntries(key, data[key], out)
 
     replaceRefs(out)
 
-    out["anyOf"] = [{"$ref": f"#/$defs/{name}"} for name in out["$defs"] if name.startswith(slash)]
+    out["anyOf"] = [{"$ref": f"#/$defs/{name}"}
+                        for name in out["$defs"]
+                            if name.startswith("paths:") or name.startswith("webhooks:")]
 
     return out
 
