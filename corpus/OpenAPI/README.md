@@ -1,17 +1,23 @@
 # OpenAPI examples
 
-Sources :
+Sources:
 
 - 6 OpenAPI documentation;
 - 4 postman, dont 2 BROKEN, type API
 - 10 api.gouv.fr
 
-API Type :
+API Type:
 
-- Doc 6
+- OAS Doc 6
 - Open Data 5
 - Data Consultation 4
 - Service 5
+
+Extensions:
+
+- `x-` extensions in 5 specs
+- `discriminator` in 1
+- `xml` and `externalDocs` in 0
 
 ## From OpenAPI
 
