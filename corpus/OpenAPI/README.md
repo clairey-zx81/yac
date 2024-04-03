@@ -44,6 +44,7 @@ API Type :
 - [Oracle Cloud Infra](https://www.postman.com/oracledevs/workspace/oracle-cloud-infrastructure-rest-apis/api/d62a427a-f901-4dad-aa2a-3c5fa6b999d9/definition/d224415c-8f6b-4499-b7ec-44f65f814aa5/file/d224415c-8f6b-4499-b7ec-44f65f814aa5)
   API 12 get, 9 post, 5 delete, 0 patch, 4 put;
   Service API;
+  Note: uses `discriminator`
 
 ## From api.gouv.fr
 
