@@ -72,6 +72,7 @@ Extensions:
 - [Simul aides renovation](https://api.gouv.fr/documentation/api_aides_renovation_energetique) (koumoul)
   API 13 get;
   Open Data;
+  Bug: 1, undefined required property (key)
 - [La bonne alternance](https://api.gouv.fr/documentation/api-la-bonne-alternance)
   API 15 get, 9 post, 0 put, 1 patch, 0 delete;
   Service API;
