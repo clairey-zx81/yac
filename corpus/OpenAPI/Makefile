@@ -31,7 +31,7 @@ stats: $(F.stats) BROKEN/ebay_api.stats.json BROKEN/walmart_api.stats.json
 	./extract.py $< > $@
 
 %.model.json: %.schema.json
-	schema2model -e $< > $@
+	jm-schema2model -e $< > $@
 
 %.stats.json: %.schema.json
 	../../../stats/json-schema-stats.py -d ../../../json-model/models -n $< > $@
