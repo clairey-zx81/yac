@@ -35,6 +35,8 @@ Extensions:
   Bug: 2 `uriref` format typo instead of `uri-ref`.
 - [Webhook](https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.1/webhook-example.json)
   Bug: missing object
+- [Tictactoe](https://github.com/OAI/learn.openapis.org/blob/main/examples/v3.1/tictactoe.json)
+  Bug: _0_ (but missing `required`?)
 
 ## From postman.com
 
