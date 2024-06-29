@@ -4,7 +4,7 @@ Claire Yannou-Medrala and Fabien Coelho
 
 This repository contains, directly and indirectly, all schemas analyzed in
 "An Analysis of Defects in Public JSON Schemas", Tech. Report A/794/CRI,
-Mines Paris - PSL [link](TODO).
+Mines Paris - PSL [link](https://minesparis-psl.hal.science/hal-04415517/file/A-794-DepotHAL.pdf).
 
 ## Installation
 
