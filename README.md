@@ -21,4 +21,5 @@ git submodule update --init
 
 ## TODO
 
+- update submodules
 - add [this benchmark](https://github.com/sourcemeta-research/jsonschema-benchmark)
