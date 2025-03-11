@@ -45,4 +45,6 @@ schema.list: openapi
 	  find ./JSC/JSC_extracts -name '*.json' -print
 	  # OpenAPI
 	  find ./OpenAPI -name '*.schema.json' -print
+	  # SourceMeta
+	  find ./SourceMeta/schemas -name schema.json -print
 	} | sort -d > $@
