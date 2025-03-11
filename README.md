@@ -18,4 +18,7 @@ git submodule update --init
 
 - [analysis_extract.sh](analysis_extract.sh)
   `jq` script which extracts all samples shown in the paper.
-- TODO
+
+## TODO
+
+- add [this benchmark](https://github.com/sourcemeta-research/jsonschema-benchmark)
