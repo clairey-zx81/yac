@@ -38,7 +38,7 @@ schema.list: openapi
 	  find ./Misc/sp-simulateurs -name '*.schema.json' -print
 	  find ./Misc/washington-post/src -name '*.json' -print
 	  find ./Misc/snowplow/schemas -type f -print
-	  find ./Misc/sourcesmeta/schemas -name schema.json -print
+	  find ./Misc/sourcemeta/schemas -name schema.json -print
 	  # ODS
 	  find ./ODS -name '*.json' -print
 	  # JSC
@@ -46,4 +46,5 @@ schema.list: openapi
 	  find ./JSC/JSC_extracts -name '*.json' -print
 	  # OpenAPI
 	  find ./OpenAPI -name '*.schema.json' -print
+	  find ./HF-DUL-JS/fetched_data/ -name '*.json' -print
 	} | sort -d > $@
